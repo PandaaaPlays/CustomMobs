@@ -1,0 +1,105 @@
+# The actual Entity
+mob:
+  type: SKELETON
+  # For Ageable
+  baby: true
+  # For Zombies
+  can-break-doors: true
+  # For Cats
+  cat-type:
+  # For Rabbits
+  rabbit-type:
+  # For Foxes
+  fox-type:
+  # For Villagers
+  villager-type:
+  villager-profession:
+  # For Horses
+  horse-color:
+  # For Llamas
+  llama-color:
+  # For Axolotl
+  axolotl-variant:
+  # For Frogs
+  frog-variant:
+  # For Parrots
+  parrot-variant:
+  # For Creeper
+  explosion-cooldown: # (Ticks)
+  explosion-radius:
+  # For Slimes
+  slime-size:
+  # For Zombified Piglins
+  zombified-piglin-anger:
+  # For Shulkers
+  shulker-color: # (DyeColor)
+  # For Vindicators
+  isJohnny:
+  # For Phantoms
+  phantom-size:
+  # For Steerables
+  saddle:
+  # For Sittables
+  sitting:
+  # For Cats, Wolves
+  collar-color:
+  # For Wolves
+  angry-wolf:
+  # For Tameables
+  tamed:
+  owner:
+  # For AbstractHorses
+  jump-strength:
+  # For SkeletonHorses
+  skeleton-trap:
+  # For ChestedHorses
+  chested:
+  # For Pandas
+  panda-gene:
+
+# CustomMob's equipment
+equipment:
+#  helmet:
+#  chestplate:
+#  leggings:
+#  boots:
+#  right-hand:
+#  left-hand:
+
+# CustomMob's special attributes
+special:
+  name:
+  visible-name:
+  health:
+  # Aggressive must be turned on for a passive animal to attack the players.
+  # aggressive:
+  glowing:
+  can-pickup-loot:
+  knockback-resistance:
+  speed:
+  damage:
+  damage-range:
+    minimum: 5.0
+    maximum: 6.5
+  invincible:
+  silent:
+  gravity:
+  persistent:
+  intelligent:
+  follow-range:
+
+#potion-effects:
+
+#item:
+
+#spawner:
+
+message:
+  text:
+  radius:
+
+sound:
+  type:
+  radius:
+  volume:
+  pitch:

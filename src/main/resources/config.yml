@@ -1,0 +1,31 @@
+# Use this document to configure the settings of your CustomMobs Plugin.
+# If you require any assistance with the plugin, please contact me on discord (https://discord.com/invite/jw4hURj).
+#   _____         ___ _                 _   _
+#  |     |___ ___|  _|_|___ _ _ ___ ___| |_|_|___ ___
+#  |   --| . |   |  _| | . | | |  _| .'|  _| | . |   |
+#  |_____|___|_|_|_| |_|_  |___|_| |__,|_| |_|___|_|_|
+#                      |___|
+
+# The message displayed when the command provided is invalid.
+# %complement% -> Will change to a useful tip if applicable.
+unknown-command: "&c&l[!] &cUnknown Command. %complement%"
+
+# The message displayed on the console when it is using a command that it cannot.
+# %complement% -> Will change to a useful tip for the console if applicable.
+console-unknown-command: "&c[!] The console cannot use this command. %complement%"
+
+# The message displayed to the sender/receiver when giving item(s) or spawner(s).
+# %amount% -> Changes to the amount of item(s) or spawner(s) given.
+# %custommob% -> Changes to the name of the CustomMob.
+# %type% -> Changes to either "item" or "spawner".
+give-sender: "&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &eSuccessfully gave &6x%amount% %custommob% &e%type% to &6%receiver%&e."
+give-receiver: "&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &eSuccessfully received &6x%amount% %custommob% &e%type% from &6%sender%&e."
+
+# The message displayed when the sender of the command does not have the permission to execute the command.
+no-permission: "&c&l[!] &cYou do not have enough permission to do this."
+
+# The message displayed when a command using coordinates was not used with valid coordinates.
+incorrect-coordinates: "&c&l[!] &cThe entered coordinates are incorrect. Make sure you are using numbers."
+
+# The message displayed when the configuration of the plugin is reloaded.
+plugin-reload: "&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &ePlugin Reloaded."
