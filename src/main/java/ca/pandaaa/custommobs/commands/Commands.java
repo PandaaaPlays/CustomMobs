@@ -12,6 +12,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 public class Commands implements CommandExecutor {
 
     private final ConfigurationManager configManager;
@@ -47,6 +50,9 @@ public class Commands implements CommandExecutor {
                 case "give":
                     giveCommand(sender, args);
                     break;
+                case "message":
+                    messageCommand(sender, args);
+                    break;
                 default:
                     sendUnknownCommandMessage(sender);
                     break;
@@ -73,6 +79,7 @@ public class Commands implements CommandExecutor {
 
         if(!customMobsManager.getCustomMobNames().contains(args[1].toLowerCase())) {
             sendUnknownMobMessage(sender, args[1]);
+            return;
         }
 
         if(args.length == 2)
@@ -100,23 +107,25 @@ public class Commands implements CommandExecutor {
             return;
         }
 
-        if(!Bukkit.getOnlinePlayers().contains(Bukkit.getPlayer(args[1]))) {
+        Player receiver = Objects.requireNonNull(Bukkit.getPlayer(args[1]));
+        if(!Bukkit.getOnlinePlayers().contains(receiver)) {
             sendUnknownCommandMessage(sender, "Player " + args[1] + " is not online.");
             return;
         }
 
+        String customMob = args[2].toLowerCase();
         if(!customMobsManager.getCustomMobNames().contains(args[2].toLowerCase())) {
             sendUnknownMobMessage(sender, args[2]);
             return;
         }
 
-        if(!args[3].equalsIgnoreCase("item") && !args[3].equalsIgnoreCase("spawner")) {
+        String type = args[3];
+        if(!type.equalsIgnoreCase("item") && !type.equalsIgnoreCase("spawner")) {
             sendUnknownGiveMessage(sender);
             return;
         }
 
         int amount = 1;
-
         if(args.length == 5) {
             try {
                 amount = Integer.parseInt(args[4]);
@@ -125,7 +134,63 @@ public class Commands implements CommandExecutor {
             }
         }
 
-        customMobsManager.giveCustomMob(sender, Bukkit.getPlayer(args[1]), args[2].toLowerCase(), args[3], amount);
+        sender.sendMessage(configManager.getSenderGiveMessage(receiver.getName(), customMob, type, amount));
+        String senderName;
+        if(sender instanceof ConsoleCommandSender) {
+            senderName = "Console";
+        } else {
+            senderName = sender.getName();
+        }
+        receiver.sendMessage(configManager.getReceiverGiveMessage(senderName, customMob, type, amount));
+
+        customMobsManager.giveCustomMob(receiver, customMob, type, amount);
+    }
+
+    private void messageCommand(CommandSender sender, String[] args) {
+        if (!sender.hasPermission("custommobs.admin")) {
+            sendNoPermissionMessage(sender);
+            return;
+        }
+
+        if(args.length < 4) {
+            sendUnknownCommandMessage(sender);
+            return;
+        }
+
+        if(!customMobsManager.getCustomMobNames().contains(args[1].toLowerCase())) {
+            sendUnknownMobMessage(sender, args[1]);
+        }
+
+        if(args[2].equalsIgnoreCase("add")) {
+            String message = String.join(" ", Arrays.copyOfRange(args, 3, args.length));
+            customMobsManager.getCustomMob(args[1]).getCustomMobConfiguration().addMessageText(message);
+            sendMessagesChangeMessage(sender, "Added the following message to " + args[1] + " : " + message);
+        } else if(args.length == 4 && args[2].equalsIgnoreCase("remove")) {
+            try {
+                if(args[3].equalsIgnoreCase("all")) {
+                    customMobsManager.getCustomMob(args[1]).getCustomMobConfiguration()
+                            .clearMessageText();
+                    sendMessagesChangeMessage(sender, "Removed all the messages of " + args[1] + ".");
+                } else if(customMobsManager.getCustomMob(args[1]).getCustomMobConfiguration().removeMessageText(Integer.parseInt(args[3]))) {
+                    sendMessagesChangeMessage(sender, "Removed message " + Integer.parseInt(args[3]) + " of " + args[1] + ".");
+                } else {
+                    sendUnknownCommandMessage(sender, "There isn't " + Integer.parseInt(args[3]) + " messages.");
+                }
+            } catch (Exception e) {
+                sendUnknownCommandMessage(sender, args[3] + " is not a valid Integer.");
+            }
+        } else if(args.length >= 5 && args[2].equalsIgnoreCase("edit")) {
+            try {
+                String message = String.join(" ", Arrays.copyOfRange(args, 4, args.length));
+                if(customMobsManager.getCustomMob(args[1]).getCustomMobConfiguration().editMessageText(Integer.parseInt(args[3]), message)) {
+                    sendMessagesChangeMessage(sender, "Edited message " + Integer.parseInt(args[3]) + " of " + args[1] +  " to : " + message);
+                } else {
+                    sendUnknownCommandMessage(sender, "There isn't " + Integer.parseInt(args[3]) + " messages.");
+                }
+            } catch (Exception e) {
+                sendUnknownCommandMessage(sender, args[3] + " is not a valid Integer.");
+            }
+        }
     }
 
     private void reloadPlugin(CommandSender sender) {
@@ -143,7 +208,7 @@ public class Commands implements CommandExecutor {
             return;
         }
 
-        CustomMobs.getPlugin().getGuiManager().getMainCustomMobsGUI().openInventory(player, 1);
+        new MainCustomMobsGUI().openInventory(player, 1);
     }
 
     private void sendUnknownCommandMessage(CommandSender sender) {
@@ -172,5 +237,9 @@ public class Commands implements CommandExecutor {
 
     private void sendNoPermissionMessage(CommandSender sender) {
         sender.sendMessage(configManager.getNoPermissionMessage());
+    }
+
+    private void sendMessagesChangeMessage(CommandSender sender, String complement) {
+        sender.sendMessage(configManager.getMessagesChangeMessage(complement));
     }
 }

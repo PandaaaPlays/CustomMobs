@@ -1,7 +1,6 @@
 package ca.pandaaa.custommobs.commands;
 
 import ca.pandaaa.custommobs.CustomMobs;
-import ca.pandaaa.custommobs.custommobs.CustomMobsManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -23,8 +22,10 @@ public class TabCompletion implements TabCompleter {
                 completionList.add("reload");
                 completionList.add("summon");
                 completionList.add("give");
+                completionList.add("message");
             }
-            if(args.length == 2 && args[0].equalsIgnoreCase("summon")) {
+            if(args.length == 2 && (args[0].equalsIgnoreCase("summon")
+                || args[0].equalsIgnoreCase("message"))) {
                 completionList.addAll(customMobNames);
             }
             if(args.length == 2 && args[0].equalsIgnoreCase("give")) {
@@ -34,6 +35,11 @@ public class TabCompletion implements TabCompleter {
 
             if(args.length == 3 && args[0].equalsIgnoreCase("give")) {
                 completionList.addAll(customMobNames);
+            }
+            if(args.length == 3 && args[0].equalsIgnoreCase("message")) {
+                completionList.add("add");
+                completionList.add("edit");
+                completionList.add("remove");
             }
 
             if(args.length == 4 && args[0].equalsIgnoreCase("give")) {

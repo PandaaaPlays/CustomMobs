@@ -1,7 +1,5 @@
 package ca.pandaaa.custommobs.utils;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -11,7 +9,6 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.profile.PlayerProfile;
 import org.bukkit.profile.PlayerTextures;
 
-import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.UUID;
@@ -37,9 +34,7 @@ public class Utils {
 
     public static ItemStack createHead(String url) {
         ItemStack head = new ItemStack(Material.PLAYER_HEAD);
-        if (url.isEmpty()) {
-            return head;
-        } else {
+        if (!url.isEmpty()) {
             SkullMeta headMeta = (SkullMeta)head.getItemMeta();
             headMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             try {
@@ -52,7 +47,7 @@ public class Utils {
                 return head;
             }
             head.setItemMeta(headMeta);
-            return head;
         }
+        return head;
     }
 }

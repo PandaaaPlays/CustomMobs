@@ -1,8 +1,8 @@
 package ca.pandaaa.custommobs.utils;
 
 public class DamageRange {
-    private double minimumDamage;
-    private double maximimDamage;
+    private final double minimumDamage;
+    private final double maximimDamage;
 
     public DamageRange(double minimumDamage, double maximimDamage) {
         this.minimumDamage = minimumDamage;

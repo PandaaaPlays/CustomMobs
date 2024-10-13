@@ -6,28 +6,27 @@ import ca.pandaaa.custommobs.configurations.ConfigurationManager;
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.CustomMobEvents;
 import ca.pandaaa.custommobs.custommobs.CustomMobsManager;
-import ca.pandaaa.custommobs.guis.GUIManager;
+import ca.pandaaa.custommobs.guis.CustomMobsGUIEvents;
+import ca.pandaaa.custommobs.guis.EditCustomMobsGUI;
 import ca.pandaaa.custommobs.guis.MainCustomMobsGUI;
 import ca.pandaaa.custommobs.utils.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class CustomMobs extends JavaPlugin {
     private File mobFolder;
-    private final List<CustomMobConfiguration> mobConfigurations = new ArrayList<>();
+    private List<CustomMobConfiguration> mobConfigurations = new ArrayList<>();
     private static CustomMobs plugin;
     private ConfigurationManager configManager;
     private CustomMobsManager customMobsManager;
-    private GUIManager guiManager;
 
     @Override
     public void onEnable() {
@@ -41,12 +40,20 @@ public class CustomMobs extends JavaPlugin {
         configManager = new ConfigurationManager(getConfig());
         customMobsManager = new CustomMobsManager(configManager, mobConfigurations);
         customMobsManager.loadCustomMobs();
-        guiManager = new GUIManager(mobConfigurations);
 
         getCommandsAndListeners();
 
         this.sendStartedMessage();
         this.sendTestingMessage();
+    }
+
+    @Override
+    public void onDisable() {
+        for(Player player : Bukkit.getOnlinePlayers()) {
+            if(player.getOpenInventory().getTitle().contains("CustomMobs")) {
+                player.closeInventory();
+            }
+        }
     }
 
     public static CustomMobs getPlugin() {
@@ -57,10 +64,6 @@ public class CustomMobs extends JavaPlugin {
         return customMobsManager;
     }
 
-    public GUIManager getGuiManager() {
-        return guiManager;
-    }
-
     public void reloadConfig(CommandSender sender) {
         plugin.reloadConfig();
         loadAllMobsConfigurations();
@@ -68,7 +71,6 @@ public class CustomMobs extends JavaPlugin {
         configManager = new ConfigurationManager(getConfig());
         customMobsManager = new CustomMobsManager(configManager, mobConfigurations);
         customMobsManager.loadCustomMobs();
-        guiManager = new GUIManager(mobConfigurations);
 
         getCommandsAndListeners();
 
@@ -98,8 +100,9 @@ public class CustomMobs extends JavaPlugin {
     }
 
     private void loadAllMobsConfigurations() {
+        mobConfigurations = new ArrayList<>();
         for(File mobFile : Objects.requireNonNull(mobFolder.listFiles())) {
-            mobConfigurations.add(new CustomMobConfiguration(mobFile.getName(), YamlConfiguration.loadConfiguration(mobFile)));
+            mobConfigurations.add(new CustomMobConfiguration(YamlConfiguration.loadConfiguration(mobFile), mobFile));
         }
     }
 
@@ -109,7 +112,7 @@ public class CustomMobs extends JavaPlugin {
             return;
 
         getServer().getPluginManager().registerEvents(new CustomMobEvents(), this);
-        getServer().getPluginManager().registerEvents(guiManager.getMainCustomMobsGUI(), this);
+        getServer().getPluginManager().registerEvents(new CustomMobsGUIEvents(), this);
         command.setExecutor(new Commands(configManager, customMobsManager));
         command.setTabCompleter(new TabCompletion());
     }

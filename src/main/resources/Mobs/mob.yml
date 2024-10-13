@@ -1,5 +1,6 @@
 # The actual Entity
 mob:
+  name: "&bTest"
   type: SKELETON
   # For Ageable
   baby: true
@@ -68,7 +69,6 @@ equipment:
 
 # CustomMob's special attributes
 special:
-  name:
   visible-name:
   health:
   # Aggressive must be turned on for a passive animal to attack the players.
@@ -81,7 +81,7 @@ special:
   damage-range:
     minimum: 5.0
     maximum: 6.5
-  invincible:
+  invincible: # Only in survival
   silent:
   gravity:
   persistent:
@@ -90,9 +90,12 @@ special:
 
 #potion-effects:
 
-#item:
+item:
+  material: GLOW_ITEM_FRAME
+  name: "&e&lCus&6&ltom &e&lSpawn Egg"
 
-#spawner:
+spawner:
+  name: "&e&lCus&6&ltom &e&lSpawner"
 
 message:
   text:

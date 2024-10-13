@@ -12,7 +12,7 @@ unknown-command: "&c&l[!] &cUnknown Command. %complement%"
 
 # The message displayed on the console when it is using a command that it cannot.
 # %complement% -> Will change to a useful tip for the console if applicable.
-console-unknown-command: "&c[!] The console cannot use this command. %complement%"
+console-unknown-command: "&c&l[!] &cThe console cannot use this command. %complement%"
 
 # The message displayed to the sender/receiver when giving item(s) or spawner(s).
 # %amount% -> Changes to the amount of item(s) or spawner(s) given.
@@ -26,6 +26,9 @@ no-permission: "&c&l[!] &cYou do not have enough permission to do this."
 
 # The message displayed when a command using coordinates was not used with valid coordinates.
 incorrect-coordinates: "&c&l[!] &cThe entered coordinates are incorrect. Make sure you are using numbers."
+
+# The message displayed when a message is edited (add/remove/edit).
+messages-change: "&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &eMessage changed. %complement%"
 
 # The message displayed when the configuration of the plugin is reloaded.
 plugin-reload: "&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &ePlugin Reloaded."
