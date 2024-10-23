@@ -26,6 +26,7 @@ public class CustomMobs extends JavaPlugin {
     private ConfigurationManager configManager;
     private CustomMobsManager customMobsManager;
 
+    // Test
     @Override
     public void onEnable() {
         plugin = this;
