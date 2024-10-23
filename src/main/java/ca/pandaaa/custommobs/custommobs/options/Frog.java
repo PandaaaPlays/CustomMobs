@@ -1,9 +1,12 @@
 package ca.pandaaa.custommobs.custommobs.options;
 
 import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -11,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Frog extends CustomMobType {
-    private final org.bukkit.entity.Frog.Variant frogVariant;
+    private org.bukkit.entity.Frog.Variant frogVariant;
 
     public Frog(org.bukkit.entity.Frog.Variant frogVariant) {
         this.frogVariant = frogVariant;
@@ -28,16 +31,32 @@ public class Frog extends CustomMobType {
     public List<ItemStack> getOptionItems(CustomMob customMob) {
         List<ItemStack> items = new ArrayList<>();
 
-        ItemStack variant = new ItemStack(Material.FROG_SPAWN_EGG);
-        ItemMeta variantMeta = variant.getItemMeta();
-        variantMeta.setDisplayName(Utils.applyFormat("&b&lFrog variant"));
-        variant.setItemMeta(variantMeta);
-        items.add(getOptionItemStack(variant));
+        items.add(getOptionItemStack(getFrogVariantItem(), true, true));
 
         return items;
     }
 
-    public ItemStack modifyOption(CustomMob customMob, String option) {
+    public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {
+        switch(option.toLowerCase()) {
+            case "frogvariant": {
+                if (clickType.isRightClick()) {
+                    this.frogVariant = null;
+                } else {
+                    this.frogVariant = NextOptions.getNextFrogVariant(frogVariant);
+                }
+                customMob.getCustomMobConfiguration().setFrogVariant(frogVariant);
+                return getOptionItemStack(getFrogVariantItem(), true, true);
+            }
+        }
         return null;
+    }
+
+    public CustomMobsItem getFrogVariantItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.FROG_SPAWN_EGG);
+        item.setName("&b&lFrog variant");
+        String variant = frogVariant == null ? "&fBiome based" : "&f" + frogVariant.toString();
+        item.addLore("&eVariant: &f" + variant);
+        item.setPersistentDataContainer(this.getClass().getSimpleName(), "FrogVariant");
+        return item;
     }
 }

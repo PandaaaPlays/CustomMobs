@@ -9,16 +9,20 @@ import java.util.List;
 
 public class CustomMobsMessage {
     private final List<String> messages;
+    private final List<String> deathMessages;
     private final double radius;
+    private final double deathRadius;
 
-    public CustomMobsMessage(List<String> messages, double radius) {
+    public CustomMobsMessage(List<String> messages, double radius, List<String> deathMessages, double deathRadius) {
         this.messages = messages;
         this.radius = radius;
+        this.deathMessages = deathMessages;
+        this.deathRadius = deathRadius;
     }
 
-    public void sendMessage(Entity customMob) {
+    public void sendMessages(Entity customMob) {
         if(!messages.isEmpty()) {
-            if(radius == -1) {
+            if(radius < 0) {
                 for(String message : messages)
                     Bukkit.broadcastMessage(Utils.applyFormat(message));
             } else {
@@ -34,7 +38,39 @@ public class CustomMobsMessage {
         }
     }
 
+    public void sendDeathMessages(Entity customMob) {
+        if(!deathMessages.isEmpty()) {
+            if(radius < 0) {
+                for(String message : deathMessages)
+                    Bukkit.broadcastMessage(Utils.applyFormat(message));
+            } else {
+                List<Entity> entities = customMob.getNearbyEntities(deathRadius, deathRadius, deathRadius);
+                for(String message : deathMessages) {
+                    for (Entity entity : entities) {
+                        if (entity instanceof Player) {
+                            entity.sendMessage(Utils.applyFormat(message));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+
     public List<String> getMessages() {
         return messages;
+    }
+
+    public List<String> getDeathMessages() {
+        return messages;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    public double getDeathRadius() {
+        return radius;
     }
 }

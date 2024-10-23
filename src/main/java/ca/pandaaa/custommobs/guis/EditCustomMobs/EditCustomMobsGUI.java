@@ -1,8 +1,10 @@
-package ca.pandaaa.custommobs.guis;
+package ca.pandaaa.custommobs.guis.EditCustomMobs;
 
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.custommobs.CustomMobsManager;
+import ca.pandaaa.custommobs.guis.CustomMobsGUI;
+import ca.pandaaa.custommobs.guis.MainCustomMobsGUI;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -213,7 +215,7 @@ public class EditCustomMobsGUI extends CustomMobsGUI implements Listener {
                 // TODO sounds
                 break;
             case 34:
-                // TODO message
+                new MessagesCustomMobsGUI(customMob, this).openInventory(clicker);
                 break;
             case 45:
                 new MainCustomMobsGUI().openInventory(clicker, 1);
@@ -356,17 +358,8 @@ public class EditCustomMobsGUI extends CustomMobsGUI implements Listener {
         ItemMeta itemMeta = item.getItemMeta();
         ArrayList<String> lore = new ArrayList<>();
         itemMeta.setDisplayName(Utils.applyFormat("&6&lMessages"));
-        lore.add(Utils.applyFormat("&eCurrent message(s):"));
-
-        int i = 1;
-        for (String message : customMob.getCustomMobMessage().getMessages()) {
-            lore.add(Utils.applyFormat("&f " + i++ + ". &r" + message));
-        }
-
         lore.add("");
-        lore.add(Utils.applyFormat("&7&o(( To add messages, use : /custommobs message [name] add [message] ))"));
-        lore.add(Utils.applyFormat("&7&o(( To edit messages, use : /custommobs message [name] edit [number] [message] ))"));
-        lore.add(Utils.applyFormat("&7&o(( To remove messages, use : /custommobs message [name] remove [number/all] ))"));
+        lore.add(Utils.applyFormat("&7&o(( Click to edit this CustomMob's message(s) ))"));
         itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
         return item;

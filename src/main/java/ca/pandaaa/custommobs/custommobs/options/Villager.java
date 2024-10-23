@@ -1,9 +1,13 @@
 package ca.pandaaa.custommobs.custommobs.options;
 
 import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -11,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Villager extends CustomMobType {
-    private final org.bukkit.entity.Villager.Type villagerType;
-    private final org.bukkit.entity.Villager.Profession villagerProfession;
+    private org.bukkit.entity.Villager.Type villagerType;
+    private org.bukkit.entity.Villager.Profession villagerProfession;
 
     public Villager(org.bukkit.entity.Villager.Type villagerType, org.bukkit.entity.Villager.Profession villagerProfession) {
         this.villagerType = villagerType;
@@ -23,31 +27,65 @@ public class Villager extends CustomMobType {
         if(!(customMob instanceof org.bukkit.entity.Villager))
             return;
 
+        Bukkit.broadcastMessage(villagerProfession.toString() + " " + villagerType.toString());
         if(villagerType != null)
             ((org.bukkit.entity.Villager) customMob).setVillagerType(villagerType);
-        if(villagerProfession != null)
+        if(villagerProfession != null) {
             ((org.bukkit.entity.Villager) customMob).setProfession(villagerProfession);
+            ((org.bukkit.entity.Villager) customMob).setVillagerExperience(1);
+        }
+        Bukkit.broadcastMessage(((org.bukkit.entity.Villager) customMob).getProfession().toString() + " " + ((org.bukkit.entity.Villager) customMob).getVillagerType().toString());
     }
 
     public List<ItemStack> getOptionItems(CustomMob customMob) {
         List<ItemStack> items = new ArrayList<>();
 
-        ItemStack type = new ItemStack(Material.VILLAGER_SPAWN_EGG);
-        ItemMeta typeMeta = type.getItemMeta();
-        typeMeta.setDisplayName(Utils.applyFormat("&3&lVillager type"));
-        type.setItemMeta(typeMeta);
-        items.add(getOptionItemStack(type));
-
-        ItemStack profession = new ItemStack(Material.BOOK);
-        ItemMeta professionMeta = profession.getItemMeta();
-        professionMeta.setDisplayName(Utils.applyFormat("&b&lVillager profession"));
-        profession.setItemMeta(professionMeta);
-        items.add(getOptionItemStack(profession));
+        items.add(getOptionItemStack(getVillagerTypeItem(), true, true));
+        items.add(getOptionItemStack(getVillagerProfessionItem(), true, true));
 
         return items;
     }
 
-    public ItemStack modifyOption(CustomMob customMob, String option) {
+    public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {
+        switch(option.toLowerCase()) {
+            case "villagertype": {
+                if(clickType.isRightClick()) {
+                    this.villagerType = null;
+                } else {
+                    this.villagerType = NextOptions.getNextVillagerType(villagerType);
+                }
+                customMob.getCustomMobConfiguration().setVillagerType(villagerType);
+                return getOptionItemStack(getVillagerTypeItem(), true, true);
+            }
+
+            case "villagerprofession": {
+                if(clickType.isRightClick()) {
+                    this.villagerProfession = org.bukkit.entity.Villager.Profession.NONE;
+                } else {
+                    this.villagerProfession = NextOptions.getNextVillagerProfession(villagerProfession);
+                }
+                customMob.getCustomMobConfiguration().setVillagerProfession(villagerProfession);
+                return getOptionItemStack(getVillagerProfessionItem(), true, true);
+            }
+        }
         return null;
+    }
+
+    public CustomMobsItem getVillagerTypeItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.VILLAGER_SPAWN_EGG);
+        item.setName("&b&lVillager type");
+        String type = villagerType == null ? "Biome based" : villagerType.toString();
+        item.addLore("&eType: &f" + type);
+        item.setPersistentDataContainer(this.getClass().getSimpleName(), "VillagerType");
+        return item;
+    }
+
+    public CustomMobsItem getVillagerProfessionItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.BOOK);
+        item.setName("&b&lVillager profession");
+        String profession = villagerProfession == null ? "&fRandom" : "&f" + villagerProfession.toString();
+        item.addLore("&eProfession: &f" + profession);
+        item.setPersistentDataContainer(this.getClass().getSimpleName(), "VillagerProfession");
+        return item;
     }
 }

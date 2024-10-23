@@ -7,8 +7,6 @@ import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.CustomMobEvents;
 import ca.pandaaa.custommobs.custommobs.CustomMobsManager;
 import ca.pandaaa.custommobs.guis.CustomMobsGUIEvents;
-import ca.pandaaa.custommobs.guis.EditCustomMobsGUI;
-import ca.pandaaa.custommobs.guis.MainCustomMobsGUI;
 import ca.pandaaa.custommobs.utils.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

@@ -1,10 +1,13 @@
 package ca.pandaaa.custommobs.custommobs.options;
 
 import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -12,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Wolf extends CustomMobType {
-    private final DyeColor collarColor;
-    private final boolean angry;
+    private DyeColor collarColor;
+    private boolean angry;
 
     public Wolf(DyeColor collarColor, boolean angry) {
         this.collarColor = collarColor;
@@ -27,27 +30,54 @@ public class Wolf extends CustomMobType {
         if(collarColor != null)
             ((org.bukkit.entity.Wolf) customMob).setCollarColor(collarColor);
         ((org.bukkit.entity.Wolf) customMob).setAngry(angry);
+
     }
 
     public List<ItemStack> getOptionItems(CustomMob customMob) {
         List<ItemStack> items = new ArrayList<>();
 
-        ItemStack angry = new ItemStack(Material.DIAMOND_SWORD);
-        ItemMeta angryMeta = angry.getItemMeta();
-        angryMeta.setDisplayName(Utils.applyFormat("&c&lAngry"));
-        angry.setItemMeta(angryMeta);
-        items.add(getOptionItemStack(angry));
-
-        ItemStack collarColor = new ItemStack(Material.END_CRYSTAL);
-        ItemMeta collarColorMeta = collarColor.getItemMeta();
-        collarColorMeta.setDisplayName(Utils.applyFormat("&b&lCollar color"));
-        collarColor.setItemMeta(collarColorMeta);
-        items.add(getOptionItemStack(collarColor));
-
+        items.add(getOptionItemStack(getCollarColorItem(), true, true));
+        items.add(getOptionItemStack(getAngryItem(), true, true));
         return items;
     }
 
-    public ItemStack modifyOption(CustomMob customMob, String option) {
+    public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {
+        switch(option.toLowerCase()) {
+            case "collarcolor": {
+                if(clickType.isRightClick()) {
+                    this.collarColor = null;
+                } else {
+                    this.collarColor = NextOptions.getNextDyeColor(collarColor);
+                }
+                customMob.getCustomMobConfiguration().setCollarColor(collarColor);
+                return getOptionItemStack(getCollarColorItem(), true, true);
+            }
+
+            case "angry": {
+                this.angry = !angry;
+                customMob.getCustomMobConfiguration().setAngryWolf(angry);
+                return getOptionItemStack(getAngryItem(), false, false);
+            }
+
+        }
         return null;
+    }
+
+    public CustomMobsItem getCollarColorItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.END_CRYSTAL);
+        item.setName("&b&lCollar color");
+        String color = collarColor == null ? "&fDefault" : Utils.getChatColorOfColor(collarColor.name()) + collarColor.name();
+        item.addLore("&eColor: " + color);
+        item.setPersistentDataContainer(this.getClass().getSimpleName(), "CollarColor");
+        return item;
+    }
+
+    public CustomMobsItem getAngryItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.DIAMOND_SWORD);
+        String angry = this.angry ? "&a&lOn" : "&c&lOff";
+        item.setName("&c&lAngry");
+        item.addLore("&eAngry: " + angry);
+        item.setPersistentDataContainer(this.getClass().getSimpleName(), "Angry");
+        return item;
     }
 }

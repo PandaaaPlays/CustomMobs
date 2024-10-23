@@ -1,10 +1,13 @@
 package ca.pandaaa.custommobs.custommobs.options;
 
 import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -12,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Shulker extends CustomMobType {
-    private final DyeColor color;
+    private DyeColor color;
 
     public Shulker(DyeColor color) {
         this.color = color;
@@ -29,16 +32,32 @@ public class Shulker extends CustomMobType {
     public List<ItemStack> getOptionItems(CustomMob customMob) {
         List<ItemStack> items = new ArrayList<>();
 
-        ItemStack color = new ItemStack(Material.SHULKER_BOX);
-        ItemMeta colorMeta = color.getItemMeta();
-        colorMeta.setDisplayName(Utils.applyFormat("&b&lShulker color"));
-        color.setItemMeta(colorMeta);
-        items.add(getOptionItemStack(color));
+        items.add(getOptionItemStack(getShulkerColorItem(), true, true));
 
         return items;
     }
 
-    public ItemStack modifyOption(CustomMob customMob, String option) {
+    public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {
+        switch (option.toLowerCase()) {
+            case "shulkercolor": {
+                if (clickType.isRightClick()) {
+                    this.color = null;
+                } else {
+                    this.color = NextOptions.getNextDyeColor(color);
+                }
+                customMob.getCustomMobConfiguration().setShulkerColor(color);
+                return getOptionItemStack(getShulkerColorItem(), true, true);
+            }
+        }
         return null;
+    }
+
+    public CustomMobsItem getShulkerColorItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.SHULKER_BOX);
+        item.setName("&b&lShulker color");
+        String color = this.color == null ? "&fNone" : Utils.getChatColorOfColor(this.color.name()) + this.color.name();
+        item.addLore("&eColor: " + color);
+        item.setPersistentDataContainer(this.getClass().getSimpleName(), "ShulkerColor");
+        return item;
     }
 }

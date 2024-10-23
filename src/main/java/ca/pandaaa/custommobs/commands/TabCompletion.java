@@ -23,9 +23,11 @@ public class TabCompletion implements TabCompleter {
                 completionList.add("summon");
                 completionList.add("give");
                 completionList.add("message");
+                completionList.add("death-message");
             }
             if(args.length == 2 && (args[0].equalsIgnoreCase("summon")
-                || args[0].equalsIgnoreCase("message"))) {
+                || args[0].equalsIgnoreCase("message")
+                    || args[0].equalsIgnoreCase("death-message"))) {
                 completionList.addAll(customMobNames);
             }
             if(args.length == 2 && args[0].equalsIgnoreCase("give")) {
@@ -36,7 +38,8 @@ public class TabCompletion implements TabCompleter {
             if(args.length == 3 && args[0].equalsIgnoreCase("give")) {
                 completionList.addAll(customMobNames);
             }
-            if(args.length == 3 && args[0].equalsIgnoreCase("message")) {
+            if(args.length == 3 && (args[0].equalsIgnoreCase("message")
+                    || args[0].equalsIgnoreCase("death-message"))) {
                 completionList.add("add");
                 completionList.add("edit");
                 completionList.add("remove");

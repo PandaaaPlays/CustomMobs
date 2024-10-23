@@ -1,9 +1,12 @@
 package ca.pandaaa.custommobs.custommobs.options;
 
 import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -11,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Fox extends CustomMobType {
-    private final org.bukkit.entity.Fox.Type foxType;
+    private org.bukkit.entity.Fox.Type foxType;
 
     public Fox(org.bukkit.entity.Fox.Type foxType) {
         this.foxType = foxType;
@@ -28,16 +31,32 @@ public class Fox extends CustomMobType {
     public List<ItemStack> getOptionItems(CustomMob customMob) {
         List<ItemStack> items = new ArrayList<>();
 
-        ItemStack type = new ItemStack(Material.FOX_SPAWN_EGG);
-        ItemMeta typeMeta = type.getItemMeta();
-        typeMeta.setDisplayName(Utils.applyFormat("&b&lFox type"));
-        type.setItemMeta(typeMeta);
-        items.add(getOptionItemStack(type));
+        items.add(getOptionItemStack(getFoxTypeItem(), true, true));
 
         return items;
     }
 
-    public ItemStack modifyOption(CustomMob customMob, String option) {
+    public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {
+        switch(option.toLowerCase()) {
+            case "foxtype": {
+                if(clickType.isRightClick()) {
+                    this.foxType = null;
+                } else {
+                    this.foxType = NextOptions.getNextFoxType(foxType);
+                }
+                customMob.getCustomMobConfiguration().setFoxType(foxType);
+                return getOptionItemStack(getFoxTypeItem(), true, true);
+            }
+        }
         return null;
+    }
+
+    public CustomMobsItem getFoxTypeItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.FOX_SPAWN_EGG);
+        item.setName("&b&lFox type");
+        String type = foxType == null ? "&fBiome based" : "&f" + foxType.toString();
+        item.addLore("&eType: &f" + type);
+        item.setPersistentDataContainer(this.getClass().getSimpleName(), "FoxType");
+        return item;
     }
 }

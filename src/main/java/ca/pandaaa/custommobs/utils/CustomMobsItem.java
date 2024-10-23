@@ -3,6 +3,7 @@ package ca.pandaaa.custommobs.utils;
 import ca.pandaaa.custommobs.CustomMobs;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -26,6 +27,14 @@ public class CustomMobsItem extends org.bukkit.inventory.ItemStack {
                 itemLore.add(Utils.applyFormat(lore));
             }
             itemMeta.setLore(itemLore);
+            setItemMeta(itemMeta);
+        }
+    }
+
+    public void addEnchantment(Enchantment enchantment, int level, boolean ignoreLevelRestriction) {
+        ItemMeta itemMeta = getItemMeta();
+        if(itemMeta != null) {
+            itemMeta.addEnchant(enchantment, level, ignoreLevelRestriction);
             setItemMeta(itemMeta);
         }
     }

@@ -1,9 +1,12 @@
 package ca.pandaaa.custommobs.custommobs.options;
 
 import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -11,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Zombie extends CustomMobType {
-    private final boolean canBreakDoors;
+    private boolean canBreakDoors;
 
     public Zombie(boolean canBreakDoors) {
         this.canBreakDoors = canBreakDoors;
@@ -27,16 +30,28 @@ public class Zombie extends CustomMobType {
     public List<ItemStack> getOptionItems(CustomMob customMob) {
         List<ItemStack> items = new ArrayList<>();
 
-        ItemStack canBreakDoor = new ItemStack(Material.DIAMOND_SWORD);
-        ItemMeta canBreakDoorMeta = canBreakDoor.getItemMeta();
-        canBreakDoorMeta.setDisplayName(Utils.applyFormat("&c&lCan break doors"));
-        canBreakDoor.setItemMeta(canBreakDoorMeta);
-        items.add(getOptionItemStack(canBreakDoor));
+        items.add(getOptionItemStack(getCanBreakDoorsItem(), false, false));
 
         return items;
     }
 
-    public ItemStack modifyOption(CustomMob customMob, String option) {
+    public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {
+        switch(option.toLowerCase()) {
+            case "canbreakdoors": {
+                this.canBreakDoors = !canBreakDoors;
+                customMob.getCustomMobConfiguration().setCanBreakDoors(canBreakDoors);
+                return getOptionItemStack(getCanBreakDoorsItem(), false, false);
+            }
+        }
         return null;
+    }
+
+    public CustomMobsItem getCanBreakDoorsItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.OAK_DOOR);
+        String canBreakDoors = this.canBreakDoors ? "&a&lOn" : "&c&lOff";
+        item.setName("&c&lCan break doors");
+        item.addLore("&eCan break doors: " + canBreakDoors);
+        item.setPersistentDataContainer(this.getClass().getSimpleName(), "CanBreakDoors");
+        return item;
     }
 }

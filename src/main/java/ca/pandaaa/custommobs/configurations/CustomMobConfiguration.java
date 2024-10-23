@@ -52,6 +52,12 @@ public class CustomMobConfiguration {
                 this);
         // TODO sounds
 
+        setCustomMobConfigurations(customMob, type);
+
+        return customMob;
+    }
+
+    public void setCustomMobConfigurations(CustomMob customMob, EntityType type) {
         customMob.addCustomMobType(new ca.pandaaa.custommobs.custommobs.options.Special(
                 isNameVisible(),
                 getHealth(),
@@ -85,7 +91,7 @@ public class CustomMobConfiguration {
                     ChestedHorse(hasChest()));
         if(Creeper.class.isAssignableFrom(type.getEntityClass()))
             customMob.addCustomMobType(new ca.pandaaa.custommobs.custommobs.options.
-                    Creeper(getExplosionCooldown(), getExplosionRadius()));
+                    Creeper(getExplosionCooldown(), getExplosionRadius(), isChargedCreeper()));
         if(Fox.class.isAssignableFrom(type.getEntityClass()))
             customMob.addCustomMobType(new ca.pandaaa.custommobs.custommobs.options.
                     Fox(getFoxType()));
@@ -143,7 +149,72 @@ public class CustomMobConfiguration {
         if(Zombie.class.isAssignableFrom(type.getEntityClass()))
             customMob.addCustomMobType(new ca.pandaaa.custommobs.custommobs.options.
                     Zombie(canBreakDoors()));
-        return customMob;
+    }
+
+    public void resetType(EntityType type) {
+        if(AbstractHorse.class.isAssignableFrom(type.getEntityClass()))
+            setJumpStrength(null);
+        if (Ageable.class.isAssignableFrom(type.getEntityClass()))
+            setBaby(null);
+        if (Axolotl.class.isAssignableFrom(type.getEntityClass()))
+            setAxolotlVariant(null);
+        if (Cat.class.isAssignableFrom(type.getEntityClass())) {
+            setCatType(null);
+            setCollarColor(null);
+        }
+        if (ChestedHorse.class.isAssignableFrom(type.getEntityClass()))
+            setHasChest(null);
+        if (Creeper.class.isAssignableFrom(type.getEntityClass())) {
+            setExplosionCooldown(null);
+            setExplosionRadius(null);
+            setChargedCreeper(null);
+        }
+        if(Fox.class.isAssignableFrom(type.getEntityClass()))
+            setFoxType(null);
+        if(Frog.class.isAssignableFrom(type.getEntityClass()))
+            setFrogVariant(null);
+        if(Horse.class.isAssignableFrom(type.getEntityClass())) {
+            setHorseColor(null);
+            setHorseStyle(null);
+        }
+        if(Llama.class.isAssignableFrom(type.getEntityClass()))
+            setLlamaColor(null);
+        if(Panda.class.isAssignableFrom(type.getEntityClass()))
+            setPandaGene(null);
+        if(Parrot.class.isAssignableFrom(type.getEntityClass()))
+            setParrotVariant(null);
+        if(Phantom.class.isAssignableFrom(type.getEntityClass()))
+            setPhantomSize(null);
+        if(PigZombie.class.isAssignableFrom(type.getEntityClass()))
+            setZombifiedPiglinAnger(null);
+        if(Rabbit.class.isAssignableFrom(type.getEntityClass()))
+            setRabbitType(null);
+        if(Shulker.class.isAssignableFrom(type.getEntityClass()))
+            setShulkerColor(null);
+        if(Sittable.class.isAssignableFrom(type.getEntityClass()))
+            setSitting(null);
+        if(SkeletonHorse.class.isAssignableFrom(type.getEntityClass()))
+            setSkeletonTrap(null);
+        if(Slime.class.isAssignableFrom(type.getEntityClass()))
+            setSlimeSize(null);
+        if(Steerable.class.isAssignableFrom(type.getEntityClass()))
+            setHasSaddle(null);
+        if(Tameable.class.isAssignableFrom(type.getEntityClass())) {
+            setOwner(null);
+            setTamed(null);
+        }
+        if(Villager.class.isAssignableFrom(type.getEntityClass())) {
+            setVillagerType(null);
+            setVillagerProfession(null);
+        }
+        if(Vindicator.class.isAssignableFrom(type.getEntityClass()))
+            setJohnnyVindicator(null);
+        if(Wolf.class.isAssignableFrom(type.getEntityClass())) {
+            setCollarColor(null);
+            setAngryWolf(null);
+        }
+        if(Zombie.class.isAssignableFrom(type.getEntityClass()))
+            setCanBreakDoors(null);
     }
 
     public ItemStack getItem() {
@@ -178,8 +249,9 @@ public class CustomMobConfiguration {
         return spawner;
     }
 
-    public CustomMobsMessage getMessage() {
-        return new CustomMobsMessage(getMessageText(), getMessageRadius());
+    public CustomMobsMessage getMessages() {
+        return new CustomMobsMessage(getMessageText(false), getMessageRadius(false),
+                getMessageText(true), getMessageRadius(true));
     }
 
     private static final String TYPE = "mob.type";
@@ -189,6 +261,11 @@ public class CustomMobConfiguration {
         } catch(Exception exception) {
             return null;
         }
+    }
+
+    public void setType(EntityType entityType) {
+        mobConfiguration.set(TYPE, entityType.name());
+        saveConfigurationFile();
     }
 
     private static final String NAME = "mob.name";
@@ -225,12 +302,21 @@ public class CustomMobConfiguration {
         return mobConfiguration.getBoolean(BABY);
     }
 
+    public void setBaby(Boolean baby) {
+        mobConfiguration.set(BABY, baby);
+        saveConfigurationFile();
+    }
     private static final String CAN_BREAK_DOORS = "mob.can-break-doors";
     private boolean canBreakDoors() {
         if(!mobConfiguration.contains(CAN_BREAK_DOORS, true))
             return false;
 
         return mobConfiguration.getBoolean(CAN_BREAK_DOORS);
+    }
+
+    public void setCanBreakDoors(Boolean canBreakDoors) {
+        mobConfiguration.set(CAN_BREAK_DOORS, canBreakDoors);
+        saveConfigurationFile();
     }
 
     private static final String CAT_TYPE = "mob.cat-type";
@@ -242,6 +328,14 @@ public class CustomMobConfiguration {
         }
     }
 
+    public void setCatType(Cat.Type catType) {
+        if (catType != null)
+            mobConfiguration.set(CAT_TYPE, catType.toString());
+        else
+            mobConfiguration.set(CAT_TYPE, null);
+        saveConfigurationFile();
+    }
+
     private static final String RABBIT_TYPE = "mob.rabbit-type";
     private Rabbit.Type getRabbitType() {
         try {
@@ -249,6 +343,14 @@ public class CustomMobConfiguration {
         } catch(Exception exception) {
             return null;
         }
+    }
+
+    public void setRabbitType(Rabbit.Type rabbitType) {
+        if (rabbitType != null)
+            mobConfiguration.set(RABBIT_TYPE, rabbitType.toString());
+        else
+            mobConfiguration.set(RABBIT_TYPE, null);
+        saveConfigurationFile();
     }
 
     private static final String FOX_TYPE = "mob.fox-type";
@@ -260,6 +362,14 @@ public class CustomMobConfiguration {
         }
     }
 
+    public void setFoxType(Fox.Type foxType) {
+        if (foxType != null)
+            mobConfiguration.set(FOX_TYPE, foxType.toString());
+        else
+            mobConfiguration.set(FOX_TYPE, null);
+        saveConfigurationFile();
+    }
+
     private static final String VILLAGER_TYPE = "mob.villager-type";
     private Villager.Type getVillagerType() {
         try {
@@ -267,6 +377,14 @@ public class CustomMobConfiguration {
         } catch(Exception exception) {
             return null;
         }
+    }
+
+    public void setVillagerType(Villager.Type villagerType) {
+        if (villagerType != null)
+            mobConfiguration.set(VILLAGER_TYPE, villagerType.toString());
+        else
+            mobConfiguration.set(VILLAGER_TYPE, null);
+        saveConfigurationFile();
     }
 
     private static final String HORSE_COLOR = "mob.horse-color";
@@ -278,6 +396,14 @@ public class CustomMobConfiguration {
         }
     }
 
+    public void setHorseColor(Horse.Color horseColor) {
+        if (horseColor != null)
+            mobConfiguration.set(HORSE_COLOR, horseColor.name());
+        else
+            mobConfiguration.set(HORSE_COLOR, null);
+        saveConfigurationFile();
+    }
+
     private static final String HORSE_STYLE = "mob.horse-style";
     private Horse.Style getHorseStyle() {
         try {
@@ -285,6 +411,14 @@ public class CustomMobConfiguration {
         } catch(Exception exception) {
             return null;
         }
+    }
+
+    public void setHorseStyle(Horse.Style horseStyle) {
+        if (horseStyle != null)
+            mobConfiguration.set(HORSE_STYLE, horseStyle.name());
+        else
+            mobConfiguration.set(HORSE_STYLE, null);
+        saveConfigurationFile();
     }
 
     private static final String LLAMA_COLOR = "mob.llama-color";
@@ -296,6 +430,14 @@ public class CustomMobConfiguration {
         }
     }
 
+    public void setLlamaColor(Llama.Color llamaColor) {
+        if (llamaColor != null)
+            mobConfiguration.set(LLAMA_COLOR, llamaColor.name());
+        else
+            mobConfiguration.set(LLAMA_COLOR, null);
+        saveConfigurationFile();
+    }
+
     private static final String AXOLOTL_VARIANT = "mob.axolotl-variant";
     private Axolotl.Variant getAxolotlVariant() {
         try {
@@ -303,6 +445,14 @@ public class CustomMobConfiguration {
         } catch(Exception exception) {
             return null;
         }
+    }
+
+    public void setAxolotlVariant(Axolotl.Variant axolotlVariant) {
+        if (axolotlVariant != null)
+            mobConfiguration.set(AXOLOTL_VARIANT, axolotlVariant.name());
+        else
+            mobConfiguration.set(AXOLOTL_VARIANT, null);
+        saveConfigurationFile();
     }
 
     private static final String FROG_VARIANT = "mob.frog-variant";
@@ -314,6 +464,14 @@ public class CustomMobConfiguration {
         }
     }
 
+    public void setFrogVariant(Frog.Variant frogVariant) {
+        if (frogVariant != null)
+            mobConfiguration.set(FROG_VARIANT, frogVariant.toString());
+        else
+            mobConfiguration.set(FROG_VARIANT, null);
+        saveConfigurationFile();
+    }
+
     private static final String PARROT_VARIANT = "mob.parrot-variant";
     private Parrot.Variant getParrotVariant() {
         try {
@@ -323,29 +481,68 @@ public class CustomMobConfiguration {
         }
     }
 
+    public void setParrotVariant(Parrot.Variant parrotVariant) {
+        if (parrotVariant != null)
+            mobConfiguration.set(PARROT_VARIANT, parrotVariant.toString());
+        else
+            mobConfiguration.set(PARROT_VARIANT, null);
+        saveConfigurationFile();
+    }
+
     private static final String VILLAGER_PROFESSION = "mob.villager-profession";
     private Villager.Profession getVillagerProfession() {
         try {
             return Registry.VILLAGER_PROFESSION.get(NamespacedKey.minecraft(mobConfiguration.getString(VILLAGER_PROFESSION).toLowerCase()));
         } catch(Exception exception) {
-            return null;
+            return Villager.Profession.NONE;
         }
     }
 
+    public void setVillagerProfession(Villager.Profession villagerProfession) {
+        if (villagerProfession != null)
+            mobConfiguration.set(VILLAGER_PROFESSION, villagerProfession.toString());
+        else
+            mobConfiguration.set(VILLAGER_PROFESSION, null);
+        saveConfigurationFile();
+    }
+
     private static final String EXPLOSION_COOLDOWN = "mob.explosion-cooldown";
-    private Integer getExplosionCooldown() {
+    private int getExplosionCooldown() {
         if(!mobConfiguration.contains(EXPLOSION_COOLDOWN, true))
-            return null;
+            return 30;
 
         return mobConfiguration.getInt(EXPLOSION_COOLDOWN);
     }
 
+    public void setExplosionCooldown(Integer explosionCooldown) {
+        mobConfiguration.set(EXPLOSION_COOLDOWN, explosionCooldown);
+        saveConfigurationFile();
+    }
+
     private static final String EXPLOSION_RADIUS = "mob.explosion-radius";
-    private Integer getExplosionRadius() {
+    private int getExplosionRadius() {
         if(!mobConfiguration.contains(EXPLOSION_RADIUS, true))
-            return null;
+            return 3;
 
         return mobConfiguration.getInt(EXPLOSION_RADIUS);
+    }
+
+    public void setExplosionRadius(Integer explosionRadius) {
+        mobConfiguration.set(EXPLOSION_RADIUS, explosionRadius);
+        saveConfigurationFile();
+    }
+
+    private static final String CHARGED_CREEPER = "mob.charged-creeper";
+    private boolean isChargedCreeper() {
+        if(!mobConfiguration.contains(CHARGED_CREEPER, true))
+            return false;
+
+        return mobConfiguration.getBoolean(CHARGED_CREEPER);
+    }
+
+    public void setChargedCreeper(Boolean chargedCreeper) {
+        mobConfiguration.set(CHARGED_CREEPER, chargedCreeper);
+        saveConfigurationFile();
     }
 
     private static final String SLIME_SIZE = "mob.slime-size";
@@ -356,12 +553,22 @@ public class CustomMobConfiguration {
         return mobConfiguration.getInt(SLIME_SIZE);
     }
 
+    public void setSlimeSize(Integer slimeSize) {
+        mobConfiguration.set(SLIME_SIZE, slimeSize);
+        saveConfigurationFile();
+    }
+
     private static final String ZOMBIFIED_PIGLIN_ANGER = "mob.zombified-piglin-anger";
     private int getZombifiedPiglinAnger() {
         if(!mobConfiguration.contains(ZOMBIFIED_PIGLIN_ANGER, true))
             return 0;
 
         return mobConfiguration.getInt(ZOMBIFIED_PIGLIN_ANGER);
+    }
+
+    public void setZombifiedPiglinAnger(Integer zombifiedPiglinAnger) {
+        mobConfiguration.set(ZOMBIFIED_PIGLIN_ANGER, zombifiedPiglinAnger);
+        saveConfigurationFile();
     }
 
     private static final String SHULKER_COLOR = "mob.shulker-color";
@@ -373,6 +580,14 @@ public class CustomMobConfiguration {
         }
     }
 
+    public void setShulkerColor(DyeColor shulkerColor) {
+        if (shulkerColor != null)
+            mobConfiguration.set(SHULKER_COLOR, shulkerColor.name());
+        else
+            mobConfiguration.set(SHULKER_COLOR, null);
+        saveConfigurationFile();
+    }
+
     private static final String JOHNNY_VANDICATOR = "mob.johnny-vandicator";
     private boolean isJohnnyVindicator() {
         if(!mobConfiguration.contains(JOHNNY_VANDICATOR, true))
@@ -381,12 +596,22 @@ public class CustomMobConfiguration {
         return mobConfiguration.getBoolean(JOHNNY_VANDICATOR);
     }
 
+    public void setJohnnyVindicator(Boolean johnnyVindicator) {
+        mobConfiguration.set(JOHNNY_VANDICATOR, johnnyVindicator);
+        saveConfigurationFile();
+    }
+
     private static final String PHANTOM_SIZE = "mob.phantom-size";
-    private Integer getPhantomSize() {
+    private int getPhantomSize() {
         if(!mobConfiguration.contains(PHANTOM_SIZE, true))
-            return null;
+            return 0;
 
         return mobConfiguration.getInt(PHANTOM_SIZE);
+    }
+
+    public void setPhantomSize(Integer phantomSize) {
+        mobConfiguration.set(PHANTOM_SIZE, phantomSize);
+        saveConfigurationFile();
     }
 
     private static final String SADDLE = "mob.saddle";
@@ -397,12 +622,23 @@ public class CustomMobConfiguration {
         return mobConfiguration.getBoolean(SADDLE);
     }
 
+    public void setHasSaddle(Boolean hasSaddle) {
+        mobConfiguration.set(SADDLE, hasSaddle);
+        saveConfigurationFile();
+    }
+
+
     private static final String SITTING = "mob.sitting";
     private boolean isSitting() {
         if(!mobConfiguration.contains(SITTING, true))
             return false;
 
         return mobConfiguration.getBoolean(SITTING);
+    }
+
+    public void setSitting(Boolean sitting) {
+        mobConfiguration.set(SITTING, sitting);
+        saveConfigurationFile();
     }
 
     private static final String COLLAR_COLOR = "mob.collar-color";
@@ -414,14 +650,31 @@ public class CustomMobConfiguration {
         }
     }
 
+    public void setCollarColor(DyeColor dyeColor) {
+        if (dyeColor != null)
+            mobConfiguration.set(COLLAR_COLOR, dyeColor.name());
+        else
+            mobConfiguration.set(COLLAR_COLOR, null);
+        saveConfigurationFile();
+    }
+
     private static final String OWNER = "mob.owner";
     private UUID getOwner() {
         try {
-            return Bukkit.getPlayer(mobConfiguration.getString(OWNER)).getUniqueId();
+            return UUID.fromString(mobConfiguration.getString(OWNER));
         } catch (Exception exception) {
             return null;
         }
     }
+
+    public void setOwner(UUID owner) {
+        if(owner != null)
+            mobConfiguration.set(OWNER, owner.toString());
+        else
+            mobConfiguration.set(OWNER, null);
+        saveConfigurationFile();
+    }
+
 
     private static final String CHEST = "mob.chested";
     private boolean hasChest() {
@@ -431,12 +684,22 @@ public class CustomMobConfiguration {
         return mobConfiguration.getBoolean(CHEST);
     }
 
+    public void setHasChest(Boolean hasChest) {
+        mobConfiguration.set(CHEST, hasChest);
+        saveConfigurationFile();
+    }
+
     private static final String JUMP_STRENGTH = "mob.jump-strength";
-    private Double getJumpStrength() {
+    private double getJumpStrength() {
         if(!mobConfiguration.contains(JUMP_STRENGTH, true))
-            return null;
+            return 0.7D;
 
         return mobConfiguration.getDouble(JUMP_STRENGTH);
+    }
+
+    public void setJumpStrength(Double jumpStrength) {
+        mobConfiguration.set(JUMP_STRENGTH, jumpStrength);
+        saveConfigurationFile();
     }
 
     private static final String TAMED = "mob.tamed";
@@ -447,12 +710,22 @@ public class CustomMobConfiguration {
         return mobConfiguration.getBoolean(TAMED);
     }
 
+    public void setTamed(Boolean tamed) {
+        mobConfiguration.set(TAMED, tamed);
+        saveConfigurationFile();
+    }
+
     private static final String SKELETON_TRAP = "mob.skeleton-trap";
     private boolean isSkeletonTrap() {
         if(!mobConfiguration.contains(SKELETON_TRAP, true))
             return false;
 
         return mobConfiguration.getBoolean(SKELETON_TRAP);
+    }
+
+    public void setSkeletonTrap(Boolean skeletonTrap) {
+        mobConfiguration.set(SKELETON_TRAP, skeletonTrap);
+        saveConfigurationFile();
     }
 
     private static final String PANDA_GENE = "mob.panda-gene";
@@ -464,6 +737,14 @@ public class CustomMobConfiguration {
         }
     }
 
+    public void setPandaGene(Panda.Gene pandaGene) {
+        if (pandaGene != null)
+            mobConfiguration.set(PANDA_GENE, pandaGene.name());
+        else
+            mobConfiguration.set(PANDA_GENE, null);
+        saveConfigurationFile();
+    }
+
     private static final String ANGRY_WOLF = "mob.angry-wolf";
     private boolean isAngry() {
         if(!mobConfiguration.contains(ANGRY_WOLF, true))
@@ -472,12 +753,22 @@ public class CustomMobConfiguration {
         return mobConfiguration.getBoolean(ANGRY_WOLF);
     }
 
+    public void setAngryWolf(Boolean angry) {
+        mobConfiguration.set(ANGRY_WOLF, angry);
+        saveConfigurationFile();
+    }
+
     private static final String HEALTH = "special.health";
     private Double getHealth() {
         if(!mobConfiguration.contains(HEALTH, true))
             return null;
 
         return mobConfiguration.getDouble(HEALTH);
+    }
+
+    public void setHealth(Double health) {
+        mobConfiguration.set(HEALTH, health);
+        saveConfigurationFile();
     }
 
     private static final String AGGRESSIVE = "special.aggressive";
@@ -520,19 +811,29 @@ public class CustomMobConfiguration {
     }
 
     private static final String KNOCKBACK_RESISTANCE = "special.knockback-resistance";
-    private Double getKnockbackResistance() {
+    private double getKnockbackResistance() {
         if(!mobConfiguration.contains(KNOCKBACK_RESISTANCE, true))
-            return null;
+            return 0D;
 
         return mobConfiguration.getDouble(KNOCKBACK_RESISTANCE);
     }
 
+    public void setKnockbackResistance(double knockbackResistance) {
+        mobConfiguration.set(KNOCKBACK_RESISTANCE, knockbackResistance);
+        saveConfigurationFile();
+    }
+
     private static final String SPEED = "special.speed";
-    private Double getSpeed() {
+    private double getSpeed() {
         if(!mobConfiguration.contains(SPEED, true))
-            return null;
+            return 0.7D;
 
         return mobConfiguration.getDouble(SPEED);
+    }
+
+    public void setSpeed(double speed) {
+        mobConfiguration.set(SPEED, speed);
+        saveConfigurationFile();
     }
 
     private static final String MINIMUM_DAMAGE = "special.damage-range.minimum";
@@ -619,11 +920,16 @@ public class CustomMobConfiguration {
     }
 
     private static final String FOLLOW_RANGE = "special.follow-range";
-    private Double getFollowRange() {
+    private double getFollowRange() {
         if(!mobConfiguration.contains(FOLLOW_RANGE, true))
-            return null;
+            return 32D;
 
         return mobConfiguration.getDouble(FOLLOW_RANGE);
+    }
+
+    public void setFollowRange(double followRange) {
+        mobConfiguration.set(FOLLOW_RANGE, followRange);
+        saveConfigurationFile();
     }
 
     private static final String SOUND_TYPE = "sound.type";
@@ -661,53 +967,54 @@ public class CustomMobConfiguration {
 
     // Messages //
 
-    private static final String MESSAGE_TEXT = "message.text";
-    private List<String> getMessageText() {
-        if(!mobConfiguration.contains(MESSAGE_TEXT, true))
+    private static final String MESSAGE_TEXT = "messages.text";
+    private static final String DEATH_MESSAGE_TEXT = "death-messages.text";
+    private List<String> getMessageText(boolean death) {
+        if(!mobConfiguration.contains(death ? DEATH_MESSAGE_TEXT : MESSAGE_TEXT, true))
             return new ArrayList<>();
 
-        return mobConfiguration.getStringList(MESSAGE_TEXT);
+        return mobConfiguration.getStringList(death ? DEATH_MESSAGE_TEXT : MESSAGE_TEXT);
     }
 
-    public void addMessageText(String text) {
+    public void addMessageText(String text, boolean death) {
         List<String> messages = new ArrayList<>();
-        if(mobConfiguration.contains(MESSAGE_TEXT, true))
-            messages = mobConfiguration.getStringList(MESSAGE_TEXT);
+        if(mobConfiguration.contains(death ? DEATH_MESSAGE_TEXT : MESSAGE_TEXT, true))
+            messages = mobConfiguration.getStringList(death ? DEATH_MESSAGE_TEXT : MESSAGE_TEXT);
         messages.add(text);
 
-        mobConfiguration.set(MESSAGE_TEXT, messages);
+        mobConfiguration.set(death ? DEATH_MESSAGE_TEXT : MESSAGE_TEXT, messages);
         saveConfigurationFile();
     }
 
-    public boolean removeMessageText(int number) {
+    public boolean removeMessageText(int number, boolean death) {
         List<String> messages = new ArrayList<>();
-        if(mobConfiguration.contains(MESSAGE_TEXT, true))
-            messages = mobConfiguration.getStringList(MESSAGE_TEXT);
+        if(mobConfiguration.contains(death ? DEATH_MESSAGE_TEXT : MESSAGE_TEXT, true))
+            messages = mobConfiguration.getStringList(death ? DEATH_MESSAGE_TEXT : MESSAGE_TEXT);
         if(messages.size() < number)
             return false;
 
         messages.remove(number - 1);
-        mobConfiguration.set(MESSAGE_TEXT, messages);
+        mobConfiguration.set(death ? DEATH_MESSAGE_TEXT : MESSAGE_TEXT, messages);
         saveConfigurationFile();
         return true;
     }
 
-    public void clearMessageText() {
+    public void clearMessageText(boolean death) {
         List<String> messages = new ArrayList<>();
 
-        mobConfiguration.set(MESSAGE_TEXT, messages);
+        mobConfiguration.set(death ? DEATH_MESSAGE_TEXT : MESSAGE_TEXT, messages);
         saveConfigurationFile();
     }
 
-    public boolean editMessageText(int number, String text) {
+    public boolean editMessageText(int number, String text, boolean death) {
         List<String> messages = new ArrayList<>();
-        if(mobConfiguration.contains(MESSAGE_TEXT, true))
-            messages = mobConfiguration.getStringList(MESSAGE_TEXT);
+        if(mobConfiguration.contains(death ? DEATH_MESSAGE_TEXT : MESSAGE_TEXT, true))
+            messages = mobConfiguration.getStringList(death ? DEATH_MESSAGE_TEXT : MESSAGE_TEXT);
         if(messages.size() < number)
             return false;
 
         messages.set(number - 1, text);
-        mobConfiguration.set(MESSAGE_TEXT, messages);
+        mobConfiguration.set(death ? DEATH_MESSAGE_TEXT : MESSAGE_TEXT, messages);
         try {
             mobConfiguration.save(mobFile);
         } catch (IOException e) {
@@ -716,12 +1023,18 @@ public class CustomMobConfiguration {
         return true;
     }
 
-    private static final String MESSAGE_RADIUS = "message.radius";
-    private double getMessageRadius() {
-        if(!mobConfiguration.contains(MESSAGE_RADIUS, true))
+    private static final String MESSAGE_RADIUS = "messages.radius";
+    private static final String DEATH_MESSAGE_RADIUS = "death-messages.radius";
+    private double getMessageRadius(boolean death) {
+        if(!mobConfiguration.contains(death ? DEATH_MESSAGE_RADIUS : MESSAGE_RADIUS, true))
             return -1;
 
-        return mobConfiguration.getDouble(MESSAGE_RADIUS);
+        return mobConfiguration.getDouble(death ? DEATH_MESSAGE_RADIUS : MESSAGE_RADIUS);
+    }
+
+    public void setMessagesRadius(double radius, boolean death) {
+        mobConfiguration.set(death ? DEATH_MESSAGE_RADIUS : MESSAGE_RADIUS, radius < 0 ? -1 : radius);
+        saveConfigurationFile();
     }
 
     private static final String ITEM_MATERIAL = "item.material";

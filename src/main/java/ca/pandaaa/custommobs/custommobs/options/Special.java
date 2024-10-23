@@ -2,16 +2,17 @@ package ca.pandaaa.custommobs.custommobs.options;
 
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.guis.BasicTypes.DoubleGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.DamageRange;
 import ca.pandaaa.custommobs.utils.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attributable;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -22,19 +23,19 @@ import java.util.Objects;
 
 public class Special extends CustomMobType {
     private boolean isNameVisible;
-    private final Double health;
+    private Double health;
     private boolean aggressive;
     private boolean glowing;
     private boolean canPickupLoot;
-    private final Double knockbackResistance;
-    private final Double speed;
+    private double knockbackResistance;
+    private double speed;
     private final DamageRange damageRange;
     private boolean invincible;
     private boolean silent;
     private boolean gravity;
     private boolean persistent;
     private boolean intelligent;
-    private final Double followRange;
+    private double followRange;
 
     public Special(boolean isNameVisible, Double health, boolean aggressive, boolean glowing, boolean canPickupLoot, Double knockbackResistance, Double speed, DamageRange damageRange, boolean invincible, boolean silent, boolean gravity, boolean persistent, boolean intelligent, Double followRange) {
         this.isNameVisible = isNameVisible;
@@ -59,12 +60,9 @@ public class Special extends CustomMobType {
         if(customMob instanceof Attributable) {
             if (health != null)
                 Objects.requireNonNull(((Attributable) customMob).getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(health);
-            if (knockbackResistance != null)
-                Objects.requireNonNull(((Attributable) customMob).getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE)).setBaseValue(knockbackResistance);
-            if (speed != null)
-                Objects.requireNonNull(((Attributable) customMob).getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).setBaseValue(speed);
-            if (followRange != null)
-                Objects.requireNonNull(((Attributable) customMob).getAttribute(Attribute.GENERIC_FOLLOW_RANGE)).setBaseValue(followRange);
+            Objects.requireNonNull(((Attributable) customMob).getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE)).setBaseValue(knockbackResistance);
+            Objects.requireNonNull(((Attributable) customMob).getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).setBaseValue(speed);
+            Objects.requireNonNull(((Attributable) customMob).getAttribute(Attribute.GENERIC_FOLLOW_RANGE)).setBaseValue(followRange);
         }
 
         if(damageRange != null) {
@@ -124,60 +122,112 @@ public class Special extends CustomMobType {
          */
     }
 
-    public ItemStack modifyOption(CustomMob customMob, String option) {
+    public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {
         switch(option.toLowerCase()) {
             case "visible": {
                 this.isNameVisible = !isNameVisible;
                 customMob.getCustomMobConfiguration().setNameVisible(isNameVisible);
-                return getOptionItemStack(getVisibleNameItem());
+                return getOptionItemStack(getVisibleNameItem(), false, false);
+            }
+
+            case "health": {
+                if(clickType.isRightClick()) {
+                    this.health = null;
+                    customMob.getCustomMobConfiguration().setHealth(health);
+                } else {
+                    new DoubleGUI("Health", customMob, false, 0, 1024, (value) -> {
+                        this.health = value;
+                        customMob.getCustomMobConfiguration().setHealth(health);
+                    }).openInventory(clicker, health == null ? 20D : health);
+                }
+                return getOptionItemStack(getHealthItem(), true, false);
             }
 
             case "aggressive" : {
                 this.aggressive = !aggressive;
                 customMob.getCustomMobConfiguration().setAggressive(aggressive);
-                return getOptionItemStack(getAggressiveItem());
+                return getOptionItemStack(getAggressiveItem(), false, false);
             }
 
             case "glowing" : {
                 this.glowing = !glowing;
                 customMob.getCustomMobConfiguration().setGlowing(glowing);
-                return getOptionItemStack(getGlowingItem());
+                return getOptionItemStack(getGlowingItem(), false, false);
             }
 
             case "canpickuploot" : {
                 this.canPickupLoot = !canPickupLoot;
                 customMob.getCustomMobConfiguration().setCanPickupLoot(canPickupLoot);
-                return getOptionItemStack(getCanPickupLootItem());
+                return getOptionItemStack(getCanPickupLootItem(), false, false);
+            }
+
+            case "knockbackresistance": {
+                if(clickType.isRightClick()) {
+                    this.knockbackResistance = 0D;
+                    customMob.getCustomMobConfiguration().setKnockbackResistance(knockbackResistance);
+                } else {
+                    new DoubleGUI("Knockback resistance", customMob, true, 0, 1, (value) -> {
+                        this.knockbackResistance = value;
+                        customMob.getCustomMobConfiguration().setKnockbackResistance(knockbackResistance);
+                    }).openInventory(clicker, knockbackResistance);
+                }
+                return getOptionItemStack(getKnockbackResistanceItem(), true, false);
+            }
+
+            case "speed": {
+                if(clickType.isRightClick()) {
+                    this.speed = 0.7D;
+                    customMob.getCustomMobConfiguration().setSpeed(speed);
+                } else {
+                    new DoubleGUI("Speed", customMob, false, 0, 1024, (value) -> {
+                        this.speed = value;
+                        customMob.getCustomMobConfiguration().setSpeed(speed);
+                    }).openInventory(clicker, speed);
+                }
+                return getOptionItemStack(getSpeedItem(), true, false);
             }
 
             case "invincible" : {
                 this.invincible = !invincible;
                 customMob.getCustomMobConfiguration().setInvincible(invincible);
-                return getOptionItemStack(getInvincibleItem());
+                return getOptionItemStack(getInvincibleItem(), false, false);
             }
 
             case "silent" : {
                 this.silent = !silent;
                 customMob.getCustomMobConfiguration().setSilent(silent);
-                return getOptionItemStack(getSilentItem());
+                return getOptionItemStack(getSilentItem(), false, false);
             }
 
             case "gravity" : {
                 this.gravity = !gravity;
                 customMob.getCustomMobConfiguration().setGravity(gravity);
-                return getOptionItemStack(getGravityItem());
+                return getOptionItemStack(getGravityItem(), false, false);
             }
 
             case "persistent" : {
                 this.persistent = !persistent;
                 customMob.getCustomMobConfiguration().setPersistent(persistent);
-                return getOptionItemStack(getPersistentItem());
+                return getOptionItemStack(getPersistentItem(), false, false);
             }
 
             case "intelligent" : {
                 this.intelligent = !intelligent;
                 customMob.getCustomMobConfiguration().setIntelligent(intelligent);
-                return getOptionItemStack(getIntelligentItem());
+                return getOptionItemStack(getIntelligentItem(), false, false);
+            }
+
+            case "followrange": {
+                if(clickType.isRightClick()) {
+                    this.followRange = 32D;
+                    customMob.getCustomMobConfiguration().setFollowRange(followRange);
+                } else {
+                    new DoubleGUI("Follow range", customMob, false, 0, 2048, (value) -> {
+                        this.followRange = value;
+                        customMob.getCustomMobConfiguration().setFollowRange(followRange);
+                    }).openInventory(clicker, followRange);
+                }
+                return getOptionItemStack(getFollowRangeItem(), true, false);
             }
         }
         return null;
@@ -186,51 +236,27 @@ public class Special extends CustomMobType {
     public List<ItemStack> getOptionItems(CustomMob customMob) {
         List<ItemStack> items = new ArrayList<>();
 
-        items.add(getOptionItemStack(getVisibleNameItem()));
-
-        // TODO
-        CustomMobsItem health = new CustomMobsItem(Material.GOLDEN_APPLE);
-        health.setName("&6&lHealth");
-        items.add(getOptionItemStack(health));
-
-        items.add(getOptionItemStack(getAggressiveItem()));
-        items.add(getOptionItemStack(getGlowingItem()));
-        items.add(getOptionItemStack(getCanPickupLootItem()));
-
-        // TODO
-        CustomMobsItem knockbackResistance = new CustomMobsItem(Material.STICK);
-        ItemMeta knockbackResistanceMeta = knockbackResistance.getItemMeta();
-        knockbackResistanceMeta.addEnchant(Enchantment.KNOCKBACK, 1, false);
-        knockbackResistanceMeta.setDisplayName(Utils.applyFormat("&a&lKnockback resistance"));
-        knockbackResistance.setItemMeta(knockbackResistanceMeta);
-        items.add(getOptionItemStack(knockbackResistance));
-
-        // TODO
-        CustomMobsItem speed = new CustomMobsItem(Material.DIAMOND_BOOTS);
-        ItemMeta speedMeta = speed.getItemMeta();
-        speedMeta.setDisplayName(Utils.applyFormat("&b&lSpeed"));
-        speed.setItemMeta(speedMeta);
-        items.add(getOptionItemStack(speed));
+        items.add(getOptionItemStack(getVisibleNameItem(), false, false));
+        items.add(getOptionItemStack(getHealthItem(), true, false));
+        items.add(getOptionItemStack(getAggressiveItem(), false, false));
+        items.add(getOptionItemStack(getGlowingItem(), false, false));
+        items.add(getOptionItemStack(getCanPickupLootItem(), false, false));
+        items.add(getOptionItemStack(getKnockbackResistanceItem(), true, false));
+        items.add(getOptionItemStack(getSpeedItem(), true, false));
 
         // TODO
         CustomMobsItem damageRange = new CustomMobsItem(Material.WOODEN_SWORD);
         ItemMeta damageRangeMeta = damageRange.getItemMeta();
         damageRangeMeta.setDisplayName(Utils.applyFormat("&c&lDamage range"));
         damageRange.setItemMeta(damageRangeMeta);
-        items.add(getOptionItemStack(damageRange));
+        items.add(getOptionItemStack(damageRange, false, false));
 
-        items.add(getOptionItemStack(getInvincibleItem()));
-        items.add(getOptionItemStack(getSilentItem()));
-        items.add(getOptionItemStack(getGravityItem()));
-        items.add(getOptionItemStack(getPersistentItem()));
-        items.add(getOptionItemStack(getIntelligentItem()));
-
-        // TODO
-        CustomMobsItem followRange = new CustomMobsItem(Material.SPYGLASS);
-        ItemMeta followRangeMeta = followRange.getItemMeta();
-        followRangeMeta.setDisplayName(Utils.applyFormat("&c&lFollow range"));
-        followRange.setItemMeta(followRangeMeta);
-        items.add(getOptionItemStack(followRange));
+        items.add(getOptionItemStack(getInvincibleItem(), false, false));
+        items.add(getOptionItemStack(getSilentItem(), false, false));
+        items.add(getOptionItemStack(getGravityItem(), false, false));
+        items.add(getOptionItemStack(getPersistentItem(), false, false));
+        items.add(getOptionItemStack(getIntelligentItem(), false, false));
+        items.add(getOptionItemStack(getFollowRangeItem(), true, false));
 
         return items;
     }
@@ -243,6 +269,18 @@ public class Special extends CustomMobType {
         item.setPersistentDataContainer(this.getClass().getSimpleName(), "Visible");
         return item;
     }
+
+    public CustomMobsItem getHealthItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.GOLDEN_APPLE);
+        item.setName("&6&lHealth");
+        if (health != null)
+            item.addLore("&eHealth: &f" + health + " (" + health / 2 + " ❤)");
+        else
+            item.addLore("&eHealth: &fDefault entity value");
+        item.setPersistentDataContainer(this.getClass().getSimpleName(), "Health");
+        return item;
+    }
+
     public CustomMobsItem getAggressiveItem() {
         CustomMobsItem item = new CustomMobsItem(Material.DIAMOND_SWORD);
         String aggressive = this.aggressive ? "&a&lOn" : "&c&lOff";
@@ -267,6 +305,24 @@ public class Special extends CustomMobType {
         item.setName("&6&lCan pickup loot");
         item.addLore("&eCan pickup loot: " + canPickupLoot);
         item.setPersistentDataContainer(this.getClass().getSimpleName(), "CanPickupLoot");
+        return item;
+    }
+
+    public CustomMobsItem getKnockbackResistanceItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.STICK);
+        item.addEnchantment(Enchantment.KNOCKBACK, 1, false);
+        item.setName("&a&lKnockback resistance");
+        item.addLore("&eKnockback resistance: &f" + knockbackResistance);
+        item.setPersistentDataContainer(this.getClass().getSimpleName(), "KnockbackResistance");
+        return item;
+    }
+
+    public CustomMobsItem getSpeedItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.DIAMOND_BOOTS);
+        item.addEnchantment(Enchantment.PROTECTION, 1, false);
+        item.setName("&b&lSpeed");
+        item.addLore("&eSpeed: &f" + speed);
+        item.setPersistentDataContainer(this.getClass().getSimpleName(), "Speed");
         return item;
     }
 
@@ -301,7 +357,7 @@ public class Special extends CustomMobType {
         CustomMobsItem item = new CustomMobsItem(Material.NAME_TAG);
         String persistent = this.persistent ? "&a&lOn" : "&c&lOff";
         item.setName("&6&lPersistent");
-        item.addLore("&eMob can dispawn: " + persistent);
+        item.addLore("&eMob cannot dispawn: " + persistent);
         item.setPersistentDataContainer(this.getClass().getSimpleName(), "Persistent");
         return item;
     }
@@ -312,6 +368,14 @@ public class Special extends CustomMobType {
         item.setName("&6&lIntelligent");
         item.addLore("&eIntelligent: " + intelligent);
         item.setPersistentDataContainer(this.getClass().getSimpleName(), "Intelligent");
+        return item;
+    }
+
+    public CustomMobsItem getFollowRangeItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.SPYGLASS);
+        item.setName("&c&lFollow range");
+        item.addLore("&eFollow range: &f" + followRange);
+        item.setPersistentDataContainer(this.getClass().getSimpleName(), "FollowRange");
         return item;
     }
 }

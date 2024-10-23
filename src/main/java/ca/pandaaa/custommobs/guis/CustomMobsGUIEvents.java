@@ -2,6 +2,7 @@ package ca.pandaaa.custommobs.guis;
 
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomMobsManager;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.EditCustomMobsGUI;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;

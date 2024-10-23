@@ -13,9 +13,9 @@ import org.bukkit.inventory.ItemStack;
 import java.util.*;
 
 public class CustomMob implements Listener {
-    private final EntityType entityType;
+    private EntityType entityType;
     private final String customMobFileName;
-    private final HashMap<String, CustomMobType> customMobTypes = new HashMap<>();
+    private HashMap<String, CustomMobType> customMobTypes = new HashMap<>();
     private ItemStack item;
     private ItemStack spawner;
     private String name;
@@ -51,7 +51,7 @@ public class CustomMob implements Listener {
         }
 
         // Message
-        mobConfiguration.getMessage().sendMessage(customMob);
+        mobConfiguration.getMessages().sendMessages(customMob);
 
         // Options
         for(CustomMobType customMobType : customMobTypes.values()) {
@@ -85,7 +85,7 @@ public class CustomMob implements Listener {
     }
 
     public void setName(String name) {
-        getCustomMobConfiguration().setName(name);
+        mobConfiguration.setName(name);
         this.item = getCustomMobConfiguration().getItem();
         this.spawner = getCustomMobConfiguration().getSpawner();
         this.name = name;
@@ -95,8 +95,17 @@ public class CustomMob implements Listener {
         return entityType;
     }
 
-    public CustomMobsMessage getCustomMobMessage() {
-        return mobConfiguration.getMessage();
+    public void setType(EntityType entityType) {
+        mobConfiguration.resetType(this.entityType);
+        mobConfiguration.setType(entityType);
+        this.entityType = entityType;
+
+        customMobTypes = new HashMap<>();
+        mobConfiguration.setCustomMobConfigurations(this, entityType);
+    }
+
+    public CustomMobsMessage getCustomMobMessages() {
+        return mobConfiguration.getMessages();
     }
 
     public Collection<CustomMobType> getCustomMobTypes() {

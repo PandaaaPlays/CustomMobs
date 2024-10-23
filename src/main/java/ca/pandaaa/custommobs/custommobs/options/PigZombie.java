@@ -1,19 +1,21 @@
 package ca.pandaaa.custommobs.custommobs.options;
 
 import ca.pandaaa.custommobs.custommobs.CustomMob;
-import ca.pandaaa.custommobs.utils.Utils;
+import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
+import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PigZombie extends CustomMobType {
-    private final int anger;
+    private int anger;
 
-    public PigZombie(int anger) {
+    public PigZombie(Integer anger) {
         this.anger = anger;
     }
 
@@ -27,16 +29,35 @@ public class PigZombie extends CustomMobType {
     public List<ItemStack> getOptionItems(CustomMob customMob) {
         List<ItemStack> items = new ArrayList<>();
 
-        ItemStack anger = new ItemStack(Material.GOLDEN_SWORD);
-        ItemMeta angerMeta = anger.getItemMeta();
-        angerMeta.setDisplayName(Utils.applyFormat("&6&lAnger"));
-        anger.setItemMeta(angerMeta);
-        items.add(getOptionItemStack(anger));
+        items.add(getOptionItemStack(getAngerItem(), true, false));
 
         return items;
     }
 
-    public ItemStack modifyOption(CustomMob customMob, String option) {
+    public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {
+        switch(option.toLowerCase()) {
+
+            case "anger": {
+                if (clickType.isRightClick()) {
+                    this.anger = 0;
+                    customMob.getCustomMobConfiguration().setZombifiedPiglinAnger(anger);
+                } else {
+                    new IntegerGUI("Anger", customMob, false, 0, 72000, (value) -> {
+                        this.anger = value;
+                        customMob.getCustomMobConfiguration().setZombifiedPiglinAnger(anger);
+                    }).openInventory(clicker, anger);
+                }
+                return getOptionItemStack(getAngerItem(), true, false);
+            }
+        }
         return null;
+    }
+
+    public CustomMobsItem getAngerItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.GOLDEN_SWORD);
+        item.setName("&6&lAnger");
+        item.addLore("&eAnger cooldown timer: &f" + anger + " (" + String.format("%.1f", (double) anger / 20) + " sec)");
+        item.setPersistentDataContainer(this.getClass().getSimpleName(), "Anger");
+        return item;
     }
 }

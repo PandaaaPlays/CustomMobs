@@ -1,13 +1,11 @@
 package ca.pandaaa.custommobs.custommobs;
 
 import ca.pandaaa.custommobs.CustomMobs;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -27,6 +25,7 @@ public class CustomMobEvents implements Listener {
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
         Entity entity = event.getDamager();
+
         if(entity instanceof Projectile)
             entity = (LivingEntity) ((Projectile) entity).getShooter();
 

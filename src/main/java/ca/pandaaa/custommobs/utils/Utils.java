@@ -2,7 +2,9 @@ package ca.pandaaa.custommobs.utils;
 
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Horse;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -50,4 +52,52 @@ public class Utils {
         }
         return head;
     }
+
+    public static ChatColor getChatColorOfColor(String color) {
+        ChatColor chatColor;
+        switch (color.toUpperCase()) {
+            case "RED":
+                chatColor = ChatColor.RED;
+                break;
+            case "BLUE":
+                chatColor = ChatColor.BLUE;
+                break;
+            case "GREEN": case "LIME":
+                chatColor = ChatColor.GREEN;
+                break;
+            case "YELLOW":
+                chatColor = ChatColor.YELLOW;
+                break;
+            case "BLACK": case "DARK_BROWN":
+                chatColor = ChatColor.DARK_GRAY;
+                break;
+            case "ORANGE": case "CHESTNUT": case "CREAMY":
+                chatColor = ChatColor.GOLD;
+                break;
+            case "PINK": case "MAGENTA":
+                chatColor = ChatColor.LIGHT_PURPLE;
+                break;
+            case "CYAN":
+                chatColor = ChatColor.DARK_AQUA;
+                break;
+            case "GRAY": case "LIGHT_GRAY":
+                chatColor = ChatColor.GRAY;
+                break;
+            case "LIGHT_BLUE":
+                chatColor = ChatColor.AQUA;
+                break;
+            case "PURPLE":
+                chatColor = ChatColor.DARK_PURPLE;
+                break;
+            case "BROWN":
+                chatColor = ChatColor.DARK_RED;
+                break;
+            case "WHITE": default:
+                chatColor = ChatColor.WHITE;
+                break;
+        }
+
+        return chatColor;
+    }
+
 }

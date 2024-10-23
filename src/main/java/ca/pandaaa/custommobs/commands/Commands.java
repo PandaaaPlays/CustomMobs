@@ -51,7 +51,10 @@ public class Commands implements CommandExecutor {
                     giveCommand(sender, args);
                     break;
                 case "message":
-                    messageCommand(sender, args);
+                    messageCommand(sender, args, false);
+                    break;
+                case "death-message":
+                    messageCommand(sender, args, true);
                     break;
                 default:
                     sendUnknownCommandMessage(sender);
@@ -146,7 +149,7 @@ public class Commands implements CommandExecutor {
         customMobsManager.giveCustomMob(receiver, customMob, type, amount);
     }
 
-    private void messageCommand(CommandSender sender, String[] args) {
+    private void messageCommand(CommandSender sender, String[] args, boolean death) {
         if (!sender.hasPermission("custommobs.admin")) {
             sendNoPermissionMessage(sender);
             return;
@@ -163,16 +166,16 @@ public class Commands implements CommandExecutor {
 
         if(args[2].equalsIgnoreCase("add")) {
             String message = String.join(" ", Arrays.copyOfRange(args, 3, args.length));
-            customMobsManager.getCustomMob(args[1]).getCustomMobConfiguration().addMessageText(message);
-            sendMessagesChangeMessage(sender, "Added the following message to " + args[1] + " : " + message);
+            customMobsManager.getCustomMob(args[1]).getCustomMobConfiguration().addMessageText(message, death);
+            sendMessagesChangeMessage(sender, "Added the following" + (death ? " death " : " ") + "message to " + args[1] + " : &r" + message);
         } else if(args.length == 4 && args[2].equalsIgnoreCase("remove")) {
             try {
                 if(args[3].equalsIgnoreCase("all")) {
                     customMobsManager.getCustomMob(args[1]).getCustomMobConfiguration()
-                            .clearMessageText();
-                    sendMessagesChangeMessage(sender, "Removed all the messages of " + args[1] + ".");
-                } else if(customMobsManager.getCustomMob(args[1]).getCustomMobConfiguration().removeMessageText(Integer.parseInt(args[3]))) {
-                    sendMessagesChangeMessage(sender, "Removed message " + Integer.parseInt(args[3]) + " of " + args[1] + ".");
+                            .clearMessageText(death);
+                    sendMessagesChangeMessage(sender, "Removed all the" + (death ? " death " : " ") + "messages of " + args[1] + ".");
+                } else if(customMobsManager.getCustomMob(args[1]).getCustomMobConfiguration().removeMessageText(Integer.parseInt(args[3]), death)) {
+                    sendMessagesChangeMessage(sender, "Removed" + (death ? " death " : " ") + "message " + Integer.parseInt(args[3]) + " of " + args[1] + ".");
                 } else {
                     sendUnknownCommandMessage(sender, "There isn't " + Integer.parseInt(args[3]) + " messages.");
                 }
@@ -182,14 +185,16 @@ public class Commands implements CommandExecutor {
         } else if(args.length >= 5 && args[2].equalsIgnoreCase("edit")) {
             try {
                 String message = String.join(" ", Arrays.copyOfRange(args, 4, args.length));
-                if(customMobsManager.getCustomMob(args[1]).getCustomMobConfiguration().editMessageText(Integer.parseInt(args[3]), message)) {
-                    sendMessagesChangeMessage(sender, "Edited message " + Integer.parseInt(args[3]) + " of " + args[1] +  " to : " + message);
+                if(customMobsManager.getCustomMob(args[1]).getCustomMobConfiguration().editMessageText(Integer.parseInt(args[3]), message, death)) {
+                    sendMessagesChangeMessage(sender, "Edited" + (death ? " death " : " ") + "message " + Integer.parseInt(args[3]) + " of " + args[1] +  " to : " + message);
                 } else {
-                    sendUnknownCommandMessage(sender, "There isn't " + Integer.parseInt(args[3]) + " messages.");
+                    sendUnknownCommandMessage(sender, "There isn't " + Integer.parseInt(args[3]) + (death ? " death " : " ") + "messages.");
                 }
             } catch (Exception e) {
                 sendUnknownCommandMessage(sender, args[3] + " is not a valid Integer.");
             }
+        } else {
+            sendUnknownCommandMessage(sender, "Messages command formatted incorrectly.");
         }
     }
 
