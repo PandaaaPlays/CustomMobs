@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PigZombie extends CustomMobType {
+public class PigZombie extends CustomMobOption {
     private int anger;
 
     public PigZombie(Integer anger) {

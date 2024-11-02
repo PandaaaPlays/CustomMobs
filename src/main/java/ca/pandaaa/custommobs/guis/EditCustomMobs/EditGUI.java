@@ -1,10 +1,13 @@
 package ca.pandaaa.custommobs.guis.EditCustomMobs;
 
 import ca.pandaaa.custommobs.CustomMobs;
+import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
-import ca.pandaaa.custommobs.custommobs.CustomMobsManager;
+import ca.pandaaa.custommobs.custommobs.Equipment;
+import ca.pandaaa.custommobs.custommobs.Manager;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
-import ca.pandaaa.custommobs.guis.MainCustomMobsGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.Drops.DropsGUI;
+import ca.pandaaa.custommobs.guis.MainGUI;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -12,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -19,7 +23,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class EditCustomMobsGUI extends CustomMobsGUI implements Listener {
+public class EditGUI extends CustomMobsGUI implements Listener {
 
     private final ItemStack mainHand;
     private final ItemStack offHand;
@@ -39,39 +43,36 @@ public class EditCustomMobsGUI extends CustomMobsGUI implements Listener {
     private final ItemStack spawner;
     private final ItemStack delete;
     private final CustomMob customMob;
-    private final CustomMobsManager customMobsManager;
+    private final Manager customMobsManager;
     private final Player player;
 
     private boolean waitingForRename;
 
-    public EditCustomMobsGUI(CustomMob customMob, CustomMobsManager customMobsManager, Player player) {
+    public EditGUI(CustomMob customMob, Manager customMobsManager, Player player) {
         super(54, "&8CustomMobs &8&l» &8"
                 + customMob.getCustomMobFileName().replace(".yml", "").substring(0, 1).toUpperCase()
                 + customMob.getCustomMobFileName().replace(".yml", "").substring(1).toLowerCase());
 
-        CustomMobs plugin = CustomMobs.getPlugin();
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-
         this.customMob = customMob;
         this.player = player;
 
-        this.mainHand = getMenuItem(new ItemStack(Material.NETHERITE_SWORD));
-        this.offHand = getMenuItem(new ItemStack(Material.SHIELD));
-        this.helmet = getMenuItem(new ItemStack(Material.NETHERITE_HELMET));
-        this.chestplate = getMenuItem(new ItemStack(Material.NETHERITE_CHESTPLATE));
-        this.leggings = getMenuItem(new ItemStack(Material.NETHERITE_LEGGINGS));
-        this.boots = getMenuItem(new ItemStack(Material.NETHERITE_BOOTS));
-        this.types = getMenuItem(new ItemStack(Material.ALLAY_SPAWN_EGG));
-        this.options = getMenuItem(new ItemStack(Material.END_CRYSTAL));
-        this.name = getMenuItem(new ItemStack(Material.SPRUCE_HANGING_SIGN));
-        this.message = getMenuItem(new ItemStack(Material.WRITABLE_BOOK));
-        this.drops = getMenuItem(new ItemStack(Material.PITCHER_POD));
-        this.sound = getMenuItem(new ItemStack(Material.JUKEBOX));
-        this.potions = getMenuItem(new ItemStack(Material.OMINOUS_BOTTLE));
-        this.previous = getMenuItem(Utils.createHead("a2f0425d64fdc8992928d608109810c1251fe243d60d175bed427c651cbe"));
-        this.item = getMenuItem(customMob.getItem());
-        this.spawner = getMenuItem(customMob.getSpawner());
-        this.delete = getMenuItem(new ItemStack(Material.BARRIER));
+        this.mainHand = getMenuItem(new ItemStack(Material.NETHERITE_SWORD), true);
+        this.offHand = getMenuItem(new ItemStack(Material.SHIELD), true);
+        this.helmet = getMenuItem(new ItemStack(Material.NETHERITE_HELMET), true);
+        this.chestplate = getMenuItem(new ItemStack(Material.NETHERITE_CHESTPLATE), true);
+        this.leggings = getMenuItem(new ItemStack(Material.NETHERITE_LEGGINGS), true);
+        this.boots = getMenuItem(new ItemStack(Material.NETHERITE_BOOTS), true);
+        this.types = getMenuItem(new ItemStack(Material.ALLAY_SPAWN_EGG), true);
+        this.options = getMenuItem(new ItemStack(Material.END_CRYSTAL), true);
+        this.name = getMenuItem(new ItemStack(Material.SPRUCE_HANGING_SIGN), true);
+        this.message = getMenuItem(new ItemStack(Material.WRITABLE_BOOK), true);
+        this.drops = getMenuItem(new ItemStack(Material.PITCHER_POD), true);
+        this.sound = getMenuItem(new ItemStack(Material.JUKEBOX), true);
+        this.potions = getMenuItem(new ItemStack(Material.OMINOUS_BOTTLE), true);
+        this.previous = getMenuItem(Utils.createHead("a2f0425d64fdc8992928d608109810c1251fe243d60d175bed427c651cbe"), true);
+        this.item = getMenuItem(customMob.getItem(), true);
+        this.spawner = getMenuItem(customMob.getSpawner(), true);
+        this.delete = getMenuItem(new ItemStack(Material.BARRIER), true);
 
         this.customMobsManager = customMobsManager;
         this.waitingForRename = false;
@@ -140,62 +141,80 @@ public class EditCustomMobsGUI extends CustomMobsGUI implements Listener {
     }
 
     @EventHandler
-    private void onInventoryClick(InventoryClickEvent event) {
-        if (!Objects.equals(event.getClickedInventory(), inventory))
+    public void onInventoryClick(InventoryClickEvent event) {
+        if (!isEventRelevant(event.getView().getTopInventory()))
             return;
+        if(event.getClickedInventory() == null || event.getClickedInventory().getType() == InventoryType.PLAYER) {
+            event.setCancelled(event.isShiftClick());
+            return;
+        }
 
         event.setCancelled(true);
 
         Player clicker = (Player) event.getWhoClicked();
+        ItemStack cursorItem = clicker.getItemOnCursor();
+        Equipment equipment = customMob.getEquipment();
 
         switch (event.getSlot()) {
             case 10:
-                if(clicker.getItemOnCursor().getType() != Material.AIR) {
-                    // TODO set the item for main hain
-                } else {
-                    // TODO get the main hand item
-                }
+                if (event.isRightClick())
+                    equipment.setMainHand(null);
+                else if (cursorItem.getType() != Material.AIR) {
+                    equipment.setMainHand(cursorItem.clone());
+                    clicker.setItemOnCursor(null);
+                } else
+                    clicker.setItemOnCursor(equipment.getMainHand());
                 break;
             case 11:
-                if(clicker.getItemOnCursor().getType() != Material.AIR) {
-                    // TODO set the item for off hain
-                } else {
-                    // TODO get the off hand item
-                }
+                if (event.isRightClick())
+                    equipment.setOffHand(null);
+                else if (cursorItem.getType() != Material.AIR) {
+                    equipment.setOffHand(cursorItem.clone());
+                    clicker.setItemOnCursor(null);
+                } else
+                    clicker.setItemOnCursor(equipment.getOffHand());
                 break;
             case 13:
-                if(clicker.getItemOnCursor().getType() != Material.AIR) {
-                    // TODO set the item for helmet
-                } else {
-                    // TODO get the helmet item
-                }
+                if (event.isRightClick())
+                    equipment.setHelmet(null);
+                else if (cursorItem.getType() != Material.AIR) {
+                    equipment.setHelmet(cursorItem.clone());
+                    clicker.setItemOnCursor(null);
+                } else
+                    clicker.setItemOnCursor(equipment.getHelmet());
                 break;
             case 14:
-                if(clicker.getItemOnCursor().getType() != Material.AIR) {
-                    // TODO set the item for chestplate
-                } else {
-                    // TODO get the chestplate item
-                }
+                if (event.isRightClick())
+                    equipment.setChestplate(null);
+                else if (cursorItem.getType() != Material.AIR) {
+                    equipment.setChestplate(cursorItem.clone());
+                    clicker.setItemOnCursor(null);
+                } else
+                    clicker.setItemOnCursor(equipment.getChestplate());
                 break;
             case 15:
-                if(clicker.getItemOnCursor().getType() != Material.AIR) {
-                    // TODO set the item for leggings
-                } else {
-                    // TODO get the leggings item
-                }
+                if (event.isRightClick())
+                    equipment.setLeggings(null);
+                else if (cursorItem.getType() != Material.AIR) {
+                    equipment.setLeggings(cursorItem.clone());
+                    clicker.setItemOnCursor(null);
+                } else
+                    clicker.setItemOnCursor(equipment.getLeggings());
                 break;
             case 16:
-                if(clicker.getItemOnCursor().getType() != Material.AIR) {
-                    // TODO set the item for boots
-                } else {
-                    // TODO get the boots item
-                }
+                if (event.isRightClick())
+                    equipment.setBoots(null);
+                else if (cursorItem.getType() != Material.AIR) {
+                    equipment.setBoots(cursorItem.clone());
+                    clicker.setItemOnCursor(null);
+                } else
+                    clicker.setItemOnCursor(equipment.getBoots());
                 break;
             case 28:
-                new TypesCustomMobsGUI(customMob).openInventory(clicker, 1);
+                new TypesGUI(customMob).openInventory(clicker, 1);
                 break;
             case 29:
-                new OptionsCustomMobsGUI(customMob).openInventory(clicker, 1);
+                new OptionsGUI(customMob).openInventory(clicker, 1);
                 break;
             case 30:
                 clicker.closeInventory();
@@ -206,7 +225,7 @@ public class EditCustomMobsGUI extends CustomMobsGUI implements Listener {
                 waitingForRename = true;
                 break;
             case 31:
-                // TODO drops
+                new DropsGUI(customMob).openInventory(clicker, 1);
                 break;
             case 32:
                 // TODO potions
@@ -215,20 +234,44 @@ public class EditCustomMobsGUI extends CustomMobsGUI implements Listener {
                 // TODO sounds
                 break;
             case 34:
-                new MessagesCustomMobsGUI(customMob, this).openInventory(clicker);
+                new MessagesGUI(customMob).openInventory(clicker);
                 break;
             case 45:
-                new MainCustomMobsGUI().openInventory(clicker, 1);
+                new MainGUI().openInventory(clicker, 1);
                 break;
             case 48:
-                customMobsManager.giveCustomMob(clicker, customMob, "item", event.isShiftClick() ? 64 : 1);
+                if (event.isRightClick()) {
+                    customMob.setItem(null);
+                    event.getInventory().setItem(48, getMenuItem(getGiveItem(customMob.getItem()), false));
+                } else if (cursorItem.getType() != Material.AIR) {
+                    ItemStack changeItem = cursorItem.clone();
+                    changeItem.setAmount(1);
+                    customMob.setItem(changeItem);
+                    event.getInventory().setItem(48, getMenuItem(getGiveItem(customMob.getItem()), false));
+                    clicker.setItemOnCursor(null);
+                } else {
+                    clicker.setItemOnCursor(customMobsManager.getCustomMobItem(customMob, "item", event.isShiftClick() ? 64 : 1));
+                }
                 break;
             case 50:
-                customMobsManager.giveCustomMob(clicker, customMob, "spawner", event.isShiftClick() ? 64 : 1);
+                if (event.isRightClick()) {
+                    customMob.setSpawner(null);
+                    event.getInventory().setItem(50, getMenuItem(getGiveItem(customMob.getSpawner()), false));
+                } else if (cursorItem.getType() != Material.AIR) {
+                    ItemStack spawner = cursorItem.clone();
+                    spawner.setAmount(1);
+                    customMob.setSpawner(spawner);
+                    event.getInventory().setItem(50, getMenuItem(getGiveItem(customMob.getSpawner()), false));
+                    clicker.setItemOnCursor(null);
+                } else {
+                    clicker.setItemOnCursor(customMobsManager.getCustomMobItem(customMob, "spawner", event.isShiftClick() ? 64 : 1));
+                }
                 break;
             case 53:
                 if (event.getCurrentItem().getItemMeta().getDisplayName().contains("Confirm")) {
-                    // TODO DELETE
+                    customMob.delete();
+                    customMobsManager.removeCustomMob(customMob.getCustomMobFileName().replaceAll(".yml", ""));
+                    new MainGUI().openInventory(player, 1);
                 } else {
                     inventory.setItem(53, getDeleteItem(delete, true));
 
@@ -257,7 +300,7 @@ public class EditCustomMobsGUI extends CustomMobsGUI implements Listener {
         }
 
         waitingForRename = false;
-        Bukkit.getScheduler().runTask(CustomMobs.getPlugin(), new EditCustomMobsGUI(customMob, customMobsManager, player)::openInventory);
+        Bukkit.getScheduler().runTask(CustomMobs.getPlugin(), new EditGUI(customMob, customMobsManager, player)::openInventory);
     }
 
     private ItemStack getHandItem(ItemStack item, boolean main) {
@@ -269,7 +312,8 @@ public class EditCustomMobsGUI extends CustomMobsGUI implements Listener {
         ArrayList<String> lore = new ArrayList<>();
         lore.add("");
         lore.add(Utils.applyFormat("&7&o(( Drag & drop an item to change this item ))"));
-        lore.add(Utils.applyFormat("&7&o(( Click to get the current item ))"));
+        lore.add(Utils.applyFormat("&7&o(( Left-Click to get the current item ))"));
+        lore.add(Utils.applyFormat("&7&o(( Right-Click to delete (reset) the current item ))"));
         itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
         return item;
@@ -281,7 +325,8 @@ public class EditCustomMobsGUI extends CustomMobsGUI implements Listener {
         ArrayList<String> lore = new ArrayList<>();
         lore.add("");
         lore.add(Utils.applyFormat("&7&o(( Drag & drop an item to change this item ))"));
-        lore.add(Utils.applyFormat("&7&o(( Click to get the current item ))"));
+        lore.add(Utils.applyFormat("&7&o(( Left-Click to get the current item ))"));
+        lore.add(Utils.applyFormat("&7&o(( Right-Click to delete (reset) the current item ))"));
         itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
         return item;
@@ -333,8 +378,10 @@ public class EditCustomMobsGUI extends CustomMobsGUI implements Listener {
         ItemMeta itemMeta = item.getItemMeta();
         ArrayList<String> lore = new ArrayList<>();
         lore.add("");
-        lore.add(Utils.applyFormat("&7&o(( Click to get this item ))"));
-        lore.add(Utils.applyFormat("&7&o(( Shift+Click to get this item (x64) ))"));
+        lore.add(Utils.applyFormat("&7&o(( Drag & drop an item to change this item ))"));
+        lore.add(Utils.applyFormat("&7&o(( Left-Click to get the current item ))"));
+        lore.add(Utils.applyFormat("&7&o(( Shift-Left-Click to get the current item (x64) ))"));
+        lore.add(Utils.applyFormat("&7&o(( Right-Click to delete (reset) the current item ))"));
         itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
         return item;

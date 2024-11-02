@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Creeper extends CustomMobType {
+public class Creeper extends CustomMobOption {
     private int explosionCooldown;
     private int explosionRadius;
     private boolean charged;

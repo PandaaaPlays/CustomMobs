@@ -2,19 +2,17 @@ package ca.pandaaa.custommobs.custommobs.options;
 
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
-import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Villager extends CustomMobType {
+public class Villager extends CustomMobOption {
     private org.bukkit.entity.Villager.Type villagerType;
     private org.bukkit.entity.Villager.Profession villagerProfession;
 
@@ -27,14 +25,12 @@ public class Villager extends CustomMobType {
         if(!(customMob instanceof org.bukkit.entity.Villager))
             return;
 
-        Bukkit.broadcastMessage(villagerProfession.toString() + " " + villagerType.toString());
         if(villagerType != null)
             ((org.bukkit.entity.Villager) customMob).setVillagerType(villagerType);
         if(villagerProfession != null) {
             ((org.bukkit.entity.Villager) customMob).setProfession(villagerProfession);
             ((org.bukkit.entity.Villager) customMob).setVillagerExperience(1);
         }
-        Bukkit.broadcastMessage(((org.bukkit.entity.Villager) customMob).getProfession().toString() + " " + ((org.bukkit.entity.Villager) customMob).getVillagerType().toString());
     }
 
     public List<ItemStack> getOptionItems(CustomMob customMob) {

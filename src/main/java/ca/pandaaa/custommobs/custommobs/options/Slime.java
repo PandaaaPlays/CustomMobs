@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Slime extends CustomMobType {
+public class Slime extends CustomMobOption {
     private Integer size;
 
     public Slime(Integer size) {

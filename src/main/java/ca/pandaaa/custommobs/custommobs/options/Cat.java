@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cat extends CustomMobType {
+public class Cat extends CustomMobOption {
     private org.bukkit.entity.Cat.Type catType;
     private DyeColor collarColor;
 

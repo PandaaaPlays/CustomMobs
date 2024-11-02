@@ -9,12 +9,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Shulker extends CustomMobType {
+public class Shulker extends CustomMobOption {
     private DyeColor color;
 
     public Shulker(DyeColor color) {

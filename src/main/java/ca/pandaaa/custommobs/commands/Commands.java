@@ -2,15 +2,15 @@ package ca.pandaaa.custommobs.commands;
 
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.configurations.ConfigurationManager;
-import ca.pandaaa.custommobs.custommobs.CustomMobsManager;
-import ca.pandaaa.custommobs.guis.MainCustomMobsGUI;
+import ca.pandaaa.custommobs.custommobs.Manager;
+import ca.pandaaa.custommobs.guis.MainGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -18,9 +18,9 @@ import java.util.Objects;
 public class Commands implements CommandExecutor {
 
     private final ConfigurationManager configManager;
-    private final CustomMobsManager customMobsManager;
+    private final Manager customMobsManager;
 
-    public Commands(ConfigurationManager configManager, CustomMobsManager customMobsManager) {
+    public Commands(ConfigurationManager configManager, Manager customMobsManager) {
         this.configManager = configManager;
         this.customMobsManager = customMobsManager;
     }
@@ -41,6 +41,9 @@ public class Commands implements CommandExecutor {
             }
 
             switch (args[0].toLowerCase()) {
+                case "test":
+
+                    break;
                 case "reload":
                     reloadPlugin(sender);
                     break;
@@ -213,7 +216,7 @@ public class Commands implements CommandExecutor {
             return;
         }
 
-        new MainCustomMobsGUI().openInventory(player, 1);
+        new MainGUI().openInventory(player, 1);
     }
 
     private void sendUnknownCommandMessage(CommandSender sender) {

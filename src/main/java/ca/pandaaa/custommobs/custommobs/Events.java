@@ -1,15 +1,14 @@
 package ca.pandaaa.custommobs.custommobs;
 
 import ca.pandaaa.custommobs.CustomMobs;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -21,7 +20,7 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 
-public class CustomMobEvents implements Listener {
+public class Events implements Listener {
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
         Entity entity = event.getDamager();
@@ -60,14 +59,15 @@ public class CustomMobEvents implements Listener {
 
         ItemMeta itemMeta = item.getItemMeta();
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+        if (container.getKeys().contains(new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.MenuItem"))) {
+            player.getInventory().remove(item);
+            CustomMobs.getPlugin().getServer().getConsoleSender().sendMessage(
+                    ChatColor.translateAlternateColorCodes('&', "&c[!] CustomMobs : " + player.getName() + " tried to use a CustomMob menu item and it was deleted. Please report this incident."));
+        }
+
         NamespacedKey itemTypeKey = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.ItemType");
         if (!container.getKeys().contains(itemTypeKey))
             return;
-
-        if (container.getKeys().contains(new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.MenuItem"))) {
-            player.getInventory().remove(item);
-            return;
-        }
 
         if (player.getGameMode() != GameMode.CREATIVE)
             item.setAmount(item.getAmount() - 1);
@@ -80,6 +80,28 @@ public class CustomMobEvents implements Listener {
         } else if (itemType.equalsIgnoreCase("Spawner")) {
             event.setCancelled(true);
             customMob.placeCustomMobSpawner(event.getClickedBlock().getRelative(event.getBlockFace()).getLocation());
+        }
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {
+        if(event.getClickedInventory().getType() != InventoryType.PLAYER)
+            return;
+
+        ItemStack item = event.getCurrentItem();
+        if(item == null)
+            return;
+        ItemMeta itemMeta = item.getItemMeta();
+        if(itemMeta == null)
+            return;
+
+        // Kicks the client... TO fix
+        PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+        if (container.getKeys().contains(new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.MenuItem"))) {
+            event.getWhoClicked().getInventory().remove(item);
+            event.setCancelled(true);
+            CustomMobs.getPlugin().getServer().getConsoleSender().sendMessage(
+                    ChatColor.translateAlternateColorCodes('&', "&c[!] CustomMobs : " + event.getWhoClicked().getName() + " had a CustomMob menu item and it was deleted. Please report this incident."));
         }
     }
 }

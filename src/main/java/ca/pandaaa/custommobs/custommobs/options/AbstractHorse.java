@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AbstractHorse extends CustomMobType {
+public class AbstractHorse extends CustomMobOption {
     private Double jumpStrength;
 
     public AbstractHorse(Double jumpStrength) {

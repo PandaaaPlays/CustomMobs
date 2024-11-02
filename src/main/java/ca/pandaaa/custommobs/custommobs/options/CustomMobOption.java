@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public abstract class CustomMobType {
+public abstract class CustomMobOption {
     public abstract void applyOptions(Entity customMobs);
     public abstract List<ItemStack> getOptionItems(CustomMob customMob);
     public abstract ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType);

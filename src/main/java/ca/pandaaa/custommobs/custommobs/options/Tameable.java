@@ -2,7 +2,7 @@ package ca.pandaaa.custommobs.custommobs.options;
 
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
-import ca.pandaaa.custommobs.guis.EditCustomMobs.OptionsCustomMobsGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.OptionsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Bukkit;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Tameable extends CustomMobType implements Listener {
+public class Tameable extends CustomMobOption implements Listener {
     private UUID owner;
     private boolean tamed;
     private boolean waitingForOwner;
@@ -105,7 +105,7 @@ public class Tameable extends CustomMobType implements Listener {
             this.owner = newOwner.getUniqueId();
         }
 
-        Bukkit.getScheduler().runTask(CustomMobs.getPlugin(), () -> new OptionsCustomMobsGUI(customMob).openInventory(player, 1));
+        Bukkit.getScheduler().runTask(CustomMobs.getPlugin(), () -> new OptionsGUI(customMob).openInventory(player, 1));
         waitingForOwner = false;
     }
 

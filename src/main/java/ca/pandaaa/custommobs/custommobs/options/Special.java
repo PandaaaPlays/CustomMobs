@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Special extends CustomMobType {
+public class Special extends CustomMobOption {
     private boolean isNameVisible;
     private Double health;
     private boolean aggressive;

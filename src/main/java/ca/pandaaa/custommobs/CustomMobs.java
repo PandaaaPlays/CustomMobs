@@ -4,15 +4,16 @@ import ca.pandaaa.custommobs.commands.Commands;
 import ca.pandaaa.custommobs.commands.TabCompletion;
 import ca.pandaaa.custommobs.configurations.ConfigurationManager;
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
-import ca.pandaaa.custommobs.custommobs.CustomMobEvents;
-import ca.pandaaa.custommobs.custommobs.CustomMobsManager;
-import ca.pandaaa.custommobs.guis.CustomMobsGUIEvents;
+import ca.pandaaa.custommobs.custommobs.DropItem;
+import ca.pandaaa.custommobs.custommobs.Events;
+import ca.pandaaa.custommobs.custommobs.Manager;
 import ca.pandaaa.custommobs.utils.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -24,7 +25,7 @@ public class CustomMobs extends JavaPlugin {
     private List<CustomMobConfiguration> mobConfigurations = new ArrayList<>();
     private static CustomMobs plugin;
     private ConfigurationManager configManager;
-    private CustomMobsManager customMobsManager;
+    private Manager customMobsManager;
 
     @Override
     public void onEnable() {
@@ -32,17 +33,19 @@ public class CustomMobs extends JavaPlugin {
         int pluginId = 21648;
         Metrics metrics = new Metrics(this, pluginId);
 
+        this.sendStartedMessage();
+
+        // DropItem serialization
+        ConfigurationSerialization.registerClass(DropItem.class, "ca.pandaaa.custommobs.custommobs.DropItem");
+
         saveDefaultConfigurations();
         loadAllMobsConfigurations();
 
         configManager = new ConfigurationManager(getConfig());
-        customMobsManager = new CustomMobsManager(configManager, mobConfigurations);
+        customMobsManager = new Manager(configManager, mobConfigurations);
         customMobsManager.loadCustomMobs();
 
         getCommandsAndListeners();
-
-        this.sendStartedMessage();
-        this.sendTestingMessage();
     }
 
     @Override
@@ -58,7 +61,7 @@ public class CustomMobs extends JavaPlugin {
         return plugin;
     }
 
-    public CustomMobsManager getCustomMobsManager() {
+    public Manager getCustomMobsManager() {
         return customMobsManager;
     }
 
@@ -67,7 +70,7 @@ public class CustomMobs extends JavaPlugin {
         loadAllMobsConfigurations();
 
         configManager = new ConfigurationManager(getConfig());
-        customMobsManager = new CustomMobsManager(configManager, mobConfigurations);
+        customMobsManager = new Manager(configManager, mobConfigurations);
         customMobsManager.loadCustomMobs();
 
         getCommandsAndListeners();
@@ -81,12 +84,6 @@ public class CustomMobs extends JavaPlugin {
         getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "  &6|   --|&e| | | |    &7Version " + getDescription().getVersion()));
         getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "  &6|_____|&e|_|_|_|     &7by &8Pa&7nd&5aaa"));
         getServer().getConsoleSender().sendMessage("");
-    }
-
-    private void sendTestingMessage() {
-        getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&c" + getDescription().getName() + " : This version of the plugin is meant for testing / may have bugs."));
-        getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&cPlease try to update to the next fully working version as soon as possible."));
-        getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&cPlease contact Pandaaa on discord if you believe this is an error."));
     }
 
     private void saveDefaultConfigurations() {
@@ -109,8 +106,7 @@ public class CustomMobs extends JavaPlugin {
         if(command == null)
             return;
 
-        getServer().getPluginManager().registerEvents(new CustomMobEvents(), this);
-        getServer().getPluginManager().registerEvents(new CustomMobsGUIEvents(), this);
+        getServer().getPluginManager().registerEvents(new Events(), this);
         command.setExecutor(new Commands(configManager, customMobsManager));
         command.setTabCompleter(new TabCompletion());
     }

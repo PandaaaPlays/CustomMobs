@@ -14,7 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Phantom extends CustomMobType {
+public class Phantom extends CustomMobOption {
     private int size;
 
     public Phantom(int size) {

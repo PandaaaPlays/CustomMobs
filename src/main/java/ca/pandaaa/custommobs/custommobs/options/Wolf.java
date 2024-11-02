@@ -9,12 +9,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Wolf extends CustomMobType {
+public class Wolf extends CustomMobOption {
     private DyeColor collarColor;
     private boolean angry;
 

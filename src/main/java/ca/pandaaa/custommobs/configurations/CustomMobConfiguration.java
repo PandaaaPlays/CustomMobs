@@ -2,7 +2,9 @@ package ca.pandaaa.custommobs.configurations;
 
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
-import ca.pandaaa.custommobs.custommobs.CustomMobsMessage;
+import ca.pandaaa.custommobs.custommobs.DropItem;
+import ca.pandaaa.custommobs.custommobs.Equipment;
+import ca.pandaaa.custommobs.custommobs.Messages;
 import ca.pandaaa.custommobs.utils.DamageRange;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.*;
@@ -14,7 +16,13 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,6 +42,19 @@ public class CustomMobConfiguration {
     }
 
     public CustomMob loadCustomMob() {
+        if(isDeleted()) {
+            LocalDate deleteDate = getDeleted();
+            if(!deleteDate.isAfter(LocalDate.now()))
+                mobFile.delete();
+            else {
+                CustomMobs.getPlugin().getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&',
+                        "&cThe CustomMob '" + fileName.replaceAll(".yml", "") + "' will be deleted permanently on " + deleteDate + "."));
+                CustomMobs.getPlugin().getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&',
+                        "&cRemove the 'delete-on' in the config of the CustomMob if this is a mistake."));
+            }
+            return null;
+        }
+
         EntityType type = this.getType();
         if(type == null
                 || type.getEntityClass() == null
@@ -42,15 +63,27 @@ public class CustomMobConfiguration {
                 || !(LivingEntity.class.isAssignableFrom(type.getEntityClass())))
             return null;
 
+        LocalDateTime dateTime;
+        try {
+            dateTime = Files.readAttributes(mobFile.toPath(), BasicFileAttributes.class).creationTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        } catch (Exception e) {
+            dateTime = LocalDateTime.now();
+        }
+
         CustomMob customMob = new CustomMob(
+                dateTime,
                 type,
                 fileName,
-                getItem(),
-                getSpawner(),
+                getItem(ITEM),
+                getItem(SPAWNER),
+                getEquipment(),
+                getDropItems(),
                 getName(),
                 new ArrayList<>(),
                 this);
+
         // TODO sounds
+        // TODO Horses, lama etc saddles should be able to have saddle
 
         setCustomMobConfigurations(customMob, type);
 
@@ -77,7 +110,11 @@ public class CustomMobConfiguration {
         if(AbstractHorse.class.isAssignableFrom(type.getEntityClass()))
             customMob.addCustomMobType(new ca.pandaaa.custommobs.custommobs.options.
                     AbstractHorse(getJumpStrength()));
-        if(Ageable.class.isAssignableFrom(type.getEntityClass()))
+
+        // "Ageable" mobs that cannot actually be babies : Parrot, Bat, Piglin Brute
+        // TODO Verify that there are no other mobs (probably not)
+        if(Ageable.class.isAssignableFrom(type.getEntityClass())
+            && !Arrays.asList(Parrot.class, Bat.class, PiglinBrute.class).contains(type.getEntityClass()))
             customMob.addCustomMobType(new ca.pandaaa.custommobs.custommobs.options.
                     Ageable(isBaby()));
         if(Axolotl.class.isAssignableFrom(type.getEntityClass()))
@@ -217,40 +254,66 @@ public class CustomMobConfiguration {
             setCanBreakDoors(null);
     }
 
-    public ItemStack getItem() {
-        ItemStack item = new ItemStack(getItemMaterial());
+    public static final String ITEM = "item";
+    public static final String SPAWNER = "spawner";
+
+    public ItemStack getItem(String configurationPath) {
+        ItemStack item = getItemStack(configurationPath);
+        if(item == null) {
+            item = new ItemStack(configurationPath.equalsIgnoreCase(ITEM) ? Material.ALLAY_SPAWN_EGG : Material.SPAWNER);
+        }
+
+        if(item.getItemMeta().getDisplayName().isEmpty()) {
+            ItemMeta itemMeta = item.getItemMeta();
+            if (itemMeta != null) {
+                itemMeta.setDisplayName(Utils.applyFormat(getName()) + (configurationPath.equalsIgnoreCase(ITEM) ? " Spawn Egg" : " Spawner"));
+                item.setItemMeta(itemMeta);
+            }
+        }
+
         ItemMeta itemMeta = item.getItemMeta();
         if (itemMeta != null) {
-            itemMeta.setDisplayName(Utils.applyFormat(getItemName()));
-
             NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.FileName");
             itemMeta.getPersistentDataContainer().set(key, PersistentDataType.STRING, getFileName().replace(".yml", ""));
             NamespacedKey keyType = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.ItemType");
-            itemMeta.getPersistentDataContainer().set(keyType, PersistentDataType.STRING, "Item");
+            itemMeta.getPersistentDataContainer().set(keyType, PersistentDataType.STRING, configurationPath);
 
             item.setItemMeta(itemMeta);
         }
         return item;
     }
 
-    public ItemStack getSpawner() {
-        ItemStack spawner = new ItemStack(Material.SPAWNER);
-        ItemMeta itemMeta = spawner.getItemMeta();
-        if (itemMeta != null) {
-            itemMeta.setDisplayName(Utils.applyFormat(getSpawnerName()));
-
-            NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.FileName");
-            itemMeta.getPersistentDataContainer().set(key, PersistentDataType.STRING, getFileName().replace(".yml", ""));
-            NamespacedKey keyType = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.ItemType");
-            itemMeta.getPersistentDataContainer().set(keyType, PersistentDataType.STRING, "Spawner");
-
-            spawner.setItemMeta(itemMeta);
-        }
-        return spawner;
+    public static final String EQUIPMENT_MAIN_HAND = "equipment.main-hand";
+    public static final String EQUIPMENT_OFF_HAND = "equipment.off-hand";
+    public static final String EQUIPMENT_HELMET = "equipment.helmet";
+    public static final String EQUIPMENT_CHESTPLATE = "equipment.chestplate";
+    public static final String EQUIPMENT_LEGGINGS = "equipment.leggings";
+    public static final String EQUIPMENT_BOOTS = "equipment.boots";
+    public Equipment getEquipment() {
+        return new Equipment(
+                this,
+                getItemStack(EQUIPMENT_MAIN_HAND),
+                getItemStack(EQUIPMENT_OFF_HAND),
+                getItemStack(EQUIPMENT_HELMET),
+                getItemStack(EQUIPMENT_CHESTPLATE),
+                getItemStack(EQUIPMENT_LEGGINGS),
+                getItemStack(EQUIPMENT_BOOTS));
     }
 
-    public CustomMobsMessage getMessages() {
-        return new CustomMobsMessage(getMessageText(false), getMessageRadius(false),
+    public static final String DROPS = "drops";
+    public List<DropItem> getDropItems() {
+        if(!mobConfiguration.contains(DROPS, true))
+            return new ArrayList<>();
+        return (List<DropItem>) mobConfiguration.getList(DROPS);
+    }
+
+    public void setDropItems(List<DropItem> dropItems) {
+        mobConfiguration.set(DROPS, dropItems);
+        saveConfigurationFile();
+    }
+
+    public Messages getMessages() {
+        return new Messages(getMessageText(false), getMessageRadius(false),
                 getMessageText(true), getMessageRadius(true));
     }
 
@@ -1015,11 +1078,7 @@ public class CustomMobConfiguration {
 
         messages.set(number - 1, text);
         mobConfiguration.set(death ? DEATH_MESSAGE_TEXT : MESSAGE_TEXT, messages);
-        try {
-            mobConfiguration.save(mobFile);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        saveConfigurationFile();
         return true;
     }
 
@@ -1037,28 +1096,45 @@ public class CustomMobConfiguration {
         saveConfigurationFile();
     }
 
-    private static final String ITEM_MATERIAL = "item.material";
-    private Material getItemMaterial() {
-        if(!mobConfiguration.contains(ITEM_MATERIAL, true))
-            return Material.ALLAY_SPAWN_EGG;
-
-        return Material.valueOf(mobConfiguration.getString(ITEM_MATERIAL));
+    public void setItemStack(String configurationPath, ItemStack itemStack) {
+        mobConfiguration.set(configurationPath, itemStack);
+        saveConfigurationFile();
     }
 
-    private static final String ITEM_NAME = "item.name";
-    private String getItemName() {
-        if(!mobConfiguration.contains(ITEM_NAME, true))
-            return getName();
-
-        return mobConfiguration.getString(ITEM_NAME);
+    public ItemStack getItemStack(String configurationPath) {
+        try {
+            ItemStack item = mobConfiguration.getItemStack(configurationPath);
+            if(item != null && item.getItemMeta() != null) {
+                ItemMeta itemMeta = item.getItemMeta();
+                itemMeta.setDisplayName(Utils.applyFormat(itemMeta.getDisplayName()));
+                itemMeta.setLore(itemMeta.getLore() == null ? new ArrayList<>() : itemMeta.getLore().stream().map(Utils::applyFormat).toList());
+                item.setItemMeta(itemMeta);
+            }
+            return item;
+        } catch(Exception exception) {
+            return null;
+        }
     }
 
-    private static final String SPAWNER_NAME = "spawner.name";
-    private String getSpawnerName() {
-        if(!mobConfiguration.contains(SPAWNER_NAME, true))
-            return getName() + " Spawner";
+    private static final String DELETED = "delete-on";
 
-        return mobConfiguration.getString(SPAWNER_NAME);
+    public boolean isDeleted() {
+        if(!mobConfiguration.contains(DELETED, true))
+            return false;
+
+        return true;
+    }
+
+    public LocalDate getDeleted() {
+        if(!mobConfiguration.contains(DELETED, true))
+            return null;
+
+        return LocalDate.parse(mobConfiguration.getString(DELETED));
+    }
+
+    public void setDeleted(LocalDate date) {
+        mobConfiguration.set(DELETED, date.toString());
+        saveConfigurationFile();
     }
 
     private void saveConfigurationFile() {

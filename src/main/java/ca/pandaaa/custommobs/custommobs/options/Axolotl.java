@@ -2,18 +2,16 @@ package ca.pandaaa.custommobs.custommobs.options;
 
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
-import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Axolotl extends CustomMobType {
+public class Axolotl extends CustomMobOption {
     private org.bukkit.entity.Axolotl.Variant axolotlVariant;
 
     public Axolotl(org.bukkit.entity.Axolotl.Variant axolotlVariant) {

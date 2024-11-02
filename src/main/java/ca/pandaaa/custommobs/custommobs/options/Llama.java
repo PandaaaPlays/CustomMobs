@@ -8,12 +8,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Llama extends CustomMobType {
+public class Llama extends CustomMobOption {
     private org.bukkit.entity.Llama.Color llamaColor;
 
     public Llama(org.bukkit.entity.Llama.Color llamaColor) {

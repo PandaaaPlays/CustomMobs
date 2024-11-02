@@ -4,39 +4,39 @@ import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 import ca.pandaaa.custommobs.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Effect;
 import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
-public class DropsCustomMobsGUI {
-
-//public class DropsCustomMobsGUI extends CustomMobsGUI implements Listener {
-    /*private final List<ItemStack> typeItems;
+public class TypesGUI extends CustomMobsGUI implements Listener {
+    private final List<ItemStack> typeItems;
     private final CustomMob customMob;
     private final ItemStack previous;
     private final ItemStack next;
 
-    public DropsCustomMobs(CustomMob customMob) {
+    public TypesGUI(CustomMob customMob) {
         super(54, "&8CustomMobs &8&l» &8Types");
 
         this.customMob = customMob;
-        CustomMobs plugin = CustomMobs.getPlugin();
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        previous = getMenuItem(Utils.createHead("a2f0425d64fdc8992928d608109810c1251fe243d60d175bed427c651cbe"));
-        next = getMenuItem(Utils.createHead("6d865aae2746a9b8e9a4fe629fb08d18d0a9251e5ccbe5fa7051f53eab9b94"));
+        previous = getMenuItem(Utils.createHead("a2f0425d64fdc8992928d608109810c1251fe243d60d175bed427c651cbe"), true);
+        next = getMenuItem(Utils.createHead("6d865aae2746a9b8e9a4fe629fb08d18d0a9251e5ccbe5fa7051f53eab9b94"), true);
         typeItems = getTypesItems();
     }
 
     public void openInventory(Player player, int page) {
-
         boolean nextPage = true;
 
         // Make sure we set the extra items to air, so that other page(s) item(s) are not persisted.
@@ -79,15 +79,16 @@ public class DropsCustomMobsGUI {
             inventory.setItem(53, filler);
 
         player.openInventory(inventory);
-
     }
 
     @EventHandler
-    private void onInventoryClick(InventoryClickEvent event) {
-        if(!Objects.equals(event.getClickedInventory(), inventory))
+    public void onInventoryClick(InventoryClickEvent event) {
+        if (!isEventRelevant(event.getView().getTopInventory()))
             return;
-        if (event.getCurrentItem() == null)
+        if(event.getClickedInventory() == null || event.getClickedInventory().getType() == InventoryType.PLAYER) {
+            event.setCancelled(event.isShiftClick());
             return;
+        }
 
         event.setCancelled(true);
         ItemMeta itemMeta = event.getCurrentItem().getItemMeta();
@@ -97,7 +98,7 @@ public class DropsCustomMobsGUI {
         switch (event.getSlot()) {
             case 45:
                 if(!name.contains("("))
-                    new EditCustomMobsGUI(customMob, CustomMobs.getPlugin().getCustomMobsManager(), clicker).openInventory();
+                    new EditGUI(customMob, CustomMobs.getPlugin().getCustomMobsManager(), clicker).openInventory();
                 else {
                     int page = Character.getNumericValue(name.charAt(name.indexOf('(') + 1));
                     openInventory(clicker, page);
@@ -111,7 +112,7 @@ public class DropsCustomMobsGUI {
             default:
                 if (event.getCurrentItem() != filler) {
                     customMob.setType(EntityType.valueOf(ChatColor.stripColor(itemMeta.getDisplayName().replace(" ", "_"))));
-                    new EditCustomMobsGUI(customMob, CustomMobs.getPlugin().getCustomMobsManager(), clicker).openInventory();
+                    new EditGUI(customMob, CustomMobs.getPlugin().getCustomMobsManager(), clicker).openInventory();
                 }
                 break;
         }
@@ -127,6 +128,7 @@ public class DropsCustomMobsGUI {
             if(type != EntityType.PLAYER
                     && type != EntityType.ARMOR_STAND
                     && type.isAlive()) {
+
                 Material spawnEgg = getSpawnEggMaterial(type);
                 if(spawnEgg != null) {
                     ItemStack item = new ItemStack(spawnEgg);
@@ -137,7 +139,7 @@ public class DropsCustomMobsGUI {
                     itemMeta.setLore(lore);
                     itemMeta.setDisplayName(Utils.applyFormat("&6&l" + type.name().replace("_", " ")));
                     item.setItemMeta(itemMeta);
-                    items.add(getMenuItem(item));
+                    items.add(getMenuItem(item, true));
                 }
             }
         }
@@ -156,5 +158,5 @@ public class DropsCustomMobsGUI {
         } catch (IllegalArgumentException e) {
             return null;
         }
-    }*/
+    }
 }
