@@ -53,7 +53,7 @@ public class Llama extends CustomMobOption {
     public CustomMobsItem getLlamaColorItem() {
         CustomMobsItem item = new CustomMobsItem(Material.END_CRYSTAL);
         item.setName("&b&lLlama color");
-        String color = llamaColor == null ? "&fRandom" : Utils.getChatColorOfColor(llamaColor.name()) + llamaColor.name();
+        String color = llamaColor == null ? "&fRandom" : Utils.getChatColorOfColor(llamaColor.name()) + Utils.getSentenceCase(llamaColor.name());
         item.addLore("&eColor: " + color);
         item.setPersistentDataContainer(this.getClass().getSimpleName(), "LlamaColor");
         return item;

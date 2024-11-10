@@ -2,6 +2,7 @@ package ca.pandaaa.custommobs.custommobs.options;
 
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
+import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -52,7 +53,7 @@ public class Axolotl extends CustomMobOption {
     public CustomMobsItem getAxolotlVariantItem() {
         CustomMobsItem item = new CustomMobsItem(Material.AXOLOTL_BUCKET);
         item.setName("&b&lAxolotl variant");
-        String variant = axolotlVariant == null ? "&fRandom" : "&f" + axolotlVariant.toString();
+        String variant = axolotlVariant == null ? "&fRandom" : "&f" + Utils.getSentenceCase(axolotlVariant.toString());
         item.addLore("&eVariant: &f" + variant);
         item.setPersistentDataContainer(this.getClass().getSimpleName(), "AxolotlVariant");
         return item;

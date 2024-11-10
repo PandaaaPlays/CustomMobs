@@ -2,6 +2,7 @@ package ca.pandaaa.custommobs.custommobs.options;
 
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
+import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -70,7 +71,7 @@ public class Villager extends CustomMobOption {
     public CustomMobsItem getVillagerTypeItem() {
         CustomMobsItem item = new CustomMobsItem(Material.VILLAGER_SPAWN_EGG);
         item.setName("&b&lVillager type");
-        String type = villagerType == null ? "Biome based" : villagerType.toString();
+        String type = villagerType == null ? "Biome based" : Utils.getSentenceCase(villagerType.toString());
         item.addLore("&eType: &f" + type);
         item.setPersistentDataContainer(this.getClass().getSimpleName(), "VillagerType");
         return item;
@@ -79,7 +80,7 @@ public class Villager extends CustomMobOption {
     public CustomMobsItem getVillagerProfessionItem() {
         CustomMobsItem item = new CustomMobsItem(Material.BOOK);
         item.setName("&b&lVillager profession");
-        String profession = villagerProfession == null ? "&fRandom" : "&f" + villagerProfession.toString();
+        String profession = villagerProfession == null ? "&fRandom" : "&f" + Utils.getSentenceCase(villagerProfession.toString());
         item.addLore("&eProfession: &f" + profession);
         item.setPersistentDataContainer(this.getClass().getSimpleName(), "VillagerProfession");
         return item;

@@ -54,7 +54,7 @@ public class Shulker extends CustomMobOption {
     public CustomMobsItem getShulkerColorItem() {
         CustomMobsItem item = new CustomMobsItem(Material.SHULKER_BOX);
         item.setName("&b&lShulker color");
-        String color = this.color == null ? "&fNone" : Utils.getChatColorOfColor(this.color.name()) + this.color.name();
+        String color = this.color == null ? "&fNone" : Utils.getChatColorOfColor(this.color.name()) + Utils.getSentenceCase(this.color.name());
         item.addLore("&eColor: " + color);
         item.setPersistentDataContainer(this.getClass().getSimpleName(), "ShulkerColor");
         return item;

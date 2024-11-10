@@ -1,12 +1,16 @@
 package ca.pandaaa.custommobs.custommobs;
 
+import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.configurations.ConfigurationManager;
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,6 +30,15 @@ public class Manager {
             if (customMob != null)
                 customMobs.put(mobConfiguration.getFileName().toLowerCase().replace(".yml", ""), customMob);
         }
+    }
+
+    public CustomMob addCustomMob(String customMobName, EntityType mobType) {
+        File file = new File(customMobName + ".yml");
+        CustomMobConfiguration mobConfiguration = new CustomMobConfiguration(YamlConfiguration.loadConfiguration(file), file);
+        mobsConfigurations.add(mobConfiguration);
+        CustomMob customMob = mobConfiguration.loadCustomMob();
+        customMobs.put(customMobName, customMob);
+        return customMob;
     }
 
     public void removeCustomMob(String customMobName) {

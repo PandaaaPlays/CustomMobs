@@ -4,7 +4,6 @@ import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.options.CustomMobOption;
 import ca.pandaaa.custommobs.utils.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -12,7 +11,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.time.LocalDate;
@@ -27,7 +25,7 @@ public class CustomMob implements Listener {
     private ItemStack item;
     private ItemStack spawner;
     private final Equipment equipment;
-    private final List<DropItem> dropItems;
+    private final List<Drop> drops;
     private String name;
     private final List<Sound> sounds;
     private final CustomMobConfiguration mobConfiguration;
@@ -38,7 +36,7 @@ public class CustomMob implements Listener {
                      ItemStack item,
                      ItemStack spawner,
                      Equipment equipment,
-                     List<DropItem> dropItems,
+                     List<Drop> drops,
                      String name,
                      List<Sound> sounds,
                      CustomMobConfiguration mobConfiguration) {
@@ -48,7 +46,7 @@ public class CustomMob implements Listener {
         this.item = item;
         this.spawner = spawner;
         this.equipment = equipment;
-        this.dropItems = dropItems;
+        this.drops = drops;
         this.name = name;
         this.sounds = sounds;
         this.mobConfiguration = mobConfiguration;
@@ -76,7 +74,8 @@ public class CustomMob implements Listener {
         equipment.giveEquipments(customMob);
 
         // Drops
-
+        NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Name");
+        customMob.getPersistentDataContainer().set(key, PersistentDataType.STRING, customMobFileName.replaceAll(".yml", ""));
 
         // Options
         for(CustomMobOption customMobType : customMobOptions.values()) {
@@ -98,7 +97,7 @@ public class CustomMob implements Listener {
     }
 
     public ItemStack getItem() {
-        return item;
+        return item.clone();
     }
 
     public void setItem(ItemStack item) {
@@ -107,7 +106,7 @@ public class CustomMob implements Listener {
     }
 
     public ItemStack getSpawner() {
-        return spawner;
+        return spawner.clone();
     }
 
     public void setSpawner(ItemStack spawner) {
@@ -119,8 +118,8 @@ public class CustomMob implements Listener {
         return equipment;
     }
 
-    public List<DropItem> getDropItems() {
-        return dropItems;
+    public List<Drop> getDrops() {
+        return drops;
     }
 
     /* === NAME (OVER HEAD) === */
@@ -144,25 +143,30 @@ public class CustomMob implements Listener {
         this.name = name;
     }
 
-    /* === DROP ITEMS === */
+    /* === DROPS === */
 
     /**
-     * Add a custom DropItem to the drop list of the CustomMob.
-     * @param dropItem The DropItem to be added to the list.
+     * Add a custom Drop to the drop list of the CustomMob.
+     * @param drop The DropItem to be added to the list.
      */
-    public void addDropItem(DropItem dropItem) {
-        dropItems.add(dropItem);
-        mobConfiguration.setDropItems(dropItems);
+    public void addDrop(Drop drop) {
+        drops.add(drop);
+        mobConfiguration.setDrops(drops);
+    }
+
+    public void editDrop(Drop drop, int index) {
+        drops.set(index, drop);
+        mobConfiguration.setDrops(drops);
     }
 
     // TODO This clearly works... Might not really be the best thing to just trust that the order is synchronized between the GUI and the List index...
     /**
-     * Remove a custom DropItem from the drop list of the CustomMob.
-     * @param dropItemIndex The index of the DropItem to be removed to the list.
+     * Remove a custom Drop from the drop list of the CustomMob.
+     * @param dropIndex The index of the Drop to be removed to the list.
      */
-    public void removeDropItem(int dropItemIndex) {
-        dropItems.remove(dropItemIndex);
-        mobConfiguration.setDropItems(dropItems);
+    public void removeDropItem(int dropIndex) {
+        drops.remove(dropIndex);
+        mobConfiguration.setDrops(drops);
     }
 
     /* === TYPE === */
@@ -206,6 +210,7 @@ public class CustomMob implements Listener {
     }
 
     public void delete() {
+        CustomMobs.getPlugin().getCustomMobsManager().removeCustomMob(customMobFileName.replaceAll(".yml", ""));
         mobConfiguration.setDeleted(LocalDate.now().plusDays(14));
     }
 

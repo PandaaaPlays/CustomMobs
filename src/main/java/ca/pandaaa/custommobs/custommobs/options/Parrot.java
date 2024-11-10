@@ -2,6 +2,7 @@ package ca.pandaaa.custommobs.custommobs.options;
 
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
+import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -52,7 +53,7 @@ public class Parrot extends CustomMobOption {
     public CustomMobsItem getParrotVariantItem() {
         CustomMobsItem item = new CustomMobsItem(Material.PARROT_SPAWN_EGG);
         item.setName("&b&lParrot variant");
-        String variant = parrotVariant == null ? "&fRandom" : "&f" + parrotVariant.toString();
+        String variant = parrotVariant == null ? "&fRandom" : "&f" + Utils.getSentenceCase(parrotVariant.toString());
         item.addLore("&eVariant: &f" + variant);
         item.setPersistentDataContainer(this.getClass().getSimpleName(), "ParrotVariant");
         return item;

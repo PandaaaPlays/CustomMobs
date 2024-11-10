@@ -3,11 +3,11 @@ package ca.pandaaa.custommobs.guis.EditCustomMobs.Drops;
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
-import ca.pandaaa.custommobs.custommobs.DropItem;
+import ca.pandaaa.custommobs.custommobs.Drop;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.EditGUI;
 import ca.pandaaa.custommobs.utils.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,13 +15,13 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class DropsGUI extends CustomMobsGUI implements Listener {
-    private List<DropItem> dropsItems;
+    private List<Drop> dropsItems;
     private final CustomMob customMob;
     private final ItemStack previous;
     private final ItemStack next;
@@ -38,7 +38,7 @@ public class DropsGUI extends CustomMobsGUI implements Listener {
     }
 
     public void openInventory(Player player, int page) {
-        dropsItems = customMob.getDropItems();
+        dropsItems = customMob.getDrops();
         this.currentPage = page;
         boolean nextPage = dropsItems.size() > (page * 45);
 
@@ -121,8 +121,8 @@ public class DropsGUI extends CustomMobsGUI implements Listener {
                 break;
             case 49:
                 if (cursorItem.getType() != Material.AIR) {
-                    DropItem newDropItem = new DropItem(cursorItem.clone(), 100);
-                    customMob.addDropItem(newDropItem);
+                    Drop newDropItem = new Drop(cursorItem.clone());
+                    customMob.addDrop(newDropItem);
 
                     if (inventory.firstEmpty() == -1) {  // Overflow in the next page
                         openInventory(clicker.getPlayer(), currentPage + 1);
@@ -137,22 +137,31 @@ public class DropsGUI extends CustomMobsGUI implements Listener {
             default:
                 if (event.getCurrentItem() != filler) {
                     int dropItemIndex = (currentPage - 1) * 45 + event.getSlot();
+                    NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Drop.Remove.Confirm");
                     if (event.isRightClick()) {
-                        customMob.removeDropItem(dropItemIndex);
-                        // DropItems is desynchronized until the reopening of the inventory.
-                        boolean currentPageEmpty = dropsItems.size() - 1 <= ((currentPage - 1) * 45);
-                        if (currentPageEmpty)
-                            currentPage = currentPage == 1 ? currentPage : currentPage - 1;
-                        openInventory(clicker, currentPage);
+                        if (event.getCurrentItem().getItemMeta().getPersistentDataContainer().getKeys().contains(key)) {
+                            customMob.removeDropItem(dropItemIndex);
+                            // DropItems is desynchronized until the reopening of the inventory.
+                            boolean currentPageEmpty = dropsItems.size() - 1 <= ((currentPage - 1) * 45);
+                            if (currentPageEmpty)
+                                currentPage = currentPage == 1 ? currentPage : currentPage - 1;
+                            openInventory(clicker, currentPage);
+                        } else {
+                            openInventory(clicker, currentPage);
+                            event.getInventory().setItem(event.getSlot(), getMenuItem(getDeleteItem(new ItemStack(Material.BARRIER)), true));
+                        }
                     } else {
-                        new SpecificDropGUI(dropsItems.get(dropItemIndex)).openInventory(clicker);
+                        if (event.getCurrentItem().getItemMeta().getPersistentDataContainer().getKeys().contains(key))
+                            openInventory(clicker, currentPage);
+                        else
+                            new SpecificDropGUI(customMob, dropsItems.get(dropItemIndex), dropItemIndex).openInventory(clicker);
                     }
                 }
                 break;
         }
     }
 
-    private ItemStack getDropItem(DropItem dropItem) {
+    private ItemStack getDropItem(Drop dropItem) {
         ItemStack item = dropItem.getItemStack().clone();
         ItemMeta itemMeta = item.getItemMeta();
         ArrayList<String> lore = itemMeta.getLore() == null ? new ArrayList<>() : (ArrayList<String>) itemMeta.getLore();
@@ -162,5 +171,20 @@ public class DropsGUI extends CustomMobsGUI implements Listener {
         itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
         return getMenuItem(item, false);
+    }
+
+    private ItemStack getDeleteItem(ItemStack item) {
+        ItemMeta itemMeta = item.getItemMeta();
+        ArrayList<String> lore = new ArrayList<>();
+        NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Drop.Remove.Confirm");
+        itemMeta.getPersistentDataContainer().set(key, PersistentDataType.BOOLEAN, true);
+        lore.add("");
+        itemMeta.setDisplayName(Utils.applyFormat("&c&l[-] Confirm drop deletion"));
+        lore.add(Utils.applyFormat("&7&o(( Left-click to cancel the deletion ))"));
+        lore.add(Utils.applyFormat("&7&o(( Right-click again to confirm the deletion ))"));
+        lore.add(Utils.applyFormat("&c&l[!] &cThis will permanently delete this drop."));
+        itemMeta.setLore(lore);
+        item.setItemMeta(itemMeta);
+        return item;
     }
 }

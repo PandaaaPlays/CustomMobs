@@ -1,6 +1,7 @@
 package ca.pandaaa.custommobs.guis;
 
 import ca.pandaaa.custommobs.CustomMobs;
+import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -86,5 +87,17 @@ public class CustomMobsGUI implements Listener {
         }
         menuItem.setItemMeta(itemMeta);
         return menuItem;
+    }
+
+    protected CustomMobsItem getMenuItem(CustomMobsItem customMobsItem, boolean hideItemFlags) {
+        return (CustomMobsItem) getMenuItem((ItemStack) customMobsItem, hideItemFlags);
+    }
+
+    protected ItemStack getPreviousItem() {
+        ItemStack item = Utils.createHead("a2f0425d64fdc8992928d608109810c1251fe243d60d175bed427c651cbe");
+        ItemMeta itemMeta = item.getItemMeta();
+        itemMeta.setDisplayName(Utils.applyFormat("&e&lPrevious"));
+        item.setItemMeta(itemMeta);
+        return getMenuItem(item, true);
     }
 }

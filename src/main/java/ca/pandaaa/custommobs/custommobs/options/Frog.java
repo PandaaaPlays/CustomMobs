@@ -2,6 +2,7 @@ package ca.pandaaa.custommobs.custommobs.options;
 
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
+import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -52,7 +53,7 @@ public class Frog extends CustomMobOption {
     public CustomMobsItem getFrogVariantItem() {
         CustomMobsItem item = new CustomMobsItem(Material.FROG_SPAWN_EGG);
         item.setName("&b&lFrog variant");
-        String variant = frogVariant == null ? "&fBiome based" : "&f" + frogVariant.toString();
+        String variant = frogVariant == null ? "&fBiome based" : "&f" + Utils.getSentenceCase(frogVariant.toString());
         item.addLore("&eVariant: &f" + variant);
         item.setPersistentDataContainer(this.getClass().getSimpleName(), "FrogVariant");
         return item;

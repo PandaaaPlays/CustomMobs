@@ -137,7 +137,7 @@ public class TypesGUI extends CustomMobsGUI implements Listener {
                     lore.add("");
                     lore.add(Utils.applyFormat("&7&o(( Click to select this CustomMob type ))"));
                     itemMeta.setLore(lore);
-                    itemMeta.setDisplayName(Utils.applyFormat("&6&l" + type.name().replace("_", " ")));
+                    itemMeta.setDisplayName(Utils.applyFormat("&6&l" + Utils.getStartCase(type.name())));
                     item.setItemMeta(itemMeta);
                     items.add(getMenuItem(item, true));
                 }
