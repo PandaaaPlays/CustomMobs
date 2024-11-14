@@ -69,7 +69,7 @@ public class Cat extends CustomMobOption {
     public CustomMobsItem getCollarColorItem() {
         CustomMobsItem item = new CustomMobsItem(Material.END_CRYSTAL);
         item.setName("&b&lCollar color");
-        String color = collarColor == null ? "&fNone" : Utils.getChatColorOfColor(collarColor.name()) + collarColor.name();
+        String color = collarColor == null ? "&fNone" : Utils.getChatColorOfColor(collarColor.name()) + Utils.getSentenceCase(collarColor.name());
         item.addLore("&eColor: " + color);
         item.setPersistentDataContainer(this.getClass().getSimpleName(), "CollarColor");
         return item;
@@ -78,7 +78,7 @@ public class Cat extends CustomMobOption {
     public CustomMobsItem getCatTypeItem() {
         CustomMobsItem item = new CustomMobsItem(Material.CAT_SPAWN_EGG);
         item.setName("&b&lCat type");
-        String type = catType == null ? "&fRandom" : "&f" + catType.toString();
+        String type = catType == null ? "&fRandom" : "&f" + Utils.getSentenceCase(catType.toString());
         item.addLore("&eType: &f" + type);
         item.setPersistentDataContainer(this.getClass().getSimpleName(), "CatType");
         return item;

@@ -69,7 +69,7 @@ public class Horse extends CustomMobOption {
     public CustomMobsItem getHorseColorItem() {
         CustomMobsItem item = new CustomMobsItem(Material.END_CRYSTAL);
         item.setName("&b&lHorse color");
-        String color = horseColor == null ? "&fRandom" : Utils.getChatColorOfColor(horseColor.name()) + horseColor.name();
+        String color = horseColor == null ? "&fRandom" : Utils.getChatColorOfColor(horseColor.name()) + Utils.getSentenceCase(horseColor.name());
         item.addLore("&eColor: " + color);
         item.setPersistentDataContainer(this.getClass().getSimpleName(), "HorseColor");
         return item;
@@ -78,7 +78,7 @@ public class Horse extends CustomMobOption {
     public CustomMobsItem getHorseStyleItem() {
         CustomMobsItem item = new CustomMobsItem(Material.HORSE_SPAWN_EGG);
         item.setName("&b&lHorse style");
-        String type = horseStyle == null ? "&fRandom" : "&f" + horseStyle.toString();
+        String type = horseStyle == null ? "&fRandom" : "&f" + Utils.getSentenceCase(horseStyle.toString());
         item.addLore("&eType: &f" + type);
         item.setPersistentDataContainer(this.getClass().getSimpleName(), "HorseStyle");
         return item;

@@ -220,6 +220,7 @@ public class EditGUI extends CustomMobsGUI implements Listener {
                 new OptionsGUI(customMob).openInventory(clicker, 1);
                 break;
             case 30:
+                // TODO clicker in waitingForRename (like main menu?)
                 clicker.closeInventory();
                 clicker.sendMessage(Utils.applyFormat("&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &eCustomMob renaming"));
                 clicker.sendMessage(Utils.applyFormat(" &6&l- &fEnter the name you want &e&nin the chat&f."));
@@ -339,7 +340,7 @@ public class EditGUI extends CustomMobsGUI implements Listener {
         ItemMeta itemMeta = item.getItemMeta();
         itemMeta.setDisplayName(Utils.applyFormat("&6&lSelect type"));
         ArrayList<String> lore = new ArrayList<>();
-        lore.add(Utils.applyFormat("&eCurrent type: &f" + customMob.getType().name().replace("_", " ")));
+        lore.add(Utils.applyFormat("&eCurrent type: &f" + Utils.getStartCase(customMob.getType().name())));
         lore.add("");
         lore.add(Utils.applyFormat("&7&o(( Click to select the type of this CustomMob ))"));
         itemMeta.setLore(lore);

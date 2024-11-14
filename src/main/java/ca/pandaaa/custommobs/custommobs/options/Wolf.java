@@ -65,7 +65,7 @@ public class Wolf extends CustomMobOption {
     public CustomMobsItem getCollarColorItem() {
         CustomMobsItem item = new CustomMobsItem(Material.END_CRYSTAL);
         item.setName("&b&lCollar color");
-        String color = collarColor == null ? "&fDefault" : Utils.getChatColorOfColor(collarColor.name()) + collarColor.name();
+        String color = collarColor == null ? "&fDefault" : Utils.getChatColorOfColor(collarColor.name()) + Utils.getSentenceCase(collarColor.name());
         item.addLore("&eColor: " + color);
         item.setPersistentDataContainer(this.getClass().getSimpleName(), "CollarColor");
         return item;

@@ -2,6 +2,7 @@ package ca.pandaaa.custommobs.custommobs.options;
 
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
+import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -52,7 +53,7 @@ public class Rabbit extends CustomMobOption {
     public CustomMobsItem getRabbitTypeItem() {
         CustomMobsItem item = new CustomMobsItem(Material.RABBIT_SPAWN_EGG);
         item.setName("&b&lRabbit type");
-        String type = rabbitType == null ? "&fRandom" : "&f" + rabbitType.toString();
+        String type = rabbitType == null ? "&fRandom" : "&f" + Utils.getSentenceCase(rabbitType.toString());
         item.addLore("&eType: &f" + type);
         item.setPersistentDataContainer(this.getClass().getSimpleName(), "RabbitType");
         return item;

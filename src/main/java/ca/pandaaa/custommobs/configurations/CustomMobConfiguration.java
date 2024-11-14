@@ -2,7 +2,7 @@ package ca.pandaaa.custommobs.configurations;
 
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
-import ca.pandaaa.custommobs.custommobs.DropItem;
+import ca.pandaaa.custommobs.custommobs.Drop;
 import ca.pandaaa.custommobs.custommobs.Equipment;
 import ca.pandaaa.custommobs.custommobs.Messages;
 import ca.pandaaa.custommobs.utils.DamageRange;
@@ -78,8 +78,8 @@ public class CustomMobConfiguration {
                 getItem(ITEM),
                 getItem(SPAWNER),
                 getEquipment(),
-                getDropItems(),
                 getPotionMeta(),
+                getDrops(),
                 getName(),
                 new ArrayList<>(),
                 this);
@@ -303,14 +303,14 @@ public class CustomMobConfiguration {
     }
 
     public static final String DROPS = "drops";
-    public List<DropItem> getDropItems() {
+    public List<Drop> getDrops() {
         if(!mobConfiguration.contains(DROPS, true))
             return new ArrayList<>();
-        return (List<DropItem>) mobConfiguration.getList(DROPS);
+        return (List<Drop>) mobConfiguration.getList(DROPS);
     }
 
-    public void setDropItems(List<DropItem> dropItems) {
-        mobConfiguration.set(DROPS, dropItems);
+    public void setDrops(List<Drop> drops) {
+        mobConfiguration.set(DROPS, drops);
         saveConfigurationFile();
     }
 

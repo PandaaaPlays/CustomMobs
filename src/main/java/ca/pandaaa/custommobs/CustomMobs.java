@@ -4,7 +4,7 @@ import ca.pandaaa.custommobs.commands.Commands;
 import ca.pandaaa.custommobs.commands.TabCompletion;
 import ca.pandaaa.custommobs.configurations.ConfigurationManager;
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
-import ca.pandaaa.custommobs.custommobs.DropItem;
+import ca.pandaaa.custommobs.custommobs.Drop;
 import ca.pandaaa.custommobs.custommobs.Events;
 import ca.pandaaa.custommobs.custommobs.Manager;
 import ca.pandaaa.custommobs.utils.Metrics;
@@ -36,7 +36,7 @@ public class CustomMobs extends JavaPlugin {
         this.sendStartedMessage();
 
         // DropItem serialization
-        ConfigurationSerialization.registerClass(DropItem.class, "ca.pandaaa.custommobs.custommobs.DropItem");
+        ConfigurationSerialization.registerClass(Drop.class, "ca.pandaaa.custommobs.custommobs.DropItem");
 
         saveDefaultConfigurations();
         loadAllMobsConfigurations();

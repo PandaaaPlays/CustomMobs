@@ -2,6 +2,7 @@ package ca.pandaaa.custommobs.custommobs.options;
 
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
+import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -54,7 +55,7 @@ public class Panda extends CustomMobOption {
     public CustomMobsItem getPandaGeneItem() {
         CustomMobsItem item = new CustomMobsItem(Material.PANDA_SPAWN_EGG);
         item.setName("&b&lPanda gene");
-        String gene = pandaGene == null ? "&fRandom" : "&f" + pandaGene.name();
+        String gene = pandaGene == null ? "&fRandom" : "&f" + Utils.getSentenceCase(pandaGene.name());
         item.addLore("&eGene: &f" + gene);
         item.setPersistentDataContainer(this.getClass().getSimpleName(), "PandaGene");
         return item;

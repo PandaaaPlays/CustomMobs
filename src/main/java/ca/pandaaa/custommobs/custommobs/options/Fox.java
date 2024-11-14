@@ -2,6 +2,7 @@ package ca.pandaaa.custommobs.custommobs.options;
 
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
+import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -52,7 +53,7 @@ public class Fox extends CustomMobOption {
     public CustomMobsItem getFoxTypeItem() {
         CustomMobsItem item = new CustomMobsItem(Material.FOX_SPAWN_EGG);
         item.setName("&b&lFox type");
-        String type = foxType == null ? "&fBiome based" : "&f" + foxType.toString();
+        String type = foxType == null ? "&fBiome based" : "&f" + Utils.getSentenceCase(foxType.toString());
         item.addLore("&eType: &f" + type);
         item.setPersistentDataContainer(this.getClass().getSimpleName(), "FoxType");
         return item;
