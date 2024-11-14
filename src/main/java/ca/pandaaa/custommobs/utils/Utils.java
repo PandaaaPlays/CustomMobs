@@ -53,6 +53,25 @@ public class Utils {
         return head;
     }
 
+    public static String getSentenceCase(String string) {
+        return string.toUpperCase().substring(0, 1) + string.toLowerCase().substring(1).replaceAll("_", " ");
+    }
+
+    public static String getStartCase(String string) {
+        String[] words = string.toLowerCase().split("[_\\s]+");
+        StringBuilder startCaseString = new StringBuilder();
+
+        for (String word : words) {
+            if (!word.isEmpty()) {
+                startCaseString.append(Character.toUpperCase(word.charAt(0)))
+                        .append(word.substring(1))
+                        .append(" ");
+            }
+        }
+
+        return startCaseString.toString().trim();
+    }
+
     public static ChatColor getChatColorOfColor(String color) {
         ChatColor chatColor;
         switch (color.toUpperCase()) {

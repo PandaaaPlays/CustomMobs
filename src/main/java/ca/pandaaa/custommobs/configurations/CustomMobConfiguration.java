@@ -12,6 +12,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.io.File;
@@ -78,6 +79,7 @@ public class CustomMobConfiguration {
                 getItem(SPAWNER),
                 getEquipment(),
                 getDropItems(),
+                getPotionMeta(),
                 getName(),
                 new ArrayList<>(),
                 this);
@@ -311,6 +313,19 @@ public class CustomMobConfiguration {
         mobConfiguration.set(DROPS, dropItems);
         saveConfigurationFile();
     }
+
+    public static final String POTIONS = "potions";
+    public PotionMeta getPotionMeta() {
+        if(!mobConfiguration.contains(POTIONS, true))
+            return (PotionMeta) new ItemStack(Material.POTION).getItemMeta();
+        return (PotionMeta) mobConfiguration.get(POTIONS);
+    }
+
+    public void setPotionMeta(PotionMeta potionMeta) {
+        mobConfiguration.set(POTIONS, potionMeta);
+        saveConfigurationFile();
+    }
+
 
     public Messages getMessages() {
         return new Messages(getMessageText(false), getMessageRadius(false),

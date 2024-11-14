@@ -10,10 +10,13 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffect;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -31,6 +34,7 @@ public class CustomMob implements Listener {
     private String name;
     private final List<Sound> sounds;
     private final CustomMobConfiguration mobConfiguration;
+    private final PotionMeta potionMeta;
 
     public CustomMob(LocalDateTime creationDate,
                      EntityType entityType,
@@ -39,6 +43,7 @@ public class CustomMob implements Listener {
                      ItemStack spawner,
                      Equipment equipment,
                      List<DropItem> dropItems,
+                     PotionMeta potionMeta,
                      String name,
                      List<Sound> sounds,
                      CustomMobConfiguration mobConfiguration) {
@@ -52,6 +57,7 @@ public class CustomMob implements Listener {
         this.name = name;
         this.sounds = sounds;
         this.mobConfiguration = mobConfiguration;
+        this.potionMeta = potionMeta;
     }
 
     /**
@@ -76,8 +82,13 @@ public class CustomMob implements Listener {
         equipment.giveEquipments(customMob);
 
         // Drops
+        NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Name");
+        customMob.getPersistentDataContainer().set(key, PersistentDataType.STRING, customMobFileName.replaceAll(".yml", ""));
 
-
+        // Potions
+        for(PotionEffect effect : potionMeta.getCustomEffects()) {
+            effect.apply((LivingEntity) customMob);
+        }
         // Options
         for(CustomMobOption customMobType : customMobOptions.values()) {
             customMobType.applyOptions(customMob);
@@ -122,7 +133,13 @@ public class CustomMob implements Listener {
     public List<DropItem> getDropItems() {
         return dropItems;
     }
-
+    public PotionMeta getPotionMeta() {
+        return potionMeta;
+    }
+    public void addPotionMeta(PotionEffect potionEffect){
+         this.potionMeta.addCustomEffect(potionEffect,true);
+        mobConfiguration.setPotionMeta(potionMeta);
+    }
     /* === NAME (OVER HEAD) === */
 
     /**
