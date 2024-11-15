@@ -104,19 +104,9 @@ public class PotionsGUI extends CustomMobsGUI {
         }
         event.setCancelled(true);
 
-        String name = "";
         Player clicker = (Player) event.getWhoClicked();
-        if(event.getCurrentItem().hasItemMeta()){
-            ItemMeta itemMeta =  event.getCurrentItem().getItemMeta();
-            name = itemMeta.getDisplayName();
-        }
-        else{
-            PotionMeta potionMeta = (PotionMeta) event.getCurrentItem().getItemMeta();
-            name = potionMeta.getDisplayName();
-            Bukkit.broadcastMessage(clicker + " ya click " + name);
-        }
-
-
+        ItemMeta itemMeta = event.getCurrentItem().getItemMeta();
+        String name = itemMeta.getDisplayName();
 
         switch (event.getSlot()) {
             case 45:
@@ -135,14 +125,13 @@ public class PotionsGUI extends CustomMobsGUI {
                 openInventory(clicker, page);
                 break;
             default:
+                new SpecificPotionGUI(customMob, itemMeta);
                 break;
         }
     }
     private List<ItemStack> getPotionsItems() {
         List<ItemStack> items = new ArrayList<>();
         if(customMob.getPotionMeta() != null){
-        Bukkit.broadcastMessage(customMob.getPotionMeta().getDisplayName());
-
         List<PotionEffect> effects = customMob.getPotionMeta().getCustomEffects();
 
         for(PotionEffect effect : effects) {

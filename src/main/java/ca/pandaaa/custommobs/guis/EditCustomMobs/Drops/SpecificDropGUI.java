@@ -209,5 +209,4 @@ public class SpecificDropGUI extends CustomMobsGUI {
         item.addLore("&c&l[!] &cThis will permanently delete this drop.");
         return getMenuItem(item, true);
     }
-
 }

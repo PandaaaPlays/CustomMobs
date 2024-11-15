@@ -18,9 +18,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
-// mettre potion a vide
-// ajouter star pour ajouter potion
-//ajouter les parametres des potions
 
 public class AddPotionsGUI extends CustomMobsGUI {
     private final List<ItemStack> potionItems;
@@ -31,7 +28,6 @@ public class AddPotionsGUI extends CustomMobsGUI {
 
     public AddPotionsGUI(CustomMob customMob) {
         super(54, "&8CustomMobs &8&l» &8Potion effects");
-
         this.customMob = customMob;
         previous = getMenuItem(Utils.createHead("a2f0425d64fdc8992928d608109810c1251fe243d60d175bed427c651cbe"), true);
         next = getMenuItem(Utils.createHead("6d865aae2746a9b8e9a4fe629fb08d18d0a9251e5ccbe5fa7051f53eab9b94"), true);
@@ -44,15 +40,14 @@ public class AddPotionsGUI extends CustomMobsGUI {
         for(int i = 0; i < 45; i++) {
             int position = ((page - 1) * 45) + i;
             if (potionItems.size() > position){
-                    inventory.setItem(i, potionItems.get(position));
-
+                inventory.setItem(i, potionItems.get(position));
             }
             else {
                 inventory.setItem(i, new ItemStack(Material.AIR));
                 nextPage = false;
             }
         }
-        if(page > 1) {
+        if(currentPage > 1) {
             ItemMeta previousItemMeta = previous.getItemMeta();
             if(previousItemMeta != null)
                 previousItemMeta.setDisplayName(Utils.applyFormat("&e&lPrevious (" + (page - 1) + ")"));
@@ -91,14 +86,10 @@ public class AddPotionsGUI extends CustomMobsGUI {
             return;
         }
         event.setCancelled(true);
-        String name = "";
+
         Player clicker = (Player) event.getWhoClicked();
-            PotionMeta potionMeta = (PotionMeta) event.getCurrentItem().getItemMeta();
-            customMob.addPotionMeta(potionMeta.getCustomEffects().get(0));
-            name = potionMeta.getDisplayName();
-
-
-
+        ItemMeta itemMeta = event.getCurrentItem().getItemMeta();
+        String name = itemMeta.getDisplayName();
 
         switch (event.getSlot()) {
             case 45:
@@ -109,16 +100,16 @@ public class AddPotionsGUI extends CustomMobsGUI {
                     openInventory(clicker, page);
                 }
                 break;
-            case 49:
-                this.currentPage += 1;
-                new AddPotionsGUI(customMob).openInventory(clicker, currentPage);
-                break;
             case 53:
                 int page = Character.getNumericValue(name.charAt(name.indexOf('(') + 1));
                 openInventory(clicker, page);
                 break;
             default:
-                new PotionsGUI(customMob).openInventory(clicker, currentPage);
+                if (event.getCurrentItem() != filler) {
+                    PotionMeta potionMeta = (PotionMeta) itemMeta;
+                    customMob.addPotionMeta(potionMeta.getCustomEffects().get(0));
+                    new PotionsGUI(customMob).openInventory(clicker, currentPage);
+                }
                 break;
         }
     }
@@ -131,7 +122,7 @@ public class AddPotionsGUI extends CustomMobsGUI {
         for(PotionEffectType effect : effects) {
             ItemStack potion = new ItemStack(Material.POTION);
             PotionMeta potionMeta = (PotionMeta) potion.getItemMeta();
-            if(potionMeta != null) {
+            if(potionMeta == null) {
                 if (effect == PotionEffectType.ABSORPTION) {
                     potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.STRENGTH, 10, 1), true);
                 } else {
