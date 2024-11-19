@@ -1,13 +1,11 @@
 package ca.pandaaa.custommobs.configurations;
 
 import ca.pandaaa.custommobs.CustomMobs;
-import ca.pandaaa.custommobs.custommobs.CustomMob;
-import ca.pandaaa.custommobs.custommobs.Drop;
-import ca.pandaaa.custommobs.custommobs.Equipment;
-import ca.pandaaa.custommobs.custommobs.Messages;
+import ca.pandaaa.custommobs.custommobs.*;
 import ca.pandaaa.custommobs.utils.DamageRange;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.*;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
@@ -75,8 +73,9 @@ public class CustomMobConfiguration {
                 type,
                 fileName,
                 getItem(ITEM),
-                getItem(SPAWNER),
+                getItem(SPAWNER_ITEM),
                 getEquipment(),
+                getSpawner(),
                 getDrops(),
                 getName(),
                 new ArrayList<>(),
@@ -255,7 +254,7 @@ public class CustomMobConfiguration {
     }
 
     public static final String ITEM = "item";
-    public static final String SPAWNER = "spawner";
+    public static final String SPAWNER_ITEM = "spawner-item";
 
     public ItemStack getItem(String configurationPath) {
         ItemStack item = getItemStack(configurationPath);
@@ -309,6 +308,18 @@ public class CustomMobConfiguration {
 
     public void setDrops(List<Drop> drops) {
         mobConfiguration.set(DROPS, drops);
+        saveConfigurationFile();
+    }
+
+    public static final String SPAWNER = "spawner";
+    public Spawner getSpawner() {
+        if(!mobConfiguration.contains(SPAWNER, true))
+            return null;
+        return (Spawner) mobConfiguration.get(SPAWNER);
+    }
+
+    public void setSpawner(Spawner spawner) {
+        mobConfiguration.set(SPAWNER, spawner);
         saveConfigurationFile();
     }
 

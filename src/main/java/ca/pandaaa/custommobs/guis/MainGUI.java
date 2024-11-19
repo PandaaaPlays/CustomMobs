@@ -11,6 +11,7 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,6 +24,8 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -183,13 +186,13 @@ public class MainGUI extends CustomMobsGUI {
         CustomMob customMob = null;
 
         Manager customMobsManager = CustomMobs.getPlugin().getCustomMobsManager();
-        String message = event.getMessage();
+        String message = event.getMessage().toLowerCase().replaceAll(" ", "_");
         if (!message.equalsIgnoreCase("cancel")) {
-            if(!customMobsManager.getCustomMobNames().contains(message.replaceAll(" ", "_"))) {
+            if(!customMobsManager.getCustomMobNames().contains(message)) {
                 customMob = customMobsManager.addCustomMob(message, EntityType.PIG);
                 waitingForCreation.sendMessage(Utils.applyFormat("&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &eSuccessfully created : &r" + message));
             } else {
-                // TODO message
+                event.getPlayer().sendMessage(Utils.applyFormat("&c&l[!] &cThe name you entered is already in use. Please select another one."));
                 return;
             }
         }

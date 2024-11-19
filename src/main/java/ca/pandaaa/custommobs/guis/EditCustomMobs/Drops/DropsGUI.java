@@ -20,7 +20,7 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DropsGUI extends CustomMobsGUI implements Listener {
+public class DropsGUI extends CustomMobsGUI {
     private List<Drop> dropsItems;
     private final CustomMob customMob;
     private final ItemStack previous;

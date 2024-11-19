@@ -58,11 +58,12 @@ public class Special extends CustomMobOption {
         customMob.setCustomNameVisible(isNameVisible);
 
         if(customMob instanceof Attributable) {
-            if (health != null)
+            // TODO FIX THIS SHIT
+            /* if (health != null)
                 Objects.requireNonNull(((Attributable) customMob).getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(health);
             Objects.requireNonNull(((Attributable) customMob).getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE)).setBaseValue(knockbackResistance);
             Objects.requireNonNull(((Attributable) customMob).getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).setBaseValue(speed);
-            Objects.requireNonNull(((Attributable) customMob).getAttribute(Attribute.GENERIC_FOLLOW_RANGE)).setBaseValue(followRange);
+            Objects.requireNonNull(((Attributable) customMob).getAttribute(Attribute.GENERIC_FOLLOW_RANGE)).setBaseValue(followRange);*/
         }
 
         if(damageRange != null) {

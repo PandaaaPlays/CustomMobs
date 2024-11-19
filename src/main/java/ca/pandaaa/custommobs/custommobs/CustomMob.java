@@ -7,6 +7,7 @@ import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.Listener;
@@ -23,9 +24,10 @@ public class CustomMob implements Listener {
     private final String customMobFileName;
     private HashMap<String, CustomMobOption> customMobOptions = new HashMap<>();
     private ItemStack item;
-    private ItemStack spawner;
+    private ItemStack spawnerItem;
     private final Equipment equipment;
     private final List<Drop> drops;
+    private Spawner spawner;
     private String name;
     private final List<Sound> sounds;
     private final CustomMobConfiguration mobConfiguration;
@@ -34,8 +36,9 @@ public class CustomMob implements Listener {
                      EntityType entityType,
                      String customMobFileName,
                      ItemStack item,
-                     ItemStack spawner,
+                     ItemStack spawnerItem,
                      Equipment equipment,
+                     Spawner spawner,
                      List<Drop> drops,
                      String name,
                      List<Sound> sounds,
@@ -44,8 +47,9 @@ public class CustomMob implements Listener {
         this.entityType = entityType;
         this.customMobFileName = customMobFileName;
         this.item = item;
-        this.spawner = spawner;
+        this.spawnerItem = spawnerItem;
         this.equipment = equipment;
+        this.spawner = spawner;
         this.drops = drops;
         this.name = name;
         this.sounds = sounds;
@@ -84,8 +88,42 @@ public class CustomMob implements Listener {
     }
 
     public void placeCustomMobSpawner(Location location) {
-        // TODO All of the spawners characteristics
-        location.getBlock().setType(Material.DIAMOND_BLOCK);
+        location.getBlock().setType(Material.SPAWNER);
+        CreatureSpawner spawnerBlock = (CreatureSpawner) location.getBlock().getState();
+
+        try {
+            // TODO set mob
+            /*CraftWorld world = ((CraftWorld)e.getClickedBlock().getWorld());
+            WorldServer worldServer = world.getHandle();
+            BlockPosition blockPosition = new BlockPosition(e.getClickedBlock().getX(),e.getClickedBlock().getY(),e.getClickedBlock().getZ());
+            TileEntityMobSpawner tileEntityMobSpawner = (TileEntityMobSpawner) worldServer.getTileEntity(blockPosition);
+            MobSpawnerData mobSpawnerData = new MobSpawnerData();
+            NBTTagCompound a = mobSpawnerData.getEntity();
+            NBTTagList handList = new NBTTagList();
+            NBTTagCompound mainHand = new NBTTagCompound();
+            mainHand.setString("id", "minecraft:diamond_sword");
+            mainHand.setShort("Count", (short) 1);
+            NBTTagList enchantments = new NBTTagList();
+            NBTTagCompound sharpness3 = new NBTTagCompound();
+            sharpness3.setShort("id", (short) 16);
+            sharpness3.setShort("lvl", (short) 3);
+            enchantments.add(sharpness3);
+            NBTTagCompound ench = new NBTTagCompound();
+            ench.set("ench", enchantments);
+            mainHand.set("tag", ench);
+            handList.add(mainHand);
+            NBTTagCompound spawnData = new NBTTagCompound();
+            spawnData.setString("id", "minecraft_zombie"); //sets the spawner to a zombie
+            spawnData.set("HandItems", handList);
+            a.a(spawnData);
+            tileEntityMobSpawner.getSpawner().setSpawnData(mobSpawnerData);*/
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //spawnerBlock.setSpawnedEntity(Ent);
+        this.spawner.setCharacteristics(spawnerBlock);
     }
 
     public void addCustomMobType(CustomMobOption customMobType) {
@@ -105,13 +143,13 @@ public class CustomMob implements Listener {
         this.item = mobConfiguration.getItem(CustomMobConfiguration.ITEM);
     }
 
-    public ItemStack getSpawner() {
-        return spawner.clone();
+    public ItemStack getSpawnerItem() {
+        return spawnerItem.clone();
     }
 
     public void setSpawner(ItemStack spawner) {
         mobConfiguration.setItemStack(CustomMobConfiguration.SPAWNER, spawner);
-        this.spawner = mobConfiguration.getItem(CustomMobConfiguration.SPAWNER);
+        this.spawnerItem = mobConfiguration.getItem(CustomMobConfiguration.SPAWNER);
     }
 
     public Equipment getEquipment() {
@@ -139,7 +177,7 @@ public class CustomMob implements Listener {
     public void setName(String name) {
         mobConfiguration.setName(name);
         this.item = getCustomMobConfiguration().getItem(CustomMobConfiguration.ITEM);
-        this.spawner = getCustomMobConfiguration().getItem(CustomMobConfiguration.SPAWNER);
+        this.spawnerItem = getCustomMobConfiguration().getItem(CustomMobConfiguration.SPAWNER);
         this.name = name;
     }
 

@@ -1,8 +1,9 @@
-package ca.pandaaa.custommobs.guis.EditCustomMobs;
+package ca.pandaaa.custommobs.guis.EditCustomMobs.Others;
 
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.EditGUI;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class MessagesGUI extends CustomMobsGUI implements Listener {
+public class MessagesGUI extends CustomMobsGUI {
 
     private final CustomMob customMob;
     private final ItemStack minusBig;
@@ -88,7 +89,7 @@ public class MessagesGUI extends CustomMobsGUI implements Listener {
             case 4: case 13:
                 customMob.getCustomMobConfiguration().setMessagesRadius(current, false);
                 customMob.getCustomMobConfiguration().setMessagesRadius(currentDeath, true);
-                new EditGUI(customMob, CustomMobs.getPlugin().getCustomMobsManager(), (Player) event.getWhoClicked()).openInventory();
+                new OthersGUI(customMob).openInventory((Player) event.getWhoClicked());
                 break;
             case 6:
                 if (current < 0)
@@ -131,13 +132,15 @@ public class MessagesGUI extends CustomMobsGUI implements Listener {
         itemMeta.getPersistentDataContainer().set(key, PersistentDataType.DOUBLE, value);
 
         itemMeta.setDisplayName(Utils.applyFormat("&6&lMessages"));
-        lore.add(Utils.applyFormat("&eCurrent radius value: &f" + (value < 0 ? "Everyone" : value)));
-        lore.add("");
-        lore.add(Utils.applyFormat("&eCurrent message(s):"));
-
-        int i = 1;
-        for (String message : death ? customMob.getCustomMobMessages().getMessages() : customMob.getCustomMobMessages().getDeathMessages()) {
-            lore.add(Utils.applyFormat("&f " + i++ + ". &r" + message));
+        lore.add(Utils.applyFormat("&eCurrent radius value: &f" + (value <= 0 ? "Everyone" : value)));
+        if((!death && !customMob.getCustomMobMessages().getMessages().isEmpty())
+                || (death && !customMob.getCustomMobMessages().getDeathMessages().isEmpty())) {
+            lore.add("");
+            lore.add(Utils.applyFormat("&eCurrent message(s):"));
+            int i = 1;
+            for (String message : death ? customMob.getCustomMobMessages().getMessages() : customMob.getCustomMobMessages().getDeathMessages()) {
+                lore.add(Utils.applyFormat("&f " + i++ + ". &r" + message));
+            }
         }
 
         lore.add("");

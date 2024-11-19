@@ -7,6 +7,7 @@ import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.Drop;
 import ca.pandaaa.custommobs.custommobs.Events;
 import ca.pandaaa.custommobs.custommobs.Manager;
+import ca.pandaaa.custommobs.custommobs.Spawner;
 import ca.pandaaa.custommobs.utils.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -36,7 +37,8 @@ public class CustomMobs extends JavaPlugin {
         this.sendStartedMessage();
 
         // DropItem serialization
-        ConfigurationSerialization.registerClass(Drop.class, "ca.pandaaa.custommobs.custommobs.DropItem");
+        ConfigurationSerialization.registerClass(Drop.class, "ca.pandaaa.custommobs.custommobs.Drop");
+        ConfigurationSerialization.registerClass(Spawner.class, "ca.pandaaa.custommobs.custommobs.Spawner");
 
         saveDefaultConfigurations();
         loadAllMobsConfigurations();
