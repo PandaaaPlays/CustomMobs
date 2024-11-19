@@ -128,7 +128,6 @@ public class AddPotionsGUI extends CustomMobsGUI {
                 } else {
                     potionMeta.addCustomEffect(new PotionEffect(effect, -1, 1,true,true), true);
                 }
-
                 ArrayList<String> lore = new ArrayList<>();
                 lore.add("");
                 lore.add(Utils.applyFormat("&7&o(( Click to select this CustomMob potion effect ))"));

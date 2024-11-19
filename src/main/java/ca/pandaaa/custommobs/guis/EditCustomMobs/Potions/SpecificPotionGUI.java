@@ -44,7 +44,7 @@ public class SpecificPotionGUI extends CustomMobsGUI{
     private final ItemStack particle;*/
     private final CustomMob customMob;
     private PotionEffect potionEffect;
-    private PotionMeta potionMeta;
+    private PotionMeta emptyPotionMeta;
     private final int potionIndex;
 
     private PotionEffectType type;
@@ -58,8 +58,8 @@ public class SpecificPotionGUI extends CustomMobsGUI{
         super(27, "&8CustomMobs &8&l» &8Potion configuration");
         this.potionIndex = potionIndex;
         this.customMob = customMob;
-        this.potionMeta = customMob.getPotionMeta().get(potionIndex);
-        this.potionEffect = potionMeta.getCustomEffects().get(0);
+        this.emptyPotionMeta = (PotionMeta) new ItemStack(Material.POTION).getItemMeta();
+        this.potionEffect = customMob.getPotionMeta().get(potionIndex).getCustomEffects().get(0);
 
         this.type = potionEffect.getType();
         this.particles = potionEffect.hasParticles();
@@ -100,13 +100,12 @@ public class SpecificPotionGUI extends CustomMobsGUI{
             return;
         Player clicker = (Player) event.getWhoClicked();
         ItemStack cursorItem = clicker.getItemOnCursor();
-
+        PotionMeta potionMeta =emptyPotionMeta.clone();
         switch (event.getSlot()) {
             case 11:
-                PotionMeta potionMeta = (PotionMeta) new ItemStack(Material.POTION).getItemMeta();
                 particles = !particles;
                 event.getView().setItem(event.getSlot(), getParticlesItem());
-                potionMeta.addCustomEffect(new PotionEffect(type, duration, amplifier, ambient, particles, true),true);
+                potionMeta.addCustomEffect(new PotionEffect(type, duration, amplifier, ambient, particles),true);
                 customMob.editPotion(potionMeta,potionIndex);
                 break;
             /*case 12:
@@ -119,16 +118,13 @@ public class SpecificPotionGUI extends CustomMobsGUI{
                 customMob.editDrop(drop, dropIndex);
                 event.getView().setItem(event.getSlot(), getConditionItem());
                 event.getView().setItem(event.getSlot() + 1, getGroupItem(drop.getDropCondition() == DropConditions.NEARBY));
-                break;
+                break;*/
             case 15:
-                if(event.getClick().isRightClick())
-                    drop.setGroupColor(null);
-                else
-                    drop.setGroupColor(NextOptions.getNextDyeColor(drop.getGroupColor()));
-
-                customMob.editDrop(drop, dropIndex);
-                event.getView().setItem(event.getSlot(), getGroupItem(false));
-                break;
+                ambient = !ambient;
+                event.getView().setItem(event.getSlot(), getAmbientItem());
+                potionMeta.addCustomEffect(new PotionEffect(type, duration, amplifier, ambient, particles),true);
+                customMob.editPotion(potionMeta,potionIndex);
+                break;/*
             case 18:
                 new SpecificDropMessageGUI().openInventory(clicker);
                 break;*/
@@ -180,7 +176,7 @@ public class SpecificPotionGUI extends CustomMobsGUI{
     private ItemStack getPotionItem() {
         ItemStack potion = new ItemStack(Material.POTION);
         PotionMeta potionMeta1 = (PotionMeta) potion.getItemMeta();
-        potionMeta1.addCustomEffect(new PotionEffect(potionMeta.getCustomEffects().get(0).getType(),1 ,1),true);
+        potionMeta1.addCustomEffect(new PotionEffect(type,1 ,1),true);
 
         potion.setItemMeta(potionMeta1);
         /*ItemStack item = drop.getItemStack().clone();

@@ -15,12 +15,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
-// mettre potion a vide
-// ajouter star pour ajouter potion
-//ajouter les parametres des potions
 
 public class PotionsGUI extends CustomMobsGUI {
     private final List<ItemStack> potionItems;
@@ -40,7 +36,6 @@ public class PotionsGUI extends CustomMobsGUI {
         addPotionEffect = getMenuItem(new ItemStack(Material.END_CRYSTAL), true);
     }
     public void openInventory(Player player, int page) {
-        //potionItems = customMob.getPotions();
         this.currentPage = page;
         boolean nextPage = potionItems.size() > (page * 45);
 
@@ -103,9 +98,11 @@ public class PotionsGUI extends CustomMobsGUI {
             return;
         }
         event.setCancelled(true);
-
+        ItemStack item = event.getView().getTopInventory().getItem(event.getSlot());
+        if (item == null)
+            return;
         Player clicker = (Player) event.getWhoClicked();
-        ItemMeta itemMeta = event.getCurrentItem().getItemMeta();
+        ItemMeta itemMeta = item.getItemMeta();
         String name = itemMeta.getDisplayName();
 
         switch (event.getSlot()) {
@@ -121,11 +118,15 @@ public class PotionsGUI extends CustomMobsGUI {
                  new AddPotionsGUI(customMob).openInventory(clicker, 1);
                 break;
             case 53:
-                int page = Character.getNumericValue(name.charAt(name.indexOf('(') + 1));
-                openInventory(clicker, page);
+                if(name.contains("(")){
+                    int page = Character.getNumericValue(name.charAt(name.indexOf('(') + 1));
+                    openInventory(clicker, page);
+                }
                 break;
             default:
-                new SpecificPotionGUI(customMob, (currentPage - 1) * 45 + event.getSlot()).openInventory(clicker);
+                if(event.getSlot() < 45){
+                    new SpecificPotionGUI(customMob, (currentPage - 1) * 45 + event.getSlot()).openInventory(clicker);
+                }
                 break;
         }
     }
