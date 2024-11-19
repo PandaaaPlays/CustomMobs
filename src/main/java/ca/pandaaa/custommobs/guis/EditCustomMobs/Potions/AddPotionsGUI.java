@@ -7,6 +7,7 @@ import ca.pandaaa.custommobs.guis.EditCustomMobs.EditGUI;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Registry;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -117,7 +118,9 @@ public class AddPotionsGUI extends CustomMobsGUI {
     private List<ItemStack> getPotionsItems() {
         List<ItemStack> items = new ArrayList<>();
 
-        List<PotionEffectType> effects = Arrays.asList(PotionEffectType.values());
+        List<PotionEffectType> effects = new ArrayList<>();
+        Registry.EFFECT.iterator().forEachRemaining(effects::add);
+
         effects.sort(Comparator.comparing(effect -> effect.getKey().getKey()));
         for(PotionEffectType effect : effects) {
             ItemStack potion = new ItemStack(Material.POTION);

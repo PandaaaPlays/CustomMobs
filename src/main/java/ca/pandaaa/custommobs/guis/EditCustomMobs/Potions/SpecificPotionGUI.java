@@ -55,7 +55,7 @@ public class SpecificPotionGUI extends CustomMobsGUI{
 
 
     public SpecificPotionGUI(CustomMob customMob, int potionIndex){
-        super(27, "&8CustomMobs &8&l» &8Potion configuration");
+        super(36, "&8CustomMobs &8&l» &8Potion configuration");
         this.potionIndex = potionIndex;
         this.customMob = customMob;
         this.potionMeta = customMob.getPotionMeta().get(potionIndex);
@@ -70,16 +70,16 @@ public class SpecificPotionGUI extends CustomMobsGUI{
     }
     public void openInventory(Player player) {
 
-        for(int i = 0; i < 27; i++)
+        for(int i = 0; i < 36; i++)
             inventory.setItem(i, filler);
 
         inventory.setItem(11, getParticlesItem());
         inventory.setItem(12, getAmplifierItem());
         inventory.setItem(14, getDurationItem());
         inventory.setItem(15, getAmbientItem());
-        inventory.setItem(18, getPreviousItem());
-        inventory.setItem(22, getPotionItem());
-        inventory.setItem(26, getDeleteItem(false));
+        inventory.setItem(27, getPreviousItem());
+        inventory.setItem(31, getPotionItem());
+        inventory.setItem(35, getDeleteItem(false));
 
         player.openInventory(inventory);
     }
@@ -109,6 +109,14 @@ public class SpecificPotionGUI extends CustomMobsGUI{
                 potionMeta.addCustomEffect(new PotionEffect(type, duration, amplifier, ambient, particles, true),true);
                 customMob.editPotion(potionMeta,potionIndex);
                 break;
+            case 14:
+
+                new SpecificPotionDurationGUI(customMob, duration, potionIndex, (value) -> {
+                    Bukkit.broadcastMessage(value + " seconde(s) // " + value * 20 + " tick(s)");
+                    /*potionMeta.addCustomEffect(new PotionEffect(type, value, amplifier, ambient, particles, true),true);
+                    customMob.editPotion(potionMeta, potionIndex);*/
+                }).openInventory(clicker);
+                break;
             /*case 12:
                 drop.setLooting(!drop.isLooting());
                 customMob.editDrop(drop, dropIndex);
@@ -132,7 +140,7 @@ public class SpecificPotionGUI extends CustomMobsGUI{
             case 18:
                 new SpecificDropMessageGUI().openInventory(clicker);
                 break;*/
-            case 22:
+            case 31:
                // customMob.addPotionMeta(potionEffect);
                 new PotionsGUI(customMob).openInventory(clicker, 1);
                 break;/*
