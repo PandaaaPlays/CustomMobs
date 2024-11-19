@@ -135,7 +135,7 @@ public class DropsGUI extends CustomMobsGUI implements Listener {
                 openInventory(clicker, currentPage + 1);
                 break;
             default:
-                if (event.getCurrentItem() != filler) {
+                if (event.getSlot() < 45) {
                     int dropItemIndex = (currentPage - 1) * 45 + event.getSlot();
                     NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Drop.Remove.Confirm");
                     if (event.isRightClick()) {
