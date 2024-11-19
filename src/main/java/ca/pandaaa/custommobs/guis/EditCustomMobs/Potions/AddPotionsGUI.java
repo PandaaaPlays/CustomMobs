@@ -94,20 +94,21 @@ public class AddPotionsGUI extends CustomMobsGUI {
         switch (event.getSlot()) {
             case 45:
                 if(!name.contains("("))
-                    new AddPotionsGUI(customMob).openInventory(clicker, currentPage);
+                    new PotionsGUI(customMob).openInventory(clicker, currentPage);
                 else {
                     int page = Character.getNumericValue(name.charAt(name.indexOf('(') + 1));
                     openInventory(clicker, page);
                 }
                 break;
             case 53:
+                if(event.getView().getItem(event.getSlot()).getType() == Material.GRAY_STAINED_GLASS_PANE)
+                    break;
                 int page = Character.getNumericValue(name.charAt(name.indexOf('(') + 1));
                 openInventory(clicker, page);
                 break;
             default:
-                if (event.getCurrentItem() != filler) {
-                    PotionMeta potionMeta = (PotionMeta) itemMeta;
-                    customMob.addPotionMeta(potionMeta.getCustomEffects().get(0));
+                if (event.getSlot() < 45) {
+                    customMob.addPotionMeta((PotionMeta) itemMeta);
                     new PotionsGUI(customMob).openInventory(clicker, currentPage);
                 }
                 break;
@@ -118,15 +119,14 @@ public class AddPotionsGUI extends CustomMobsGUI {
 
         List<PotionEffectType> effects = Arrays.asList(PotionEffectType.values());
         effects.sort(Comparator.comparing(effect -> effect.getKey().getKey()));
-
         for(PotionEffectType effect : effects) {
             ItemStack potion = new ItemStack(Material.POTION);
             PotionMeta potionMeta = (PotionMeta) potion.getItemMeta();
-            if(potionMeta == null) {
+            if(potionMeta != null) {
                 if (effect == PotionEffectType.ABSORPTION) {
                     potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.STRENGTH, 10, 1), true);
                 } else {
-                    potionMeta.addCustomEffect(new PotionEffect(effect, -1, 1), true);
+                    potionMeta.addCustomEffect(new PotionEffect(effect, -1, 1,true,true), true);
                 }
 
                 ArrayList<String> lore = new ArrayList<>();
@@ -134,7 +134,6 @@ public class AddPotionsGUI extends CustomMobsGUI {
                 lore.add(Utils.applyFormat("&7&o(( Click to select this CustomMob potion effect ))"));
                 potionMeta.setLore(lore);
                 potionMeta.setDisplayName(Utils.applyFormat("&6&l" + Utils.getStartCase(effect.getKey().getKey())));
-
                 potion.setItemMeta(potionMeta);
                 items.add(getMenuItem(potion, true));
             }

@@ -315,13 +315,13 @@ public class CustomMobConfiguration {
     }
 
     public static final String POTIONS = "potions";
-    public PotionMeta getPotionMeta() {
+    public List<PotionMeta> getPotionMeta() {
         if(!mobConfiguration.contains(POTIONS, true))
-            return (PotionMeta) new ItemStack(Material.POTION).getItemMeta();
-        return (PotionMeta) mobConfiguration.get(POTIONS);
+            return new ArrayList<>();
+        return (List<PotionMeta>) mobConfiguration.getList(POTIONS);
     }
 
-    public void setPotionMeta(PotionMeta potionMeta) {
+    public void setPotionMeta(List<PotionMeta> potionMeta) {
         mobConfiguration.set(POTIONS, potionMeta);
         saveConfigurationFile();
     }

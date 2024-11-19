@@ -125,33 +125,29 @@ public class PotionsGUI extends CustomMobsGUI {
                 openInventory(clicker, page);
                 break;
             default:
-                new SpecificPotionGUI(customMob, itemMeta);
+                new SpecificPotionGUI(customMob, (currentPage - 1) * 45 + event.getSlot()).openInventory(clicker);
                 break;
         }
     }
     private List<ItemStack> getPotionsItems() {
         List<ItemStack> items = new ArrayList<>();
         if(customMob.getPotionMeta() != null){
-        List<PotionEffect> effects = customMob.getPotionMeta().getCustomEffects();
+        List<PotionMeta> potionMetas = customMob.getPotionMeta();
 
-        for(PotionEffect effect : effects) {
+        for(PotionMeta potionMeta1 : potionMetas) {
             ItemStack potion = new ItemStack(Material.POTION);
-            PotionMeta potionMeta = (PotionMeta) potion.getItemMeta();
-            if(potionMeta != null) {
-                potionMeta.addCustomEffect(effect, true);
-
-                ArrayList<String> lore = new ArrayList<>();
+            PotionMeta potionMeta = (PotionMeta) new ItemStack(Material.POTION).getItemMeta();
+            potionMeta.addCustomEffect(new PotionEffect(potionMeta1.getCustomEffects().get(0).getType(),1 ,1),true);
+            ArrayList<String> lore = new ArrayList<>();
                 lore.add("");
                 lore.add(Utils.applyFormat("&7&o(( Click to select this CustomMob potion effect ))"));
                 potionMeta.setLore(lore);
-                potionMeta.setDisplayName(Utils.applyFormat("&6&l" + Utils.getStartCase(effect.getType().getKey().getKey())));
+                potionMeta.setDisplayName(Utils.applyFormat("&6&l" + Utils.getStartCase(potionMeta.getCustomEffects().get(0).getType().getKey().getKey())));
 
                 potion.setItemMeta(potionMeta);
                 items.add(getMenuItem(potion, false));
             }
-        }}
+        }
         return items;
     }
-
-
 }

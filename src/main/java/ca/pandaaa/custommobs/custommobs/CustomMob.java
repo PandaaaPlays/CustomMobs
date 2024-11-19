@@ -33,7 +33,7 @@ public class CustomMob implements Listener {
     private String name;
     private final List<Sound> sounds;
     private final CustomMobConfiguration mobConfiguration;
-    private final PotionMeta potionMeta;
+    private final List<PotionMeta> potionMeta;
 
     public CustomMob(LocalDateTime creationDate,
                      EntityType entityType,
@@ -41,7 +41,7 @@ public class CustomMob implements Listener {
                      ItemStack item,
                      ItemStack spawner,
                      Equipment equipment,
-                     PotionMeta potionMeta,
+                     List<PotionMeta> potionMeta,
                      List<Drop> drops,
                      String name,
                      List<Sound> sounds,
@@ -52,11 +52,11 @@ public class CustomMob implements Listener {
         this.item = item;
         this.spawner = spawner;
         this.equipment = equipment;
+        this.potionMeta = potionMeta;
         this.drops = drops;
         this.name = name;
         this.sounds = sounds;
         this.mobConfiguration = mobConfiguration;
-        this.potionMeta = potionMeta;
     }
 
     /**
@@ -85,8 +85,8 @@ public class CustomMob implements Listener {
         customMob.getPersistentDataContainer().set(key, PersistentDataType.STRING, customMobFileName.replaceAll(".yml", ""));
         
       // Potions
-        for(PotionEffect effect : potionMeta.getCustomEffects()) {
-            effect.apply((LivingEntity) customMob);
+        for(PotionMeta potionMeta : potionMeta) {
+            potionMeta.getCustomEffects().get(0).apply((LivingEntity) customMob);
         }
         // Options
         for(CustomMobOption customMobType : customMobOptions.values()) {
@@ -132,12 +132,12 @@ public class CustomMob implements Listener {
     public List<Drop> getDrops() {
         return drops;
     }
-    public PotionMeta getPotionMeta() {
+    public List<PotionMeta> getPotionMeta() {
         return potionMeta;
     }
-    public void addPotionMeta(PotionEffect potionEffect){
-         this.potionMeta.addCustomEffect(potionEffect,true);
-        mobConfiguration.setPotionMeta(potionMeta);
+    public void addPotionMeta(PotionMeta potionMeta){
+         this.potionMeta.add(potionMeta);
+        mobConfiguration.setPotionMeta(this.potionMeta);
     }
     /* === NAME (OVER HEAD) === */
 
@@ -158,6 +158,12 @@ public class CustomMob implements Listener {
         this.item = getCustomMobConfiguration().getItem(CustomMobConfiguration.ITEM);
         this.spawner = getCustomMobConfiguration().getItem(CustomMobConfiguration.SPAWNER);
         this.name = name;
+    }
+
+
+    public void editPotion(PotionMeta potionMeta, int index) {
+        this.potionMeta.set(index, potionMeta);
+        mobConfiguration.setPotionMeta(this.potionMeta);
     }
 
     /* === DROPS === */
