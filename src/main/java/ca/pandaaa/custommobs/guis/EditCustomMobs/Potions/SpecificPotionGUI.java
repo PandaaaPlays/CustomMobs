@@ -64,7 +64,7 @@ public class SpecificPotionGUI extends CustomMobsGUI{
         this.type = potionEffect.getType();
         this.particles = potionEffect.hasParticles();
         this.ambient = potionEffect.isAmbient();
-        this.duration = potionEffect.getDuration();
+        this.duration = potionEffect.getDuration()/20;
         this.amplifier = potionEffect.getAmplifier();
 
     }
@@ -110,7 +110,7 @@ public class SpecificPotionGUI extends CustomMobsGUI{
             case 14:
                 new SpecificPotionDurationGUI(customMob, duration, potionIndex, (value) -> {
                     Bukkit.broadcastMessage(value + " seconde(s) // " + value * 20 + " tick(s)");
-                    duration = value*20;
+                    duration = value;
                     update(potionMeta);
                 }).openInventory(clicker);
                 event.getView().setItem(event.getSlot(), getDurationItem());
@@ -122,6 +122,7 @@ public class SpecificPotionGUI extends CustomMobsGUI{
                 break;
             case 31:
                 new PotionsGUI(customMob).openInventory(clicker, 1);
+
                 break;
             case 35:
                 if (event.getCurrentItem().getItemMeta().getDisplayName().contains("Confirm")) {
@@ -140,7 +141,7 @@ public class SpecificPotionGUI extends CustomMobsGUI{
 
     }
     private void update(PotionMeta potionMeta){
-        potionMeta.addCustomEffect(new PotionEffect(type, duration, amplifier, ambient, particles),true);
+        potionMeta.addCustomEffect(new PotionEffect(type, duration*20, amplifier, ambient, particles),true);
         customMob.editPotion(potionMeta,potionIndex);
     }
     private ItemStack getParticlesItem() {
@@ -158,7 +159,7 @@ public class SpecificPotionGUI extends CustomMobsGUI{
         if(duration <0)
             item.addLore("&eCurrent duration:&f infinity"+ " "," &7&o(( Click to edit this option ))");
         else
-            item.addLore("&eCurrent duration:&f " + SpecificPotionDurationGUI.getFormattedSize(duration/20) + " ", "&7&o(( Click to edit this option ))");
+            item.addLore("&eCurrent duration:&f " + SpecificPotionDurationGUI.getFormattedSize(duration) + " ", "&7&o(( Click to edit this option ))");
         return getMenuItem(item, true);
     } private ItemStack getAmplifierItem() {
         CustomMobsItem item = new CustomMobsItem(Material.GLOWSTONE_DUST);
