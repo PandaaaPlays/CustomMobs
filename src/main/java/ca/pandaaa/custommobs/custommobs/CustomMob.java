@@ -165,6 +165,10 @@ public class CustomMob implements Listener {
         this.potionMeta.set(index, potionMeta);
         mobConfiguration.setPotionMeta(this.potionMeta);
     }
+    public void removePotionItem(int potionIndex) {
+        potionMeta.remove(potionIndex);
+        mobConfiguration.setPotionMeta(potionMeta);
+    }
 
     /* === DROPS === */
 

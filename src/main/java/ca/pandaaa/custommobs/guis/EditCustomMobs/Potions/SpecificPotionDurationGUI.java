@@ -155,7 +155,7 @@ public class SpecificPotionDurationGUI extends CustomMobsGUI {
         return item;
     }
 
-    private String getFormattedSize(int size) {
+    static String getFormattedSize(int size) {
         if(size <= 0)
             return "Infinite";
         String formattedSize = "";

@@ -100,57 +100,48 @@ public class SpecificPotionGUI extends CustomMobsGUI{
             return;
         Player clicker = (Player) event.getWhoClicked();
         ItemStack cursorItem = clicker.getItemOnCursor();
-        PotionMeta potionMeta =emptyPotionMeta.clone();
+        PotionMeta potionMeta = emptyPotionMeta.clone();
         switch (event.getSlot()) {
             case 11:
                 particles = !particles;
                 event.getView().setItem(event.getSlot(), getParticlesItem());
-                potionMeta.addCustomEffect(new PotionEffect(type, duration, amplifier, ambient, particles),true);
-                customMob.editPotion(potionMeta,potionIndex);
+                update(potionMeta);
                 break;
             case 14:
-
                 new SpecificPotionDurationGUI(customMob, duration, potionIndex, (value) -> {
                     Bukkit.broadcastMessage(value + " seconde(s) // " + value * 20 + " tick(s)");
-                    /*potionMeta.addCustomEffect(new PotionEffect(type, value, amplifier, ambient, particles, true),true);
-                    customMob.editPotion(potionMeta, potionIndex);*/
+                    duration = value*20;
+                    update(potionMeta);
                 }).openInventory(clicker);
+                event.getView().setItem(event.getSlot(), getDurationItem());
                 break;
-            /*case 12:
-                drop.setLooting(!drop.isLooting());
-                customMob.editDrop(drop, dropIndex);
-                event.getView().setItem(event.getSlot(), getLootingItem());
-                break;
-            case 14:
-                drop.setDropCondition(DropConditions.getNextCondition(drop.getDropCondition()));
-                customMob.editDrop(drop, dropIndex);
-                event.getView().setItem(event.getSlot(), getConditionItem());
-                event.getView().setItem(event.getSlot() + 1, getGroupItem(drop.getDropCondition() == DropConditions.NEARBY));
-                break;*/
             case 15:
                 ambient = !ambient;
                 event.getView().setItem(event.getSlot(), getAmbientItem());
-                potionMeta.addCustomEffect(new PotionEffect(type, duration, amplifier, ambient, particles),true);
-                customMob.editPotion(potionMeta,potionIndex);
-                break;/*
-            case 18:
-                new SpecificDropMessageGUI().openInventory(clicker);
-                break;*/
+                update(potionMeta);
+                break;
             case 31:
-               // customMob.addPotionMeta(potionEffect);
                 new PotionsGUI(customMob).openInventory(clicker, 1);
-                break;/*
-            case 26:
-                if (cursorItem.getType() != Material.AIR) {
-                    drop.setItemStack(cursorItem.clone());
-                    customMob.editDrop(drop, dropIndex);
-                    event.getInventory().setItem(31, getDropItem());
-                    clicker.setItemOnCursor(null);
+                break;
+            case 35:
+                if (event.getCurrentItem().getItemMeta().getDisplayName().contains("Confirm")) {
+                    customMob.removePotionItem(potionIndex);
+                    new PotionsGUI(customMob).openInventory(clicker, 1);
                 } else {
-                    clicker.setItemOnCursor(drop.getItemStack());
+                    inventory.setItem(35, getDeleteItem(true));
+
+                    for(int i = 0; i < 36; i++) {
+                        if (inventory.getItem(i).getType() == Material.GRAY_STAINED_GLASS_PANE)
+                            inventory.getItem(i).setType(Material.RED_STAINED_GLASS_PANE);
+                    }
                 }
-                break;*/
+                break;
         }
+
+    }
+    private void update(PotionMeta potionMeta){
+        potionMeta.addCustomEffect(new PotionEffect(type, duration, amplifier, ambient, particles),true);
+        customMob.editPotion(potionMeta,potionIndex);
     }
     private ItemStack getParticlesItem() {
         CustomMobsItem item = new CustomMobsItem(Material.TIPPED_ARROW);
@@ -164,21 +155,21 @@ public class SpecificPotionGUI extends CustomMobsGUI{
     private ItemStack getDurationItem() {
         CustomMobsItem item = new CustomMobsItem(Material.CLOCK);
         item.setName("&d&lDuration");
-        if(potionEffect.getDuration() == -1)
+        if(duration <0)
             item.addLore("&eCurrent duration:&f infinity"+ " "," &7&o(( Click to edit this option ))");
         else
-            item.addLore("&eCurrent duration:&f " + potionEffect.getDuration() + " ", "&7&o(( Click to edit this option ))");
+            item.addLore("&eCurrent duration:&f " + SpecificPotionDurationGUI.getFormattedSize(duration/20) + " ", "&7&o(( Click to edit this option ))");
         return getMenuItem(item, true);
     } private ItemStack getAmplifierItem() {
         CustomMobsItem item = new CustomMobsItem(Material.GLOWSTONE_DUST);
         item.setName("&d&lAmplifier");
-        item.addLore("&eAmplifier is set to:&f " + potionEffect.getAmplifier() + " ", "&7&o(( Click to edit this option ))");
+        item.addLore("&eAmplifier is set to:&f " + amplifier + " ", "&7&o(( Click to edit this option ))");
         return getMenuItem(item, true);
     }
     private ItemStack getAmbientItem() {
         CustomMobsItem item = new CustomMobsItem(Material.COPPER_GRATE);
         item.setName("&d&lAmbient");
-        item.addLore("&eAmbient is set to:&f " + potionEffect.isAmbient() +  " ", "&7&o(( Click to edit this option ))");
+        item.addLore("&eAmbient is set to:&f " + ambient +  " ", "&7&o(( Click to edit this option ))");
         return getMenuItem(item, true);
     }
     private ItemStack getPotionItem() {
@@ -186,16 +177,11 @@ public class SpecificPotionGUI extends CustomMobsGUI{
         PotionMeta potionMeta1 = (PotionMeta) potion.getItemMeta();
         potionMeta1.addCustomEffect(new PotionEffect(type,1 ,1),true);
 
-        potion.setItemMeta(potionMeta1);
-        /*ItemStack item = drop.getItemStack().clone();
-        ItemMeta itemMeta = item.getItemMeta();
-        List<String> lore = itemMeta.getLore() == null ? new ArrayList<>() : itemMeta.getLore();
+        List<String> lore = potionMeta1.getLore() == null ? new ArrayList<>() : potionMeta1.getLore();
         lore.add("");
-        lore.add(Utils.applyFormat("&7&o(( Drag & drop an item to change this item ))"));
-        lore.add(Utils.applyFormat("&7&o(( Left-Click to get the current item ))"));
-        itemMeta.setLore(lore);
-        item.setItemMeta(itemMeta);
-        return getMenuItem(item, false);*/
+        lore.add(Utils.applyFormat("&7&o(( Left-Click to change the current item ))"));
+        potionMeta1.setLore(lore);
+        potion.setItemMeta(potionMeta1);
         return potion;
     }
     private ItemStack getDeleteItem(boolean confirm) {
