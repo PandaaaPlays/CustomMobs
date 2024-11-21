@@ -54,8 +54,8 @@ public class Phantom extends CustomMobOption {
                     new IntegerGUI("Phantom size", customMob, false, 0, 64, (value) -> {
                         this.size = value;
                         customMob.getCustomMobConfiguration().setPhantomSize(size);
+                        new OptionsGUI(customMob).openInventory(clicker, 1);
                     }).openInventory(clicker, size);
-                    new OptionsGUI(customMob).openInventory(clicker, 1);
                 }
                 return getOptionItemStack(getPhantomSizeItem(), true, false);
             }

@@ -12,10 +12,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.potion.PotionEffect;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -165,6 +163,7 @@ public class CustomMob implements Listener {
         this.potionMeta.set(index, potionMeta);
         mobConfiguration.setPotionMeta(this.potionMeta);
     }
+
     public void removePotionItem(int potionIndex) {
         potionMeta.remove(potionIndex);
         mobConfiguration.setPotionMeta(potionMeta);

@@ -54,8 +54,8 @@ public class Creeper extends CustomMobOption {
                     new IntegerGUI("Explosion cooldown", customMob, false, 0, 1200, (value) -> {
                         this.explosionCooldown = value;
                         customMob.getCustomMobConfiguration().setExplosionCooldown(explosionCooldown);
+                        new OptionsGUI(customMob).openInventory(clicker, 1);
                     }).openInventory(clicker, explosionCooldown);
-                    new OptionsGUI(customMob).openInventory(clicker, 1);
                 }
                 return getOptionItemStack(getExplosionCooldownItem(), true, false);
             }
@@ -68,8 +68,8 @@ public class Creeper extends CustomMobOption {
                     new IntegerGUI("Explosion radius", customMob, false, 0, 128, (value) -> {
                         this.explosionRadius = value;
                         customMob.getCustomMobConfiguration().setExplosionRadius(explosionRadius);
+                        new OptionsGUI(customMob).openInventory(clicker, 1);
                     }).openInventory(clicker, explosionRadius);
-                    new OptionsGUI(customMob).openInventory(clicker, 1);
                 }
                 return getOptionItemStack(getExplosionRadiusItem(), true, false);
             }

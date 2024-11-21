@@ -4,7 +4,6 @@ import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 import ca.pandaaa.custommobs.utils.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -47,7 +46,6 @@ public class IntegerGUI extends CustomMobsGUI implements Listener {
     }
 
     public void openInventory(Player player, Integer value) {
-        Bukkit.broadcastMessage("test" + player.getName());
         inventory.setItem(0, filler);
         inventory.setItem(1, small ? filler : getMinusItem(minusBig, true));
         inventory.setItem(2, getMinusItem(minusSmall, false));

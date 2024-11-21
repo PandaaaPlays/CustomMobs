@@ -1,11 +1,8 @@
 package ca.pandaaa.custommobs.guis.EditCustomMobs.Potions;
 
-import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
-import ca.pandaaa.custommobs.guis.EditCustomMobs.EditGUI;
 import ca.pandaaa.custommobs.utils.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Registry;
 import org.bukkit.entity.Player;
@@ -18,22 +15,29 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.function.Consumer;
 
-public class AddPotionsGUI extends CustomMobsGUI {
+public class PotionEffectsGUI extends CustomMobsGUI {
+
+    private final Consumer<PotionMeta> consumer;
     private final List<ItemStack> potionItems;
     private final CustomMob customMob;
     private final ItemStack previous;
     private final ItemStack next;
     private int currentPage = 1;
 
-    public AddPotionsGUI(CustomMob customMob) {
+    public PotionEffectsGUI(CustomMob customMob, Consumer<PotionMeta> consumer) {
         super(54, "&8CustomMobs &8&l» &8Potion effects");
+        this.consumer = consumer;
         this.customMob = customMob;
         previous = getMenuItem(Utils.createHead("a2f0425d64fdc8992928d608109810c1251fe243d60d175bed427c651cbe"), true);
         next = getMenuItem(Utils.createHead("6d865aae2746a9b8e9a4fe629fb08d18d0a9251e5ccbe5fa7051f53eab9b94"), true);
-        potionItems = getPotionsItems();
+        potionItems = getPotionTypesItems();
     }
+
     public void openInventory(Player player, int page) {
         this.currentPage = page;
         boolean nextPage = potionItems.size() > (page * 45);
@@ -42,8 +46,7 @@ public class AddPotionsGUI extends CustomMobsGUI {
             int position = ((page - 1) * 45) + i;
             if (potionItems.size() > position){
                 inventory.setItem(i, potionItems.get(position));
-            }
-            else {
+            } else {
                 inventory.setItem(i, new ItemStack(Material.AIR));
                 nextPage = false;
             }
@@ -60,14 +63,11 @@ public class AddPotionsGUI extends CustomMobsGUI {
             previous.setItemMeta(previousItemMeta);
         }
         inventory.setItem(45, previous);
-        inventory.setItem(46, filler);
-        inventory.setItem(47, filler);
-        inventory.setItem(48, filler);
-        inventory.setItem(49, filler);
-        inventory.setItem(50, filler);
-        inventory.setItem(51, filler);
-        inventory.setItem(52, filler);
-        if(nextPage) {
+
+        for(int i = 46; i <= 52; i++)
+            inventory.setItem(i, filler);
+
+        if (nextPage) {
             ItemMeta nextItemMeta = next.getItemMeta();
             if(nextItemMeta != null)
                 nextItemMeta.setDisplayName(Utils.applyFormat("&e&lNext (" + (page + 1) + ")"));
@@ -78,6 +78,7 @@ public class AddPotionsGUI extends CustomMobsGUI {
 
         player.openInventory(inventory);
     }
+
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (!isEventRelevant(event.getView().getTopInventory()))
@@ -109,13 +110,13 @@ public class AddPotionsGUI extends CustomMobsGUI {
                 break;
             default:
                 if (event.getSlot() < 45) {
-                    customMob.addPotionMeta((PotionMeta) itemMeta);
-                    new PotionsGUI(customMob).openInventory(clicker, currentPage);
+                    // TODO twice the same effect?
+                    consumer.accept((PotionMeta) itemMeta);
                 }
                 break;
         }
     }
-    private List<ItemStack> getPotionsItems() {
+    private List<ItemStack> getPotionTypesItems() {
         List<ItemStack> items = new ArrayList<>();
 
         List<PotionEffectType> effects = new ArrayList<>();
@@ -133,7 +134,7 @@ public class AddPotionsGUI extends CustomMobsGUI {
                 }
                 ArrayList<String> lore = new ArrayList<>();
                 lore.add("");
-                lore.add(Utils.applyFormat("&7&o(( Click to select this CustomMob potion effect ))"));
+                lore.add(Utils.applyFormat("&7&o(( Click to select this potion effect ))"));
                 potionMeta.setLore(lore);
                 potionMeta.setDisplayName(Utils.applyFormat("&6&l" + Utils.getStartCase(effect.getKey().getKey())));
                 potion.setItemMeta(potionMeta);
