@@ -89,6 +89,7 @@ public class DoubleGUI extends CustomMobsGUI implements Listener {
                 break;
             case 4:
                 consumer.accept(current);
+                // TODO This shouldnt be here... (do like integers)
                 new OptionsGUI(customMob).openInventory((Player) event.getWhoClicked(), 1);
                 break;
             case 6:

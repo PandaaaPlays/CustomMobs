@@ -2,10 +2,12 @@ package ca.pandaaa.custommobs.guis.EditCustomMobs.Potions;
 
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.custommobs.options.NextOptions;
+import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.Drops.DropsGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.Drops.SpecificDropChanceGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.Drops.SpecificDropMessageGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.OptionsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.DropConditions;
 import ca.pandaaa.custommobs.utils.Utils;
@@ -24,24 +26,8 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SpecificPotionGUI extends CustomMobsGUI{
+public class SpecificPotionGUI extends CustomMobsGUI {
 
-/*
-    private final ItemStack yes;
-    private final ItemStack no;
-    private final ItemStack minusBig;
-    private final ItemStack plusBig;
-    private final ItemStack plusSmall;
-    private final ItemStack minusSmall;
-    private final ItemStack confirm;
-    private final ItemStack confirm;
-    private final ItemStack particle;
-
-    private final boolean ambient;
-    private final int amplifier;
-    private final int duration;
-
-    private final ItemStack particle;*/
     private final CustomMob customMob;
     private PotionEffect potionEffect;
     private PotionMeta emptyPotionMeta;
@@ -68,15 +54,16 @@ public class SpecificPotionGUI extends CustomMobsGUI{
         this.amplifier = potionEffect.getAmplifier();
 
     }
+
     public void openInventory(Player player) {
 
         for(int i = 0; i < 36; i++)
             inventory.setItem(i, filler);
 
-        inventory.setItem(11, getParticlesItem());
-        inventory.setItem(12, getAmplifierItem());
-        inventory.setItem(14, getDurationItem());
-        inventory.setItem(15, getAmbientItem());
+        inventory.setItem(11, getAmplifierItem());
+        inventory.setItem(12, getDurationItem());
+        inventory.setItem(14, getAmbientItem());
+        inventory.setItem(15, getParticlesItem());
         inventory.setItem(27, getPreviousItem());
         inventory.setItem(31, getPotionItem());
         inventory.setItem(35, getDeleteItem(false));
@@ -85,7 +72,6 @@ public class SpecificPotionGUI extends CustomMobsGUI{
     }
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-
         if (!isEventRelevant(event.getView().getTopInventory()))
             return;
         if (event.getClickedInventory() == null || event.getClickedInventory().getType() == InventoryType.PLAYER) {
@@ -99,26 +85,40 @@ public class SpecificPotionGUI extends CustomMobsGUI{
         if (item == null)
             return;
         Player clicker = (Player) event.getWhoClicked();
-        ItemStack cursorItem = clicker.getItemOnCursor();
         PotionMeta potionMeta = emptyPotionMeta.clone();
         switch (event.getSlot()) {
+            // Amplifier
             case 11:
-                particles = !particles;
-                event.getView().setItem(event.getSlot(), getParticlesItem());
-                update(potionMeta);
+                new IntegerGUI("Amplifier", customMob, false, 1, 255, (value) -> {
+                    this.amplifier = value;
+                    update(potionMeta);
+                }).openInventory(clicker, amplifier);
+                new SpecificPotionGUI(customMob, potionIndex).openInventory((Player) event.getWhoClicked());
                 break;
-            case 14:
+            // Duration
+            case 12:
                 new SpecificPotionDurationGUI(customMob, duration, potionIndex, (value) -> {
                     Bukkit.broadcastMessage(value + " seconde(s) // " + value * 20 + " tick(s)");
                     duration = value;
                     update(potionMeta);
                 }).openInventory(clicker);
-                event.getView().setItem(event.getSlot(), getDurationItem());
+                new SpecificPotionGUI(customMob, potionIndex).openInventory((Player) event.getWhoClicked());
                 break;
-            case 15:
+            // Ambient
+            case 14:
                 ambient = !ambient;
                 event.getView().setItem(event.getSlot(), getAmbientItem());
                 update(potionMeta);
+                break;
+            // Particules
+            case 15:
+                particles = !particles;
+                event.getView().setItem(event.getSlot(), getParticlesItem());
+                update(potionMeta);
+                break;
+            // Previous page
+            case 27:
+                new PotionsGUI(customMob).openInventory(clicker, 1);
                 break;
             case 31:
                 new PotionsGUI(customMob).openInventory(clicker, 1);

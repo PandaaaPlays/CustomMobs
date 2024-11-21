@@ -2,6 +2,7 @@ package ca.pandaaa.custommobs.custommobs.options;
 
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.OptionsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -47,6 +48,7 @@ public class Slime extends CustomMobOption {
                         this.size = value;
                         customMob.getCustomMobConfiguration().setSlimeSize(size);
                     }).openInventory(clicker, size == null ? 0 : size);
+                    new OptionsGUI(customMob).openInventory(clicker, 1);
                 }
                 return getOptionItemStack(getSlimeSizeItem(), true, false);
             }

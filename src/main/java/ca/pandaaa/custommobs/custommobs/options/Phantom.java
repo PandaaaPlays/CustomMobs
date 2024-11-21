@@ -2,6 +2,7 @@ package ca.pandaaa.custommobs.custommobs.options;
 
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.OptionsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
@@ -54,6 +55,7 @@ public class Phantom extends CustomMobOption {
                         this.size = value;
                         customMob.getCustomMobConfiguration().setPhantomSize(size);
                     }).openInventory(clicker, size);
+                    new OptionsGUI(customMob).openInventory(clicker, 1);
                 }
                 return getOptionItemStack(getPhantomSizeItem(), true, false);
             }

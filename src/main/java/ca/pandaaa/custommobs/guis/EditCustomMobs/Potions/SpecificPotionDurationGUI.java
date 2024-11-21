@@ -96,7 +96,6 @@ public class SpecificPotionDurationGUI extends CustomMobsGUI {
                 break;
             case 4:
                 consumer.accept(current);
-                new SpecificPotionGUI(customMob, potionIndex).openInventory((Player) event.getWhoClicked());
                 break;
             case 6:
                 if ((!shifting && current <= maximum - 1) || (shifting && current <= maximum - 10))
