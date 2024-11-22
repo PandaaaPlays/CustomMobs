@@ -111,6 +111,12 @@ public class PotionEffectsGUI extends CustomMobsGUI {
             default:
                 if (event.getSlot() < 45) {
                     // TODO twice the same effect?
+                    // TODO Doesnt work with the strength / absorption
+                    if(itemMeta.getDisplayName().contains("Absorption")) {
+                        ((PotionMeta) itemMeta).clearCustomEffects();
+                        ((PotionMeta) itemMeta).addCustomEffect(new PotionEffect(PotionEffectType.ABSORPTION, -1, 1), true);
+                    }
+
                     consumer.accept((PotionMeta) itemMeta);
                 }
                 break;
@@ -118,9 +124,12 @@ public class PotionEffectsGUI extends CustomMobsGUI {
     }
     private List<ItemStack> getPotionTypesItems() {
         List<ItemStack> items = new ArrayList<>();
-
+// FIXME stocks everything in config (we only want the useful stuff)
         List<PotionEffectType> effects = new ArrayList<>();
         Registry.EFFECT.iterator().forEachRemaining(effects::add);
+
+        for(PotionMeta meta : customMob.getPotionMeta())
+            effects.remove(meta.getCustomEffects().get(0).getType());
 
         effects.sort(Comparator.comparing(effect -> effect.getKey().getKey()));
         for(PotionEffectType effect : effects) {
@@ -128,7 +137,7 @@ public class PotionEffectsGUI extends CustomMobsGUI {
             PotionMeta potionMeta = (PotionMeta) potion.getItemMeta();
             if(potionMeta != null) {
                 if (effect == PotionEffectType.ABSORPTION) {
-                    potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.STRENGTH, 10, 1), true);
+                    potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.STRENGTH, -1, 1), true);
                 } else {
                     potionMeta.addCustomEffect(new PotionEffect(effect, -1, 1,true,true), true);
                 }

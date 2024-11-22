@@ -16,6 +16,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -163,7 +164,10 @@ public class PotionsGUI extends CustomMobsGUI {
             for(PotionMeta potionMeta1 : potionMetas) {
                 ItemStack potion = new ItemStack(Material.POTION);
                 PotionMeta potionMeta = (PotionMeta) new ItemStack(Material.POTION).getItemMeta();
-                potionMeta.addCustomEffect(new PotionEffect(potionMeta1.getCustomEffects().get(0).getType(),1 ,1),true);
+                if(potionMeta1.getCustomEffects().get(0).getType() == PotionEffectType.ABSORPTION)
+                    potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.STRENGTH,1 ,1),true);
+                else
+                    potionMeta.addCustomEffect(new PotionEffect(potionMeta1.getCustomEffects().get(0).getType(),1 ,1),true);
                 ArrayList<String> lore = new ArrayList<>();
                 PotionEffect effect = potionMeta1.getCustomEffects().get(0);
                 lore.add(Utils.applyFormat("&f&l* &eAmplifier:&f " + effect.getAmplifier()));
@@ -177,7 +181,7 @@ public class PotionsGUI extends CustomMobsGUI {
                 lore.add(Utils.applyFormat("&7&o(( Left-Click to edit this potion effect ))"));
                 lore.add(Utils.applyFormat("&7&o(( Right-Click to remove this potion effect ))"));
                 potionMeta.setLore(lore);
-                potionMeta.setDisplayName(Utils.applyFormat("&6&l" + Utils.getStartCase(potionMeta.getCustomEffects().get(0).getType().getKey().getKey())));
+                potionMeta.setDisplayName(Utils.applyFormat("&6&l" + Utils.getStartCase(potionMeta1.getCustomEffects().get(0).getType().getKey().getKey())));
                 potion.setItemMeta(potionMeta);
                 items.add(getMenuItem(potion, true));
             }

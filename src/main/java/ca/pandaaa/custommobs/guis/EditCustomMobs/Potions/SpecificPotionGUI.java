@@ -184,7 +184,10 @@ public class SpecificPotionGUI extends CustomMobsGUI {
     private ItemStack getPotionItem() {
         ItemStack potion = new ItemStack(Material.POTION);
         PotionMeta potionMeta = (PotionMeta) potion.getItemMeta();
-        potionMeta.addCustomEffect(new PotionEffect(type,1 ,1), true);
+        if(type == PotionEffectType.ABSORPTION)
+            potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.STRENGTH,1 ,1),true);
+        else
+            potionMeta.addCustomEffect(new PotionEffect(type,1 ,1), true);
         potionMeta.setDisplayName(Utils.applyFormat("&6&l" + Utils.getStartCase(type.getKey().getKey())));
         List<String> lore = potionMeta.getLore() == null ? new ArrayList<>() : potionMeta.getLore();
         lore.add("");
