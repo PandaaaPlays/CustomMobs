@@ -2,6 +2,7 @@ package ca.pandaaa.custommobs.custommobs.options;
 
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.OptionsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -53,6 +54,7 @@ public class Creeper extends CustomMobOption {
                     new IntegerGUI("Explosion cooldown", customMob, false, 0, 1200, (value) -> {
                         this.explosionCooldown = value;
                         customMob.getCustomMobConfiguration().setExplosionCooldown(explosionCooldown);
+                        new OptionsGUI(customMob).openInventory(clicker, 1);
                     }).openInventory(clicker, explosionCooldown);
                 }
                 return getOptionItemStack(getExplosionCooldownItem(), true, false);
@@ -66,6 +68,7 @@ public class Creeper extends CustomMobOption {
                     new IntegerGUI("Explosion radius", customMob, false, 0, 128, (value) -> {
                         this.explosionRadius = value;
                         customMob.getCustomMobConfiguration().setExplosionRadius(explosionRadius);
+                        new OptionsGUI(customMob).openInventory(clicker, 1);
                     }).openInventory(clicker, explosionRadius);
                 }
                 return getOptionItemStack(getExplosionRadiusItem(), true, false);

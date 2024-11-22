@@ -2,9 +2,7 @@ package ca.pandaaa.custommobs.utils;
 
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -117,5 +115,30 @@ public class Utils {
         }
 
         return chatColor;
+    }
+
+    public static String getFormattedTime(int timeInSecond) {
+        if(timeInSecond <= 0)
+            return "Infinite";
+        String formattedSize = "";
+
+        boolean hours = false;
+        if (timeInSecond >= 3600) {
+            formattedSize += timeInSecond / 3600 + " hour" + (timeInSecond >= 7200 ? "(s) " : " ");
+            hours = true;
+        }
+        timeInSecond = timeInSecond % 3600;
+
+        boolean minutes = false;
+        if (timeInSecond >= 60) {
+            formattedSize += (hours ? "& " : "") + timeInSecond / 60 + " minute" + (timeInSecond >= 120 ? "(s) " : " ");
+            minutes = true;
+        }
+        timeInSecond = timeInSecond % 60;
+
+        if (timeInSecond > 0)
+            formattedSize += (minutes ? "& " : "") + timeInSecond + " second" +  (timeInSecond > 1 ? "(s) " : " ");
+
+        return formattedSize;
     }
 }

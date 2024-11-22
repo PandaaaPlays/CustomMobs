@@ -1,12 +1,9 @@
 package ca.pandaaa.custommobs.custommobs;
 
-import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.configurations.ConfigurationManager;
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 

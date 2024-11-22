@@ -1,12 +1,12 @@
 package ca.pandaaa.custommobs.guis.EditCustomMobs;
 
 import ca.pandaaa.custommobs.CustomMobs;
-import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.custommobs.Equipment;
 import ca.pandaaa.custommobs.custommobs.Manager;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.Drops.DropsGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.Potions.PotionsGUI;
 import ca.pandaaa.custommobs.guis.MainGUI;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Bukkit;
@@ -21,7 +21,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class EditGUI extends CustomMobsGUI implements Listener {
 
@@ -229,10 +228,10 @@ public class EditGUI extends CustomMobsGUI implements Listener {
                 new DropsGUI(customMob).openInventory(clicker, 1);
                 break;
             case 32:
-                // TODO potions
+                new PotionsGUI(customMob).openInventory(clicker, 1);
                 break;
             case 33:
-                // TODO sounds
+                // TODO Sounds
                 break;
             case 34:
                 new MessagesGUI(customMob).openInventory(clicker);

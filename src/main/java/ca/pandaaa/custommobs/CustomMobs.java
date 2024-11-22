@@ -31,6 +31,24 @@ public class CustomMobs extends JavaPlugin {
     public void onEnable() {
         plugin = this;
         int pluginId = 21648;
+
+        /* TODO
+        FAT LOG ERROR : [CustomMobs] Task #102 for CustomMobs v1.0.0 generated an exception
+java.lang.NoClassDefFoundError: ca/pandaaa/custommobs/utils/Metrics$CustomChart
+        at ca.pandaaa.custommobs.utils.Metrics$MetricsBase.submitData(Metrics.java:258) ~[?:?]
+        at org.bukkit.craftbukkit.v1_21_R2.scheduler.CraftTask.run(CraftTask.java:82) ~[spigot-1.21.3-R0.1-SNAPSHOT.jar:4378-Spigot-e65d67a-8ef9079]
+        at org.bukkit.craftbukkit.v1_21_R2.scheduler.CraftScheduler.mainThreadHeartbeat(CraftScheduler.java:415) ~[spigot-1.21.3-R0.1-SNAPSHOT.jar:4378-Spigot-e65d67a-8ef9079]
+        at net.minecraft.server.MinecraftServer.c(MinecraftServer.java:1502) ~[spigot-1.21.3-R0.1-SNAPSHOT.jar:4378-Spigot-e65d67a-8ef9079]
+        at net.minecraft.server.MinecraftServer.a(MinecraftServer.java:1391) ~[spigot-1.21.3-R0.1-SNAPSHOT.jar:4378-Spigot-e65d67a-8ef9079]
+        at net.minecraft.server.MinecraftServer.y(MinecraftServer.java:1093) ~[spigot-1.21.3-R0.1-SNAPSHOT.jar:4378-Spigot-e65d67a-8ef9079]
+        at net.minecraft.server.MinecraftServer.lambda$spin$0(MinecraftServer.java:329) ~[spigot-1.21.3-R0.1-SNAPSHOT.jar:4378-Spigot-e65d67a-8ef9079]
+        at java.base/java.lang.Thread.run(Thread.java:1570) [?:?]
+Caused by: java.lang.ClassNotFoundException: ca.pandaaa.custommobs.utils.Metrics$CustomChart
+        at org.bukkit.plugin.java.PluginClassLoader.loadClass0(PluginClassLoader.java:160) ~[spigot-api-1.21.3-R0.1-SNAPSHOT.jar:?]
+        at org.bukkit.plugin.java.PluginClassLoader.loadClass(PluginClassLoader.java:112) ~[spigot-api-1.21.3-R0.1-SNAPSHOT.jar:?]
+        at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?]
+        ... 8 more
+         */
         Metrics metrics = new Metrics(this, pluginId);
 
         this.sendStartedMessage();
