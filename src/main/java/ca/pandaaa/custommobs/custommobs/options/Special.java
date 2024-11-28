@@ -2,16 +2,19 @@ package ca.pandaaa.custommobs.custommobs.options;
 
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.custommobs.NMS;
 import ca.pandaaa.custommobs.guis.BasicTypes.DoubleGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.DamageRange;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.attribute.Attributable;
-import org.bukkit.attribute.Attribute;
+import org.bukkit.Registry;
+import org.bukkit.attribute.*;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Animals;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Mob;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -59,11 +62,11 @@ public class Special extends CustomMobOption {
 
         if(customMob instanceof Attributable) {
             // TODO FIX THIS SHIT
-            /* if (health != null)
-                Objects.requireNonNull(((Attributable) customMob).getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(health);
-            Objects.requireNonNull(((Attributable) customMob).getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE)).setBaseValue(knockbackResistance);
-            Objects.requireNonNull(((Attributable) customMob).getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).setBaseValue(speed);
-            Objects.requireNonNull(((Attributable) customMob).getAttribute(Attribute.GENERIC_FOLLOW_RANGE)).setBaseValue(followRange);*/
+             if (health != null)
+                Objects.requireNonNull(((Attributable) customMob).getAttribute(Registry.ATTRIBUTE.get(NamespacedKey.minecraft("max_health")))).setBaseValue(health);
+            Objects.requireNonNull(((Attributable) customMob).getAttribute(Registry.ATTRIBUTE.get(NamespacedKey.minecraft("knockback_resistance")))).setBaseValue(knockbackResistance);
+            Objects.requireNonNull(((Attributable) customMob).getAttribute(Registry.ATTRIBUTE.get(NamespacedKey.minecraft("movement_speed")))).setBaseValue(speed);
+            Objects.requireNonNull(((Attributable) customMob).getAttribute(Registry.ATTRIBUTE.get(NamespacedKey.minecraft("follow_range")))).setBaseValue(followRange);
         }
 
         if(damageRange != null) {
@@ -77,9 +80,9 @@ public class Special extends CustomMobOption {
 
         customMob.setGlowing(glowing);
 
-        if(customMob instanceof LivingEntity) {
-            ((LivingEntity) customMob).setCanPickupItems(canPickupLoot);
-            ((LivingEntity) customMob).setAI(intelligent);
+        if(customMob instanceof org.bukkit.entity.LivingEntity) {
+            ((org.bukkit.entity.LivingEntity) customMob).setCanPickupItems(canPickupLoot);
+            ((org.bukkit.entity.LivingEntity) customMob).setAI(intelligent);
         }
 
         customMob.setInvulnerable(invincible);
@@ -89,41 +92,10 @@ public class Special extends CustomMobOption {
     }
 
     private void addAggressivity(Entity customMob) {
-        /* TODO addAggressivity
-        Pathfinder pathfinder = ((Mob) customMob).getPathfinder();
-            ((net.minecraft.world.entity.Entity)entity).getHandle();
-
-            List goalB = (List)getPrivateField("b", PathfinderGoalSelector.class, goalSelector); goalB.clear();
-            List goalC = (List)getPrivateField("c", PathfinderGoalSelector.class, goalSelector); goalC.clear();
-            List targetB = (List)getPrivateField("b", PathfinderGoalSelector.class, targetSelector); targetB.clear();
-            List targetC = (List)getPrivateField("c", PathfinderGoalSelector.class, targetSelector); targetC.clear();
-            ((CraftWorld)customMob.getWorld()).getHandle();
-            Class<net.minecraft.world.entity.Entity> clazz = net.minecraft.world.entity.Entity.class;
-            Method m = clazz.getDeclaredMethod("getBukkitEntity");
-            m.setAccessible(true);
-            Class<org.bukkit.entity.Entity> clazz2 = m.getReturnType().asSubclass(org.bukkit.entity.Entity.class);
-
-            super(((CraftWorld)world).getHandle());
-            List goalB = (List)getPrivateField("b", PathfinderGoalSelector.class, goalSelector); goalB.clear();
-            List goalC = (List)getPrivateField("c", PathfinderGoalSelector.class, goalSelector); goalC.clear();
-            List targetB = (List)getPrivateField("b", PathfinderGoalSelector.class, targetSelector); targetB.clear();
-            List targetC = (List)getPrivateField("c", PathfinderGoalSelector.class, targetSelector); targetC.clear();
-
-            this.goalSelector.a(0, new PathfinderGoalFloat(this));
-            this.goalSelector.a(2, new PathfinderGoalMeleeAttack(this, EntityHuman.class, 1.0D, false));
-            this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this, EntityVillager.class, 1.0D, true));
-            this.goalSelector.a(5, new PathfinderGoalMoveTowardsRestriction(this, 1.0D));
-            this.goalSelector.a(6, new PathfinderGoalMoveThroughVillage(this, 1.0D, false));
-            this.goalSelector.a(7, new PathfinderGoalRandomStroll(this, 1.0D));
-            this.goalSelector.a(8, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
-            this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
-            this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true));
-            this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, 0, true));
-            this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityVillager.class, 0, false));
-         */
+        new NMS().setCustomMobAggressivity((Mob) customMob);
     }
 
-    public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {
+    public ItemStack modifyOption(org.bukkit.entity.Player clicker, CustomMob customMob, String option, ClickType clickType) {
         switch(option.toLowerCase()) {
             case "visible": {
                 this.isNameVisible = !isNameVisible;
@@ -380,3 +352,7 @@ public class Special extends CustomMobOption {
         return item;
     }
 }
+
+
+
+

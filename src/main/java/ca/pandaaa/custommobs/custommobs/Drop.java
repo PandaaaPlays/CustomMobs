@@ -1,13 +1,14 @@
 package ca.pandaaa.custommobs.custommobs;
 
 import ca.pandaaa.custommobs.utils.DropConditions;
-import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.Dye;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Drop implements ConfigurationSerializable {
 

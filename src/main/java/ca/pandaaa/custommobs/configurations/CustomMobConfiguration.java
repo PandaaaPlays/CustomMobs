@@ -1009,6 +1009,7 @@ public class CustomMobConfiguration {
     private static final String SOUND_TYPE = "sound.type";
     private Sound getSoundType() {
         try {
+            // TODO fix this deprecated
             return Sound.valueOf(mobConfiguration.getString(SOUND_TYPE));
         } catch(Exception exception) {
             return null;
