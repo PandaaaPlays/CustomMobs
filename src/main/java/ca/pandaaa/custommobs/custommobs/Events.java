@@ -3,12 +3,16 @@ package ca.pandaaa.custommobs.custommobs;
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.utils.DropConditions;
 import org.bukkit.*;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.SpawnerSpawnEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -278,5 +282,20 @@ public class Events implements Listener {
             }
         }
         // TODO Message
+    }
+
+    @EventHandler
+    public void onSpawnerSpawn(SpawnerSpawnEvent event) {
+        PersistentDataContainer container = event.getSpawner().getPersistentDataContainer();
+        Location location = event.getEntity().getLocation();
+
+        NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Spawner");
+        if (container.has(key, PersistentDataType.STRING)) {
+            String mobName = container.get(key, PersistentDataType.STRING);
+
+            event.setCancelled(true);
+
+            CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(mobName).spawnCustomMob(location);
+        }
     }
 }

@@ -4,6 +4,7 @@ import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.options.CustomMobOption;
 import ca.pandaaa.custommobs.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -16,7 +17,10 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 
 public class CustomMob implements Listener {
     private LocalDateTime creationDate;
@@ -27,7 +31,7 @@ public class CustomMob implements Listener {
     private ItemStack spawnerItem;
     private final Equipment equipment;
     private final List<Drop> drops;
-    private Spawner spawner;
+    private final Spawner spawner;
     private String name;
     private final List<Sound> sounds;
     private final CustomMobConfiguration mobConfiguration;
@@ -91,39 +95,14 @@ public class CustomMob implements Listener {
         location.getBlock().setType(Material.SPAWNER);
         CreatureSpawner spawnerBlock = (CreatureSpawner) location.getBlock().getState();
 
-        try {
-            // TODO set mob
-            /*CraftWorld world = ((CraftWorld)e.getClickedBlock().getWorld());
-            WorldServer worldServer = world.getHandle();
-            BlockPosition blockPosition = new BlockPosition(e.getClickedBlock().getX(),e.getClickedBlock().getY(),e.getClickedBlock().getZ());
-            TileEntityMobSpawner tileEntityMobSpawner = (TileEntityMobSpawner) worldServer.getTileEntity(blockPosition);
-            MobSpawnerData mobSpawnerData = new MobSpawnerData();
-            NBTTagCompound a = mobSpawnerData.getEntity();
-            NBTTagList handList = new NBTTagList();
-            NBTTagCompound mainHand = new NBTTagCompound();
-            mainHand.setString("id", "minecraft:diamond_sword");
-            mainHand.setShort("Count", (short) 1);
-            NBTTagList enchantments = new NBTTagList();
-            NBTTagCompound sharpness3 = new NBTTagCompound();
-            sharpness3.setShort("id", (short) 16);
-            sharpness3.setShort("lvl", (short) 3);
-            enchantments.add(sharpness3);
-            NBTTagCompound ench = new NBTTagCompound();
-            ench.set("ench", enchantments);
-            mainHand.set("tag", ench);
-            handList.add(mainHand);
-            NBTTagCompound spawnData = new NBTTagCompound();
-            spawnData.setString("id", "minecraft_zombie"); //sets the spawner to a zombie
-            spawnData.set("HandItems", handList);
-            a.a(spawnData);
-            tileEntityMobSpawner.getSpawner().setSpawnData(mobSpawnerData);*/
+        spawnerBlock.setSpawnedType(entityType);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Spawner");
+        spawnerBlock.getPersistentDataContainer().set(key, PersistentDataType.STRING, customMobFileName.replaceAll(".yml", ""));
 
-        //spawnerBlock.setSpawnedEntity(Ent);
         this.spawner.setCharacteristics(spawnerBlock);
+
+        spawnerBlock.update();
     }
 
     public void addCustomMobType(CustomMobOption customMobType) {

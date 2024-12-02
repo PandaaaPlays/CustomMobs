@@ -101,7 +101,8 @@ message:
   text:
   radius:
 
-sound:
+sounds:
+
   type:
   radius:
   volume:

@@ -314,7 +314,8 @@ public class CustomMobConfiguration {
     public static final String SPAWNER = "spawner";
     public Spawner getSpawner() {
         if(!mobConfiguration.contains(SPAWNER, true))
-            return null;
+            // TODO Check for default values
+            return new Spawner(4, 4, 7, 100, 100, 200, 16);
         return (Spawner) mobConfiguration.get(SPAWNER);
     }
 
@@ -1004,40 +1005,6 @@ public class CustomMobConfiguration {
     public void setFollowRange(double followRange) {
         mobConfiguration.set(FOLLOW_RANGE, followRange);
         saveConfigurationFile();
-    }
-
-    private static final String SOUND_TYPE = "sound.type";
-    private Sound getSoundType() {
-        try {
-            // TODO fix this deprecated
-            return Sound.valueOf(mobConfiguration.getString(SOUND_TYPE));
-        } catch(Exception exception) {
-            return null;
-        }
-    }
-
-    private static final String SOUND_RADIUS = "sound.radius";
-    private double getSoundRadius() {
-        if(!mobConfiguration.contains(SOUND_RADIUS, true))
-            return -1;
-
-        return mobConfiguration.getDouble(SOUND_RADIUS);
-    }
-
-    private static final String SOUND_VOLUME = "sound.volume";
-    private float getSoundVolume() {
-        if(!mobConfiguration.contains(SOUND_VOLUME, true))
-            return 1;
-
-        return (float) mobConfiguration.getDouble(SOUND_VOLUME);
-    }
-
-    private static final String SOUND_PITCH = "sound.pitch";
-    private float getSoundPitch() {
-        if(!mobConfiguration.contains(SOUND_PITCH, true))
-            return 1;
-
-        return (float) mobConfiguration.getDouble(SOUND_PITCH);
     }
 
     // Messages //

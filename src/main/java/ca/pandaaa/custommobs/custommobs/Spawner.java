@@ -2,6 +2,7 @@ package ca.pandaaa.custommobs.custommobs;
 
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.spawner.BaseSpawner;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +11,7 @@ public class Spawner implements ConfigurationSerializable {
     private int spawnCount;
     private int maxNearbyCount;
     private int spawnRange;
-    private int spawnDelay;
+    private int spawnDelay; // Delay before the first spawn
     private int minSpawnDelay;
     private int maxSpawnDelay;
     private int requiredPlayerRange;
@@ -25,7 +26,7 @@ public class Spawner implements ConfigurationSerializable {
         this.requiredPlayerRange = requiredPlayerRange;
     }
 
-    public void setCharacteristics(CreatureSpawner spawner) {
+    public void setCharacteristics(org.bukkit.spawner.Spawner spawner) {
         spawner.setSpawnCount(spawnCount);
         spawner.setMaxNearbyEntities(maxNearbyCount);
         spawner.setSpawnRange(spawnRange);
