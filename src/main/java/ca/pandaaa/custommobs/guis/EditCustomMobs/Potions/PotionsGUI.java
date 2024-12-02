@@ -113,8 +113,7 @@ public class PotionsGUI extends CustomMobsGUI {
                 if(!name.contains("("))
                     new EditGUI(customMob, CustomMobs.getPlugin().getCustomMobsManager(), clicker).openInventory();
                 else {
-                    int page = Character.getNumericValue(name.charAt(name.indexOf('(') + 1));
-                    openInventory(clicker, page);
+                    openInventory(clicker, currentPage-1);
                 }
                 break;
             case 49:
@@ -125,8 +124,7 @@ public class PotionsGUI extends CustomMobsGUI {
                 break;
             case 53:
                 if(name.contains("(")){
-                    int page = Character.getNumericValue(name.charAt(name.indexOf('(') + 1));
-                    openInventory(clicker, page);
+                    openInventory(clicker, currentPage+1);
                 }
                 break;
             default:

@@ -7,6 +7,7 @@ import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.Drop;
 import ca.pandaaa.custommobs.custommobs.Events;
 import ca.pandaaa.custommobs.custommobs.Manager;
+import ca.pandaaa.custommobs.custommobs.Sound;
 import ca.pandaaa.custommobs.utils.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -55,6 +56,7 @@ Caused by: java.lang.ClassNotFoundException: ca.pandaaa.custommobs.utils.Metrics
 
         // DropItem serialization
         ConfigurationSerialization.registerClass(Drop.class, "ca.pandaaa.custommobs.custommobs.DropItem");
+        ConfigurationSerialization.registerClass(Sound.class, "ca.pandaaa.custommobs.custommobs.Sound");
 
         saveDefaultConfigurations();
         loadAllMobsConfigurations();
