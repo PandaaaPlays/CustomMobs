@@ -315,7 +315,7 @@ public class CustomMobConfiguration {
     public Spawner getSpawner() {
         if(!mobConfiguration.contains(SPAWNER, true))
             // TODO Check for default values
-            return new Spawner(4, 4, 7, 100, 100, 200, 16);
+            return new Spawner(4, 4, 7, 100, 100, 200, 16, false);
         return (Spawner) mobConfiguration.get(SPAWNER);
     }
 

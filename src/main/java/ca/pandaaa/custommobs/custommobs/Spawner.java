@@ -15,8 +15,9 @@ public class Spawner implements ConfigurationSerializable {
     private int minSpawnDelay;
     private int maxSpawnDelay;
     private int requiredPlayerRange;
+    private boolean requiresDarkness;
 
-    public Spawner(int spawnCount, int maxNearbyCount, int spawnRange, int spawnDelay, int minSpawnDelay, int maxSpawnDelay, int requiredPlayerRange) {
+    public Spawner(int spawnCount, int maxNearbyCount, int spawnRange, int spawnDelay, int minSpawnDelay, int maxSpawnDelay, int requiredPlayerRange, boolean requiresDarkness) {
         this.spawnCount = spawnCount;
         this.maxNearbyCount = maxNearbyCount;
         this.spawnRange = spawnRange;
@@ -24,6 +25,7 @@ public class Spawner implements ConfigurationSerializable {
         this.minSpawnDelay = minSpawnDelay;
         this.maxSpawnDelay = maxSpawnDelay;
         this.requiredPlayerRange = requiredPlayerRange;
+        this.requiresDarkness = requiresDarkness;
     }
 
     public void setCharacteristics(org.bukkit.spawner.Spawner spawner) {
@@ -46,6 +48,7 @@ public class Spawner implements ConfigurationSerializable {
         data.put("minimum-spawn-delay", minSpawnDelay);
         data.put("maximum-spawn-delay", maxSpawnDelay);
         data.put("required-player-range", requiredPlayerRange);
+        data.put("requires-darkness", requiresDarkness);
         return data;
     }
 
@@ -57,6 +60,7 @@ public class Spawner implements ConfigurationSerializable {
         int minimumSpawnDelay = (int) data.get("minimum-spawn-delay");
         int maximumSpawnDelay = (int) data.get("maximum-spawn-delay");
         int requiredPlayerRange = (int) data.get("required-player-range");
-        return new Spawner(spawnCount, maxNearbyCount, spawnRange, spawnDelay, minimumSpawnDelay, maximumSpawnDelay, requiredPlayerRange);
+        boolean requiresDarkness = (boolean) data.get("requires-darkness");
+        return new Spawner(spawnCount, maxNearbyCount, spawnRange, spawnDelay, minimumSpawnDelay, maximumSpawnDelay, requiredPlayerRange, requiresDarkness);
     }
 }
