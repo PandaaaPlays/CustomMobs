@@ -901,7 +901,7 @@ public class CustomMobConfiguration {
     private static final String SPEED = "special.speed";
     private double getSpeed() {
         if(!mobConfiguration.contains(SPEED, true))
-            return 0.7D;
+            return 0.3D;
 
         return mobConfiguration.getDouble(SPEED);
     }

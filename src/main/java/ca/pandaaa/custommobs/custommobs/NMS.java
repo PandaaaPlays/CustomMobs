@@ -52,10 +52,10 @@ public class NMS {
                 Class<?> craftLivingEntityClass = Class
                         .forName(String.format("%s.%s.%s.%s", PACKAGE_BASE, VERSION, MIDDLE_PACKAGE, CRAFT_LIVING_ENTITY_CLASS_NAME));
                 getHandleMethod = craftLivingEntityClass.getMethod("getHandle");
-                // To find the fields corresponding to the version, see : https://minidigger.github.io/MiniMappingViewer/#/mojang/client/1.21.3/LivingEntity
+                // To find the fields corresponding to the version, see : https://minidigger.github.io/MiniMappingViewer/#/mojang/client/1.XX.XX/LivingEntity
                 // Field in NMS LivingEntity class of type : AttributeMap
-                attributeMap = LivingEntity.class.getDeclaredField("bS");
-                // To find the fields corresponding to the version, see : https://minidigger.github.io/MiniMappingViewer/#/mojang/client/1.21.3/AttributeMap
+                attributeMap = LivingEntity.class.getDeclaredField("bR");
+                // To find the fields corresponding to the version, see : https://minidigger.github.io/MiniMappingViewer/#/mojang/client/1.XX.XX/AttributeMap
                 // Field in NMS AttributeMap class of type : Map
                 attributes = AttributeMap.class.getDeclaredField("b");
                 attributeMap.setAccessible(true);

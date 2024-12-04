@@ -4,7 +4,6 @@ import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.options.CustomMobOption;
 import ca.pandaaa.custommobs.utils.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -23,7 +22,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class CustomMob implements Listener {
-    private LocalDateTime creationDate;
+    private final LocalDateTime creationDate;
     private EntityType entityType;
     private final String customMobFileName;
     private HashMap<String, CustomMobOption> customMobOptions = new HashMap<>();
@@ -231,6 +230,10 @@ public class CustomMob implements Listener {
         mobConfiguration.setDeleted(LocalDate.now().plusDays(14));
     }
 
+    /**
+     * The date provided by the creation date of the mob's yaml file.
+     * @return The creation date of the mob.
+     */
     public LocalDateTime getCreationDate() {
         return creationDate;
     }
