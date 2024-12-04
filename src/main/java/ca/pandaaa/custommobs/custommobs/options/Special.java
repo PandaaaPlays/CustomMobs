@@ -149,7 +149,7 @@ public class Special extends CustomMobOption {
 
             case "speed": {
                 if(clickType.isRightClick()) {
-                    this.speed = 0.7D;
+                    this.speed = 0.3D;
                     customMob.getCustomMobConfiguration().setSpeed(speed);
                 } else {
                     new DoubleGUI("Speed", customMob, false, 0, 1024, (value) -> {
