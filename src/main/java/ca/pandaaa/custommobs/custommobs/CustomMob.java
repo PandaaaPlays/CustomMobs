@@ -130,9 +130,11 @@ public class CustomMob implements Listener {
     public List<Drop> getDrops() {
         return drops;
     }
+
     public List<PotionMeta> getPotionMeta() {
         return potionMeta;
     }
+
     public void addPotionMeta(PotionMeta potionMeta){
          this.potionMeta.add(potionMeta);
         mobConfiguration.setPotionMeta(this.potionMeta);
@@ -141,14 +143,17 @@ public class CustomMob implements Listener {
     public List<Sound> getSounds() {
         return sounds;
     }
-    public void setSound(Sound sound) {
+
+    public void addSound(Sound sound) {
         this.sounds.add(sound);
         mobConfiguration.setSounds(this.sounds);
     }
+
     public void removeSound(int soundIndex) {
         sounds.remove(soundIndex);
         mobConfiguration.setSounds(sounds);
     }
+
     public void editSound(Sound sound, int index) {
         this.sounds.set(index, sound);
         mobConfiguration.setSounds(this.sounds);

@@ -16,7 +16,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.function.Consumer;
-
+//TODO faire la shit de son hardcode enum
 public class AddSoundsGUI extends CustomMobsGUI {
     private final CustomMob customMob;
     private final ItemStack previous;
@@ -44,11 +44,11 @@ public class AddSoundsGUI extends CustomMobsGUI {
         inventory.setItem(12, getCategory(Material.ZOMBIE_SPAWN_EGG, "Entity"));
         inventory.setItem(14, getCategory(Material.STICK, "Item"));
         inventory.setItem(15, getCategory(Material.MUSIC_DISC_5, "Music"));
+        //TODO
         inventory.setItem(16, getCategory(Material.BELL, "Others"));
-        inventory.setItem(28, getFavorite(Material.EXPERIENCE_BOTTLE, "Experience_Orb_Pickup", "entity.experience_orb.pickup"));
-        inventory.setItem(34, getFavorite(Material.DRAGON_HEAD, "Dragon_Death", "entity.ender_dragon.death"));
+        inventory.setItem(28, getFavorite(Material.EXPERIENCE_BOTTLE, "Experience orb pickup", "entity.experience_orb.pickup"));
+        inventory.setItem(34, getFavorite(Material.DRAGON_HEAD, "Dragon death", "entity.ender_dragon.death"));
         inventory.setItem(45, previous);
-        inventory.setItem(53, getDeleteItem(false));
         player.openInventory(inventory);
     }
 
@@ -63,7 +63,6 @@ public class AddSoundsGUI extends CustomMobsGUI {
 
         event.setCancelled(true);
         ItemMeta itemMeta = event.getCurrentItem().getItemMeta();
-        String name = itemMeta.getDisplayName();
         Player clicker = (Player) event.getWhoClicked();
         switch (event.getSlot()) {
             case 10:
@@ -88,10 +87,7 @@ public class AddSoundsGUI extends CustomMobsGUI {
                 new SoundsGUI(customMob).openInventory(clicker, 1);
                 break;
             default:
-                if (event.getCurrentItem() == filler) {
-                    break;
-                }
-                if (28 <= event.getSlot() && event.getSlot() <= 34){
+                if (event.getSlot() >= 28 && event.getSlot() <= 34 && event.getCurrentItem().getType() != Material.GRAY_STAINED_GLASS_PANE){
                     org.bukkit.Sound sound = Registry.SOUNDS.get(NamespacedKey.minecraft(itemMeta.getPersistentDataContainer().get(keyFavorite, PersistentDataType.STRING)));
                     Sound customMobSound = new Sound( sound, 1, SoundCategory.MASTER, 1, 1, event.getCurrentItem().getType(), true);
                     consumer.accept(customMobSound);
@@ -99,35 +95,25 @@ public class AddSoundsGUI extends CustomMobsGUI {
                 break;
         }
     }
+
     private ItemStack getCategory(Material material, String name) {
         CustomMobsItem item = new CustomMobsItem(material);
 
-        item.setName("&d&l" +name);
+        item.setName("&6&l" +name);
         item.addLore("");
         item.addLore( "&7&o(( Click to view this category ))");
         return getMenuItem(item, true);
     }
+
     private ItemStack getFavorite(Material material, String name, String sound) {
         CustomMobsItem item = new CustomMobsItem(material);
         ItemMeta itemMeta = item.getItemMeta();
         itemMeta.getPersistentDataContainer().set(keyFavorite, PersistentDataType.STRING,sound);
         item.setItemMeta(itemMeta);
-        item.setName("&d&l" +name);
+        item.setName("&6&l" +name);
         item.addLore("");
         item.addLore( "&7&o(( Click to choose this sound ))");
 
-        return getMenuItem(item, true);
-    }
-
-    private ItemStack getDeleteItem(boolean confirm) {
-        CustomMobsItem item = new CustomMobsItem(Material.BARRIER);
-        item.addLore("");
-        if (confirm) {
-            item.setName("&c&l[-] Confirm potion deletion");
-            item.addLore("&7&o(( Click again to confirm the deletion ))");
-        } else
-            item.setName("&c&l[-] Delete potion");
-        item.addLore("&c&l[!] &cThis will permanently delete this potion.");
         return getMenuItem(item, true);
     }
 }

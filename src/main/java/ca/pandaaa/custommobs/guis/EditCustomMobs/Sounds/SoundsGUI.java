@@ -28,7 +28,7 @@ public class SoundsGUI extends CustomMobsGUI {
     private int currentPage = 1;
 
     public SoundsGUI(CustomMob customMob) {
-        super(54, "&8CustomMobs &8&l» &8Sounds");
+        super(54, "&8CustomMobs &8&l» &8Current sounds");
 
         this.customMob = customMob;
         sounds = customMob.getSounds();
@@ -107,10 +107,10 @@ public class SoundsGUI extends CustomMobsGUI {
             String onDeath = sound.getOnDeath() ? "&c&lOn entity death" : "&a&lOn entity spawn";
             lore.add(Utils.applyFormat("&f&l* &dSound event:&f " + onDeath));
             lore.add("");
-            lore.add(Utils.applyFormat("&7&o(( Left-Click to edit this potion effect ))"));
-            lore.add(Utils.applyFormat("&7&o(( Right-Click to remove this potion effect ))"));
+            lore.add(Utils.applyFormat("&7&o(( Left-Click to edit this sound ))"));
+            lore.add(Utils.applyFormat("&7&o(( Right-Click to remove this sound ))"));
             itemMeta.setLore(lore);
-            itemMeta.setItemName(Utils.getSentenceCase(sound.getSoundType().name()));
+            itemMeta.setItemName(Utils.applyFormat("&6&l" + Utils.getSentenceCase(sound.getSoundType().name())));
             musicDisc.setItemMeta(itemMeta);
             items.add(getMenuItem(musicDisc, false));
         }
@@ -143,7 +143,7 @@ public class SoundsGUI extends CustomMobsGUI {
                 break;
             case 49:
                 new AddSoundsGUI(customMob, value ->{
-                    customMob.setSound(value);
+                    customMob.addSound(value);
                     new SoundsGUI(customMob).openInventory(clicker,currentPage);
                 }).openInventory(clicker);
                 break;
@@ -153,10 +153,6 @@ public class SoundsGUI extends CustomMobsGUI {
                 }
                 break;
             default:
-                if (event.getCurrentItem() == filler) {
-                    break;
-                }
-                new EditGUI(customMob, CustomMobs.getPlugin().getCustomMobsManager(), clicker).openInventory();
                 if (event.getSlot() < 45) {
                     int soundItemIndex = (currentPage - 1) * 45 + event.getSlot();
                     NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Sound.Remove.Confirm");

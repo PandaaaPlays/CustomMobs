@@ -24,7 +24,7 @@ public class SpecificSoundGUI  extends CustomMobsGUI {
     private final List<SoundCategory> soundCategoryList;
 
     public SpecificSoundGUI(CustomMob customMob, int soundIndex){
-        super(36, "&8CustomMobs &8&l» &8Potion configuration");
+        super(36, "&8CustomMobs &8&l» &8Sound configuration");
         this.customMob = customMob;
         this.soundIndex = soundIndex;
         this.sound = customMob.getSounds().get(soundIndex);
@@ -83,8 +83,7 @@ public class SpecificSoundGUI  extends CustomMobsGUI {
                 break;
              // Radius
             case 13:
-                //Max value ????
-                new DoubleGUI("Radius", customMob, false, -1, 255, (value) -> {
+                new DoubleGUI("Radius", customMob, false, -1, 250, (value) -> {
                     sound.setRadius(value.floatValue());
                     customMob.editSound(sound, soundIndex);
                     new SpecificSoundGUI(customMob, soundIndex).openInventory((Player) event.getWhoClicked());
@@ -97,8 +96,8 @@ public class SpecificSoundGUI  extends CustomMobsGUI {
                         break;
                     }
                     sound.setCategory(soundCategoryList.get(soundCategoryList.indexOf(sound.getCategory()) - 1));
-                }else{
-                    if(soundCategoryList.indexOf(sound.getCategory())== soundCategoryList.size()-1){
+                } else {
+                    if (soundCategoryList.indexOf(sound.getCategory())== soundCategoryList.size()-1){
                         break;
                     }
                     sound.setCategory(soundCategoryList.get(soundCategoryList.indexOf(sound.getCategory()) + 1));
@@ -171,9 +170,9 @@ public class SpecificSoundGUI  extends CustomMobsGUI {
 
     private ItemStack getSoundItem() {
         CustomMobsItem item = new CustomMobsItem(sound.getMaterial());
-        item.setName(Utils.getSentenceCase(sound.getSoundType().name()));
+        item.setName(Utils.applyFormat("&6&l" + Utils.getSentenceCase(sound.getSoundType().name())));
         item.addLore("");
-        item.addLore(Utils.applyFormat("&7&o(( Click to change the current potion effect ))"));
+        item.addLore(Utils.applyFormat("&7&o(( Click to change the current sound ))"));
         return getMenuItem(item, true);
     }
 

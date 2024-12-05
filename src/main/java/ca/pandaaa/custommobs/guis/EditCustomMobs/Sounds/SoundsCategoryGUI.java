@@ -12,10 +12,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +30,7 @@ public class SoundsCategoryGUI extends CustomMobsGUI {
     private final Consumer<ca.pandaaa.custommobs.custommobs.Sound> consumer;
 
     public SoundsCategoryGUI(CustomMob customMob, String category, Consumer<ca.pandaaa.custommobs.custommobs.Sound> consumer) {
-        super(54, "&8CustomMobs &8&l» &8Sounds");
+        super(54, "&8CustomMobs &8&l» &8Sounds ("+ category+")");
         this.customMob = customMob;
         this.category =category;
         this.consumer = consumer;
@@ -43,6 +39,7 @@ public class SoundsCategoryGUI extends CustomMobsGUI {
         previous = getMenuItem(Utils.createHead("a2f0425d64fdc8992928d608109810c1251fe243d60d175bed427c651cbe"), true);
         next = getMenuItem(Utils.createHead("6d865aae2746a9b8e9a4fe629fb08d18d0a9251e5ccbe5fa7051f53eab9b94"), true);
     }
+
     public void openInventory(Player player, int page) {
         this.currentPage = page;
         boolean nextPage = sounds.size() > (page * 45);
@@ -115,12 +112,9 @@ public class SoundsCategoryGUI extends CustomMobsGUI {
                 }
                 break;
             default:
-                if (event.getCurrentItem() == filler) {
-                    break;
-                }
                 if (event.getSlot() < 45){
-                    ca.pandaaa.custommobs.custommobs.Sound ssound = new ca.pandaaa.custommobs.custommobs.Sound(categorySounds.get(event.getSlot()), 1, SoundCategory.MASTER, 1, 1, event.getCurrentItem().getType(), true);
-                    consumer.accept(ssound);
+                    ca.pandaaa.custommobs.custommobs.Sound customMobSound = new ca.pandaaa.custommobs.custommobs.Sound(categorySounds.get(event.getSlot()), 1, SoundCategory.MASTER, 1, 1, event.getCurrentItem().getType(), true);
+                    consumer.accept(customMobSound);
                 }
                 break;
         }
@@ -151,12 +145,12 @@ public class SoundsCategoryGUI extends CustomMobsGUI {
         ItemStack item = new ItemStack(material);
         ItemMeta itemMeta = item.getItemMeta();
         ArrayList<String> lore = new ArrayList<>();
-        itemMeta.setItemName(Utils.getStartCase(string));
+        itemMeta.setItemName(Utils.applyFormat("&6&l" + Utils.getStartCase(string)));
         lore.add("");
         lore.add(Utils.applyFormat("&7&o(( Click to select this CustomMob sound ))"));
         itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
-        return item;
+        return getMenuItem(item,true);
     }
     private List<Sound> getCategorySounds(){
         List<Sound> tempCategorySounds= new ArrayList<>();
@@ -166,51 +160,3 @@ public class SoundsCategoryGUI extends CustomMobsGUI {
         return tempCategorySounds;
     }
 }
-/*for(Sound sound : allSounds){
-
-            try{
-                Material material = Material.matchMaterial(sound.toString().split("_")[1].toUpperCase());
-                items.add(new ItemStack(material));
-            } catch (Exception e) {
-                items.add(new ItemStack(Material.MUSIC_DISC_5));
-            }
-
-        }*/
- /* List<ItemStack> items = new ArrayList<>();
-        List<Sound> allSounds = new ArrayList<>();
-        List<Material> materials = Arrays.stream(Material.values()).toList();
-        Registry.SOUNDS.iterator().forEachRemaining(allSounds::add);
-        allSounds.removeIf(s -> !s.toString().startsWith(category.toUpperCase()));
-        Bukkit.broadcastMessage(category.toUpperCase());
-        allSounds.sort(Comparator.comparing(sound -> sound.toString()));
-        for (Sound sound : allSounds) {
-            String soundName = sound.toString().split("_")[1].toUpperCase();
-
-            if (Material.matchMaterial(soundName + "_BLOCK") != null) {
-                items.add(createItem(Material.matchMaterial(soundName + "_BLOCK"), sound.toString()));
-            }
-            else if(sound.toString().split("_").length >= 3){
-                if (material.toString().contains(soundName+ sound.toString().split("_")[2])) {
-                    items.add(createItem(material, sound.toString()));
-                    break;
-                }
-            }
-            else {
-                if(materials.contains()){
-
-                }
-                for (Material material : materials) {
-                    if(sound.toString().split("_").length >= 3){
-                        if (material.toString().contains(soundName+ sound.toString().split("_")[2])) {
-                            items.add(createItem(material, sound.toString()));
-                            break;
-                        }
-                    }
-                    if (material.toString().contains(soundName)) {
-                        items.add(createItem(material, sound.toString()));
-                        break;
-                    }
-                }
-            }
-
-        }*/
