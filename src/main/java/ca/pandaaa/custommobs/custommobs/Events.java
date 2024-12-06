@@ -293,8 +293,6 @@ public class Events implements Listener {
         if (container.has(key, PersistentDataType.STRING)) {
             String mobName = container.get(key, PersistentDataType.STRING);
 
-            event.setCancelled(true);
-
             CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(mobName).spawnCustomMob(location);
         }
     }

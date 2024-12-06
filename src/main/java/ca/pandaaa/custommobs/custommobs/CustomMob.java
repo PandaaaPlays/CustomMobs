@@ -94,7 +94,11 @@ public class CustomMob implements Listener {
         location.getBlock().setType(Material.SPAWNER);
         CreatureSpawner spawnerBlock = (CreatureSpawner) location.getBlock().getState();
 
-        spawnerBlock.setSpawnedType(entityType);
+        if(this.spawner.areChecksDisabled())
+            // Set this to be an invisible "entity" that spawns regardless of conditions.
+            spawnerBlock.setSpawnedType(EntityType.AREA_EFFECT_CLOUD);
+        else
+            spawnerBlock.setSpawnedType(entityType);
 
         NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Spawner");
         spawnerBlock.getPersistentDataContainer().set(key, PersistentDataType.STRING, customMobFileName.replaceAll(".yml", ""));
