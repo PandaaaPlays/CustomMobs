@@ -26,6 +26,69 @@ public class Spawner implements ConfigurationSerializable {
         this.requiresDarkness = requiresDarkness;
     }
 
+    // SpawnCount
+    public void setSpawnCount(int spawnCount){
+        this.spawnCount = spawnCount;
+    }
+
+    public int getSpawnCount(){
+        return spawnCount;
+    }
+
+    // MaxNearbyCount
+    public void setMaxNearbyCount(int maxNearbyCount){
+        this.maxNearbyCount = maxNearbyCount;
+    }
+
+    public int getMaxNearbyCount(){
+        return maxNearbyCount;
+    }
+
+    // SpawnRange
+    public void setSpawnRange(int spawnRange){
+        this.spawnRange = spawnRange;
+    }
+
+    public int getSpawnRange(){
+        return spawnRange;
+    }
+
+    // SpawnDelay
+    public void setSpawnDelay(int spawnDelay){
+        this.spawnDelay = spawnDelay;
+    }
+
+    public int getSpawnDelay(){
+        return spawnDelay;
+    }
+
+    // minSpawnDelay
+    public void setMinSpawnDelay(int minSpawnDelay){
+        this.minSpawnDelay = minSpawnDelay;
+    }
+
+    public int getMinSpawnDelay(){
+        return minSpawnDelay;
+    }
+
+    // maxSpawnDelay
+    public void setMaxSpawnDelay(int maxSpawnDelay){
+        this.maxSpawnDelay = maxSpawnDelay;
+    }
+
+    public int getMaxSpawnDelay(){
+        return maxSpawnDelay;
+    }
+
+    // requiredPlayerRange
+    public void setRequiredPlayerRange(int requiredPlayerRange){
+        this.requiredPlayerRange = requiredPlayerRange;
+    }
+
+    public int getRequiredPlayerRange(){
+        return requiredPlayerRange;
+    }
+
     public void setCharacteristics(org.bukkit.spawner.Spawner spawner) {
         spawner.setSpawnCount(spawnCount);
         spawner.setMaxNearbyEntities(maxNearbyCount);
