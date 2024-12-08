@@ -13,9 +13,9 @@ public class Spawner implements ConfigurationSerializable {
     private int minSpawnDelay;
     private int maxSpawnDelay;
     private int requiredPlayerRange;
-    private boolean requiresDarkness;
+    private boolean disableChecks;
 
-    public Spawner(int spawnCount, int maxNearbyCount, int spawnRange, int spawnDelay, int minSpawnDelay, int maxSpawnDelay, int requiredPlayerRange, boolean requiresDarkness) {
+    public Spawner(int spawnCount, int maxNearbyCount, int spawnRange, int spawnDelay, int minSpawnDelay, int maxSpawnDelay, int requiredPlayerRange, boolean disableChecks) {
         this.spawnCount = spawnCount;
         this.maxNearbyCount = maxNearbyCount;
         this.spawnRange = spawnRange;
@@ -23,7 +23,7 @@ public class Spawner implements ConfigurationSerializable {
         this.minSpawnDelay = minSpawnDelay;
         this.maxSpawnDelay = maxSpawnDelay;
         this.requiredPlayerRange = requiredPlayerRange;
-        this.requiresDarkness = requiresDarkness;
+        this.disableChecks = disableChecks;
     }
 
     // SpawnCount
@@ -99,6 +99,10 @@ public class Spawner implements ConfigurationSerializable {
         spawner.setRequiredPlayerRange(requiredPlayerRange);
     }
 
+    public boolean areChecksDisabled() {
+        return disableChecks;
+    }
+
     @Override
     public Map<String, Object> serialize() {
         Map<String, Object> data = new HashMap<>();
@@ -109,7 +113,7 @@ public class Spawner implements ConfigurationSerializable {
         data.put("minimum-spawn-delay", minSpawnDelay);
         data.put("maximum-spawn-delay", maxSpawnDelay);
         data.put("required-player-range", requiredPlayerRange);
-        data.put("requires-darkness", requiresDarkness);
+        data.put("disable-checks", disableChecks);
         return data;
     }
 
@@ -121,7 +125,7 @@ public class Spawner implements ConfigurationSerializable {
         int minimumSpawnDelay = (int) data.get("minimum-spawn-delay");
         int maximumSpawnDelay = (int) data.get("maximum-spawn-delay");
         int requiredPlayerRange = (int) data.get("required-player-range");
-        boolean requiresDarkness = (boolean) data.get("requires-darkness");
+        boolean requiresDarkness = (boolean) data.get("disable-checks");
         return new Spawner(spawnCount, maxNearbyCount, spawnRange, spawnDelay, minimumSpawnDelay, maximumSpawnDelay, requiredPlayerRange, requiresDarkness);
     }
 }
