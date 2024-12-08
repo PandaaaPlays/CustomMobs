@@ -8,6 +8,7 @@ import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.Drops.DropsGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.Others.MessagesGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.Others.OthersGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.Others.Spawner.SpawnerGUI;
 import ca.pandaaa.custommobs.guis.MainGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
@@ -149,7 +150,6 @@ public class EditGUI extends CustomMobsGUI {
             event.setCancelled(event.isShiftClick());
             return;
         }
-
         event.setCancelled(true);
 
         Player clicker = (Player) event.getWhoClicked();
@@ -230,7 +230,7 @@ public class EditGUI extends CustomMobsGUI {
                 new DropsGUI(customMob).openInventory(clicker, 1);
                 break;
             case 32:
-                // TODO potions
+                new SpawnerGUI(customMob, customMobsManager).openInventory(clicker);
                 break;
             case 33:
                 // TODO sounds
@@ -257,12 +257,12 @@ public class EditGUI extends CustomMobsGUI {
                 break;
             case 50:
                 if (event.isRightClick()) {
-                    customMob.setSpawner(null);
+                    customMob.setSpawnerItem(null);
                     event.getInventory().setItem(50, getMenuItem(getGiveItem(customMob.getSpawnerItem()), false));
                 } else if (cursorItem.getType() != Material.AIR) {
                     ItemStack spawner = cursorItem.clone();
                     spawner.setAmount(1);
-                    customMob.setSpawner(spawner);
+                    customMob.setSpawnerItem(spawner);
                     event.getInventory().setItem(50, getMenuItem(getGiveItem(customMob.getSpawnerItem()), false));
                     clicker.setItemOnCursor(null);
                 } else {

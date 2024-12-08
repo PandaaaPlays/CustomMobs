@@ -30,7 +30,7 @@ public class CustomMob implements Listener {
     private ItemStack spawnerItem;
     private final Equipment equipment;
     private final List<Drop> drops;
-    private final Spawner spawner;
+    private Spawner spawner;
     private String name;
     private final List<Sound> sounds;
     private final CustomMobConfiguration mobConfiguration;
@@ -129,7 +129,7 @@ public class CustomMob implements Listener {
         return spawnerItem.clone();
     }
 
-    public void setSpawner(ItemStack spawner) {
+    public void setSpawnerItem(ItemStack spawner) {
         mobConfiguration.setItemStack(CustomMobConfiguration.SPAWNER, spawner);
         this.spawnerItem = mobConfiguration.getItem(CustomMobConfiguration.SPAWNER);
     }
@@ -161,6 +161,17 @@ public class CustomMob implements Listener {
         this.item = getCustomMobConfiguration().getItem(CustomMobConfiguration.ITEM);
         this.spawnerItem = getCustomMobConfiguration().getItem(CustomMobConfiguration.SPAWNER);
         this.name = name;
+    }
+
+    /* === SPAWNER === */
+
+    public void setSpawner(Spawner spawner) {
+        this.spawner = spawner;
+        mobConfiguration.setSpawner(spawner);
+    }
+
+    public Spawner getSpawner() {
+        return spawner;
     }
 
     /* === DROPS === */

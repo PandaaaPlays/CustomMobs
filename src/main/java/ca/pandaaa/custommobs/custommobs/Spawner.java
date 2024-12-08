@@ -1,21 +1,22 @@
 package ca.pandaaa.custommobs.custommobs;
 
+import org.bukkit.Registry;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Spawner implements ConfigurationSerializable {
-    private int spawnCount;
-    private int maxNearbyCount;
-    private int spawnRange; // How many blocks around the spawner can the mob spawn
-    private int spawnDelay; // Delay before the first spawn
-    private int minSpawnDelay;
-    private int maxSpawnDelay;
-    private int requiredPlayerRange;
-    private boolean disableChecks;
+    private int spawnCount; // 4 : 1 a 25
+    private int maxNearbyCount; // 6 : 1 a 150
+    private int spawnRange; // How many blocks around the spawner can the mob spawn // 4
+    private int spawnDelay; // Delay before the first spawn // 0 a 72000
+    private int minSpawnDelay; // 200 : 1 a max
+    private int maxSpawnDelay; // 799 : min a 72000 foufounne
+    private int requiredPlayerRange; // Default 16 : 0 a 128
+    private boolean disableRequirements; //on off
 
-    public Spawner(int spawnCount, int maxNearbyCount, int spawnRange, int spawnDelay, int minSpawnDelay, int maxSpawnDelay, int requiredPlayerRange, boolean disableChecks) {
+    public Spawner(int spawnCount, int maxNearbyCount, int spawnRange, int spawnDelay, int minSpawnDelay, int maxSpawnDelay, int requiredPlayerRange, boolean disableRequirements) {
         this.spawnCount = spawnCount;
         this.maxNearbyCount = maxNearbyCount;
         this.spawnRange = spawnRange;
@@ -23,7 +24,7 @@ public class Spawner implements ConfigurationSerializable {
         this.minSpawnDelay = minSpawnDelay;
         this.maxSpawnDelay = maxSpawnDelay;
         this.requiredPlayerRange = requiredPlayerRange;
-        this.disableChecks = disableChecks;
+        this.disableRequirements = disableRequirements;
     }
 
     // SpawnCount
@@ -89,6 +90,16 @@ public class Spawner implements ConfigurationSerializable {
         return requiredPlayerRange;
     }
 
+    // DisableChecks
+    public void setDisableRequirements(boolean disableRequirements){
+        this.disableRequirements = disableRequirements;
+    }
+
+    public boolean getDisableRequirements(){
+        return disableRequirements;
+    }
+
+
     public void setCharacteristics(org.bukkit.spawner.Spawner spawner) {
         spawner.setSpawnCount(spawnCount);
         spawner.setMaxNearbyEntities(maxNearbyCount);
@@ -100,7 +111,7 @@ public class Spawner implements ConfigurationSerializable {
     }
 
     public boolean areChecksDisabled() {
-        return disableChecks;
+        return disableRequirements;
     }
 
     @Override
@@ -113,7 +124,7 @@ public class Spawner implements ConfigurationSerializable {
         data.put("minimum-spawn-delay", minSpawnDelay);
         data.put("maximum-spawn-delay", maxSpawnDelay);
         data.put("required-player-range", requiredPlayerRange);
-        data.put("disable-checks", disableChecks);
+        data.put("disable-requirements", disableRequirements);
         return data;
     }
 
@@ -125,7 +136,7 @@ public class Spawner implements ConfigurationSerializable {
         int minimumSpawnDelay = (int) data.get("minimum-spawn-delay");
         int maximumSpawnDelay = (int) data.get("maximum-spawn-delay");
         int requiredPlayerRange = (int) data.get("required-player-range");
-        boolean requiresDarkness = (boolean) data.get("disable-checks");
+        boolean requiresDarkness = (boolean) data.get("disable-requirements");
         return new Spawner(spawnCount, maxNearbyCount, spawnRange, spawnDelay, minimumSpawnDelay, maximumSpawnDelay, requiredPlayerRange, requiresDarkness);
     }
 }
