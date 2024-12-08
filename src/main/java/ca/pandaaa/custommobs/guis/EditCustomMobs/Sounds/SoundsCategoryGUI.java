@@ -1,11 +1,12 @@
 package ca.pandaaa.custommobs.guis.EditCustomMobs.Sounds;
 
-import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
-import ca.pandaaa.custommobs.utils.CustomMobsItem;
+import ca.pandaaa.custommobs.utils.SoundEnum;
 import ca.pandaaa.custommobs.utils.Utils;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -15,13 +16,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
 
 public class SoundsCategoryGUI extends CustomMobsGUI {
     private final List<ItemStack> sounds;
-    private final List<Sound> categorySounds;
+    private final List<SoundEnum> categorySounds;
     private final CustomMob customMob;
     private final ItemStack previous;
     private final ItemStack next;
@@ -34,7 +34,7 @@ public class SoundsCategoryGUI extends CustomMobsGUI {
         this.customMob = customMob;
         this.category =category;
         this.consumer = consumer;
-        this.categorySounds = getCategorySounds();
+        this.categorySounds = SoundEnum.getSoundsByCategory(category.toUpperCase());
         this.sounds = getSounds();
         previous = getMenuItem(Utils.createHead("a2f0425d64fdc8992928d608109810c1251fe243d60d175bed427c651cbe"), true);
         next = getMenuItem(Utils.createHead("6d865aae2746a9b8e9a4fe629fb08d18d0a9251e5ccbe5fa7051f53eab9b94"), true);
@@ -45,7 +45,7 @@ public class SoundsCategoryGUI extends CustomMobsGUI {
         boolean nextPage = sounds.size() > (page * 45);
 
         // Make sure we set the extra items to air, so that other page(s) item(s) are not persisted.
-        for (int i = 0; i < 54; i++) {
+        for (int i = 0; i < 45; i++) {
             int position = ((currentPage - 1) * 45) + i;
             if (sounds.size() > position) {
                 inventory.setItem(i, sounds.get(position));
@@ -113,7 +113,7 @@ public class SoundsCategoryGUI extends CustomMobsGUI {
                 break;
             default:
                 if (event.getSlot() < 45){
-                    ca.pandaaa.custommobs.custommobs.Sound customMobSound = new ca.pandaaa.custommobs.custommobs.Sound(categorySounds.get(event.getSlot()), 1, SoundCategory.MASTER, 1, 1, event.getCurrentItem().getType(), true);
+                    ca.pandaaa.custommobs.custommobs.Sound customMobSound = new ca.pandaaa.custommobs.custommobs.Sound(categorySounds.get(event.getSlot()).getSound(), 1, SoundCategory.MASTER, 1, 1, event.getCurrentItem().getType(), true);
                     consumer.accept(customMobSound);
                 }
                 break;
@@ -122,25 +122,16 @@ public class SoundsCategoryGUI extends CustomMobsGUI {
     private List<ItemStack> getSounds() {
         List<ItemStack> items = new ArrayList<>();
 
-        List<Material> materials = Arrays.stream(Material.values()).toList();
-
-
-        for (Sound sound : categorySounds) {
-            String[] soundName = sound.toString().toUpperCase().split("_");
-            Material bestMaterial = Material.GLOW_ITEM_FRAME;
-            for (Material material : materials) {
-                if(material.isItem()){
-                    if (material.toString().contains(soundName[1])) {
-                        bestMaterial = material;
-                        break;
-                    }
-                }
-
-            }
-            items.add(createItem(bestMaterial, sound.toString()));
+        for (SoundEnum sound : categorySounds) {
+            if(sound.getMaterial().isItem() && sound.getMaterial() != Material.AIR)
+                items.add(createItem(sound.getMaterial(), sound.toString()));
+            else
+                items.add(createItem(Material.BARRIER, sound.toString()));
         }
+
         return items;
     }
+
     private ItemStack createItem(Material material, String string){
         ItemStack item = new ItemStack(material);
         ItemMeta itemMeta = item.getItemMeta();
@@ -151,12 +142,5 @@ public class SoundsCategoryGUI extends CustomMobsGUI {
         itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
         return getMenuItem(item,true);
-    }
-    private List<Sound> getCategorySounds(){
-        List<Sound> tempCategorySounds= new ArrayList<>();
-        Registry.SOUNDS.iterator().forEachRemaining(tempCategorySounds::add);
-        tempCategorySounds.removeIf(s -> !s.toString().startsWith(category.toUpperCase()));
-        tempCategorySounds.sort(Comparator.comparing(sound -> sound.toString()));
-        return tempCategorySounds;
     }
 }

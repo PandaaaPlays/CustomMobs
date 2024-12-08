@@ -89,7 +89,7 @@ public class AddSoundsGUI extends CustomMobsGUI {
             default:
                 if (event.getSlot() >= 28 && event.getSlot() <= 34 && event.getCurrentItem().getType() != Material.GRAY_STAINED_GLASS_PANE){
                     org.bukkit.Sound sound = Registry.SOUNDS.get(NamespacedKey.minecraft(itemMeta.getPersistentDataContainer().get(keyFavorite, PersistentDataType.STRING)));
-                    Sound customMobSound = new Sound( sound, 1, SoundCategory.MASTER, 1, 1, event.getCurrentItem().getType(), true);
+                    Sound customMobSound = new Sound(sound, 1, SoundCategory.MASTER, 1, 1, event.getCurrentItem().getType(), true);
                     consumer.accept(customMobSound);
                 }
                 break;

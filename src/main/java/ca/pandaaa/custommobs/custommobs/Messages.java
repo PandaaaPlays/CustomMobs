@@ -20,6 +20,8 @@ public class Messages {
         this.deathRadius = deathRadius;
     }
 
+    // TODO Bug de Jé que quand on spam ca stack les items et ca trigger les 2 boutons + (grands), etc.
+
     public void sendMessages(Entity customMob) {
         if(!messages.isEmpty()) {
             if(radius < 0) {
