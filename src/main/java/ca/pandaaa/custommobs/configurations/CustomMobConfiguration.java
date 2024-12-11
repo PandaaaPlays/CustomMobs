@@ -108,7 +108,8 @@ public class CustomMobConfiguration {
                 hasGravity(),
                 isPersistent(),
                 isIntelligent(),
-                getFollowRange()));
+                getFollowRange(),
+                getSize()));
 
         if(AbstractHorse.class.isAssignableFrom(type.getEntityClass()))
             customMob.addCustomMobType(new ca.pandaaa.custommobs.custommobs.options.
@@ -1019,6 +1020,18 @@ public class CustomMobConfiguration {
 
     public void setFollowRange(double followRange) {
         mobConfiguration.set(FOLLOW_RANGE, followRange);
+        saveConfigurationFile();
+    }
+
+    private static final String SIZE = "special.size";
+    private double getSize() {
+        if(!mobConfiguration.contains(SIZE, true))
+            return 1;
+        return mobConfiguration.getDouble(SIZE);
+    }
+
+    public void setSize(double size) {
+        mobConfiguration.set(FOLLOW_RANGE, size);
         saveConfigurationFile();
     }
 

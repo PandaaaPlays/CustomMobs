@@ -2,6 +2,7 @@ package ca.pandaaa.custommobs.custommobs.options;
 
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.guis.BasicTypes.DoubleGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.OptionsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -46,6 +47,7 @@ public class AbstractHorse extends CustomMobOption {
                     new DoubleGUI("Jump strength", customMob, true, 0, 2, (value) -> {
                         this.jumpStrength = value;
                         customMob.getCustomMobConfiguration().setJumpStrength(jumpStrength);
+                        new OptionsGUI(customMob).openInventory((Player) clicker, 1);
                     }).openInventory(clicker, jumpStrength);
                 }
                 return getOptionItemStack(getJumpStrengthItem(), true, false);

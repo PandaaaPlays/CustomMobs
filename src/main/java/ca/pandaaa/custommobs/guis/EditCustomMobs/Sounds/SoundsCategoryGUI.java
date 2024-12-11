@@ -6,6 +6,7 @@ import ca.pandaaa.custommobs.utils.SoundEnum;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,7 +29,6 @@ public class SoundsCategoryGUI extends CustomMobsGUI {
     private final String category;
     private int currentPage = 1;
     private final Consumer<ca.pandaaa.custommobs.custommobs.Sound> consumer;
-
     public SoundsCategoryGUI(CustomMob customMob, String category, Consumer<ca.pandaaa.custommobs.custommobs.Sound> consumer) {
         super(54, "&8CustomMobs &8&l» &8Sounds ("+ category+")");
         this.customMob = customMob;

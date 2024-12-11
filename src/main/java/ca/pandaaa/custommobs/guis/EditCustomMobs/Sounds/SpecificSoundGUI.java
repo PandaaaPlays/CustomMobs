@@ -65,7 +65,6 @@ public class SpecificSoundGUI  extends CustomMobsGUI {
         switch (event.getSlot()) {
             // Volume
             case 11:
-                //double or float
                 new DoubleGUI("Volume", customMob, true, 0, 1, (value) -> {
                     sound.setVolume(value.floatValue());
                     customMob.editSound(sound, soundIndex);
@@ -74,7 +73,6 @@ public class SpecificSoundGUI  extends CustomMobsGUI {
                 break;
             // Pitch
            case 12:
-               //Min value and double or float
                new DoubleGUI("Pitch", customMob, true, 0.5, 2, (value) -> {
                    sound.setPitch(value.floatValue());
                    customMob.editSound(sound, soundIndex);

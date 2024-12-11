@@ -3,6 +3,7 @@ package ca.pandaaa.custommobs.custommobs.options;
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.guis.BasicTypes.DoubleGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.OptionsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.DamageRange;
 import ca.pandaaa.custommobs.utils.Utils;
@@ -36,8 +37,9 @@ public class Special extends CustomMobOption {
     private boolean persistent;
     private boolean intelligent;
     private double followRange;
-
-    public Special(boolean isNameVisible, Double health, boolean aggressive, boolean glowing, boolean canPickupLoot, Double knockbackResistance, Double speed, DamageRange damageRange, boolean invincible, boolean silent, boolean gravity, boolean persistent, boolean intelligent, Double followRange) {
+    private double size;
+    //TODO change DDDDdddouble
+    public Special(boolean isNameVisible, Double health, boolean aggressive, boolean glowing, boolean canPickupLoot, Double knockbackResistance, Double speed, DamageRange damageRange, boolean invincible, boolean silent, boolean gravity, boolean persistent, boolean intelligent, Double followRange, double size) {
         this.isNameVisible = isNameVisible;
         this.health = health;
         this.aggressive = aggressive;
@@ -52,6 +54,7 @@ public class Special extends CustomMobOption {
         this.persistent = persistent;
         this.intelligent = intelligent;
         this.followRange = followRange;
+        this.size = size;
     }
 
     public void applyOptions(Entity customMob) {
@@ -63,6 +66,7 @@ public class Special extends CustomMobOption {
             Objects.requireNonNull(((Attributable) customMob).getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE)).setBaseValue(knockbackResistance);
             Objects.requireNonNull(((Attributable) customMob).getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).setBaseValue(speed);
             Objects.requireNonNull(((Attributable) customMob).getAttribute(Attribute.GENERIC_FOLLOW_RANGE)).setBaseValue(followRange);
+            Objects.requireNonNull(((Attributable) customMob).getAttribute(Attribute.GENERIC_SCALE)).setBaseValue(size);
         }
 
         if(damageRange != null) {
@@ -138,6 +142,7 @@ public class Special extends CustomMobOption {
                     new DoubleGUI("Health", customMob, false, 0, 1024, (value) -> {
                         this.health = value;
                         customMob.getCustomMobConfiguration().setHealth(health);
+                        new OptionsGUI(customMob).openInventory((Player) clicker, 1);
                     }).openInventory(clicker, health == null ? 20D : health);
                 }
                 return getOptionItemStack(getHealthItem(), true, false);
@@ -169,6 +174,7 @@ public class Special extends CustomMobOption {
                     new DoubleGUI("Knockback resistance", customMob, true, 0, 1, (value) -> {
                         this.knockbackResistance = value;
                         customMob.getCustomMobConfiguration().setKnockbackResistance(knockbackResistance);
+                        new OptionsGUI(customMob).openInventory((Player) clicker, 1);
                     }).openInventory(clicker, knockbackResistance);
                 }
                 return getOptionItemStack(getKnockbackResistanceItem(), true, false);
@@ -182,6 +188,7 @@ public class Special extends CustomMobOption {
                     new DoubleGUI("Speed", customMob, false, 0, 1024, (value) -> {
                         this.speed = value;
                         customMob.getCustomMobConfiguration().setSpeed(speed);
+                        new OptionsGUI(customMob).openInventory((Player) clicker, 1);
                     }).openInventory(clicker, speed);
                 }
                 return getOptionItemStack(getSpeedItem(), true, false);
@@ -225,9 +232,25 @@ public class Special extends CustomMobOption {
                     new DoubleGUI("Follow range", customMob, false, 0, 2048, (value) -> {
                         this.followRange = value;
                         customMob.getCustomMobConfiguration().setFollowRange(followRange);
+                        new OptionsGUI(customMob).openInventory((Player) clicker, 1);
                     }).openInventory(clicker, followRange);
                 }
                 return getOptionItemStack(getFollowRangeItem(), true, false);
+            }
+
+            case "size": {
+                if(clickType.isRightClick()) {
+                    this.size = 1;
+                    customMob.getCustomMobConfiguration().setSize(size);
+                } else {
+                    //TODO custom GUI for 0.06 value
+                    new DoubleGUI("Size", customMob, true, 0.06, 16, (value) -> {
+                        this.size = value;
+                        customMob.getCustomMobConfiguration().setSize(size);
+                        new OptionsGUI(customMob).openInventory((Player) clicker, 1);
+                    }).openInventory(clicker, size);
+                }
+                return getOptionItemStack(getSizeItem(), true, false);
             }
         }
         return null;
@@ -257,6 +280,7 @@ public class Special extends CustomMobOption {
         items.add(getOptionItemStack(getPersistentItem(), false, false));
         items.add(getOptionItemStack(getIntelligentItem(), false, false));
         items.add(getOptionItemStack(getFollowRangeItem(), true, false));
+        items.add(getOptionItemStack(getSizeItem(), true, false));
 
         return items;
     }
@@ -376,6 +400,14 @@ public class Special extends CustomMobOption {
         item.setName("&c&lFollow range");
         item.addLore("&eFollow range: &f" + followRange);
         item.setPersistentDataContainer(this.getClass().getSimpleName(), "FollowRange");
+        return item;
+    }
+
+    public CustomMobsItem getSizeItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.LARGE_AMETHYST_BUD);
+        item.setName("&b&lSize");
+        item.addLore("&eSize: &f" + size);
+        item.setPersistentDataContainer(this.getClass().getSimpleName(), "Size");
         return item;
     }
 }

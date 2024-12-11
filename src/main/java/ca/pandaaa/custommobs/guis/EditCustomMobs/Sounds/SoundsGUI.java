@@ -104,8 +104,8 @@ public class SoundsGUI extends CustomMobsGUI {
             lore.add(Utils.applyFormat("&f&l* &bPitch:&f " +sound.getPitch()));
             lore.add(Utils.applyFormat("&f&l* &aRadius:&f " + sound.getRadius()));
             lore.add(Utils.applyFormat("&f&l* &dCategory:&f " + Utils.getStartCase(sound.getCategory().toString())));
-            String onDeath = sound.getOnDeath() ? "&c&lOn entity death" : "&a&lOn entity spawn";
-            lore.add(Utils.applyFormat("&f&l* &dSound event:&f " + onDeath));
+            String onDeath = sound.getOnDeath() ? "&c&lOn death" : "&a&lOn spawn";
+            lore.add(Utils.applyFormat("&f&l* &9Sound event:&f " + onDeath));
             lore.add("");
             lore.add(Utils.applyFormat("&7&o(( Left-Click to edit this sound ))"));
             lore.add(Utils.applyFormat("&7&o(( Right-Click to remove this sound ))"));

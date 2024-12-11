@@ -1,9 +1,6 @@
 package ca.pandaaa.custommobs.utils;
 
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Registry;
-import org.bukkit.Sound;
+import org.bukkit.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -1652,13 +1649,10 @@ public enum SoundEnum {
     }
 
     public Sound getSound() {
-        String soundEnumName = this.name();
-        String soundName = soundEnumName.replace("_", "").toUpperCase();
-
         try {
-            return Registry.SOUNDS.get(new NamespacedKey(NamespacedKey.MINECRAFT, soundName));
+            return Sound.valueOf(name());
         } catch (IllegalArgumentException e) {
-            System.out.println("No matching Sound for: " + soundEnumName);
+            System.out.println("No matching Sound for: " + name());
             return null;
         }
     }

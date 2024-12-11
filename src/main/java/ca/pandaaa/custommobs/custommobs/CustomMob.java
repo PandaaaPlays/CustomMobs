@@ -82,10 +82,11 @@ public class CustomMob implements Listener {
         NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Name");
         customMob.getPersistentDataContainer().set(key, PersistentDataType.STRING, customMobFileName.replaceAll(".yml", ""));
         
-      // Potions
+        // Potions
         for(PotionMeta potionMeta : potionMeta) {
             potionMeta.getCustomEffects().get(0).apply((LivingEntity) customMob);
         }
+
         // Options
         for(CustomMobOption customMobType : customMobOptions.values()) {
             customMobType.applyOptions(customMob);
