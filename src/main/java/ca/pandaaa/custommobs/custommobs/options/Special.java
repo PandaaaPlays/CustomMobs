@@ -41,7 +41,7 @@ public class Special extends CustomMobOption {
     private boolean intelligent;
     private double followRange;
     private double size;
-    //TODO change DDDDdddouble
+    //TODO change DDDDdddouble dans les configs ca devrait etre de double si pas besoin de Double
     public Special(boolean isNameVisible, Double health, boolean aggressive, boolean glowing, boolean canPickupLoot, Double knockbackResistance, Double speed, DamageRange damageRange, boolean invincible, boolean silent, boolean gravity, boolean persistent, boolean intelligent, Double followRange, double size) {
         this.isNameVisible = isNameVisible;
         this.health = health;
