@@ -5,6 +5,7 @@ import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.custommobs.Drop;
 import ca.pandaaa.custommobs.custommobs.Equipment;
 import ca.pandaaa.custommobs.custommobs.Messages;
+import ca.pandaaa.custommobs.custommobs.Sound;
 import ca.pandaaa.custommobs.utils.DamageRange;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.*;
@@ -81,7 +82,7 @@ public class CustomMobConfiguration {
                 getPotionMeta(),
                 getDrops(),
                 getName(),
-                new ArrayList<>(),
+                getSounds(),
                 this);
 
         // TODO sounds
@@ -107,7 +108,8 @@ public class CustomMobConfiguration {
                 hasGravity(),
                 isPersistent(),
                 isIntelligent(),
-                getFollowRange()));
+                getFollowRange(),
+                getSize()));
 
         if(AbstractHorse.class.isAssignableFrom(type.getEntityClass()))
             customMob.addCustomMobType(new ca.pandaaa.custommobs.custommobs.options.
@@ -326,6 +328,17 @@ public class CustomMobConfiguration {
         saveConfigurationFile();
     }
 
+    public static final String SOUNDS = "sounds";
+    public List<Sound> getSounds() {
+        if(!mobConfiguration.contains(SOUNDS, true))
+            return new ArrayList<>();
+        return (List<Sound>) mobConfiguration.getList(SOUNDS);
+    }
+
+    public void setSounds(List<Sound> sounds) {
+        mobConfiguration.set(SOUNDS, sounds);
+        saveConfigurationFile();
+    }
 
     public Messages getMessages() {
         return new Messages(getMessageText(false), getMessageRadius(false),
@@ -1010,38 +1023,18 @@ public class CustomMobConfiguration {
         saveConfigurationFile();
     }
 
-    private static final String SOUND_TYPE = "sound.type";
-    private Sound getSoundType() {
-        try {
-            return Sound.valueOf(mobConfiguration.getString(SOUND_TYPE));
-        } catch(Exception exception) {
-            return null;
-        }
-    }
-
-    private static final String SOUND_RADIUS = "sound.radius";
-    private double getSoundRadius() {
-        if(!mobConfiguration.contains(SOUND_RADIUS, true))
-            return -1;
-
-        return mobConfiguration.getDouble(SOUND_RADIUS);
-    }
-
-    private static final String SOUND_VOLUME = "sound.volume";
-    private float getSoundVolume() {
-        if(!mobConfiguration.contains(SOUND_VOLUME, true))
+    private static final String SIZE = "special.size";
+    private double getSize() {
+        if(!mobConfiguration.contains(SIZE, true))
             return 1;
-
-        return (float) mobConfiguration.getDouble(SOUND_VOLUME);
+        return mobConfiguration.getDouble(SIZE);
     }
 
-    private static final String SOUND_PITCH = "sound.pitch";
-    private float getSoundPitch() {
-        if(!mobConfiguration.contains(SOUND_PITCH, true))
-            return 1;
-
-        return (float) mobConfiguration.getDouble(SOUND_PITCH);
+    public void setSize(double size) {
+        mobConfiguration.set(FOLLOW_RANGE, size);
+        saveConfigurationFile();
     }
+
 
     // Messages //
 

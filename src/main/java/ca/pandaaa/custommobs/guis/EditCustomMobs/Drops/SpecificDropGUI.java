@@ -3,6 +3,7 @@ package ca.pandaaa.custommobs.guis.EditCustomMobs.Drops;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.custommobs.Drop;
 import ca.pandaaa.custommobs.custommobs.options.NextOptions;
+import ca.pandaaa.custommobs.guis.BasicTypes.DoubleGUI;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.DropConditions;
@@ -78,13 +79,21 @@ public class SpecificDropGUI extends CustomMobsGUI {
                 event.getView().setItem(event.getSlot(), getLootingItem());
                 break;
             case 14:
+                if(event.isRightClick() && drop.getDropCondition().name().equals("NEARBY")){
+                    new DoubleGUI("Maximum range", false, 1, 255, (value) -> {
+                        drop.setNearbyRange(value);
+                        customMob.editDrop(drop, dropIndex);
+                        new SpecificDropGUI(customMob, drop, dropIndex).openInventory((Player) event.getWhoClicked());
+                    }).openInventory(clicker, drop.getNearbyRange());
+                    break;
+                }
                 drop.setDropCondition(DropConditions.getNextCondition(drop.getDropCondition()));
                 customMob.editDrop(drop, dropIndex);
                 event.getView().setItem(event.getSlot(), getConditionItem());
                 event.getView().setItem(event.getSlot() + 1, getGroupItem(drop.getDropCondition() == DropConditions.NEARBY));
                 break;
             case 15:
-                if(event.getClick().isRightClick())
+                if(event.isRightClick())
                     drop.setGroupColor(null);
                 else
                     drop.setGroupColor(NextOptions.getNextDyeColor(drop.getGroupColor()));
@@ -154,7 +163,24 @@ public class SpecificDropGUI extends CustomMobsGUI {
         item.addLore("&eCondition: &f"
                 + dropCondtionName.toUpperCase().charAt(0)
                 + dropCondtionName.toLowerCase().substring(1).replaceAll("_", " "));
+        switch (drop.getDropCondition().name()){
+            case "NEARBY":
+                item.addLore("&f&l* &bRange:&f " + drop.getNearbyRange());
+                item.addLore("","&7&o(( Only nearby players have a chance to receive this drop ))");
+                break;
+            case "KILLER":
+                item.addLore("","&7&o(( Only the killer has a chance to receive this drop ))");
+                break;
+            case "DROP":
+                item.addLore("","&7&o(( This drop has a chance of dropping on the ground ))");
+                break;
+            case "MOST_DAMAGE":
+                item.addLore("","&7&o(( Only the player that dealt the most damage has a chance to receive this drop ))");
+                break;
+        }
         item.addLore("", "&7&o(( Click to cycle this option ))");
+        if(drop.getDropCondition().name().equals("NEARBY"))
+            item.addLore("&7&o(( Right-Click to modify range value ))");
         return getMenuItem(item, true);
     }
 

@@ -7,6 +7,7 @@ import ca.pandaaa.custommobs.custommobs.Manager;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.Drops.DropsGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.Potions.PotionsGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.Sounds.SoundsGUI;
 import ca.pandaaa.custommobs.guis.MainGUI;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Bukkit;
@@ -231,7 +232,7 @@ public class EditGUI extends CustomMobsGUI implements Listener {
                 new PotionsGUI(customMob).openInventory(clicker, 1);
                 break;
             case 33:
-                // TODO Sounds
+                new SoundsGUI(customMob).openInventory(clicker,1);
                 break;
             case 34:
                 new MessagesGUI(customMob).openInventory(clicker);

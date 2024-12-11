@@ -82,10 +82,11 @@ public class CustomMob implements Listener {
         NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Name");
         customMob.getPersistentDataContainer().set(key, PersistentDataType.STRING, customMobFileName.replaceAll(".yml", ""));
         
-      // Potions
+        // Potions
         for(PotionMeta potionMeta : potionMeta) {
             potionMeta.getCustomEffects().get(0).apply((LivingEntity) customMob);
         }
+
         // Options
         for(CustomMobOption customMobType : customMobOptions.values()) {
             customMobType.applyOptions(customMob);
@@ -130,12 +131,33 @@ public class CustomMob implements Listener {
     public List<Drop> getDrops() {
         return drops;
     }
+
     public List<PotionMeta> getPotionMeta() {
         return potionMeta;
     }
+
     public void addPotionMeta(PotionMeta potionMeta){
          this.potionMeta.add(potionMeta);
         mobConfiguration.setPotionMeta(this.potionMeta);
+    }
+
+    public List<Sound> getSounds() {
+        return sounds;
+    }
+
+    public void addSound(Sound sound) {
+        this.sounds.add(sound);
+        mobConfiguration.setSounds(this.sounds);
+    }
+
+    public void removeSound(int soundIndex) {
+        sounds.remove(soundIndex);
+        mobConfiguration.setSounds(sounds);
+    }
+
+    public void editSound(Sound sound, int index) {
+        this.sounds.set(index, sound);
+        mobConfiguration.setSounds(this.sounds);
     }
     /* === NAME (OVER HEAD) === */
 
@@ -168,7 +190,6 @@ public class CustomMob implements Listener {
         potionMeta.remove(potionIndex);
         mobConfiguration.setPotionMeta(potionMeta);
     }
-
     /* === DROPS === */
 
     /**

@@ -82,6 +82,9 @@ public class Drop implements ConfigurationSerializable {
     public double getNearbyRange() {
         return nearbyRange;
     }
+    public void setNearbyRange(double nearbyRange) {
+        this.nearbyRange = nearbyRange;
+    }
 
     public DyeColor getGroupColor() {
         return groupColor;
