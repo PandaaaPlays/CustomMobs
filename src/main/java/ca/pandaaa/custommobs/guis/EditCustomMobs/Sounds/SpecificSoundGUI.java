@@ -21,14 +21,12 @@ public class SpecificSoundGUI  extends CustomMobsGUI {
     private final CustomMob customMob;
     private final int soundIndex;
     private final Sound sound;
-    private final List<SoundCategory> soundCategoryList;
 
     public SpecificSoundGUI(CustomMob customMob, int soundIndex){
         super(36, "&8CustomMobs &8&l» &8Sound configuration");
         this.customMob = customMob;
         this.soundIndex = soundIndex;
         this.sound = customMob.getSounds().get(soundIndex);
-        this.soundCategoryList = Arrays.asList(SoundCategory.values());
     }
 
     public void openInventory(Player player) {
@@ -65,62 +63,74 @@ public class SpecificSoundGUI  extends CustomMobsGUI {
         switch (event.getSlot()) {
             // Volume
             case 11:
-                new DoubleGUI("Volume", customMob, true, 0, 1, (value) -> {
+                new DoubleGUI("Volume", true, 0, 1, (value) -> {
                     sound.setVolume(value.floatValue());
                     customMob.editSound(sound, soundIndex);
                     new SpecificSoundGUI(customMob, soundIndex).openInventory((Player) event.getWhoClicked());
                 }).openInventory(clicker, (double) sound.getVolume());
                 break;
+
             // Pitch
            case 12:
-               new DoubleGUI("Pitch", customMob, true, 0.5, 2, (value) -> {
+               new DoubleGUI("Pitch", true, 0.5, 2, (value) -> {
                    sound.setPitch(value.floatValue());
                    customMob.editSound(sound, soundIndex);
                    new SpecificSoundGUI(customMob, soundIndex).openInventory((Player) event.getWhoClicked());
                }).openInventory(clicker, (double) sound.getPitch());
                 break;
+
              // Radius
             case 13:
-                new DoubleGUI("Radius", customMob, false, -1, 250, (value) -> {
-                    sound.setRadius(value.floatValue());
+                new DoubleGUI("Radius", false, -1, 250, (value) -> {
+                    sound.setRadius(value);
                     customMob.editSound(sound, soundIndex);
                     new SpecificSoundGUI(customMob, soundIndex).openInventory((Player) event.getWhoClicked());
-                }).openInventory(clicker, (double) sound.getRadius());
+                }).openInventory(clicker, sound.getRadius());
                 break;
+
             // Category
             case 14:
-                if (event.isRightClick()) {
-                    if(soundCategoryList.indexOf(sound.getCategory())== 0){
-                        break;
-                    }
-                    sound.setCategory(soundCategoryList.get(soundCategoryList.indexOf(sound.getCategory()) - 1));
-                } else {
-                    if (soundCategoryList.indexOf(sound.getCategory())== soundCategoryList.size()-1){
-                        break;
-                    }
-                    sound.setCategory(soundCategoryList.get(soundCategoryList.indexOf(sound.getCategory()) + 1));
+                // TODO faire les autres comme ca
+                List<SoundCategory> soundCategories = Arrays.asList(SoundCategory.values());
+
+                if (event.isRightClick())
+                    sound.setCategory(soundCategories.get(0));
+                else {
+                    if (soundCategories.indexOf(sound.getCategory()) == soundCategories.size() - 1)
+                        sound.setCategory(soundCategories.get(0));
+                    else
+                        sound.setCategory(soundCategories.get(soundCategories.indexOf(sound.getCategory()) + 1));
                 }
+
                 customMob.editSound(sound, soundIndex);
                 new SpecificSoundGUI(customMob, soundIndex).openInventory((Player) event.getWhoClicked());
                 break;
+
             // On Death
             case 15:
                 sound.setOnDeath(!sound.getOnDeath());
                 customMob.editSound(sound, soundIndex);
                 openInventory(clicker);
                 break;
+
             // Previous page
             case 27:
                 new SoundsGUI(customMob).openInventory(clicker, 1);
                 break;
+
             case 31:
-                new AddSoundsGUI(customMob, value ->{
-                    sound.setSoundType(value.getSoundType());
-                    sound.setMaterial(value.getMaterial());
-                    customMob.editSound(sound, soundIndex);
-                    new SpecificSoundGUI(customMob,soundIndex).openInventory(clicker);
-                }).openInventory(clicker);
+                if(event.isRightClick()) {
+                    clicker.playSound(clicker.getLocation(), sound.getSoundType(), sound.getVolume(), sound.getPitch());
+                } else {
+                    new AddSoundsGUI(customMob, value -> {
+                        sound.setSoundType(value.getSoundType());
+                        sound.setMaterial(value.getMaterial());
+                        customMob.editSound(sound, soundIndex);
+                        new SpecificSoundGUI(customMob, soundIndex).openInventory(clicker);
+                    }).openInventory(clicker);
+                }
                 break;
+
             case 35:
                 if (event.getCurrentItem().getItemMeta().getDisplayName().contains("Confirm")) {
                     customMob.removeSound(soundIndex);
@@ -139,50 +149,50 @@ public class SpecificSoundGUI  extends CustomMobsGUI {
     }
 
     private ItemStack getVolumeItem() {
-        CustomMobsItem item = new CustomMobsItem(Material.IRON_BLOCK);
+        CustomMobsItem item = new CustomMobsItem(Material.NOTE_BLOCK);
         item.setName("&6&lVolume");
         item.addLore("&eVolume:&f " + sound.getVolume(), " ", "&7&o(( Click to edit this option ))");
         return getMenuItem(item, true);
     }
 
     private ItemStack getPitchItem() {
-        CustomMobsItem item = new CustomMobsItem(Material.GOLD_BLOCK);
+        CustomMobsItem item = new CustomMobsItem(Material.MUSIC_DISC_PRECIPICE);
         item.setName("&6&lPitch");
         item.addLore("&ePitch:&f " + sound.getPitch(), " ", "&7&o(( Click to edit this option ))");
         return getMenuItem(item, true);
     }
 
     private ItemStack getRadiusItem() {
-        CustomMobsItem item = new CustomMobsItem(Material.DIAMOND_BLOCK);
+        CustomMobsItem item = new CustomMobsItem(Material.SPYGLASS);
         item.setName("&6&lRadius");
         item.addLore("&eRadius:&f " + sound.getRadius(), " ", "&7&o(( Click to edit this option ))");
         return getMenuItem(item, true);
     }
 
     private ItemStack getCategoryItem() {
-        CustomMobsItem item = new CustomMobsItem(Material.NETHERITE_BLOCK);
+        CustomMobsItem item = new CustomMobsItem(Material.BOOK);
         item.setName("&6&lCategory");
-        item.addLore("&eCategory:&f " + sound.getCategory(), " ", "&7&o(( Click to edit this option ))");
+        item.addLore("&eCategory:&f " + sound.getCategory());
+        item.addLore("", "&7&o(( Left-Click to cycle this option ))", "&7&o(( Right-Click to reset this option ))");
         return getMenuItem(item, true);
     }
 
     private ItemStack getSoundItem() {
         CustomMobsItem item = new CustomMobsItem(sound.getMaterial());
         item.setName(Utils.applyFormat("&6&l" + Utils.getSentenceCase(sound.getSoundType().name())));
-        item.addLore("");
-        item.addLore(Utils.applyFormat("&7&o(( Click to change the current sound ))"));
+        item.addLore("", "&7&o(( Click to change the current sound ))", "&7&o(( Right-Click to play this sound ))");
         return getMenuItem(item, true);
     }
 
     private ItemStack getDeathSpawnItem() {
-        CustomMobsItem item = new CustomMobsItem(Material.STICK);
+        CustomMobsItem item = new CustomMobsItem(Material.DEAD_BUSH);
         item.setName("&6&lDeath/Spawn");
-        if(sound.getOnDeath()){
-            item.setType(Material.STONE_SWORD);
-            item.addLore("&eDeath/Spawn:&f On Death", "&7&o(( Click to edit this option ))");
-        }else{
-            item.setType(Material.VILLAGER_SPAWN_EGG);
-            item.addLore("&eDeath/Spawn:&f On Spawn", "&7&o(( Click to edit this option ))");
+        if(sound.getOnDeath()) {
+            item.setType(Material.DEAD_BUSH);
+            item.addLore("&eDeath/Spawn:&f On Death", "", "&7&o(( Click to edit this option ))");
+        } else {
+            item.setType(Material.RESPAWN_ANCHOR);
+            item.addLore("&eDeath/Spawn:&f On Spawn", "", "&7&o(( Click to edit this option ))");
         }
         return getMenuItem(item, true);
     }

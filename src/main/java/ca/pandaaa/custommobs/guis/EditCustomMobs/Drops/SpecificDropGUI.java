@@ -4,13 +4,10 @@ import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.custommobs.Drop;
 import ca.pandaaa.custommobs.custommobs.options.NextOptions;
 import ca.pandaaa.custommobs.guis.BasicTypes.DoubleGUI;
-import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
-import ca.pandaaa.custommobs.guis.EditCustomMobs.Potions.SpecificPotionGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.DropConditions;
 import ca.pandaaa.custommobs.utils.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -83,7 +80,7 @@ public class SpecificDropGUI extends CustomMobsGUI {
                 break;
             case 14:
                 if(event.isRightClick() && drop.getDropCondition().name().equals("NEARBY")){
-                    new DoubleGUI("Maximum range", customMob, false, 1, 255, (value) -> {
+                    new DoubleGUI("Maximum range", false, 1, 255, (value) -> {
                         drop.setNearbyRange(value);
                         customMob.editDrop(drop, dropIndex);
                         new SpecificDropGUI(customMob, drop, dropIndex).openInventory((Player) event.getWhoClicked());
@@ -96,7 +93,7 @@ public class SpecificDropGUI extends CustomMobsGUI {
                 event.getView().setItem(event.getSlot() + 1, getGroupItem(drop.getDropCondition() == DropConditions.NEARBY));
                 break;
             case 15:
-                if(event.getClick().isRightClick())
+                if(event.isRightClick())
                     drop.setGroupColor(null);
                 else
                     drop.setGroupColor(NextOptions.getNextDyeColor(drop.getGroupColor()));
@@ -168,7 +165,7 @@ public class SpecificDropGUI extends CustomMobsGUI {
                 + dropCondtionName.toLowerCase().substring(1).replaceAll("_", " "));
         switch (drop.getDropCondition().name()){
             case "NEARBY":
-                item.addLore("&f&l* &bRange:&f " +drop.getNearbyRange());
+                item.addLore("&f&l* &bRange:&f " + drop.getNearbyRange());
                 item.addLore("","&7&o(( Only nearby players have a chance to receive this drop ))");
                 break;
             case "KILLER":

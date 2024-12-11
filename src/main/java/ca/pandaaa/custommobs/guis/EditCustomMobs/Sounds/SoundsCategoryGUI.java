@@ -5,7 +5,6 @@ import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 import ca.pandaaa.custommobs.utils.SoundEnum;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -112,8 +111,13 @@ public class SoundsCategoryGUI extends CustomMobsGUI {
                 break;
             default:
                 if (event.getSlot() < 45){
-                    ca.pandaaa.custommobs.custommobs.Sound customMobSound = new ca.pandaaa.custommobs.custommobs.Sound(categorySounds.get(event.getSlot()).getSound(), 1, SoundCategory.MASTER, 1, 1, event.getCurrentItem().getType(), true);
-                    consumer.accept(customMobSound);
+                    SoundEnum soundEnum = categorySounds.get(event.getSlot() + (currentPage - 1) * 45);
+                    if(event.isRightClick()) {
+                        clicker.playSound(clicker.getLocation(), soundEnum.getSound(), 1.0F, 1.0F);
+                    } else {
+                        ca.pandaaa.custommobs.custommobs.Sound customMobSound = new ca.pandaaa.custommobs.custommobs.Sound(soundEnum.getSound(), 1, SoundCategory.MASTER, 1, 1, soundEnum.getMaterial(), true);
+                        consumer.accept(customMobSound);
+                    }
                 }
                 break;
         }
@@ -139,6 +143,7 @@ public class SoundsCategoryGUI extends CustomMobsGUI {
         itemMeta.setDisplayName(Utils.applyFormat("&6&l" + Utils.getStartCase(string)));
         lore.add("");
         lore.add(Utils.applyFormat("&7&o(( Click to select this CustomMob sound ))"));
+        lore.add(Utils.applyFormat("&7&o(( Right-Click to play this sound ))"));
         itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
         return getMenuItem(item,true);

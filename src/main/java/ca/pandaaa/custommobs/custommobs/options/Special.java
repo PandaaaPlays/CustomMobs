@@ -12,7 +12,10 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attributable;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Animals;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -139,7 +142,7 @@ public class Special extends CustomMobOption {
                     this.health = null;
                     customMob.getCustomMobConfiguration().setHealth(health);
                 } else {
-                    new DoubleGUI("Health", customMob, false, 0, 1024, (value) -> {
+                    new DoubleGUI("Health", false, 0, 1024, (value) -> {
                         this.health = value;
                         customMob.getCustomMobConfiguration().setHealth(health);
                         new OptionsGUI(customMob).openInventory((Player) clicker, 1);
@@ -171,7 +174,7 @@ public class Special extends CustomMobOption {
                     this.knockbackResistance = 0D;
                     customMob.getCustomMobConfiguration().setKnockbackResistance(knockbackResistance);
                 } else {
-                    new DoubleGUI("Knockback resistance", customMob, true, 0, 1, (value) -> {
+                    new DoubleGUI("Knockback resistance", true, 0, 1, (value) -> {
                         this.knockbackResistance = value;
                         customMob.getCustomMobConfiguration().setKnockbackResistance(knockbackResistance);
                         new OptionsGUI(customMob).openInventory((Player) clicker, 1);
@@ -185,7 +188,7 @@ public class Special extends CustomMobOption {
                     this.speed = 0.7D;
                     customMob.getCustomMobConfiguration().setSpeed(speed);
                 } else {
-                    new DoubleGUI("Speed", customMob, false, 0, 1024, (value) -> {
+                    new DoubleGUI("Speed", false, 0, 1024, (value) -> {
                         this.speed = value;
                         customMob.getCustomMobConfiguration().setSpeed(speed);
                         new OptionsGUI(customMob).openInventory((Player) clicker, 1);
@@ -229,7 +232,7 @@ public class Special extends CustomMobOption {
                     this.followRange = 32D;
                     customMob.getCustomMobConfiguration().setFollowRange(followRange);
                 } else {
-                    new DoubleGUI("Follow range", customMob, false, 0, 2048, (value) -> {
+                    new DoubleGUI("Follow range", false, 0, 2048, (value) -> {
                         this.followRange = value;
                         customMob.getCustomMobConfiguration().setFollowRange(followRange);
                         new OptionsGUI(customMob).openInventory((Player) clicker, 1);
@@ -244,7 +247,7 @@ public class Special extends CustomMobOption {
                     customMob.getCustomMobConfiguration().setSize(size);
                 } else {
                     //TODO custom GUI for 0.06 value
-                    new DoubleGUI("Size", customMob, true, 0.06, 16, (value) -> {
+                    new DoubleGUI("Size", true, 0.06, 16, (value) -> {
                         this.size = value;
                         customMob.getCustomMobConfiguration().setSize(size);
                         new OptionsGUI(customMob).openInventory((Player) clicker, 1);

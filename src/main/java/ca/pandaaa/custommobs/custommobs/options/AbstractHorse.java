@@ -44,7 +44,7 @@ public class AbstractHorse extends CustomMobOption {
                     this.jumpStrength = 0.7D;
                     customMob.getCustomMobConfiguration().setJumpStrength(jumpStrength);
                 } else {
-                    new DoubleGUI("Jump strength", customMob, true, 0, 2, (value) -> {
+                    new DoubleGUI("Jump strength", true, 0, 2, (value) -> {
                         this.jumpStrength = value;
                         customMob.getCustomMobConfiguration().setJumpStrength(jumpStrength);
                         new OptionsGUI(customMob).openInventory((Player) clicker, 1);

@@ -4,6 +4,7 @@ import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
+import ca.pandaaa.custommobs.utils.SoundEnum;
 import ca.pandaaa.custommobs.utils.Utils;
 import ca.pandaaa.custommobs.custommobs.Sound;
 import org.bukkit.Material;
@@ -48,9 +49,13 @@ public class AddSoundsGUI extends CustomMobsGUI {
         inventory.setItem(14, getCategory(Material.STICK, "Item"));
         inventory.setItem(15, getCategory(Material.MUSIC_DISC_5, "Music"));
         inventory.setItem(16, getCategory(Material.BELL, "Others"));
-        inventory.setItem(28, getFavorite(Material.EXPERIENCE_BOTTLE, "Experience orb pickup", "entity.experience_orb.pickup"));
-        // TODO sounds in between (favorites)
-        inventory.setItem(34, getFavorite(Material.DRAGON_HEAD, "Dragon death", "entity.ender_dragon.death"));
+        inventory.setItem(28, getFavorite(SoundEnum.ENTITY_EXPERIENCE_ORB_PICKUP));
+        inventory.setItem(29, getFavorite(SoundEnum.BLOCK_AMETHYST_CLUSTER_BREAK));
+        inventory.setItem(30, getFavorite(SoundEnum.ENTITY_FIREWORK_ROCKET_TWINKLE));
+        inventory.setItem(31, getFavorite(SoundEnum.ENTITY_LIGHTNING_BOLT_THUNDER));
+        inventory.setItem(32, getFavorite(SoundEnum.ITEM_GOAT_HORN_SOUND_0));
+        inventory.setItem(33, getFavorite(SoundEnum.EVENT_MOB_EFFECT_TRIAL_OMEN));
+        inventory.setItem(34, getFavorite(SoundEnum.ENTITY_ENDER_DRAGON_DEATH));
         inventory.setItem(45, previous);
         player.openInventory(inventory);
     }
@@ -90,10 +95,14 @@ public class AddSoundsGUI extends CustomMobsGUI {
                 new SoundsGUI(customMob).openInventory(clicker, 1);
                 break;
             default:
-                if (event.getSlot() >= 28 && event.getSlot() <= 34 && event.getCurrentItem().getType() != Material.GRAY_STAINED_GLASS_PANE){
+                if (event.getSlot() >= 28 && event.getSlot() <= 34 && event.getCurrentItem().getType() != Material.GRAY_STAINED_GLASS_PANE) {
                     org.bukkit.Sound sound = Registry.SOUNDS.get(NamespacedKey.minecraft(itemMeta.getPersistentDataContainer().get(keyFavorite, PersistentDataType.STRING)));
-                    Sound customMobSound = new Sound(sound, 1, SoundCategory.MASTER, 1, 1, event.getCurrentItem().getType(), true);
-                    consumer.accept(customMobSound);
+                    if(event.isRightClick()) {
+                        clicker.playSound(clicker.getLocation(), sound, 1.0F, 1.0F);
+                    } else {
+                        Sound customMobSound = new Sound(sound, 1, SoundCategory.MASTER, 1, 1, event.getCurrentItem().getType(), true);
+                        consumer.accept(customMobSound);
+                    }
                 }
                 break;
         }
@@ -108,14 +117,15 @@ public class AddSoundsGUI extends CustomMobsGUI {
         return getMenuItem(item, true);
     }
 
-    private ItemStack getFavorite(Material material, String name, String sound) {
-        CustomMobsItem item = new CustomMobsItem(material);
+    private ItemStack getFavorite(SoundEnum soundEnum) {
+        CustomMobsItem item = new CustomMobsItem(soundEnum.getMaterial());
         ItemMeta itemMeta = item.getItemMeta();
-        itemMeta.getPersistentDataContainer().set(keyFavorite, PersistentDataType.STRING,sound);
+        itemMeta.getPersistentDataContainer().set(keyFavorite, PersistentDataType.STRING, soundEnum.getSound().getKey().getKey());
         item.setItemMeta(itemMeta);
-        item.setName("&6&l" +name);
+        item.setName("&6&l" + Utils.getStartCase(soundEnum.name()));
         item.addLore("");
         item.addLore( "&7&o(( Click to choose this sound ))");
+        item.addLore("&7&o(( Right-Click to play this sound ))");
 
         return getMenuItem(item, true);
     }

@@ -5,8 +5,9 @@ import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.EditGUI;
 import ca.pandaaa.custommobs.utils.Utils;
-import org.bukkit.*;
 import ca.pandaaa.custommobs.custommobs.Sound;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -19,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SoundsGUI extends CustomMobsGUI {
-    private List<ItemStack> soundsItem;
     private final List<Sound> sounds;
     private final CustomMob customMob;
     private final ItemStack previous;
@@ -38,7 +38,7 @@ public class SoundsGUI extends CustomMobsGUI {
     }
 
     public void openInventory(Player player, int page) {
-        soundsItem = getSounds();
+        List<ItemStack> soundsItem = getSounds();
         this.currentPage = page;
         boolean nextPage = sounds.size() > (page * 45);
 
