@@ -5,8 +5,11 @@ import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
-import org.bukkit.*;
 import ca.pandaaa.custommobs.custommobs.Sound;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -44,9 +47,9 @@ public class AddSoundsGUI extends CustomMobsGUI {
         inventory.setItem(12, getCategory(Material.ZOMBIE_SPAWN_EGG, "Entity"));
         inventory.setItem(14, getCategory(Material.STICK, "Item"));
         inventory.setItem(15, getCategory(Material.MUSIC_DISC_5, "Music"));
-        //TODO
         inventory.setItem(16, getCategory(Material.BELL, "Others"));
         inventory.setItem(28, getFavorite(Material.EXPERIENCE_BOTTLE, "Experience orb pickup", "entity.experience_orb.pickup"));
+        // TODO sounds in between (favorites)
         inventory.setItem(34, getFavorite(Material.DRAGON_HEAD, "Dragon death", "entity.ender_dragon.death"));
         inventory.setItem(45, previous);
         player.openInventory(inventory);
