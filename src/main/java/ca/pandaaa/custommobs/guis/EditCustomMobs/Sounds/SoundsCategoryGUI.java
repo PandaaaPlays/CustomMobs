@@ -4,7 +4,6 @@ import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 import ca.pandaaa.custommobs.utils.SoundEnum;
 import ca.pandaaa.custommobs.utils.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -16,7 +15,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -26,13 +24,11 @@ public class SoundsCategoryGUI extends CustomMobsGUI {
     private final CustomMob customMob;
     private final ItemStack previous;
     private final ItemStack next;
-    private final String category;
     private int currentPage = 1;
     private final Consumer<ca.pandaaa.custommobs.custommobs.Sound> consumer;
     public SoundsCategoryGUI(CustomMob customMob, String category, Consumer<ca.pandaaa.custommobs.custommobs.Sound> consumer) {
         super(54, "&8CustomMobs &8&l» &8Sounds ("+ category+")");
         this.customMob = customMob;
-        this.category =category;
         this.consumer = consumer;
         this.categorySounds = SoundEnum.getSoundsByCategory(category.toUpperCase());
         this.sounds = getSounds();
@@ -94,12 +90,15 @@ public class SoundsCategoryGUI extends CustomMobsGUI {
         }
 
         event.setCancelled(true);
+
+        if (event.getCurrentItem().getType() == Material.GRAY_STAINED_GLASS_PANE)
+            return;
         ItemMeta itemMeta = event.getCurrentItem().getItemMeta();
         String name = itemMeta.getDisplayName();
         Player clicker = (Player) event.getWhoClicked();
         switch (event.getSlot()) {
             case 45:
-                if(!name.contains("(")){
+                if(!name.contains("(")) {
                     new AddSoundsGUI(customMob, consumer).openInventory(clicker);
                 }
                 else {
@@ -107,7 +106,7 @@ public class SoundsCategoryGUI extends CustomMobsGUI {
                 }
                 break;
             case 53:
-                if(name.contains("(")){
+                if(name.contains("(")) {
                     openInventory(clicker, currentPage+1);
                 }
                 break;
@@ -119,6 +118,7 @@ public class SoundsCategoryGUI extends CustomMobsGUI {
                 break;
         }
     }
+
     private List<ItemStack> getSounds() {
         List<ItemStack> items = new ArrayList<>();
 
@@ -132,11 +132,11 @@ public class SoundsCategoryGUI extends CustomMobsGUI {
         return items;
     }
 
-    private ItemStack createItem(Material material, String string){
+    private ItemStack createItem(Material material, String string) {
         ItemStack item = new ItemStack(material);
         ItemMeta itemMeta = item.getItemMeta();
         ArrayList<String> lore = new ArrayList<>();
-        itemMeta.setItemName(Utils.applyFormat("&6&l" + Utils.getStartCase(string)));
+        itemMeta.setDisplayName(Utils.applyFormat("&6&l" + Utils.getStartCase(string)));
         lore.add("");
         lore.add(Utils.applyFormat("&7&o(( Click to select this CustomMob sound ))"));
         itemMeta.setLore(lore);

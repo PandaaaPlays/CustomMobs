@@ -19,7 +19,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class CustomMobs extends JavaPlugin {
     private File mobFolder;
@@ -50,6 +52,9 @@ Caused by: java.lang.ClassNotFoundException: ca.pandaaa.custommobs.utils.Metrics
         at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?]
         ... 8 more
          */
+
+        // TODO Sounds Enum might miss new sounds... add thing to show on console saying its missing one
+
         Metrics metrics = new Metrics(this, pluginId);
 
         this.sendStartedMessage();
@@ -57,6 +62,13 @@ Caused by: java.lang.ClassNotFoundException: ca.pandaaa.custommobs.utils.Metrics
         // DropItem serialization
         ConfigurationSerialization.registerClass(Drop.class, "ca.pandaaa.custommobs.custommobs.DropItem");
         ConfigurationSerialization.registerClass(Sound.class, "ca.pandaaa.custommobs.custommobs.Sound");
+
+        // Initialize SoundEnum for faster timings on click
+        try {
+            Class.forName("ca.pandaaa.custommobs.utils.SoundEnum");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
         saveDefaultConfigurations();
         loadAllMobsConfigurations();
