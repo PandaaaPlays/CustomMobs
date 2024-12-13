@@ -1,11 +1,8 @@
 package ca.pandaaa.custommobs.guis.BasicTypes;
 
 import ca.pandaaa.custommobs.CustomMobs;
-import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
-import ca.pandaaa.custommobs.guis.EditCustomMobs.OptionsGUI;
 import ca.pandaaa.custommobs.utils.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -19,7 +16,6 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Consumer;
 
 public class DoubleGUI extends CustomMobsGUI implements Listener {
@@ -30,14 +26,12 @@ public class DoubleGUI extends CustomMobsGUI implements Listener {
     private final ItemStack confirm;
     private final ItemStack plusBig;
     private final ItemStack plusSmall;
-    private final CustomMob customMob;
     private final boolean small;
     private final double maximum;
     private final double minimum;
-    public DoubleGUI(String option, CustomMob customMob, boolean small, double minValue, double maxValue, Consumer<Double> consumer) {
+    public DoubleGUI(String option, boolean small, double minValue, double maxValue, Consumer<Double> consumer) {
         super(9, "&8Parameter &8&l» &8" + option);
         this.consumer = consumer;
-        this.customMob = customMob;
         this.small = small;
         this.maximum = maxValue;
         this.minimum = minValue;
@@ -89,7 +83,6 @@ public class DoubleGUI extends CustomMobsGUI implements Listener {
                 break;
             case 4:
                 consumer.accept(current);
-                new OptionsGUI(customMob).openInventory((Player) event.getWhoClicked(), 1);
                 break;
             case 6:
                 if ((!shifting && current <= maximum - 0.1) || (shifting && current <= maximum - 0.5))

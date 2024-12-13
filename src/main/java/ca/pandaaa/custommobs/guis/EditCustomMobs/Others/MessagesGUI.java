@@ -5,7 +5,6 @@ import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.EditGUI;
 import ca.pandaaa.custommobs.utils.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -19,7 +18,6 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class MessagesGUI extends CustomMobsGUI {
 
@@ -138,6 +136,7 @@ public class MessagesGUI extends CustomMobsGUI {
             lore.add("");
             lore.add(Utils.applyFormat("&eCurrent message(s):"));
             int i = 1;
+            // TODO Message are both in death and not in death?
             for (String message : death ? customMob.getCustomMobMessages().getMessages() : customMob.getCustomMobMessages().getDeathMessages()) {
                 lore.add(Utils.applyFormat("&f " + i++ + ". &r" + message));
             }

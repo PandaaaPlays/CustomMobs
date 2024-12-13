@@ -8,6 +8,7 @@ import ca.pandaaa.custommobs.custommobs.Drop;
 import ca.pandaaa.custommobs.custommobs.Events;
 import ca.pandaaa.custommobs.custommobs.Manager;
 import ca.pandaaa.custommobs.custommobs.Spawner;
+import ca.pandaaa.custommobs.custommobs.Sound;
 import ca.pandaaa.custommobs.utils.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -19,7 +20,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class CustomMobs extends JavaPlugin {
     private File mobFolder;
@@ -32,13 +35,42 @@ public class CustomMobs extends JavaPlugin {
     public void onEnable() {
         plugin = this;
         int pluginId = 21648;
+
+        /* TODO
+        FAT LOG ERROR : [CustomMobs] Task #102 for CustomMobs v1.0.0 generated an exception
+java.lang.NoClassDefFoundError: ca/pandaaa/custommobs/utils/Metrics$CustomChart
+        at ca.pandaaa.custommobs.utils.Metrics$MetricsBase.submitData(Metrics.java:258) ~[?:?]
+        at org.bukkit.craftbukkit.v1_21_R2.scheduler.CraftTask.run(CraftTask.java:82) ~[spigot-1.21.3-R0.1-SNAPSHOT.jar:4378-Spigot-e65d67a-8ef9079]
+        at org.bukkit.craftbukkit.v1_21_R2.scheduler.CraftScheduler.mainThreadHeartbeat(CraftScheduler.java:415) ~[spigot-1.21.3-R0.1-SNAPSHOT.jar:4378-Spigot-e65d67a-8ef9079]
+        at net.minecraft.server.MinecraftServer.c(MinecraftServer.java:1502) ~[spigot-1.21.3-R0.1-SNAPSHOT.jar:4378-Spigot-e65d67a-8ef9079]
+        at net.minecraft.server.MinecraftServer.a(MinecraftServer.java:1391) ~[spigot-1.21.3-R0.1-SNAPSHOT.jar:4378-Spigot-e65d67a-8ef9079]
+        at net.minecraft.server.MinecraftServer.y(MinecraftServer.java:1093) ~[spigot-1.21.3-R0.1-SNAPSHOT.jar:4378-Spigot-e65d67a-8ef9079]
+        at net.minecraft.server.MinecraftServer.lambda$spin$0(MinecraftServer.java:329) ~[spigot-1.21.3-R0.1-SNAPSHOT.jar:4378-Spigot-e65d67a-8ef9079]
+        at java.base/java.lang.Thread.run(Thread.java:1570) [?:?]
+Caused by: java.lang.ClassNotFoundException: ca.pandaaa.custommobs.utils.Metrics$CustomChart
+        at org.bukkit.plugin.java.PluginClassLoader.loadClass0(PluginClassLoader.java:160) ~[spigot-api-1.21.3-R0.1-SNAPSHOT.jar:?]
+        at org.bukkit.plugin.java.PluginClassLoader.loadClass(PluginClassLoader.java:112) ~[spigot-api-1.21.3-R0.1-SNAPSHOT.jar:?]
+        at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?]
+        ... 8 more
+         */
+
+        // TODO Sounds Enum might miss new sounds... add thing to show on console saying its missing one
+
         Metrics metrics = new Metrics(this, pluginId);
 
         this.sendStartedMessage();
 
         // DropItem serialization
         ConfigurationSerialization.registerClass(Drop.class, "ca.pandaaa.custommobs.custommobs.Drop");
+        ConfigurationSerialization.registerClass(Sound.class, "ca.pandaaa.custommobs.custommobs.Sound");
         ConfigurationSerialization.registerClass(Spawner.class, "ca.pandaaa.custommobs.custommobs.Spawner");
+
+        // Initialize SoundEnum for faster timings on click
+        try {
+            Class.forName("ca.pandaaa.custommobs.utils.SoundEnum");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
         saveDefaultConfigurations();
         loadAllMobsConfigurations();

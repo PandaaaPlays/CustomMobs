@@ -3,17 +3,14 @@ package ca.pandaaa.custommobs.commands;
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.configurations.ConfigurationManager;
 import ca.pandaaa.custommobs.custommobs.Manager;
-import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 import ca.pandaaa.custommobs.guis.MainGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.*;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.Objects;

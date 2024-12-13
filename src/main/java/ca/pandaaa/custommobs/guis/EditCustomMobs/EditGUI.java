@@ -9,6 +9,8 @@ import ca.pandaaa.custommobs.guis.EditCustomMobs.Drops.DropsGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.Others.MessagesGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.Others.OthersGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.Others.Spawner.SpawnerGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.Potions.PotionsGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.Sounds.SoundsGUI;
 import ca.pandaaa.custommobs.guis.MainGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
@@ -233,7 +235,7 @@ public class EditGUI extends CustomMobsGUI {
                 new SpawnerGUI(customMob, customMobsManager).openInventory(clicker);
                 break;
             case 33:
-                // TODO sounds
+                // TODO Special effects
                 break;
             case 34:
                 new OthersGUI(customMob).openInventory(clicker);

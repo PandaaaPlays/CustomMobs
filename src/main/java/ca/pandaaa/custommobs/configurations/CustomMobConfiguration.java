@@ -2,6 +2,11 @@ package ca.pandaaa.custommobs.configurations;
 
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.*;
+import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.custommobs.Drop;
+import ca.pandaaa.custommobs.custommobs.Equipment;
+import ca.pandaaa.custommobs.custommobs.Messages;
+import ca.pandaaa.custommobs.custommobs.Sound;
 import ca.pandaaa.custommobs.utils.DamageRange;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.*;
@@ -10,6 +15,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.io.File;
@@ -75,10 +81,11 @@ public class CustomMobConfiguration {
                 getItem(ITEM),
                 getItem(SPAWNER_ITEM),
                 getEquipment(),
+                getPotionMeta(),
                 getSpawner(),
                 getDrops(),
                 getName(),
-                new ArrayList<>(),
+                getSounds(),
                 this);
 
         // TODO sounds
@@ -104,7 +111,8 @@ public class CustomMobConfiguration {
                 hasGravity(),
                 isPersistent(),
                 isIntelligent(),
-                getFollowRange()));
+                getFollowRange(),
+                getSize()));
 
         if(AbstractHorse.class.isAssignableFrom(type.getEntityClass()))
             customMob.addCustomMobType(new ca.pandaaa.custommobs.custommobs.options.
@@ -321,6 +329,30 @@ public class CustomMobConfiguration {
 
     public void setSpawner(Spawner spawner) {
         mobConfiguration.set(SPAWNER, spawner);
+        saveConfigurationFile();
+    }
+
+    public static final String POTIONS = "potions";
+    public List<PotionMeta> getPotionMeta() {
+        if(!mobConfiguration.contains(POTIONS, true))
+            return new ArrayList<>();
+        return (List<PotionMeta>) mobConfiguration.getList(POTIONS);
+    }
+
+    public void setPotionMeta(List<PotionMeta> potionMeta) {
+        mobConfiguration.set(POTIONS, potionMeta);
+        saveConfigurationFile();
+    }
+
+    public static final String SOUNDS = "sounds";
+    public List<Sound> getSounds() {
+        if(!mobConfiguration.contains(SOUNDS, true))
+            return new ArrayList<>();
+        return (List<Sound>) mobConfiguration.getList(SOUNDS);
+    }
+
+    public void setSounds(List<Sound> sounds) {
+        mobConfiguration.set(SOUNDS, sounds);
         saveConfigurationFile();
     }
 
@@ -1006,6 +1038,19 @@ public class CustomMobConfiguration {
         mobConfiguration.set(FOLLOW_RANGE, followRange);
         saveConfigurationFile();
     }
+
+    private static final String SIZE = "special.size";
+    private double getSize() {
+        if(!mobConfiguration.contains(SIZE, true))
+            return 1;
+        return mobConfiguration.getDouble(SIZE);
+    }
+
+    public void setSize(double size) {
+        mobConfiguration.set(SIZE, size);
+        saveConfigurationFile();
+    }
+
 
     // Messages //
 

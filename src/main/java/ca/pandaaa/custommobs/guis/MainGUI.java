@@ -1,13 +1,10 @@
 package ca.pandaaa.custommobs.guis;
 
 import ca.pandaaa.custommobs.CustomMobs;
-import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.custommobs.Manager;
-import ca.pandaaa.custommobs.guis.EditCustomMobs.Drops.SpecificDropGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.EditGUI;
 import ca.pandaaa.custommobs.utils.Utils;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -15,10 +12,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.inventory.ItemStack;
@@ -29,7 +23,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class MainGUI extends CustomMobsGUI {
     private final List<ItemStack> items;

@@ -1,12 +1,8 @@
 package ca.pandaaa.custommobs.custommobs;
 
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Horse;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 public class Equipment {

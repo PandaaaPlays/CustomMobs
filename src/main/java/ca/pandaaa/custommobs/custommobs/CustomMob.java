@@ -10,8 +10,10 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.time.LocalDate;
@@ -34,6 +36,7 @@ public class CustomMob implements Listener {
     private String name;
     private final List<Sound> sounds;
     private final CustomMobConfiguration mobConfiguration;
+    private final List<PotionMeta> potionMeta;
 
     public CustomMob(LocalDateTime creationDate,
                      EntityType entityType,
@@ -42,6 +45,7 @@ public class CustomMob implements Listener {
                      ItemStack spawnerItem,
                      Equipment equipment,
                      Spawner spawner,
+                     List<PotionMeta> potionMeta,
                      List<Drop> drops,
                      String name,
                      List<Sound> sounds,
@@ -52,6 +56,7 @@ public class CustomMob implements Listener {
         this.item = item;
         this.spawnerItem = spawnerItem;
         this.equipment = equipment;
+        this.potionMeta = potionMeta;
         this.spawner = spawner;
         this.drops = drops;
         this.name = name;
@@ -83,6 +88,11 @@ public class CustomMob implements Listener {
         // Drops
         NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Name");
         customMob.getPersistentDataContainer().set(key, PersistentDataType.STRING, customMobFileName.replaceAll(".yml", ""));
+
+        // Potions
+        for(PotionMeta potionMeta : potionMeta) {
+            potionMeta.getCustomEffects().get(0).apply((LivingEntity) customMob);
+        }
 
         // Options
         for(CustomMobOption customMobType : customMobOptions.values()) {
@@ -142,6 +152,34 @@ public class CustomMob implements Listener {
         return drops;
     }
 
+    public List<PotionMeta> getPotionMeta() {
+        return potionMeta;
+    }
+
+    public void addPotionMeta(PotionMeta potionMeta){
+         this.potionMeta.add(potionMeta);
+        mobConfiguration.setPotionMeta(this.potionMeta);
+    }
+
+    public List<Sound> getSounds() {
+        return sounds;
+    }
+
+    public void addSound(Sound sound) {
+        this.sounds.add(sound);
+        mobConfiguration.setSounds(this.sounds);
+    }
+
+    public void removeSound(int soundIndex) {
+        sounds.remove(soundIndex);
+        mobConfiguration.setSounds(sounds);
+    }
+
+    public void editSound(Sound sound, int index) {
+        this.sounds.set(index, sound);
+        mobConfiguration.setSounds(this.sounds);
+    }
+
     /* === NAME (OVER HEAD) === */
 
     /**
@@ -172,6 +210,18 @@ public class CustomMob implements Listener {
 
     public Spawner getSpawner() {
         return spawner;
+    }
+
+    /* === POTION === */
+
+    public void editPotion(PotionMeta potionMeta, int index) {
+        this.potionMeta.set(index, potionMeta);
+        mobConfiguration.setPotionMeta(this.potionMeta);
+    }
+
+    public void removePotionItem(int potionIndex) {
+        potionMeta.remove(potionIndex);
+        mobConfiguration.setPotionMeta(potionMeta);
     }
 
     /* === DROPS === */

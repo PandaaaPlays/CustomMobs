@@ -2,6 +2,7 @@ package ca.pandaaa.custommobs.custommobs.options;
 
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.OptionsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -45,6 +46,7 @@ public class PigZombie extends CustomMobOption {
                     new IntegerGUI("Anger", customMob, false, 0, 72000, (value) -> {
                         this.anger = value;
                         customMob.getCustomMobConfiguration().setZombifiedPiglinAnger(anger);
+                        new OptionsGUI(customMob).openInventory(clicker, 1);
                     }).openInventory(clicker, anger);
                 }
                 return getOptionItemStack(getAngerItem(), true, false);
