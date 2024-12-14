@@ -101,7 +101,10 @@ public class Spawner implements ConfigurationSerializable {
 
     public void setCharacteristics(org.bukkit.spawner.Spawner spawner) {
         spawner.setSpawnCount(spawnCount);
-        spawner.setMaxNearbyEntities(maxNearbyCount);
+        if(areRequirementsDisabled())
+            spawner.setMaxNearbyEntities(1);
+        else
+            spawner.setMaxNearbyEntities(maxNearbyCount);
         spawner.setSpawnRange(spawnRange);
         spawner.setDelay(spawnDelay);
         spawner.setMinSpawnDelay(minSpawnDelay);

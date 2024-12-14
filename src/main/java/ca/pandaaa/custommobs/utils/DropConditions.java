@@ -10,7 +10,6 @@ public enum DropConditions {
     DROP,
     MOST_DAMAGE; // Might be hard to do... Might remove
 
-    // TODO Explain what thoses conditions mean in the GUI
     public static DropConditions getNextCondition(DropConditions currentCondition) {
         Map<DropConditions, DropConditions> next = new HashMap<>();
         next.put(null, NEARBY);

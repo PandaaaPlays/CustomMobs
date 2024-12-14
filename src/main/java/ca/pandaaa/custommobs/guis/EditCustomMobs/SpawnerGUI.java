@@ -213,7 +213,7 @@ public class SpawnerGUI extends CustomMobsGUI {
         item.setName("&6&lSpawn delay");
         String minDelay = spawner.getMinSpawnDelay() > 20 ? "(" + Utils.getFormattedTime(spawner.getMinSpawnDelay() / 20, true, false) + ")" : "";
         String maxDelay = spawner.getMaxSpawnDelay() > 20 ? "(" + Utils.getFormattedTime(spawner.getMaxSpawnDelay() / 20, true, false) + ")" : "";
-        item.addLore("&eRange:&f Between " + spawner.getMinSpawnDelay() + " tick(s) " + minDelay + "and " + spawner.getMaxSpawnDelay() + " tick(s) " + maxDelay, "", "&7&o(( Click to edit this option ))", "&7&o(( Right-Click to reset this option ))");
+        item.addLore("&eRange:&f Between " + spawner.getMinSpawnDelay() + " tick(s) " + minDelay + " and " + spawner.getMaxSpawnDelay() + " tick(s) " + maxDelay, "", "&7&o(( Click to edit this option ))", "&7&o(( Right-Click to reset this option ))");
         return getMenuItem(item, true);
     }
 
