@@ -7,14 +7,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Spawner implements ConfigurationSerializable {
-    private int spawnCount; // 4 : 1 a 25
-    private int maxNearbyCount; // 6 : 1 a 150
-    private int spawnRange; // How many blocks around the spawner can the mob spawn // 4
-    private int spawnDelay; // Delay before the first spawn // 0 a 72000
-    private int minSpawnDelay; // 200 : 1 a max
-    private int maxSpawnDelay; // 799 : min a 72000 foufounne
-    private int requiredPlayerRange; // Default 16 : 0 a 128
-    private boolean disableRequirements; //on off
+    private int spawnCount;
+    private int maxNearbyCount;
+    private int spawnRange;
+    private int spawnDelay;
+    private int minSpawnDelay;
+    private int maxSpawnDelay;
+    private int requiredPlayerRange;
+    private boolean disableRequirements;
 
     public Spawner(int spawnCount, int maxNearbyCount, int spawnRange, int spawnDelay, int minSpawnDelay, int maxSpawnDelay, int requiredPlayerRange, boolean disableRequirements) {
         this.spawnCount = spawnCount;
@@ -27,7 +27,7 @@ public class Spawner implements ConfigurationSerializable {
         this.disableRequirements = disableRequirements;
     }
 
-    // SpawnCount
+    // SpawnCount (Default 4, from 1 to 25)
     public void setSpawnCount(int spawnCount){
         this.spawnCount = spawnCount;
     }
@@ -36,7 +36,7 @@ public class Spawner implements ConfigurationSerializable {
         return spawnCount;
     }
 
-    // MaxNearbyCount
+    // MaxNearbyCount (Default 6, from 1 to 150)
     public void setMaxNearbyCount(int maxNearbyCount){
         this.maxNearbyCount = maxNearbyCount;
     }
@@ -54,7 +54,7 @@ public class Spawner implements ConfigurationSerializable {
         return spawnRange;
     }
 
-    // SpawnDelay
+    // SpawnDelay (Initial)
     public void setSpawnDelay(int spawnDelay){
         this.spawnDelay = spawnDelay;
     }
@@ -63,7 +63,7 @@ public class Spawner implements ConfigurationSerializable {
         return spawnDelay;
     }
 
-    // minSpawnDelay
+    // minSpawnDelay (After the initial)
     public void setMinSpawnDelay(int minSpawnDelay){
         this.minSpawnDelay = minSpawnDelay;
     }
@@ -81,7 +81,7 @@ public class Spawner implements ConfigurationSerializable {
         return maxSpawnDelay;
     }
 
-    // requiredPlayerRange
+    // requiredPlayerRange (Default 16, from 0 to 128)
     public void setRequiredPlayerRange(int requiredPlayerRange){
         this.requiredPlayerRange = requiredPlayerRange;
     }
@@ -95,7 +95,7 @@ public class Spawner implements ConfigurationSerializable {
         this.disableRequirements = disableRequirements;
     }
 
-    public boolean getDisableRequirements(){
+    public boolean areRequirementsDisabled() {
         return disableRequirements;
     }
 
@@ -108,10 +108,6 @@ public class Spawner implements ConfigurationSerializable {
         spawner.setMinSpawnDelay(minSpawnDelay);
         spawner.setMaxSpawnDelay(maxSpawnDelay);
         spawner.setRequiredPlayerRange(requiredPlayerRange);
-    }
-
-    public boolean areChecksDisabled() {
-        return disableRequirements;
     }
 
     @Override

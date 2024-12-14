@@ -10,7 +10,6 @@ import ca.pandaaa.custommobs.custommobs.Sound;
 import ca.pandaaa.custommobs.utils.DamageRange;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.*;
-import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
@@ -81,8 +80,8 @@ public class CustomMobConfiguration {
                 getItem(ITEM),
                 getItem(SPAWNER_ITEM),
                 getEquipment(),
-                getPotionMeta(),
                 getSpawner(),
+                getPotionMeta(),
                 getDrops(),
                 getName(),
                 getSounds(),
@@ -154,9 +153,6 @@ public class CustomMobConfiguration {
         if(Parrot.class.isAssignableFrom(type.getEntityClass()))
             customMob.addCustomMobType(new ca.pandaaa.custommobs.custommobs.options.
                     Parrot(getParrotVariant()));
-        if(Phantom.class.isAssignableFrom(type.getEntityClass()))
-            customMob.addCustomMobType(new ca.pandaaa.custommobs.custommobs.options.
-                    Phantom(getPhantomSize()));
         if(PigZombie.class.isAssignableFrom(type.getEntityClass()))
             customMob.addCustomMobType(new ca.pandaaa.custommobs.custommobs.options.
                     PigZombie(getZombifiedPiglinAnger()));

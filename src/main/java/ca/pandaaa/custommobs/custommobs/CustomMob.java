@@ -4,9 +4,11 @@ import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.options.CustomMobOption;
 import ca.pandaaa.custommobs.utils.Utils;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import org.bukkit.*;
+import org.bukkit.attribute.Attributable;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -89,14 +91,14 @@ public class CustomMob implements Listener {
         NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Name");
         customMob.getPersistentDataContainer().set(key, PersistentDataType.STRING, customMobFileName.replaceAll(".yml", ""));
 
-        // Potions
-        for(PotionMeta potionMeta : potionMeta) {
-            potionMeta.getCustomEffects().get(0).apply((LivingEntity) customMob);
-        }
-
         // Options
         for(CustomMobOption customMobType : customMobOptions.values()) {
             customMobType.applyOptions(customMob);
+        }
+
+        // Potions
+        for(PotionMeta potionMeta : potionMeta) {
+            potionMeta.getCustomEffects().get(0).apply((LivingEntity) customMob);
         }
     }
 
@@ -104,7 +106,7 @@ public class CustomMob implements Listener {
         location.getBlock().setType(Material.SPAWNER);
         CreatureSpawner spawnerBlock = (CreatureSpawner) location.getBlock().getState();
 
-        if(this.spawner.areChecksDisabled())
+        if(this.spawner.areRequirementsDisabled())
             // Set this to be an invisible "entity" that spawns regardless of conditions.
             spawnerBlock.setSpawnedType(EntityType.AREA_EFFECT_CLOUD);
         else

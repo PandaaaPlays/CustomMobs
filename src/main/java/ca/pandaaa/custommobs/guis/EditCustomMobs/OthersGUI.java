@@ -1,9 +1,10 @@
-package ca.pandaaa.custommobs.guis.EditCustomMobs.Others;
+package ca.pandaaa.custommobs.guis.EditCustomMobs;
 
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
-import ca.pandaaa.custommobs.guis.EditCustomMobs.EditGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.Potions.PotionsGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.Sounds.SoundsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -51,10 +52,10 @@ public class OthersGUI extends CustomMobsGUI {
 
         switch (event.getSlot()) {
             case 12:
-                // TODO Potions
+                new PotionsGUI(customMob).openInventory(clicker, 1);
                 break;
             case 13:
-                // TODO Sounds
+                new SoundsGUI(customMob).openInventory(clicker, 1);
                 break;
             case 14:
                 new MessagesGUI(customMob).openInventory(clicker);

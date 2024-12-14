@@ -99,7 +99,6 @@ public class DoubleIntegerGUI extends CustomMobsGUI implements Listener {
                 break;
             case 4:
                 consumer.accept(new int[]{currentMin, currentMax});
-                new OptionsGUI(customMob).openInventory((Player) event.getWhoClicked(), 1);
                 break;
             case 6:
                 if ((!shifting && currentMin < currentMax - 1) || (shifting && currentMin < currentMax - 5))

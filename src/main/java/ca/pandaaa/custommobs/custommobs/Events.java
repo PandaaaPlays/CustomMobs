@@ -3,10 +3,7 @@ package ca.pandaaa.custommobs.custommobs;
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.utils.DropConditions;
 import org.bukkit.*;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -286,14 +283,38 @@ public class Events implements Listener {
 
     @EventHandler
     public void onSpawnerSpawn(SpawnerSpawnEvent event) {
+        if(event.getEntity().getType() != EntityType.AREA_EFFECT_CLOUD)
+            return;
+
         PersistentDataContainer container = event.getSpawner().getPersistentDataContainer();
         Location location = event.getEntity().getLocation();
 
         NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Spawner");
         if (container.has(key, PersistentDataType.STRING)) {
             String mobName = container.get(key, PersistentDataType.STRING);
+            CustomMob customMob = CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(mobName);
+            int range = customMob.getSpawner().getSpawnRange();
 
-            CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(mobName).spawnCustomMob(location);
+            // With this, we find the mobs of the same type. If that is ever a problem, we could filter on the persistent key of the CustomMob.
+            int nearbyCustomMobs = (int) event.getSpawner().getLocation().getWorld().getNearbyEntities(event.getSpawner().getLocation(), range, range, range).stream()
+                    .filter(entity -> entity.getType() == customMob.getType())
+                    .count();
+
+            event.getEntity().remove();
+            if (nearbyCustomMobs < customMob.getSpawner().getMaxNearbyCount()) {
+                int availableSpawnCount = customMob.getSpawner().getMaxNearbyCount() - nearbyCustomMobs;
+                int random = new Random().nextInt(Math.min(customMob.getSpawner().getSpawnCount(), availableSpawnCount));
+
+                for (int i = 0; i < random; i++) {
+                    double offsetX = (new Random().nextDouble() * 2 - 1) * range;
+                    double offsetY = (new Random().nextDouble() * 2 - 1) * range;
+                    double offsetZ = (new Random().nextDouble() * 2 - 1) * range;
+
+                    Location spawnLocation = location.clone().add(offsetX, offsetY, offsetZ);
+
+                    CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(mobName).spawnCustomMob(spawnLocation);
+                }
+            }
         }
     }
 }

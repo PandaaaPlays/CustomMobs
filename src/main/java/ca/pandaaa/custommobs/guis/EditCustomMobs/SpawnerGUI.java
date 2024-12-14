@@ -1,4 +1,4 @@
-package ca.pandaaa.custommobs.guis.EditCustomMobs.Others.Spawner;
+package ca.pandaaa.custommobs.guis.EditCustomMobs;
 
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.custommobs.Manager;
@@ -6,7 +6,6 @@ import ca.pandaaa.custommobs.custommobs.Spawner;
 import ca.pandaaa.custommobs.guis.BasicTypes.DoubleIntegerGUI;
 import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
-import ca.pandaaa.custommobs.guis.EditCustomMobs.EditGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
@@ -70,24 +69,28 @@ public class SpawnerGUI extends CustomMobsGUI {
             case 10:
                 new IntegerGUI("Spawn Count", customMob, true, 1, 25, (value) -> {
                     spawner.setSpawnCount(value);
+                    customMob.setSpawner(spawner);
                     new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());
                 }).openInventory(clicker, spawner.getSpawnCount());
                 break;
             case 11:
                 new IntegerGUI("Maximum nearby count", customMob, false, 1, 150, (value) -> {
                     spawner.setMaxNearbyCount(value);
+                    customMob.setSpawner(spawner);
                     new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());
                 }).openInventory(clicker, spawner.getMaxNearbyCount());
                 break;
             case 12:
                 new IntegerGUI("Spawn range", customMob, true, 0, 128, (value) -> {
                     spawner.setSpawnRange(value);
+                    customMob.setSpawner(spawner);
                     new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());
                 }).openInventory(clicker, spawner.getSpawnRange());
                 break;
             case 13:
                 new IntegerGUI("Spawn delay", customMob, false, 0, 72000, (value) -> {
                     spawner.setSpawnDelay(value);
+                    customMob.setSpawner(spawner);
                     new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());
                 }).openInventory(clicker, spawner.getSpawnDelay());
                 break;
@@ -95,23 +98,27 @@ public class SpawnerGUI extends CustomMobsGUI {
                 new DoubleIntegerGUI("Spawn delay range", customMob, false, 1, 72000, (value) -> {
                     spawner.setMinSpawnDelay(value[0]);
                     spawner.setMaxSpawnDelay(value[1]);
+                    customMob.setSpawner(spawner);
                     new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());
                 }).openInventory(clicker, spawner.getMinSpawnDelay(), spawner.getMaxSpawnDelay());
                 break;
             case 15:
                 new IntegerGUI("Required player range", customMob, false, 0, 128, (value) -> {
                     spawner.setRequiredPlayerRange(value);
+                    customMob.setSpawner(spawner);
                     new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());
                 }).openInventory(clicker, spawner.getRequiredPlayerRange());
                 break;
             case 16:
-                spawner.setDisableRequirements(!spawner.getDisableRequirements());
+                spawner.setDisableRequirements(!spawner.areRequirementsDisabled());
+                customMob.setSpawner(spawner);
                 new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());
                 break;
 
             case 27:
                 new EditGUI(customMob,customMobsManager, clicker.getPlayer()).openInventory();
                 break;
+
             case 31:
                 if (cursorItem.getType() != Material.AIR) {
                     ItemStack spawner = item.clone();
@@ -181,8 +188,8 @@ public class SpawnerGUI extends CustomMobsGUI {
     private ItemStack getDisableRequirementsItem() {
         CustomMobsItem item = new CustomMobsItem(Material.LIGHT);
         item.setName("&6&lSpawner requirements");
-        String spawnerRequirements = spawner.getDisableRequirements() ? "&a&lOn" : "&c&lOff";
-        item.addLore("&6&lRequirements:&f " + spawnerRequirements, " ", "&7&o(( Click to edit this option ))");
+        String spawnerRequirements = !spawner.areRequirementsDisabled() ? "&a&lOn" : "&c&lOff";
+        item.addLore("&eRequirements:&f " + spawnerRequirements, " ", "&7&o(( Click to edit this option ))");
         return getMenuItem(item, true);
     }
 

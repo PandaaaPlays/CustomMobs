@@ -68,12 +68,14 @@ public class Special extends CustomMobOption {
         customMob.setCustomNameVisible(isNameVisible);
 
         if(customMob instanceof Attributable) {
-            if (health != null)
-                Objects.requireNonNull(((Attributable) customMob).getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(health);
-            Objects.requireNonNull(((Attributable) customMob).getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE)).setBaseValue(knockbackResistance);
-            Objects.requireNonNull(((Attributable) customMob).getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).setBaseValue(speed);
-            Objects.requireNonNull(((Attributable) customMob).getAttribute(Attribute.GENERIC_FOLLOW_RANGE)).setBaseValue(followRange);
-            Objects.requireNonNull(((Attributable) customMob).getAttribute(Attribute.GENERIC_SCALE)).setBaseValue(size);
+            if (health != null) {
+                Objects.requireNonNull(((Attributable) customMob).getAttribute(Registry.ATTRIBUTE.get(NamespacedKey.minecraft("max_health")))).setBaseValue(health);
+                ((LivingEntity) customMob).setHealth(health);
+            }
+            Objects.requireNonNull(((Attributable) customMob).getAttribute(Registry.ATTRIBUTE.get(NamespacedKey.minecraft("knockback_resistance")))).setBaseValue(knockbackResistance);
+            Objects.requireNonNull(((Attributable) customMob).getAttribute(Registry.ATTRIBUTE.get(NamespacedKey.minecraft("movement_speed")))).setBaseValue(speed);
+            Objects.requireNonNull(((Attributable) customMob).getAttribute(Registry.ATTRIBUTE.get(NamespacedKey.minecraft("follow_range")))).setBaseValue(followRange);
+            Objects.requireNonNull(((Attributable) customMob).getAttribute(Registry.ATTRIBUTE.get(NamespacedKey.minecraft("scale")))).setBaseValue(size);
         }
 
         if(damageRange != null) {
