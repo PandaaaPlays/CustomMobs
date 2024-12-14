@@ -156,7 +156,7 @@ public class SpecificPotionGUI extends CustomMobsGUI {
     private ItemStack getDurationItem() {
         CustomMobsItem item = new CustomMobsItem(Material.CLOCK);
         item.setName("&b&lDuration");
-        String duration = this.duration <= 0 ? "Infinite" : Utils.getFormattedTime(this.duration);
+        String duration = this.duration <= 0 ? "Infinite" : Utils.getFormattedTime(this.duration, false, true);
         item.addLore("&eCurrent duration:&f " + duration, " ", "&7&o(( Click to edit this option ))", "&7&o(( Right-Click to reset this option ))");
         return getMenuItem(item, true);
     }

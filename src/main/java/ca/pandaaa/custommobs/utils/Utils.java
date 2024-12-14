@@ -117,27 +117,35 @@ public class Utils {
         return chatColor;
     }
 
-    public static String getFormattedTime(int timeInSecond) {
-        if(timeInSecond <= 0)
-            return "Infinite";
+    public static String getFormattedTime(int timeInSecond, boolean small, boolean showInfinite) {
+        String hoursString = small ? " h" : " hour";
+        String minutesString = small ? " m" : " minute";
+        String secondsString = small ? " s" : " second";
+
+        if(timeInSecond <= 0) {
+            if(showInfinite)
+                return "Infinite";
+            else
+                return "0";
+        }
         String formattedSize = "";
 
         boolean hours = false;
         if (timeInSecond >= 3600) {
-            formattedSize += timeInSecond / 3600 + " hour" + (timeInSecond >= 7200 ? "(s) " : " ");
+            formattedSize += timeInSecond / 3600 + hoursString + (timeInSecond >= 7200 && !small ? "s" : "");
             hours = true;
         }
         timeInSecond = timeInSecond % 3600;
 
         boolean minutes = false;
         if (timeInSecond >= 60) {
-            formattedSize += (hours ? "& " : "") + timeInSecond / 60 + " minute" + (timeInSecond >= 120 ? "(s) " : " ");
+            formattedSize += (hours ? " & " : "") + timeInSecond / 60 + minutesString + (timeInSecond >= 120 && !small ? "s" : "");
             minutes = true;
         }
         timeInSecond = timeInSecond % 60;
 
         if (timeInSecond > 0)
-            formattedSize += (minutes ? "& " : "") + timeInSecond + " second" +  (timeInSecond > 1 ? "(s) " : " ");
+            formattedSize += (minutes ? " & " : "") + timeInSecond + secondsString + (timeInSecond > 1 && !small ? "s" : "");
 
         return formattedSize;
     }

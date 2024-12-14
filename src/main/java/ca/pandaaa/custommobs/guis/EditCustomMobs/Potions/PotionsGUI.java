@@ -169,7 +169,7 @@ public class PotionsGUI extends CustomMobsGUI {
                 ArrayList<String> lore = new ArrayList<>();
                 PotionEffect effect = potionMeta1.getCustomEffects().get(0);
                 lore.add(Utils.applyFormat("&f&l* &eAmplifier:&f " + effect.getAmplifier()));
-                lore.add(Utils.applyFormat("&f&l* &bDuration:&f " + (effect.getDuration() <= 0 ? "Infinite" : Utils.getFormattedTime(effect.getDuration() / 20))));
+                lore.add(Utils.applyFormat("&f&l* &bDuration:&f " + (effect.getDuration() <= 0 ? "Infinite" : Utils.getFormattedTime(effect.getDuration() / 20, false, true))));
                 String ambient = effect.isAmbient() ? "&a&lOn" : "&c&lOff";
                 lore.add(Utils.applyFormat("&f&l* &aAmbient:&f " + ambient));
                 String particles = effect.hasParticles() ? "&a&lOn" : "&c&lOff";

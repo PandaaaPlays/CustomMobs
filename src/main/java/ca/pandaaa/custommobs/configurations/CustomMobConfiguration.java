@@ -318,7 +318,6 @@ public class CustomMobConfiguration {
     public static final String SPAWNER = "spawner";
     public Spawner getSpawner() {
         if(!mobConfiguration.contains(SPAWNER, true))
-            // TODO Check for default values
             return new Spawner(4, 6, 4, 0, 200, 799, 16, true);
         return (Spawner) mobConfiguration.get(SPAWNER);
     }

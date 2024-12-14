@@ -3,11 +3,12 @@ package ca.pandaaa.custommobs.guis.EditCustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.custommobs.Manager;
 import ca.pandaaa.custommobs.custommobs.Spawner;
-import ca.pandaaa.custommobs.guis.BasicTypes.DoubleIntegerGUI;
+import ca.pandaaa.custommobs.guis.BasicTypes.TimeIntegerRangeGUI;
 import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,7 +18,6 @@ import org.bukkit.inventory.ItemStack;
 
 public class SpawnerGUI extends CustomMobsGUI {
     private final CustomMob customMob;
-    private final ItemStack previous;
     private final Spawner spawner;
     private final Manager customMobsManager;
 
@@ -26,7 +26,6 @@ public class SpawnerGUI extends CustomMobsGUI {
 
         this.customMob = customMob;
         this.customMobsManager = customMobsManager;
-        previous = getMenuItem(Utils.createHead("a2f0425d64fdc8992928d608109810c1251fe243d60d175bed427c651cbe"), true);
         spawner = customMob.getSpawner();
     }
 
@@ -67,47 +66,84 @@ public class SpawnerGUI extends CustomMobsGUI {
             return;
         switch (event.getSlot()) {
             case 10:
-                new IntegerGUI("Spawn Count", customMob, true, 1, 25, (value) -> {
-                    spawner.setSpawnCount(value);
+                if(event.isRightClick()) {
+                    spawner.setSpawnCount(4);
                     customMob.setSpawner(spawner);
                     new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());
-                }).openInventory(clicker, spawner.getSpawnCount());
+                } else {
+                    new IntegerGUI("Spawn Count", customMob, true, 1, 25, (value) -> {
+                        spawner.setSpawnCount(value);
+                        customMob.setSpawner(spawner);
+                        new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());
+                    }).openInventory(clicker, spawner.getSpawnCount());
+                }
                 break;
             case 11:
-                new IntegerGUI("Maximum nearby count", customMob, false, 1, 150, (value) -> {
-                    spawner.setMaxNearbyCount(value);
+                if(event.isRightClick()) {
+                    spawner.setMaxNearbyCount(6);
                     customMob.setSpawner(spawner);
                     new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());
-                }).openInventory(clicker, spawner.getMaxNearbyCount());
+                } else {
+                    new IntegerGUI("Maximum nearby count", customMob, false, 1, 150, (value) -> {
+                        spawner.setMaxNearbyCount(value);
+                        customMob.setSpawner(spawner);
+                        new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());
+                    }).openInventory(clicker, spawner.getMaxNearbyCount());
+                }
                 break;
             case 12:
-                new IntegerGUI("Spawn range", customMob, true, 0, 128, (value) -> {
-                    spawner.setSpawnRange(value);
+                if(event.isRightClick()) {
+                    spawner.setSpawnRange(4);
                     customMob.setSpawner(spawner);
                     new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());
-                }).openInventory(clicker, spawner.getSpawnRange());
+                } else {
+                    new IntegerGUI("Spawn range", customMob, true, 0, 128, (value) -> {
+                        spawner.setSpawnRange(value);
+                        customMob.setSpawner(spawner);
+                        new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());
+                    }).openInventory(clicker, spawner.getSpawnRange());
+                }
                 break;
             case 13:
-                new IntegerGUI("Spawn delay", customMob, false, 0, 72000, (value) -> {
-                    spawner.setSpawnDelay(value);
+                if(event.isRightClick()) {
+                    spawner.setSpawnDelay(0);
                     customMob.setSpawner(spawner);
                     new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());
-                }).openInventory(clicker, spawner.getSpawnDelay());
+                } else {
+                    new IntegerGUI("Spawn delay", customMob, false, 0, 72000, (value) -> {
+                        spawner.setSpawnDelay(value);
+                        customMob.setSpawner(spawner);
+                        new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());
+                    }).openInventory(clicker, spawner.getSpawnDelay());
+                }
                 break;
             case 14:
-                new DoubleIntegerGUI("Spawn delay range", customMob, false, 1, 72000, (value) -> {
-                    spawner.setMinSpawnDelay(value[0]);
-                    spawner.setMaxSpawnDelay(value[1]);
+                if(event.isRightClick()) {
+                    spawner.setMinSpawnDelay(200);
+                    spawner.setMaxSpawnDelay(799);
                     customMob.setSpawner(spawner);
                     new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());
-                }).openInventory(clicker, spawner.getMinSpawnDelay(), spawner.getMaxSpawnDelay());
+                } else {
+                    new TimeIntegerRangeGUI("Spawn delay range", false, 1, 72000, (value) -> {
+                        spawner.setMinSpawnDelay(value[0]);
+                        spawner.setMaxSpawnDelay(value[1]);
+                        customMob.setSpawner(spawner);
+                        new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());
+                    }).openInventory(clicker, spawner.getMinSpawnDelay(), spawner.getMaxSpawnDelay());
+                }
                 break;
             case 15:
-                new IntegerGUI("Required player range", customMob, false, 0, 128, (value) -> {
-                    spawner.setRequiredPlayerRange(value);
+                if(event.isRightClick()) {
+                    spawner.setRequiredPlayerRange(16);
                     customMob.setSpawner(spawner);
                     new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());
-                }).openInventory(clicker, spawner.getRequiredPlayerRange());
+                } else {
+                    new IntegerGUI("Required player range", customMob, false, 0, 128, (value) -> {
+                        spawner.setRequiredPlayerRange(value);
+                        customMob.setSpawner(spawner);
+                        new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());
+                    }).openInventory(clicker, spawner.getRequiredPlayerRange());
+                }
                 break;
             case 16:
                 spawner.setDisableRequirements(!spawner.areRequirementsDisabled());
@@ -145,43 +181,46 @@ public class SpawnerGUI extends CustomMobsGUI {
 
     private ItemStack getSpawnCountItem() {
         CustomMobsItem item = new CustomMobsItem(Material.HEAVY_CORE);
-        item.setName("&6&lSpawn count");
-        item.addLore("&eSpawn count:&f " + spawner.getSpawnCount(), " ", "&7&o(( Click to edit this option ))");
+        item.setName("&6&lMaximum spawn count");
+        item.addLore("&eSpawn count:&f 1-" + spawner.getSpawnCount(), " ", "&7&o(( Click to edit this option ))", "&7&o(( Right-Click to reset this option ))");
         return getMenuItem(item, true);
     }
 
     private ItemStack getMaxNearbyCountItem() {
         CustomMobsItem item = new CustomMobsItem(Material.COCOA_BEANS);
         item.setName("&6&lNearby count");
-        item.addLore("&eMax:&f " + spawner.getMaxNearbyCount(), " ", "&7&o(( Click to edit this option ))");
+        item.addLore("&eMaximum amount:&f " + spawner.getMaxNearbyCount(), " ", "&7&o(( Click to edit this option ))", "&7&o(( Right-Click to reset this option ))");
         return getMenuItem(item, true);
     }
 
     private ItemStack getSpawnRangeItem() {
         CustomMobsItem item = new CustomMobsItem(Material.FIRE_CHARGE);
         item.setName("&6&lSpawn range");
-        item.addLore("&eSpawn range:&f " + spawner.getSpawnRange(), " ", "&7&o(( Click to edit this option ))");
+        item.addLore("&eRange:&f " + spawner.getSpawnRange() + " block(s)", " ", "&7&o(( Click to edit this option ))", "&7&o(( Right-Click to reset this option ))");
         return getMenuItem(item, true);
     }
 
     private ItemStack getSpawnDelayItem() {
         CustomMobsItem item = new CustomMobsItem(Material.CHAIN);
-        item.setName("&6&lSpawn delay");
-        item.addLore("&eSpawn delay:&f " + spawner.getSpawnDelay(), " ", "&7&o(( Click to edit this option ))");
+        item.setName("&6&lInitial spawn delay");
+        String delay = spawner.getSpawnDelay() > 20 ? "(" + Utils.getFormattedTime(spawner.getSpawnDelay() / 20, true, false) + ")" : "";
+        item.addLore("&eFirst spawn delay:&f " + spawner.getSpawnDelay() + " tick(s) " + delay, " ", "&7&o(( Click to edit this option ))", "&7&o(( Right-Click to reset this option ))");
         return getMenuItem(item, true);
     }
 
     private ItemStack getSpawnDelayRangeItem() {
         CustomMobsItem item = new CustomMobsItem(Material.CLOCK);
-        item.setName("&6&lRange of spawn delay");
-        item.addLore("&eBetween:&f " + spawner.getMinSpawnDelay()+ " and " + spawner.getMaxSpawnDelay(), " ", "&7&o(( Click to edit this option ))");
+        item.setName("&6&lSpawn delay");
+        String minDelay = spawner.getMinSpawnDelay() > 20 ? "(" + Utils.getFormattedTime(spawner.getMinSpawnDelay() / 20, true, false) + ")" : "";
+        String maxDelay = spawner.getMaxSpawnDelay() > 20 ? "(" + Utils.getFormattedTime(spawner.getMaxSpawnDelay() / 20, true, false) + ")" : "";
+        item.addLore("&eRange:&f Between " + spawner.getMinSpawnDelay() + " tick(s) " + minDelay + "and " + spawner.getMaxSpawnDelay() + " tick(s) " + maxDelay, "", "&7&o(( Click to edit this option ))", "&7&o(( Right-Click to reset this option ))");
         return getMenuItem(item, true);
     }
 
     private ItemStack getRequiredPlayerRangeItem() {
         CustomMobsItem item = new CustomMobsItem(Material.SPYGLASS);
         item.setName("&6&lRequired player range");
-        item.addLore("&eRange:&f " + spawner.getRequiredPlayerRange(), " ", "&7&o(( Click to edit this option ))");
+        item.addLore("&eRange:&f " + spawner.getRequiredPlayerRange() + " block(s)", " ", "&7&o(( Click to edit this option ))", "&7&o(( Right-Click to reset this option ))");
         return getMenuItem(item, true);
     }
 
@@ -189,7 +228,7 @@ public class SpawnerGUI extends CustomMobsGUI {
         CustomMobsItem item = new CustomMobsItem(Material.LIGHT);
         item.setName("&6&lSpawner requirements");
         String spawnerRequirements = !spawner.areRequirementsDisabled() ? "&a&lOn" : "&c&lOff";
-        item.addLore("&eRequirements:&f " + spawnerRequirements, " ", "&7&o(( Click to edit this option ))");
+        item.addLore("&eRequirements:&f " + spawnerRequirements, " ", "&7&o(( Enabling the requirements will default to the spawner's", "&7&odefault behaviors (e.g.: require darkness, grass, etc.) ))", "", "&7&o(( Click to edit this option ))");
         return getMenuItem(item, true);
     }
 

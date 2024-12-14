@@ -1,9 +1,7 @@
 package ca.pandaaa.custommobs.guis.BasicTypes;
 
 import ca.pandaaa.custommobs.CustomMobs;
-import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
-import ca.pandaaa.custommobs.guis.EditCustomMobs.OptionsGUI;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -20,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class DoubleIntegerGUI extends CustomMobsGUI implements Listener {
+public class TimeIntegerRangeGUI extends CustomMobsGUI implements Listener {
 
     private final Consumer<int[]> consumer;
     private final ItemStack minusBig;
@@ -28,14 +26,12 @@ public class DoubleIntegerGUI extends CustomMobsGUI implements Listener {
     private final ItemStack confirm;
     private final ItemStack plusBig;
     private final ItemStack plusSmall;
-    private final CustomMob customMob;
     private final boolean small;
-    private final double maximum;
-    private final double minimum;
-    public DoubleIntegerGUI(String option, CustomMob customMob, boolean small, int minValue, int maxValue, Consumer<int[]> consumer) {
+    private final int maximum;
+    private final int minimum;
+    public TimeIntegerRangeGUI(String option, boolean small, int minValue, int maxValue, Consumer<int[]> consumer) {
         super(18, "&8Parameter &8&l» &8" + option);
         this.consumer = consumer;
-        this.customMob = customMob;
         this.small = small;
         this.maximum = maxValue;
         this.minimum = minValue;
@@ -48,23 +44,23 @@ public class DoubleIntegerGUI extends CustomMobsGUI implements Listener {
 
     public void openInventory(Player player, Integer valueMin, Integer valueMax) {
         inventory.setItem(0, filler);
-        inventory.setItem(1, small ? filler : getMinusItem(minusBig, true,1));
-        inventory.setItem(2, getMinusItem(minusSmall, false,1));
+        inventory.setItem(1, small ? filler : getMinusItem(minusBig, true,"Minimum"));
+        inventory.setItem(2, getMinusItem(minusSmall, false, "Minimum"));
         inventory.setItem(3, filler);
-        inventory.setItem(4, getConfirmItem(confirm, valueMin,1));
+        inventory.setItem(4, getConfirmItem(confirm, valueMin,"Minimum"));
         inventory.setItem(5, filler);
-        inventory.setItem(6, getPlusItem(plusSmall, false,1));
-        inventory.setItem(7, small ? filler : getPlusItem(plusBig, true,1));
+        inventory.setItem(6, getPlusItem(plusSmall, false,"Minimum"));
+        inventory.setItem(7, small ? filler : getPlusItem(plusBig, true,"Minimum"));
         inventory.setItem(8, filler);
 
         inventory.setItem(9, filler);
-        inventory.setItem(10, small ? filler : getMinusItem(minusBig, true,2));
-        inventory.setItem(11, getMinusItem(minusSmall, false,2));
+        inventory.setItem(10, small ? filler : getMinusItem(minusBig, true,"Maximum"));
+        inventory.setItem(11, getMinusItem(minusSmall, false,"Maximum"));
         inventory.setItem(12, filler);
-        inventory.setItem(13, getConfirmItem(confirm, valueMax,2));
+        inventory.setItem(13, getConfirmItem(confirm, valueMax,"Maximum"));
         inventory.setItem(14, filler);
-        inventory.setItem(15, getPlusItem(plusSmall, false,2));
-        inventory.setItem(16, small ? filler : getPlusItem(plusBig, true,2));
+        inventory.setItem(15, getPlusItem(plusSmall, false,"Maximum"));
+        inventory.setItem(16, small ? filler : getPlusItem(plusBig, true,"Maximum"));
         inventory.setItem(17, filler);
 
         player.openInventory(inventory);
@@ -80,65 +76,64 @@ public class DoubleIntegerGUI extends CustomMobsGUI implements Listener {
         }
 
         event.setCancelled(true);
-        NamespacedKey keyMin = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Integer1");
-        NamespacedKey keyMax = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Integer2");
+        NamespacedKey keyMin = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Minimum");
+        NamespacedKey keyMax = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Maximum");
         int currentMin = event.getInventory().getItem(4).getItemMeta().getPersistentDataContainer().get(keyMin, PersistentDataType.INTEGER);
         int currentMax = event.getInventory().getItem(13).getItemMeta().getPersistentDataContainer().get(keyMax, PersistentDataType.INTEGER);
-
 
         boolean shifting = !small && event.isShiftClick();
 
         switch (event.getSlot()) {
             case 1:
                 if (((!shifting && currentMin >= minimum + 10) || (shifting && currentMin >= minimum + 50)) && !small)
-                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? currentMin - 50 : currentMin - 10,+ 1));
+                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? currentMin - 50 : currentMin - 10,"Minimum"));
                 break;
             case 2:
                 if ((!shifting && currentMin >= minimum + 1) || (shifting && currentMin >= minimum + 5))
-                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? currentMin - 5 : currentMin - 1,+ 1));
+                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? currentMin - 5 : currentMin - 1,"Minimum"));
                 break;
             case 4:
                 consumer.accept(new int[]{currentMin, currentMax});
                 break;
             case 6:
                 if ((!shifting && currentMin < currentMax - 1) || (shifting && currentMin < currentMax - 5))
-                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? currentMin + 5 : currentMin + 1,+ 1));
+                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? currentMin + 5 : currentMin + 1,"Minimum"));
                 break;
             case 7:
                 if (((!shifting && currentMin < currentMax - 10) || (shifting && currentMin < currentMax - 50)) && !small)
-                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? currentMin + 50 : currentMin + 10,+ 1));
+                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? currentMin + 50 : currentMin + 10,"Minimum"));
                 break;
             case 10:
                 if (((!shifting && currentMax > currentMin + 10) || (shifting && currentMax > currentMin + 50)) && !small)
-                    inventory.setItem(13, getConfirmItem(inventory.getItem(13), shifting ? currentMax - 50 : currentMax - 10,+ 2));
+                    inventory.setItem(13, getConfirmItem(inventory.getItem(13), shifting ? currentMax - 50 : currentMax - 10,"Maximum"));
                 break;
             case 11:
                 if ((!shifting && currentMax > currentMin + 1) || (shifting && currentMax > currentMin + 5))
-                    inventory.setItem(13, getConfirmItem(inventory.getItem(13), shifting ? currentMax - 5 : currentMax - 1,+ 2));
+                    inventory.setItem(13, getConfirmItem(inventory.getItem(13), shifting ? currentMax - 5 : currentMax - 1,"Maximum"));
                 break;
             case 13:
                 consumer.accept(new int[]{currentMin, currentMax});
                 break;
             case 15:
                 if ((!shifting && currentMax <= maximum - 1) || (shifting && currentMax <= maximum - 5))
-                    inventory.setItem(13, getConfirmItem(inventory.getItem(13), shifting ? currentMax + 5 : currentMax + 1,+ 2));
+                    inventory.setItem(13, getConfirmItem(inventory.getItem(13), shifting ? currentMax + 5 : currentMax + 1,"Maximum"));
                 break;
             case 16:
                 if (((!shifting && currentMax <= maximum - 10) || (shifting && currentMax <= maximum - 50)) && !small)
-                    inventory.setItem(13, getConfirmItem(inventory.getItem(13), shifting ? currentMax + 50 : currentMax + 10,+ 2));
+                    inventory.setItem(13, getConfirmItem(inventory.getItem(13), shifting ? currentMax + 50 : currentMax + 10,"Maximum"));
                 break;
             default:
                 break;
         }
     }
 
-    private ItemStack getConfirmItem(ItemStack item, Integer value, Integer index) {
+    private ItemStack getConfirmItem(ItemStack item, Integer value, String type) {
         ItemMeta meta = item.getItemMeta();
-        NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Integer"+index);
+        NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs." + type);
         meta.getPersistentDataContainer().set(key, PersistentDataType.INTEGER, value);
         meta.setDisplayName(Utils.applyFormat("&a&l[+] Confirm"));
         List<String> itemLore = new ArrayList<>();
-        itemLore.add(Utils.applyFormat("&eCurrent value: &f" + value));
+        itemLore.add(Utils.applyFormat("&eCurrent value: &f" + value + " tick(s)" + (value > 20 ? " (" + Utils.getFormattedTime(value / 20, false, false) + ")" : "")));
         itemLore.add("");
         itemLore.add(Utils.applyFormat("&7&o(( Click to confirm! ))"));
         meta.setLore(itemLore);
@@ -146,10 +141,10 @@ public class DoubleIntegerGUI extends CustomMobsGUI implements Listener {
         return item;
     }
 
-    private ItemStack getMinusItem(ItemStack item, boolean big, int index) {
+    private ItemStack getMinusItem(ItemStack item, boolean big, String type) {
         ItemMeta meta = item.getItemMeta();
-        NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Integer");
-        meta.getPersistentDataContainer().set(key, PersistentDataType.INTEGER, index);
+        NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.RangeType");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, type);
         List<String> itemLore = new ArrayList<>();
         itemLore.add("");
         if (big) {
@@ -169,10 +164,10 @@ public class DoubleIntegerGUI extends CustomMobsGUI implements Listener {
         return item;
     }
 
-    private ItemStack getPlusItem(ItemStack item, boolean big, int index) {
+    private ItemStack getPlusItem(ItemStack item, boolean big, String type) {
         ItemMeta meta = item.getItemMeta();
-        NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Integer");
-        meta.getPersistentDataContainer().set(key, PersistentDataType.INTEGER, index);
+        NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.RangeType");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, type);
         List<String> itemLore = new ArrayList<>();
         itemLore.add("");
         if (big) {

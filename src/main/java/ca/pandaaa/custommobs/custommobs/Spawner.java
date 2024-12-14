@@ -1,6 +1,5 @@
 package ca.pandaaa.custommobs.custommobs;
 
-import org.bukkit.Registry;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import java.util.HashMap;
