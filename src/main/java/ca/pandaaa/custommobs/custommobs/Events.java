@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.SpawnerSpawnEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -125,7 +126,7 @@ public class Events implements Listener {
         if (itemType.equalsIgnoreCase("Item")) {
             event.setCancelled(true);
             customMob.spawnCustomMob(event.getClickedBlock().getLocation().add(0.5, 2, 0.5));
-        } else if (itemType.equalsIgnoreCase("Spawner")) {
+        } else if (itemType.equalsIgnoreCase("Spawner-Item")) {
             event.setCancelled(true);
             customMob.placeCustomMobSpawner(event.getClickedBlock().getRelative(event.getBlockFace()).getLocation());
         }
@@ -278,5 +279,42 @@ public class Events implements Listener {
             }
         }
         // TODO Message
+    }
+
+    @EventHandler
+    public void onSpawnerSpawn(SpawnerSpawnEvent event) {
+        if(event.getEntity().getType() != EntityType.AREA_EFFECT_CLOUD)
+            return;
+
+        PersistentDataContainer container = event.getSpawner().getPersistentDataContainer();
+        Location location = event.getEntity().getLocation();
+
+        NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Spawner");
+        if (container.has(key, PersistentDataType.STRING)) {
+            String mobName = container.get(key, PersistentDataType.STRING);
+            CustomMob customMob = CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(mobName);
+            int range = customMob.getSpawner().getSpawnRange();
+
+            // With this, we find the mobs of the same type. If that is ever a problem, we could filter on the persistent key of the CustomMob.
+            int nearbyCustomMobs = (int) event.getSpawner().getLocation().getWorld().getNearbyEntities(event.getSpawner().getLocation(), range, range, range).stream()
+                    .filter(entity -> entity.getType() == customMob.getType())
+                    .count();
+
+            event.getEntity().remove();
+            if (nearbyCustomMobs < customMob.getSpawner().getMaxNearbyCount()) {
+                int availableSpawnCount = customMob.getSpawner().getMaxNearbyCount() - nearbyCustomMobs;
+                int random = new Random().nextInt(Math.min(customMob.getSpawner().getSpawnCount(), availableSpawnCount));
+
+                for (int i = 0; i < random; i++) {
+                    double offsetX = (new Random().nextDouble() * 2 - 1) * range;
+                    double offsetY = (new Random().nextDouble() * 2 - 1) * range;
+                    double offsetZ = (new Random().nextDouble() * 2 - 1) * range;
+
+                    Location spawnLocation = location.clone().add(offsetX, offsetY, offsetZ);
+
+                    CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(mobName).spawnCustomMob(spawnLocation);
+                }
+            }
+        }
     }
 }

@@ -4,9 +4,12 @@ import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.options.CustomMobOption;
 import ca.pandaaa.custommobs.utils.Utils;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import org.bukkit.*;
+import org.bukkit.attribute.Attributable;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -17,17 +20,21 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 
 public class CustomMob implements Listener {
-    private LocalDateTime creationDate;
+    private final LocalDateTime creationDate;
     private EntityType entityType;
     private final String customMobFileName;
     private HashMap<String, CustomMobOption> customMobOptions = new HashMap<>();
     private ItemStack item;
-    private ItemStack spawner;
+    private ItemStack spawnerItem;
     private final Equipment equipment;
     private final List<Drop> drops;
+    private Spawner spawner;
     private String name;
     private final List<Sound> sounds;
     private final CustomMobConfiguration mobConfiguration;
@@ -37,8 +44,9 @@ public class CustomMob implements Listener {
                      EntityType entityType,
                      String customMobFileName,
                      ItemStack item,
-                     ItemStack spawner,
+                     ItemStack spawnerItem,
                      Equipment equipment,
+                     Spawner spawner,
                      List<PotionMeta> potionMeta,
                      List<Drop> drops,
                      String name,
@@ -48,9 +56,10 @@ public class CustomMob implements Listener {
         this.entityType = entityType;
         this.customMobFileName = customMobFileName;
         this.item = item;
-        this.spawner = spawner;
+        this.spawnerItem = spawnerItem;
         this.equipment = equipment;
         this.potionMeta = potionMeta;
+        this.spawner = spawner;
         this.drops = drops;
         this.name = name;
         this.sounds = sounds;
@@ -81,21 +90,34 @@ public class CustomMob implements Listener {
         // Drops
         NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Name");
         customMob.getPersistentDataContainer().set(key, PersistentDataType.STRING, customMobFileName.replaceAll(".yml", ""));
-        
-        // Potions
-        for(PotionMeta potionMeta : potionMeta) {
-            potionMeta.getCustomEffects().get(0).apply((LivingEntity) customMob);
-        }
 
         // Options
         for(CustomMobOption customMobType : customMobOptions.values()) {
             customMobType.applyOptions(customMob);
         }
+
+        // Potions
+        for(PotionMeta potionMeta : potionMeta) {
+            potionMeta.getCustomEffects().get(0).apply((LivingEntity) customMob);
+        }
     }
 
     public void placeCustomMobSpawner(Location location) {
-        // TODO All of the spawners characteristics
-        location.getBlock().setType(Material.DIAMOND_BLOCK);
+        location.getBlock().setType(Material.SPAWNER);
+        CreatureSpawner spawnerBlock = (CreatureSpawner) location.getBlock().getState();
+
+        if(this.spawner.areRequirementsDisabled())
+            // Set this to be an invisible "entity" that spawns regardless of conditions.
+            spawnerBlock.setSpawnedType(EntityType.AREA_EFFECT_CLOUD);
+        else
+            spawnerBlock.setSpawnedType(entityType);
+
+        NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Spawner");
+        spawnerBlock.getPersistentDataContainer().set(key, PersistentDataType.STRING, customMobFileName.replaceAll(".yml", ""));
+
+        this.spawner.setCharacteristics(spawnerBlock);
+
+        spawnerBlock.update();
     }
 
     public void addCustomMobType(CustomMobOption customMobType) {
@@ -115,13 +137,13 @@ public class CustomMob implements Listener {
         this.item = mobConfiguration.getItem(CustomMobConfiguration.ITEM);
     }
 
-    public ItemStack getSpawner() {
-        return spawner.clone();
+    public ItemStack getSpawnerItem() {
+        return spawnerItem.clone();
     }
 
-    public void setSpawner(ItemStack spawner) {
+    public void setSpawnerItem(ItemStack spawner) {
         mobConfiguration.setItemStack(CustomMobConfiguration.SPAWNER, spawner);
-        this.spawner = mobConfiguration.getItem(CustomMobConfiguration.SPAWNER);
+        this.spawnerItem = mobConfiguration.getItem(CustomMobConfiguration.SPAWNER);
     }
 
     public Equipment getEquipment() {
@@ -159,6 +181,7 @@ public class CustomMob implements Listener {
         this.sounds.set(index, sound);
         mobConfiguration.setSounds(this.sounds);
     }
+
     /* === NAME (OVER HEAD) === */
 
     /**
@@ -176,10 +199,22 @@ public class CustomMob implements Listener {
     public void setName(String name) {
         mobConfiguration.setName(name);
         this.item = getCustomMobConfiguration().getItem(CustomMobConfiguration.ITEM);
-        this.spawner = getCustomMobConfiguration().getItem(CustomMobConfiguration.SPAWNER);
+        this.spawnerItem = getCustomMobConfiguration().getItem(CustomMobConfiguration.SPAWNER);
         this.name = name;
     }
 
+    /* === SPAWNER === */
+
+    public void setSpawner(Spawner spawner) {
+        this.spawner = spawner;
+        mobConfiguration.setSpawner(spawner);
+    }
+
+    public Spawner getSpawner() {
+        return spawner;
+    }
+
+    /* === POTION === */
 
     public void editPotion(PotionMeta potionMeta, int index) {
         this.potionMeta.set(index, potionMeta);
@@ -190,6 +225,7 @@ public class CustomMob implements Listener {
         potionMeta.remove(potionIndex);
         mobConfiguration.setPotionMeta(potionMeta);
     }
+
     /* === DROPS === */
 
     /**
@@ -261,6 +297,10 @@ public class CustomMob implements Listener {
         mobConfiguration.setDeleted(LocalDate.now().plusDays(14));
     }
 
+    /**
+     * The date provided by the creation date of the mob's yaml file.
+     * @return The creation date of the mob.
+     */
     public LocalDateTime getCreationDate() {
         return creationDate;
     }

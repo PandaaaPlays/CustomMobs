@@ -16,7 +16,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
 
-public class TypesGUI extends CustomMobsGUI implements Listener {
+public class TypesGUI extends CustomMobsGUI {
     private final List<ItemStack> typeItems;
     private final CustomMob customMob;
     private final ItemStack previous;
@@ -86,7 +86,12 @@ public class TypesGUI extends CustomMobsGUI implements Listener {
         }
 
         event.setCancelled(true);
-        ItemMeta itemMeta = event.getCurrentItem().getItemMeta();
+
+        ItemStack item = event.getView().getTopInventory().getItem(event.getSlot());
+        if (item == null)
+            return;
+
+        ItemMeta itemMeta = item.getItemMeta();
         final String name = itemMeta.getDisplayName();
         Player clicker = (Player) event.getWhoClicked();
 
@@ -100,12 +105,14 @@ public class TypesGUI extends CustomMobsGUI implements Listener {
                 }
                 break;
             case 53:
+                if(event.getView().getItem(event.getSlot()).getType() == Material.GRAY_STAINED_GLASS_PANE)
+                    break;
                 int page = Character.getNumericValue(name.charAt(name.indexOf('(') + 1));
                 openInventory(clicker, page);
                 break;
             // Every mob types
             default:
-                if (event.getCurrentItem() != filler) {
+                if (event.getSlot() < 45) {
                     customMob.setType(EntityType.valueOf(ChatColor.stripColor(itemMeta.getDisplayName().replace(" ", "_"))));
                     new EditGUI(customMob, CustomMobs.getPlugin().getCustomMobsManager(), clicker).openInventory();
                 }

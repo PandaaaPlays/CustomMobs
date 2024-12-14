@@ -1,6 +1,7 @@
 package ca.pandaaa.custommobs.configurations;
 
 import ca.pandaaa.custommobs.CustomMobs;
+import ca.pandaaa.custommobs.custommobs.*;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.custommobs.Drop;
 import ca.pandaaa.custommobs.custommobs.Equipment;
@@ -77,8 +78,9 @@ public class CustomMobConfiguration {
                 type,
                 fileName,
                 getItem(ITEM),
-                getItem(SPAWNER),
+                getItem(SPAWNER_ITEM),
                 getEquipment(),
+                getSpawner(),
                 getPotionMeta(),
                 getDrops(),
                 getName(),
@@ -151,9 +153,6 @@ public class CustomMobConfiguration {
         if(Parrot.class.isAssignableFrom(type.getEntityClass()))
             customMob.addCustomMobType(new ca.pandaaa.custommobs.custommobs.options.
                     Parrot(getParrotVariant()));
-        if(Phantom.class.isAssignableFrom(type.getEntityClass()))
-            customMob.addCustomMobType(new ca.pandaaa.custommobs.custommobs.options.
-                    Phantom(getPhantomSize()));
         if(PigZombie.class.isAssignableFrom(type.getEntityClass()))
             customMob.addCustomMobType(new ca.pandaaa.custommobs.custommobs.options.
                     PigZombie(getZombifiedPiglinAnger()));
@@ -259,7 +258,7 @@ public class CustomMobConfiguration {
     }
 
     public static final String ITEM = "item";
-    public static final String SPAWNER = "spawner";
+    public static final String SPAWNER_ITEM = "spawner-item";
 
     public ItemStack getItem(String configurationPath) {
         ItemStack item = getItemStack(configurationPath);
@@ -313,6 +312,18 @@ public class CustomMobConfiguration {
 
     public void setDrops(List<Drop> drops) {
         mobConfiguration.set(DROPS, drops);
+        saveConfigurationFile();
+    }
+
+    public static final String SPAWNER = "spawner";
+    public Spawner getSpawner() {
+        if(!mobConfiguration.contains(SPAWNER, true))
+            return new Spawner(4, 6, 4, 0, 200, 799, 16, true);
+        return (Spawner) mobConfiguration.get(SPAWNER);
+    }
+
+    public void setSpawner(Spawner spawner) {
+        mobConfiguration.set(SPAWNER, spawner);
         saveConfigurationFile();
     }
 
@@ -917,7 +928,7 @@ public class CustomMobConfiguration {
     private static final String SPEED = "special.speed";
     private double getSpeed() {
         if(!mobConfiguration.contains(SPEED, true))
-            return 0.7D;
+            return 0.3D;
 
         return mobConfiguration.getDouble(SPEED);
     }
@@ -1031,7 +1042,7 @@ public class CustomMobConfiguration {
     }
 
     public void setSize(double size) {
-        mobConfiguration.set(FOLLOW_RANGE, size);
+        mobConfiguration.set(SIZE, size);
         saveConfigurationFile();
     }
 

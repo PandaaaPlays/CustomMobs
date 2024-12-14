@@ -111,7 +111,7 @@ public class SpecificPotionDurationGUI extends CustomMobsGUI {
         meta.getPersistentDataContainer().set(key, PersistentDataType.INTEGER, value);
         meta.setDisplayName(Utils.applyFormat("&a&l[+] Confirm"));
         List<String> itemLore = new ArrayList<>();
-        itemLore.add(Utils.applyFormat("&eCurrent value: &f" + Utils.getFormattedTime(value)));
+        itemLore.add(Utils.applyFormat("&eCurrent value: &f" + Utils.getFormattedTime(value, false, true)));
         itemLore.add("");
         itemLore.add(Utils.applyFormat("&7&o(( Anything under 1 will be set to 'Infinite' ))"));
         itemLore.add(Utils.applyFormat("&7&o(( Click to confirm! ))"));
@@ -124,9 +124,9 @@ public class SpecificPotionDurationGUI extends CustomMobsGUI {
         ItemMeta meta = item.getItemMeta();
         List<String> itemLore = new ArrayList<>();
         itemLore.add("");
-        meta.setDisplayName(Utils.applyFormat("&c&l[-] Remove " + Utils.getFormattedTime(size)));
-        itemLore.add(Utils.applyFormat("&7&o(( Click to remove " + Utils.getFormattedTime(size) + " ))"));
-        itemLore.add(Utils.applyFormat("&7&o(( Shift-Click to remove " + Utils.getFormattedTime(size * 10) + " ))"));
+        meta.setDisplayName(Utils.applyFormat("&c&l[-] Remove " + Utils.getFormattedTime(size, false, true)));
+        itemLore.add(Utils.applyFormat("&7&o(( Click to remove " + Utils.getFormattedTime(size, false, true) + " ))"));
+        itemLore.add(Utils.applyFormat("&7&o(( Shift-Click to remove " + Utils.getFormattedTime(size * 10, false, true) + " ))"));
         meta.setLore(itemLore);
         item.setItemMeta(meta);
         return item;
@@ -137,9 +137,9 @@ public class SpecificPotionDurationGUI extends CustomMobsGUI {
         List<String> itemLore = new ArrayList<>();
         itemLore.add("");
 
-        meta.setDisplayName(Utils.applyFormat("&a&l[+] Add " + Utils.getFormattedTime(size)));
-        itemLore.add(Utils.applyFormat("&7&o(( Click to add " + Utils.getFormattedTime(size) + " ))"));
-        itemLore.add(Utils.applyFormat("&7&o(( Shift-Click to add " + Utils.getFormattedTime(size * 10) + " ))"));
+        meta.setDisplayName(Utils.applyFormat("&a&l[+] Add " + Utils.getFormattedTime(size, false, true)));
+        itemLore.add(Utils.applyFormat("&7&o(( Click to add " + Utils.getFormattedTime(size, false, true) + " ))"));
+        itemLore.add(Utils.applyFormat("&7&o(( Shift-Click to add " + Utils.getFormattedTime(size * 10, false, true) + " ))"));
         meta.setLore(itemLore);
         item.setItemMeta(meta);
         return item;

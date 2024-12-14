@@ -6,15 +6,13 @@ import ca.pandaaa.custommobs.custommobs.Equipment;
 import ca.pandaaa.custommobs.custommobs.Manager;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.Drops.DropsGUI;
-import ca.pandaaa.custommobs.guis.EditCustomMobs.Potions.PotionsGUI;
-import ca.pandaaa.custommobs.guis.EditCustomMobs.Sounds.SoundsGUI;
 import ca.pandaaa.custommobs.guis.MainGUI;
+import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -23,7 +21,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 
-public class EditGUI extends CustomMobsGUI implements Listener {
+public class EditGUI extends CustomMobsGUI {
 
     private final ItemStack mainHand;
     private final ItemStack offHand;
@@ -71,7 +69,7 @@ public class EditGUI extends CustomMobsGUI implements Listener {
         this.potions = getMenuItem(new ItemStack(Material.OMINOUS_BOTTLE), true);
         this.previous = getMenuItem(Utils.createHead("a2f0425d64fdc8992928d608109810c1251fe243d60d175bed427c651cbe"), true);
         this.item = getMenuItem(customMob.getItem(), true);
-        this.spawner = getMenuItem(customMob.getSpawner(), true);
+        this.spawner = getMenuItem(customMob.getSpawnerItem(), true);
         this.delete = getMenuItem(new ItemStack(Material.BARRIER), true);
 
         this.customMobsManager = customMobsManager;
@@ -112,14 +110,14 @@ public class EditGUI extends CustomMobsGUI implements Listener {
         // Drops item
         inventory.setItem(31, getDropsItem(drops));
 
-        // Potions item
-        inventory.setItem(32, getPotionsItem(potions));
+        // Spawner item
+        inventory.setItem(32, getSpawnerItem());
 
-        // Sounds item
-        inventory.setItem(33, getSoundsItem(sound));
+        // Custom effects item
+        inventory.setItem(33, getCustomEffectsItem());
 
-        // Messages item
-        inventory.setItem(34, getMessageItem(message));
+        // Other item
+        inventory.setItem(34, getOtherItem());
 
         // Previous page (back to main menu)
         inventory.setItem(45, getPreviousItem(previous));
@@ -148,7 +146,6 @@ public class EditGUI extends CustomMobsGUI implements Listener {
             event.setCancelled(event.isShiftClick());
             return;
         }
-
         event.setCancelled(true);
 
         Player clicker = (Player) event.getWhoClicked();
@@ -229,13 +226,13 @@ public class EditGUI extends CustomMobsGUI implements Listener {
                 new DropsGUI(customMob).openInventory(clicker, 1);
                 break;
             case 32:
-                new PotionsGUI(customMob).openInventory(clicker, 1);
+                new SpawnerGUI(customMob, customMobsManager).openInventory(clicker);
                 break;
             case 33:
-                new SoundsGUI(customMob).openInventory(clicker,1);
+                // TODO Special effects
                 break;
             case 34:
-                new MessagesGUI(customMob).openInventory(clicker);
+                new OthersGUI(customMob).openInventory(clicker);
                 break;
             case 45:
                 new MainGUI().openInventory(clicker, 1);
@@ -256,13 +253,13 @@ public class EditGUI extends CustomMobsGUI implements Listener {
                 break;
             case 50:
                 if (event.isRightClick()) {
-                    customMob.setSpawner(null);
-                    event.getInventory().setItem(50, getMenuItem(getGiveItem(customMob.getSpawner()), false));
+                    customMob.setSpawnerItem(null);
+                    event.getInventory().setItem(50, getMenuItem(getGiveItem(customMob.getSpawnerItem()), false));
                 } else if (cursorItem.getType() != Material.AIR) {
                     ItemStack spawner = cursorItem.clone();
                     spawner.setAmount(1);
-                    customMob.setSpawner(spawner);
-                    event.getInventory().setItem(50, getMenuItem(getGiveItem(customMob.getSpawner()), false));
+                    customMob.setSpawnerItem(spawner);
+                    event.getInventory().setItem(50, getMenuItem(getGiveItem(customMob.getSpawnerItem()), false));
                     clicker.setItemOnCursor(null);
                 } else {
                     clicker.setItemOnCursor(customMobsManager.getCustomMobItem(customMob, "spawner", event.isShiftClick() ? 64 : 1));
@@ -402,17 +399,6 @@ public class EditGUI extends CustomMobsGUI implements Listener {
         return item;
     }
 
-    private ItemStack getMessageItem(ItemStack item) {
-        ItemMeta itemMeta = item.getItemMeta();
-        ArrayList<String> lore = new ArrayList<>();
-        itemMeta.setDisplayName(Utils.applyFormat("&6&lMessages"));
-        lore.add("");
-        lore.add(Utils.applyFormat("&7&o(( Click to edit this CustomMob's message(s) ))"));
-        itemMeta.setLore(lore);
-        item.setItemMeta(itemMeta);
-        return item;
-    }
-
     private ItemStack getDropsItem(ItemStack item) {
         ItemMeta itemMeta = item.getItemMeta();
         ArrayList<String> lore = new ArrayList<>();
@@ -424,26 +410,25 @@ public class EditGUI extends CustomMobsGUI implements Listener {
         return item;
     }
 
-    private ItemStack getSoundsItem(ItemStack item) {
-        ItemMeta itemMeta = item.getItemMeta();
-        ArrayList<String> lore = new ArrayList<>();
-        lore.add("");
-        itemMeta.setDisplayName(Utils.applyFormat("&6&lSounds"));
-        lore.add(Utils.applyFormat("&7&o(( Click to edit this CustomMob's spawn sound(s) ))"));
-        itemMeta.setLore(lore);
-        item.setItemMeta(itemMeta);
-        return item;
+    private ItemStack getSpawnerItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.TRIAL_SPAWNER);
+        item.setName("&6&lSpawner");
+        item.addLore("", "&7&o(( Click to edit this CustomMob's spawner ))");
+        return getMenuItem(item, true);
     }
 
-    private ItemStack getPotionsItem(ItemStack item) {
-        ItemMeta itemMeta = item.getItemMeta();
-        ArrayList<String> lore = new ArrayList<>();
-        lore.add("");
-        itemMeta.setDisplayName(Utils.applyFormat("&6&lPotions"));
-        lore.add(Utils.applyFormat("&7&o(( Click to edit this CustomMob's potion effect(s) ))"));
-        itemMeta.setLore(lore);
-        item.setItemMeta(itemMeta);
-        return item;
+    private ItemStack getCustomEffectsItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.TORCHFLOWER);
+        item.setName("&6&lCustom effects");
+        item.addLore("", "&7&o(( Click to edit this CustomMob's custom effect(s) ))");
+        return getMenuItem(item, true);
+    }
+
+    private ItemStack getOtherItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.BELL);
+        item.setName("&6&lOthers");
+        item.addLore("", "&7&o(( Click to edit this CustomMob's other characteristics ))");
+        return getMenuItem(item, true);
     }
 }
 

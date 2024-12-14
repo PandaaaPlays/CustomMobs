@@ -17,7 +17,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
 
-public class OptionsGUI extends CustomMobsGUI implements Listener {
+public class OptionsGUI extends CustomMobsGUI {
 
     private final List<ItemStack> optionsItems;
     private final CustomMob customMob;

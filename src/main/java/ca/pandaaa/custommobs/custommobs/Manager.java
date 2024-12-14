@@ -1,5 +1,6 @@
 package ca.pandaaa.custommobs.custommobs;
 
+import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.configurations.ConfigurationManager;
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -8,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,8 +32,14 @@ public class Manager {
     }
 
     public CustomMob addCustomMob(String customMobName, EntityType mobType) {
-        File file = new File(customMobName + ".yml");
+        File file = new File(CustomMobs.getPlugin().getDataFolder() + "/Mobs/" + customMobName + ".yml");
+        try {
+            file.createNewFile();
+        } catch (IOException exception) {
+            // TODO
+        }
         CustomMobConfiguration mobConfiguration = new CustomMobConfiguration(YamlConfiguration.loadConfiguration(file), file);
+        mobConfiguration.setType(mobType);
         mobsConfigurations.add(mobConfiguration);
         CustomMob customMob = mobConfiguration.loadCustomMob();
         customMobs.put(customMobName, customMob);
@@ -53,7 +61,7 @@ public class Manager {
             item.setAmount(amount);
             return item;
         } else if(type.equalsIgnoreCase("spawner")) {
-            ItemStack spawner = customMob.getSpawner().clone();
+            ItemStack spawner = customMob.getSpawnerItem().clone();
             spawner.setAmount(amount);
             return spawner;
         }

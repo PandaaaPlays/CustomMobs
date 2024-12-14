@@ -33,7 +33,7 @@ public class CustomMobsGUI implements Listener {
 
         title = Utils.applyFormat(title);
 
-        int titleLength = 29;
+        int titleLength = 27;
         Matcher matcher = ChatColor.STRIP_COLOR_PATTERN.matcher(title);
         while(matcher.find())
             titleLength += 2;
