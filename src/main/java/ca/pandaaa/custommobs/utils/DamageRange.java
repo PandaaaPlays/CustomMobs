@@ -1,12 +1,17 @@
 package ca.pandaaa.custommobs.utils;
 
-public class DamageRange {
-    private final double minimumDamage;
-    private final double maximimDamage;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
-    public DamageRange(double minimumDamage, double maximimDamage) {
+import java.util.HashMap;
+import java.util.Map;
+
+public class DamageRange implements ConfigurationSerializable {
+    private final double minimumDamage;
+    private final double maximumDamage;
+
+    public DamageRange(double minimumDamage, double maximumDamage) {
         this.minimumDamage = minimumDamage;
-        this.maximimDamage = maximimDamage;
+        this.maximumDamage = maximumDamage;
     }
 
     public double getMinimumDamage() {
@@ -14,6 +19,22 @@ public class DamageRange {
     }
 
     public double getMaximimDamage() {
-        return maximimDamage;
+        return maximumDamage;
+    }
+
+    @Override
+    public Map<String, Object> serialize() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("minimum-damage", minimumDamage);
+        data.put("maximum-damage", maximumDamage);
+
+        return data;
+    }
+
+    public static DamageRange deserialize(Map<String, Object> data) {
+        double minimumDamage = (double) data.get("minimum-damage");
+        double maximumDamage = (double) data.get("maximum-damage");
+
+        return new DamageRange(minimumDamage, maximumDamage);
     }
 }
