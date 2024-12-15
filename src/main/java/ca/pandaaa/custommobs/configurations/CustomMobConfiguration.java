@@ -936,21 +936,16 @@ public class CustomMobConfiguration {
         saveConfigurationFile();
     }
 
-    private static final String MINIMUM_DAMAGE = "special.damage-range.minimum";
-    private static final String MAXIMUM_DAMAGE = "special.damage-range.maximum";
     private static final String DAMAGE = "special.damage";
     private DamageRange getDamageRange() {
-        if(mobConfiguration.contains(MINIMUM_DAMAGE, true)
-                && mobConfiguration.contains(MAXIMUM_DAMAGE, true))
-            return new DamageRange(
-                    mobConfiguration.getDouble(MINIMUM_DAMAGE),
-                    mobConfiguration.getDouble(MAXIMUM_DAMAGE));
-        else if (mobConfiguration.contains(DAMAGE, true))
-            return new DamageRange(
-                    mobConfiguration.getDouble(DAMAGE),
-                    mobConfiguration.getDouble(DAMAGE));
-        else
+        if(!mobConfiguration.contains(DAMAGE, true))
             return null;
+        return (DamageRange) mobConfiguration.get(DAMAGE);
+    }
+
+    public void setDamageRange(DamageRange damageRange) {
+        mobConfiguration.set(DAMAGE, damageRange);
+        saveConfigurationFile();
     }
 
 

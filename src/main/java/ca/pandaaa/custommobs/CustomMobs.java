@@ -5,7 +5,9 @@ import ca.pandaaa.custommobs.commands.TabCompletion;
 import ca.pandaaa.custommobs.configurations.ConfigurationManager;
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.*;
+import ca.pandaaa.custommobs.utils.DamageRange;
 import ca.pandaaa.custommobs.utils.Metrics;
+import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -59,6 +61,7 @@ Caused by: java.lang.ClassNotFoundException: ca.pandaaa.custommobs.utils.Metrics
         ConfigurationSerialization.registerClass(Drop.class, "ca.pandaaa.custommobs.custommobs.Drop");
         ConfigurationSerialization.registerClass(Sound.class, "ca.pandaaa.custommobs.custommobs.Sound");
         ConfigurationSerialization.registerClass(Spawner.class, "ca.pandaaa.custommobs.custommobs.Spawner");
+        ConfigurationSerialization.registerClass(DamageRange.class, "ca.pandaaa.custommobs.utils.DamageRange");
         ConfigurationSerialization.registerClass(PotionEffect.class, "ca.pandaaa.custommobs.custommobs.PotionEffect");
 
         // Initialize SoundEnum for faster timings on click
@@ -147,10 +150,11 @@ Caused by: java.lang.ClassNotFoundException: ca.pandaaa.custommobs.utils.Metrics
         metrics.addCustomChart(new Metrics.AdvancedPie("custommobs_entity_types", () -> {
             Map<String, Integer> entityTypeAmount = new HashMap<>();
             for (CustomMob customMob : customMobsManager.getCustomMobs()) {
-                if (!entityTypeAmount.containsKey(customMob.getType().getClass().getSimpleName()))
-                    entityTypeAmount.put(customMob.getType().getClass().getSimpleName(), 1);
+                String entityType = Utils.getSentenceCase(customMob.getType().getEntityClass().getSimpleName());
+                if (!entityTypeAmount.containsKey(entityType))
+                    entityTypeAmount.put(entityType, 1);
                 else
-                    entityTypeAmount.put(customMob.getType().getClass().getSimpleName(), entityTypeAmount.get(customMob.getType().getClass().getSimpleName()) + 1);
+                    entityTypeAmount.put(entityType, entityTypeAmount.get(entityType) + 1);
             }
             return entityTypeAmount;
         }));
