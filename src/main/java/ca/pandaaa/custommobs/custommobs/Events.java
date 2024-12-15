@@ -303,8 +303,7 @@ public class Events implements Listener {
             event.getEntity().remove();
             if (nearbyCustomMobs < customMob.getSpawner().getMaxNearbyCount()) {
                 int availableSpawnCount = customMob.getSpawner().getMaxNearbyCount() - nearbyCustomMobs;
-                int random = new Random().nextInt(Math.min(customMob.getSpawner().getSpawnCount(), availableSpawnCount));
-
+                int random = new Random().nextInt(Math.min(customMob.getSpawner().getSpawnCount(), availableSpawnCount)) + 1;
                 for (int i = 0; i < random; i++) {
                     double offsetX = (new Random().nextDouble() * 2 - 1) * range;
                     double offsetY = (new Random().nextDouble() * 2 - 1) * range;
