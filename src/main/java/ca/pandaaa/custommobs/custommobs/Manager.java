@@ -3,6 +3,7 @@ package ca.pandaaa.custommobs.custommobs;
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.configurations.ConfigurationManager;
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -36,7 +37,8 @@ public class Manager {
         try {
             file.createNewFile();
         } catch (IOException exception) {
-            // TODO
+            CustomMobs.getPlugin().getServer().getConsoleSender().sendMessage(
+                    ChatColor.translateAlternateColorCodes('&', "&c[!] An error occurred creating the file for " + customMobName + "."));
         }
         CustomMobConfiguration mobConfiguration = new CustomMobConfiguration(YamlConfiguration.loadConfiguration(file), file);
         mobConfiguration.setType(mobType);

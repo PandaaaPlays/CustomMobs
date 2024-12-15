@@ -17,21 +17,22 @@ public class Drop implements ConfigurationSerializable {
     private double probability;
     private boolean looting;
     private DropConditions dropCondition;
-    // This is only used for DropConditions.NEARBY // TODO This is hardcoded to 50
-    private double nearbyRange = 50D;
+    // This is only used for DropConditions.NEARBY
+    private double nearbyRange;
     private DyeColor groupColor;
     private List<String> receiverMessages;
     private List<String> broadcastedMessages;
     private double nearbyBroadcastRange;
 
     public Drop(ItemStack itemStack) {
-        this(itemStack, 50, false, DropConditions.NEARBY, null, new ArrayList<>(), new ArrayList<>(), -1);
+        this(itemStack, 50, false, DropConditions.NEARBY, 50, null, new ArrayList<>(), new ArrayList<>(), -1);
     }
 
     public Drop(ItemStack itemStack,
                 double probability,
                 boolean looting,
                 DropConditions dropCondition,
+                double nearbyRange,
                 DyeColor groupColor,
                 List<String> receiverMessages,
                 List<String> broadcastedMessages,
@@ -40,6 +41,7 @@ public class Drop implements ConfigurationSerializable {
         this.probability = probability;
         this.looting = looting;
         this.dropCondition = dropCondition;
+        nearbyRange = nearbyBroadcastRange;
         this.groupColor = groupColor;
         this.receiverMessages = receiverMessages;
         this.broadcastedMessages = broadcastedMessages;
@@ -85,6 +87,7 @@ public class Drop implements ConfigurationSerializable {
     public double getNearbyRange() {
         return nearbyRange;
     }
+
     public void setNearbyRange(double nearbyRange) {
         this.nearbyRange = nearbyRange;
     }
@@ -140,12 +143,13 @@ public class Drop implements ConfigurationSerializable {
         double probability = (double) data.get("probability");
         boolean looting = (boolean) data.get("affected-by-looting");
         DropConditions dropCondition = DropConditions.valueOf(data.get("drop-condition").toString());
+        double nearbyRange = (double) data.get("nearby-drop-range");
         // Handle potential null value for "group-color"
         DyeColor groupColor = null;
         if (data.get("group-color") != null) {
             groupColor = DyeColor.valueOf(data.get("group-color").toString());
         }
         // TODO Messages
-        return new Drop(itemStack, probability, looting, dropCondition, groupColor, new ArrayList<>(), new ArrayList<>(), -1);
+        return new Drop(itemStack, probability, looting, dropCondition, nearbyRange, groupColor, new ArrayList<>(), new ArrayList<>(), -1);
     }
 }
