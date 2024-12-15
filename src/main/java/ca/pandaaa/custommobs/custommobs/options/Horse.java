@@ -16,7 +16,6 @@ public class Horse extends CustomMobOption {
     private org.bukkit.entity.Horse.Color horseColor;
     private org.bukkit.entity.Horse.Style horseStyle;
 
-    //TODO Saddle
     public Horse(org.bukkit.entity.Horse.Color horseColor, org.bukkit.entity.Horse.Style horseStyle) {
         this.horseColor = horseColor;
         this.horseStyle = horseStyle;

@@ -1,6 +1,7 @@
 package ca.pandaaa.custommobs.guis.EditCustomMobs.Potions;
 
 import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.custommobs.PotionEffect;
 import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
@@ -12,7 +13,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
@@ -21,8 +21,6 @@ import java.util.List;
 public class SpecificPotionGUI extends CustomMobsGUI {
 
     private final CustomMob customMob;
-    private PotionEffect potionEffect;
-    private PotionMeta emptyPotionMeta;
     private final int potionIndex;
     private PotionEffectType type;
     private boolean particles;
@@ -31,13 +29,12 @@ public class SpecificPotionGUI extends CustomMobsGUI {
     private int amplifier;
 
 
-    public SpecificPotionGUI(CustomMob customMob, int potionIndex){
+    public SpecificPotionGUI(CustomMob customMob, int potionIndex) {
         super(36, "&8CustomMobs &8&l» &8Potion configuration");
         this.potionIndex = potionIndex;
         this.customMob = customMob;
-        this.emptyPotionMeta = (PotionMeta) new ItemStack(Material.POTION).getItemMeta();
-        this.potionEffect = customMob.getPotionMeta().get(potionIndex).getCustomEffects().get(0);
 
+        PotionEffect potionEffect = customMob.getPotionEffects().get(potionIndex);
         this.type = potionEffect.getType();
         this.particles = potionEffect.hasParticles();
         this.ambient = potionEffect.isAmbient();
@@ -76,13 +73,12 @@ public class SpecificPotionGUI extends CustomMobsGUI {
         if (item == null)
             return;
         Player clicker = (Player) event.getWhoClicked();
-        PotionMeta potionMeta = emptyPotionMeta.clone();
         switch (event.getSlot()) {
             // Amplifier
             case 11:
                 new IntegerGUI("Amplifier", customMob, false, 1, 255, (value) -> {
                     this.amplifier = value;
-                    update(potionMeta);
+                    customMob.editPotion(new PotionEffect(type, duration, amplifier, ambient, particles), potionIndex);
                     new SpecificPotionGUI(customMob, potionIndex).openInventory((Player) event.getWhoClicked());
                 }).openInventory(clicker, amplifier);
                 break;
@@ -91,11 +87,11 @@ public class SpecificPotionGUI extends CustomMobsGUI {
                 if (event.getClick().isRightClick()) {
                     duration = 0;
                     event.getView().setItem(event.getSlot(), getDurationItem());
-                    update(potionMeta);
+                    customMob.editPotion(new PotionEffect(type, duration, amplifier, ambient, particles), potionIndex);
                 } else {
                     new SpecificPotionDurationGUI(duration, (value) -> {
                         duration = value;
-                        update(potionMeta);
+                        customMob.editPotion(new PotionEffect(type, duration, amplifier, ambient, particles), potionIndex);
                         new SpecificPotionGUI(customMob, potionIndex).openInventory((Player) event.getWhoClicked());
                     }).openInventory(clicker);
                 }
@@ -104,13 +100,13 @@ public class SpecificPotionGUI extends CustomMobsGUI {
             case 14:
                 ambient = !ambient;
                 event.getView().setItem(event.getSlot(), getAmbientItem());
-                update(potionMeta);
+                customMob.editPotion(new PotionEffect(type, duration, amplifier, ambient, particles), potionIndex);
                 break;
-            // Particules
+            // Particles
             case 15:
                 particles = !particles;
                 event.getView().setItem(event.getSlot(), getParticlesItem());
-                update(potionMeta);
+                customMob.editPotion(new PotionEffect(type, duration, amplifier, ambient, particles), potionIndex);
                 break;
             // Previous page
             case 27:
@@ -119,8 +115,8 @@ public class SpecificPotionGUI extends CustomMobsGUI {
             // Edit potion
             case 31:
                 new PotionEffectsGUI(customMob, (value) -> {
-                    type = value.getCustomEffects().get(0).getType();
-                    update(potionMeta);
+                    type = value.getType();
+                    customMob.editPotion(new PotionEffect(type, duration, amplifier, ambient, particles), potionIndex);
                     new SpecificPotionGUI(customMob, potionIndex).openInventory((Player) event.getWhoClicked());
                 }).openInventory(clicker, 1);
                 break;
@@ -140,16 +136,11 @@ public class SpecificPotionGUI extends CustomMobsGUI {
         }
 
     }
-    private void update(PotionMeta potionMeta){
-        potionMeta.addCustomEffect(new PotionEffect(type, duration*20, amplifier, ambient, particles),true);
-        customMob.editPotion(potionMeta,potionIndex);
-    }
 
-    // TODO add comment to explain what Amplifier is (see spigot javadoc)
     private ItemStack getAmplifierItem() {
         CustomMobsItem item = new CustomMobsItem(Material.GLOWSTONE_DUST);
         item.setName("&6&lAmplifier");
-        item.addLore("&eAmplifier:&f " + amplifier, " ", "&7&o(( Click to edit this option ))");
+        item.addLore("&eAmplifier:&f " + amplifier, "", "&7&o(( The potion effect level ))", "", "&7&o(( Click to edit this option ))");
         return getMenuItem(item, true);
     }
 
@@ -161,19 +152,18 @@ public class SpecificPotionGUI extends CustomMobsGUI {
         return getMenuItem(item, true);
     }
 
-    // TODO add comment to explain what Ambient is
     private ItemStack getAmbientItem() {
         CustomMobsItem item = new CustomMobsItem(Material.COPPER_GRATE);
         item.setName("&a&lAmbient");
         String ambient = this.ambient ? "&a&lOn" : "&c&lOff";
-        item.addLore("&eAmbient:&f " + ambient, " ", "&7&o(( Click to edit this option ))");
+        item.addLore("&eAmbient:&f " + ambient, "", "&7&o(( Ambient potion(s) particles are translucent ))", "", "&7&o(( Click to edit this option ))");
         return getMenuItem(item, true);
     }
 
     private ItemStack getParticlesItem() {
         CustomMobsItem item = new CustomMobsItem(Material.TIPPED_ARROW);
         PotionMeta potionMeta = (PotionMeta) item.getItemMeta();
-        potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 1, 1), true);
+        potionMeta.addCustomEffect(new org.bukkit.potion.PotionEffect(PotionEffectType.FIRE_RESISTANCE, 1, 1), true);
         item.setItemMeta(potionMeta);
         item.setName("&d&lParticles");
         String particles = this.particles ? "&a&lOn" : "&c&lOff";
@@ -185,9 +175,9 @@ public class SpecificPotionGUI extends CustomMobsGUI {
         ItemStack potion = new ItemStack(Material.POTION);
         PotionMeta potionMeta = (PotionMeta) potion.getItemMeta();
         if(type == PotionEffectType.ABSORPTION)
-            potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.STRENGTH,1 ,1),true);
+            potionMeta.addCustomEffect(new org.bukkit.potion.PotionEffect(PotionEffectType.STRENGTH,1 ,1),true);
         else
-            potionMeta.addCustomEffect(new PotionEffect(type,1 ,1), true);
+            potionMeta.addCustomEffect(new org.bukkit.potion.PotionEffect(type,1 ,1), true);
         potionMeta.setDisplayName(Utils.applyFormat("&6&l" + Utils.getStartCase(type.getKey().getKey())));
         List<String> lore = potionMeta.getLore() == null ? new ArrayList<>() : potionMeta.getLore();
         lore.add("");

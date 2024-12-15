@@ -30,9 +30,7 @@ public class Slime extends CustomMobOption {
 
     public List<ItemStack> getOptionItems(CustomMob customMob) {
         List<ItemStack> items = new ArrayList<>();
-
         items.add(getOptionItemStack(getSlimeSizeItem(), true, false));
-// TODO other mobs scaling?
         return items;
     }
 
