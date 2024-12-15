@@ -1,5 +1,6 @@
 package ca.pandaaa.custommobs.custommobs;
 
+import ca.pandaaa.custommobs.CustomMobs;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -13,6 +14,8 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.player.Player;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -43,9 +46,9 @@ public class NMS {
                 .split("\\.")[VERSION_PACKAGE_COUNTER];
         private static final String MIDDLE_PACKAGE = "entity";
         private static final String CRAFT_LIVING_ENTITY_CLASS_NAME = "CraftLivingEntity";
-        private final Method getHandleMethod;
-        private final Field attributeMap; // LivingEntity AttributeMap
-        private final Field attributes; // AttributeMap attributes
+        private Method getHandleMethod = null;
+        private Field attributeMap = null; // LivingEntity AttributeMap
+        private Field attributes = null; // AttributeMap attributes
 
         private NMSResolver() {
             try {
@@ -54,14 +57,20 @@ public class NMS {
                 getHandleMethod = craftLivingEntityClass.getMethod("getHandle");
                 // To find the fields corresponding to the version, see : https://minidigger.github.io/MiniMappingViewer/#/mojang/client/1.XX.XX/LivingEntity
                 // Field in NMS LivingEntity class of type : AttributeMap
-                attributeMap = LivingEntity.class.getDeclaredField("bR");
+                if(Bukkit.getBukkitVersion().contains("1.21.4"))
+                    attributeMap = LivingEntity.class.getDeclaredField("bR");
+                else if(Bukkit.getBukkitVersion().contains("1.21.3"))
+                    attributeMap = LivingEntity.class.getDeclaredField("bS");
+                else {
+                    throw new Exception("This server version does not support aggressive animals. Please contact the developper if you believe this is an issue.");
+                }
                 // To find the fields corresponding to the version, see : https://minidigger.github.io/MiniMappingViewer/#/mojang/client/1.XX.XX/AttributeMap
                 // Field in NMS AttributeMap class of type : Map
                 attributes = AttributeMap.class.getDeclaredField("b");
                 attributeMap.setAccessible(true);
                 attributes.setAccessible(true);
-            } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | NoSuchFieldException e) {
-                throw new RuntimeException(e);
+            } catch (Exception e) {
+                CustomMobs.getPlugin().getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&c" + e));
             }
         }
 
