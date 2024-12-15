@@ -156,7 +156,7 @@ public class SpecificPotionGUI extends CustomMobsGUI {
         CustomMobsItem item = new CustomMobsItem(Material.COPPER_GRATE);
         item.setName("&a&lAmbient");
         String ambient = this.ambient ? "&a&lOn" : "&c&lOff";
-        item.addLore("&eAmbient:&f " + ambient, "", "&7&o(( Ambient potion(s) particles are translucent ))", "", "&7&o(( Click to edit this option ))");
+        item.addLore("&eAmbient:&f " + ambient, "", "&7&o(( Ambient potion particles are translucent ))", "", "&7&o(( Click to edit this option ))");
         return getMenuItem(item, true);
     }
 
