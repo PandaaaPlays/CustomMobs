@@ -4,6 +4,7 @@ import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.custommobs.NMS;
 import ca.pandaaa.custommobs.guis.BasicTypes.DoubleGUI;
+import ca.pandaaa.custommobs.guis.BasicTypes.DoubleRangeGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.OptionsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.DamageRange;
@@ -37,7 +38,7 @@ public class Special extends CustomMobOption {
     private boolean canPickupLoot;
     private double knockbackResistance;
     private double speed;
-    private final DamageRange damageRange;
+    private DamageRange damageRange;
     private boolean invincible;
     private boolean silent;
     private boolean gravity;
@@ -45,7 +46,7 @@ public class Special extends CustomMobOption {
     private boolean intelligent;
     private double followRange;
     private double size;
-    //TODO change DDDDdddouble dans les configs ca devrait etre de double si pas besoin de Double
+
     public Special(boolean isNameVisible, Double health, boolean aggressive, boolean glowing, boolean canPickupLoot, Double knockbackResistance, Double speed, DamageRange damageRange, boolean invincible, boolean silent, boolean gravity, boolean persistent, boolean intelligent, Double followRange, double size) {
         this.isNameVisible = isNameVisible;
         this.health = health;
@@ -172,6 +173,21 @@ public class Special extends CustomMobOption {
                 return getOptionItemStack(getSpeedItem(), true, false);
             }
 
+            case "damagerange": {
+                if(clickType.isRightClick()) {
+                    this.damageRange = null;
+                } else {
+                    new DoubleRangeGUI("Damage range", false, 0, 1024, (value) -> {
+                        this.damageRange = new DamageRange(value[0], value[1]);
+                        customMob.getCustomMobConfiguration().setDamageRange(damageRange);
+                        new OptionsGUI(customMob).openInventory((Player) clicker, 1);
+                    }).openInventory(clicker,
+                            damageRange == null ? 5 : damageRange.getMinimumDamage(),
+                            damageRange == null ? 5 : damageRange.getMaximimDamage());
+                }
+                return getOptionItemStack(getDamageRangeItem(), true, false);
+            }
+
             case "invincible" : {
                 this.invincible = !invincible;
                 customMob.getCustomMobConfiguration().setInvincible(invincible);
@@ -244,14 +260,7 @@ public class Special extends CustomMobOption {
         items.add(getOptionItemStack(getCanPickupLootItem(), false, false));
         items.add(getOptionItemStack(getKnockbackResistanceItem(), true, false));
         items.add(getOptionItemStack(getSpeedItem(), true, false));
-
-        // TODO
-        CustomMobsItem damageRange = new CustomMobsItem(Material.WOODEN_SWORD);
-        ItemMeta damageRangeMeta = damageRange.getItemMeta();
-        damageRangeMeta.setDisplayName(Utils.applyFormat("&c&lDamage range"));
-        damageRange.setItemMeta(damageRangeMeta);
-        items.add(getOptionItemStack(damageRange, false, false));
-
+        items.add(getOptionItemStack(getDamageRangeItem(), true, false));
         items.add(getOptionItemStack(getInvincibleItem(), false, false));
         items.add(getOptionItemStack(getSilentItem(), false, false));
         items.add(getOptionItemStack(getGravityItem(), false, false));
@@ -325,6 +334,20 @@ public class Special extends CustomMobOption {
         item.setName("&b&lSpeed");
         item.addLore("&eSpeed: &f" + speed);
         item.setPersistentDataContainer(this.getClass().getSimpleName(), "Speed");
+        return item;
+    }
+
+    public CustomMobsItem getDamageRangeItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.WOODEN_SWORD);
+        item.setName("&c&lDamage range");
+        if(damageRange != null) {
+            String min = damageRange.getMinimumDamage() + " (" + damageRange.getMinimumDamage() / 2 + " ❤)";
+            String max = damageRange.getMaximimDamage() + " (" + damageRange.getMaximimDamage() / 2 + " ❤)";
+            item.addLore("&eRange: &f" + min + " - " + max);
+        } else {
+            item.addLore("&eRange: &fDefault mob value");
+        }
+        item.setPersistentDataContainer(this.getClass().getSimpleName(), "DamageRange");
         return item;
     }
 

@@ -88,6 +88,6 @@ public class Equipment {
             ((LivingEntity) customMob).getEquipment().setLeggings(leggings, true);
             ((LivingEntity) customMob).getEquipment().setBoots(boots, true);
         }
-        // TODO Natural drop chance (and disable)
+        // TODO Natural drop chance (and disable) (Shift-Left-Click maybe?)
     }
 }

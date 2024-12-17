@@ -119,51 +119,56 @@ public class MainGUI extends CustomMobsGUI {
         event.setCancelled(true);
 
         ItemStack item = event.getView().getTopInventory().getItem(event.getSlot());
-        if (item == null)
+        if (item == null || item.getType() == Material.GRAY_STAINED_GLASS_PANE)
             return;
         ItemMeta itemMeta = item.getItemMeta();
         Player clicker = (Player) event.getWhoClicked();
         int clickedSlot = event.getSlot();
-// TODO WE cannot check for item name, do the slot instead
-        String itemName = itemMeta.getDisplayName();
-        if(itemName.contains("Previous")) {
-            new MainGUI().openInventory(clicker, currentPage - 1);
-        } else if (itemName.contains("Next")) {
-            new MainGUI().openInventory(clicker, currentPage + 1);
-        } else if (itemName.contains("Add CustomMob")) {
-            clicker.closeInventory();
-            clicker.sendMessage(Utils.applyFormat("&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &eCustomMob creation"));
-            clicker.sendMessage(Utils.applyFormat(" &6&l- &fEnter the name you want &e&nin the chat&f."));
-            clicker.sendMessage(Utils.applyFormat(" &6&l- &fThis name must be unique, it is only used to refer to the mob in the CustomMob menu."));
-            clicker.sendMessage(Utils.applyFormat(" &6&l- &fType &ccancel &fin the chat to cancel creation."));
-            waitingForCreation = clicker;
-        } else if (clickedSlot < 45) {
-            try {
-                NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.FileName");
-                String fileName = itemMeta.getPersistentDataContainer().get(key, PersistentDataType.STRING).toLowerCase();
-                Manager customMobsManager = CustomMobs.getPlugin().getCustomMobsManager();
 
-                NamespacedKey removeKey = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Remove.Confirm");
-                if (event.isRightClick()) {
-                    if (event.getCurrentItem().getItemMeta().getPersistentDataContainer().getKeys().contains(removeKey)) {
-                        customMobsManager.getCustomMob(fileName).delete();
-                        boolean currentPageEmpty = items.size() - 1 <= ((currentPage - 1) * 45);
-                        if (currentPageEmpty)
-                            currentPage = currentPage == 1 ? currentPage : currentPage - 1;
-                        new MainGUI().openInventory(clicker, currentPage);
-                    } else {
-                        openInventory(clicker, currentPage);
-                        event.getInventory().setItem(event.getSlot(), getMenuItem(getDeleteItem(new ItemStack(Material.BARRIER), fileName), true));
+        switch(clickedSlot) {
+            case 45:
+                new MainGUI().openInventory(clicker, currentPage - 1);
+                break;
+            case 49:
+                clicker.closeInventory();
+                clicker.sendMessage(Utils.applyFormat("&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &eCustomMob creation"));
+                clicker.sendMessage(Utils.applyFormat(" &6&l- &fEnter the name you want &e&nin the chat&f."));
+                clicker.sendMessage(Utils.applyFormat(" &6&l- &fThis name must be unique, it is only used to refer to the mob in the CustomMob menu."));
+                clicker.sendMessage(Utils.applyFormat(" &6&l- &fType &ccancel &fin the chat to cancel creation."));
+                waitingForCreation = clicker;
+                break;
+            case 53:
+                new MainGUI().openInventory(clicker, currentPage + 1);
+                break;
+            default:
+                if (clickedSlot < 45) {
+                    try {
+                        NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.FileName");
+                        String fileName = itemMeta.getPersistentDataContainer().get(key, PersistentDataType.STRING).toLowerCase();
+                        Manager customMobsManager = CustomMobs.getPlugin().getCustomMobsManager();
+
+                        NamespacedKey removeKey = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Remove.Confirm");
+                        if (event.isRightClick()) {
+                            if (event.getCurrentItem().getItemMeta().getPersistentDataContainer().getKeys().contains(removeKey)) {
+                                customMobsManager.getCustomMob(fileName).delete();
+                                boolean currentPageEmpty = items.size() - 1 <= ((currentPage - 1) * 45);
+                                if (currentPageEmpty)
+                                    currentPage = currentPage == 1 ? currentPage : currentPage - 1;
+                                new MainGUI().openInventory(clicker, currentPage);
+                            } else {
+                                openInventory(clicker, currentPage);
+                                event.getInventory().setItem(event.getSlot(), getMenuItem(getDeleteItem(new ItemStack(Material.BARRIER), fileName), true));
+                            }
+                        } else {
+                            if (event.getCurrentItem().getItemMeta().getPersistentDataContainer().getKeys().contains(removeKey))
+                                openInventory(clicker, currentPage);
+                            else
+                                new EditGUI(customMobsManager.getCustomMob(fileName), customMobsManager, clicker).openInventory();
+                        }
+                    } catch (Exception exception) {
+                        clicker.sendMessage(Utils.applyFormat("&c&l[!] &cNo CustomMob was associated to this item. This is a bug."));
                     }
-                } else {
-                    if (event.getCurrentItem().getItemMeta().getPersistentDataContainer().getKeys().contains(removeKey))
-                        openInventory(clicker, currentPage);
-                    else
-                        new EditGUI(customMobsManager.getCustomMob(fileName), customMobsManager, clicker).openInventory();
                 }
-            } catch (Exception exception) {
-                clicker.sendMessage(Utils.applyFormat("&c&l[!] &cNo CustomMob was associated to this item. This is a bug."));
-            }
         }
     }
 
@@ -176,14 +181,13 @@ public class MainGUI extends CustomMobsGUI {
 
         event.setCancelled(true);
 
-        CustomMob customMob = null;
-
         Manager customMobsManager = CustomMobs.getPlugin().getCustomMobsManager();
         String message = event.getMessage().toLowerCase().replaceAll(" ", "_");
         if (!message.equalsIgnoreCase("cancel")) {
             if(!customMobsManager.getCustomMobNames().contains(message)) {
-                customMob = customMobsManager.addCustomMob(message, EntityType.PIG);
+                CustomMob customMob = customMobsManager.addCustomMob(message, EntityType.PIG);
                 waitingForCreation.sendMessage(Utils.applyFormat("&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &eSuccessfully created : &r" + message));
+                Bukkit.getScheduler().runTask(CustomMobs.getPlugin(), new EditGUI(customMob, customMobsManager, event.getPlayer())::openInventory);
             } else {
                 event.getPlayer().sendMessage(Utils.applyFormat("&c&l[!] &cThe name you entered is already in use. Please select another one."));
                 return;
@@ -191,7 +195,6 @@ public class MainGUI extends CustomMobsGUI {
         }
 
         waitingForCreation = null;
-        Bukkit.getScheduler().runTask(CustomMobs.getPlugin(), new EditGUI(customMob, customMobsManager, event.getPlayer())::openInventory);
     }
 
     private List<String> getItemLore() {

@@ -18,18 +18,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class TimeIntegerRangeGUI extends CustomMobsGUI implements Listener {
+public class DoubleRangeGUI extends CustomMobsGUI implements Listener {
 
-    private final Consumer<int[]> consumer;
+    private final Consumer<double[]> consumer;
     private final ItemStack minusBig;
     private final ItemStack minusSmall;
     private final ItemStack confirm;
     private final ItemStack plusBig;
     private final ItemStack plusSmall;
     private final boolean small;
-    private final int maximum;
-    private final int minimum;
-    public TimeIntegerRangeGUI(String option, boolean small, int minValue, int maxValue, Consumer<int[]> consumer) {
+    private final double maximum;
+    private final double minimum;
+
+    public DoubleRangeGUI(String option, boolean small, double minValue, double maxValue, Consumer<double[]> consumer) {
         super(18, "&8Parameter &8&l» &8" + option);
         this.consumer = consumer;
         this.small = small;
@@ -42,7 +43,7 @@ public class TimeIntegerRangeGUI extends CustomMobsGUI implements Listener {
         confirm = getMenuItem(new ItemStack(Material.END_CRYSTAL), true);
     }
 
-    public void openInventory(Player player, Integer valueMin, Integer valueMax) {
+    public void openInventory(Player player, double valueMin, double valueMax) {
         inventory.setItem(0, filler);
         inventory.setItem(1, small ? filler : getMinusItem(minusBig, true,"Minimum"));
         inventory.setItem(2, getMinusItem(minusSmall, false, "Minimum"));
@@ -78,62 +79,63 @@ public class TimeIntegerRangeGUI extends CustomMobsGUI implements Listener {
         event.setCancelled(true);
         NamespacedKey keyMin = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Minimum");
         NamespacedKey keyMax = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Maximum");
-        int currentMin = event.getInventory().getItem(4).getItemMeta().getPersistentDataContainer().get(keyMin, PersistentDataType.INTEGER);
-        int currentMax = event.getInventory().getItem(13).getItemMeta().getPersistentDataContainer().get(keyMax, PersistentDataType.INTEGER);
+        double currentMin = Math.round(event.getInventory().getItem(4).getItemMeta().getPersistentDataContainer().get(keyMin, PersistentDataType.DOUBLE) * 10.0) / 10.0;
+        double currentMax = Math.round(event.getInventory().getItem(13).getItemMeta().getPersistentDataContainer().get(keyMax, PersistentDataType.DOUBLE) * 10.0) / 10.0;
 
         boolean shifting = !small && event.isShiftClick();
 
         switch (event.getSlot()) {
             case 1:
-                if (((!shifting && currentMin >= minimum + 10) || (shifting && currentMin >= minimum + 50)) && !small)
-                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? currentMin - 50 : currentMin - 10,"Minimum"));
+                if (((!shifting && currentMin >= minimum + 1) || (shifting && currentMin >= minimum + 5)) && !small)
+                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? currentMin - 5 : currentMin - 1, "Minimum"));
                 break;
             case 2:
-                if ((!shifting && currentMin >= minimum + 1) || (shifting && currentMin >= minimum + 5))
-                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? currentMin - 5 : currentMin - 1,"Minimum"));
+                if ((!shifting && currentMin >= minimum + 0.1) || (shifting && currentMin >= minimum + 0.5))
+                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? currentMin - 0.5 : currentMin - 0.1, "Minimum"));
                 break;
             case 4:
-                consumer.accept(new int[]{currentMin, currentMax});
+                consumer.accept(new double[]{currentMin, currentMax});
                 break;
             case 6:
-                if ((!shifting && currentMin <= currentMax - 1) || (shifting && currentMin <= currentMax - 5))
-                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? currentMin + 5 : currentMin + 1,"Minimum"));
+                if ((!shifting && currentMin <= currentMax - 0.1) || (shifting && currentMin <= currentMax - 0.5))
+                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? currentMin + 0.5 : currentMin + 0.1,"Minimum"));
                 break;
             case 7:
-                if (((!shifting && currentMin <= currentMax - 10) || (shifting && currentMin <= currentMax - 50)) && !small)
-                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? currentMin + 50 : currentMin + 10,"Minimum"));
+                if (((!shifting && currentMin <= currentMax - 1) || (shifting && currentMin <= currentMax - 5)) && !small)
+                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? currentMin + 5 : currentMin + 1,"Minimum"));
                 break;
             case 10:
-                if (((!shifting && currentMax >= currentMin + 10) || (shifting && currentMax >= currentMin + 50)) && !small)
-                    inventory.setItem(13, getConfirmItem(inventory.getItem(13), shifting ? currentMax - 50 : currentMax - 10,"Maximum"));
-                break;
-            case 11:
-                if ((!shifting && currentMax >= currentMin + 1) || (shifting && currentMax >= currentMin + 5))
+                if (((!shifting && currentMax >= currentMin + 1) || (shifting && currentMax >= currentMin + 5)) && !small)
                     inventory.setItem(13, getConfirmItem(inventory.getItem(13), shifting ? currentMax - 5 : currentMax - 1,"Maximum"));
                 break;
+            case 11:
+                if ((!shifting && currentMax >= currentMin + 0.1) || (shifting && currentMax >= currentMin + 0.5))
+                    inventory.setItem(13, getConfirmItem(inventory.getItem(13), shifting ? currentMax - 0.5 : currentMax - 0.1,"Maximum"));
+                break;
             case 13:
-                consumer.accept(new int[]{currentMin, currentMax});
+                consumer.accept(new double[]{currentMin, currentMax});
                 break;
             case 15:
-                if ((!shifting && currentMax <= maximum - 1) || (shifting && currentMax <= maximum - 5))
-                    inventory.setItem(13, getConfirmItem(inventory.getItem(13), shifting ? currentMax + 5 : currentMax + 1,"Maximum"));
+                if ((!shifting && currentMax <= maximum - 0.1) || (shifting && currentMax <= maximum - 0.5))
+                    inventory.setItem(13, getConfirmItem(inventory.getItem(13), shifting ? currentMax + 0.5 : currentMax + 0.1,"Maximum"));
                 break;
             case 16:
-                if (((!shifting && currentMax <= maximum - 10) || (shifting && currentMax <= maximum - 50)) && !small)
-                    inventory.setItem(13, getConfirmItem(inventory.getItem(13), shifting ? currentMax + 50 : currentMax + 10,"Maximum"));
+                if (((!shifting && currentMax <= maximum - 1) || (shifting && currentMax <= maximum - 5)) && !small)
+                    inventory.setItem(13, getConfirmItem(inventory.getItem(13), shifting ? currentMax + 5 : currentMax + 1,"Maximum"));
                 break;
             default:
                 break;
         }
     }
 
-    private ItemStack getConfirmItem(ItemStack item, Integer value, String type) {
+    private ItemStack getConfirmItem(ItemStack item, double value, String type) {
         ItemMeta meta = item.getItemMeta();
+        value = Math.round(value * 10.0) / 10.0;
         NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs." + type);
-        meta.getPersistentDataContainer().set(key, PersistentDataType.INTEGER, value);
+        meta.getPersistentDataContainer().set(key, PersistentDataType.DOUBLE, value);
         meta.setDisplayName(Utils.applyFormat("&a&l[+] Confirm"));
         List<String> itemLore = new ArrayList<>();
-        itemLore.add(Utils.applyFormat("&eCurrent value: &f" + value + " tick(s)" + (value > 20 ? " (" + Utils.getFormattedTime(value / 20, false, false) + ")" : "")));
+        itemLore.add(Utils.applyFormat("&eCurrent value: &f" + value));
         itemLore.add("");
         itemLore.add(Utils.applyFormat("&7&o(( Click to confirm! ))"));
         meta.setLore(itemLore);
@@ -148,16 +150,15 @@ public class TimeIntegerRangeGUI extends CustomMobsGUI implements Listener {
         List<String> itemLore = new ArrayList<>();
         itemLore.add("");
         if (big) {
-            meta.setDisplayName(Utils.applyFormat("&c&l[-] Remove 10"));
-
-            itemLore.add(Utils.applyFormat("&7&o(( Click to remove 10 ))"));
-            if (!small)
-                itemLore.add(Utils.applyFormat("&7&o(( Shift-Click to remove 50 ))"));
-        } else {
             meta.setDisplayName(Utils.applyFormat("&c&l[-] Remove 1"));
             itemLore.add(Utils.applyFormat("&7&o(( Click to remove 1 ))"));
             if (!small)
                 itemLore.add(Utils.applyFormat("&7&o(( Shift-Click to remove 5 ))"));
+        } else {
+            meta.setDisplayName(Utils.applyFormat("&c&l[-] Remove 0.1"));
+            itemLore.add(Utils.applyFormat("&7&o(( Click to remove 0.1 ))"));
+            if (!small)
+                itemLore.add(Utils.applyFormat("&7&o(( Shift-Click to remove 0.5 ))"));
         }
         meta.setLore(itemLore);
         item.setItemMeta(meta);
@@ -171,15 +172,15 @@ public class TimeIntegerRangeGUI extends CustomMobsGUI implements Listener {
         List<String> itemLore = new ArrayList<>();
         itemLore.add("");
         if (big) {
-            meta.setDisplayName(Utils.applyFormat("&a&l[+] Add 10"));
-            itemLore.add(Utils.applyFormat("&7&o(( Click to add 10 ))"));
-            if (!small)
-                itemLore.add(Utils.applyFormat("&7&o(( Shift-Click to add 50 ))"));
-        } else {
             meta.setDisplayName(Utils.applyFormat("&a&l[+] Add 1"));
             itemLore.add(Utils.applyFormat("&7&o(( Click to add 1 ))"));
             if (!small)
                 itemLore.add(Utils.applyFormat("&7&o(( Shift-Click to add 5 ))"));
+        } else {
+            meta.setDisplayName(Utils.applyFormat("&a&l[+] Add 0.1"));
+            itemLore.add(Utils.applyFormat("&7&o(( Click to add 0.1 ))"));
+            if (!small)
+                itemLore.add(Utils.applyFormat("&7&o(( Shift-Click to add 0.5 ))"));
         }
         meta.setLore(itemLore);
         item.setItemMeta(meta);

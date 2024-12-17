@@ -37,8 +37,8 @@ public class CustomMob implements Listener {
     private Spawner spawner;
     private String name;
     private final List<Sound> sounds;
-    private final CustomMobConfiguration mobConfiguration;
-    private final List<PotionMeta> potionMeta;
+    private final List<PotionEffect> potionEffects;
+    private final CustomMobConfiguration mobConfiguration;;
 
     public CustomMob(LocalDateTime creationDate,
                      EntityType entityType,
@@ -47,7 +47,7 @@ public class CustomMob implements Listener {
                      ItemStack spawnerItem,
                      Equipment equipment,
                      Spawner spawner,
-                     List<PotionMeta> potionMeta,
+                     List<PotionEffect> potionEffects,
                      List<Drop> drops,
                      String name,
                      List<Sound> sounds,
@@ -58,7 +58,7 @@ public class CustomMob implements Listener {
         this.item = item;
         this.spawnerItem = spawnerItem;
         this.equipment = equipment;
-        this.potionMeta = potionMeta;
+        this.potionEffects = potionEffects;
         this.spawner = spawner;
         this.drops = drops;
         this.name = name;
@@ -97,8 +97,8 @@ public class CustomMob implements Listener {
         }
 
         // Potions
-        for(PotionMeta potionMeta : potionMeta) {
-            potionMeta.getCustomEffects().get(0).apply((LivingEntity) customMob);
+        for(PotionEffect potionEffect : potionEffects) {
+            potionEffect.apply((LivingEntity) customMob);
         }
     }
 
@@ -154,13 +154,13 @@ public class CustomMob implements Listener {
         return drops;
     }
 
-    public List<PotionMeta> getPotionMeta() {
-        return potionMeta;
+    public List<PotionEffect> getPotionEffects() {
+        return potionEffects;
     }
 
-    public void addPotionMeta(PotionMeta potionMeta){
-         this.potionMeta.add(potionMeta);
-        mobConfiguration.setPotionMeta(this.potionMeta);
+    public void addPotionEffect(PotionEffect potionEffect) {
+         this.potionEffects.add(potionEffect);
+         mobConfiguration.setPotionEffects(this.potionEffects);
     }
 
     public List<Sound> getSounds() {
@@ -216,14 +216,14 @@ public class CustomMob implements Listener {
 
     /* === POTION === */
 
-    public void editPotion(PotionMeta potionMeta, int index) {
-        this.potionMeta.set(index, potionMeta);
-        mobConfiguration.setPotionMeta(this.potionMeta);
+    public void editPotion(PotionEffect potionEffect, int index) {
+        this.potionEffects.set(index, potionEffect);
+        mobConfiguration.setPotionEffects(potionEffects);
     }
 
     public void removePotionItem(int potionIndex) {
-        potionMeta.remove(potionIndex);
-        mobConfiguration.setPotionMeta(potionMeta);
+        potionEffects.remove(potionIndex);
+        mobConfiguration.setPotionEffects(potionEffects);
     }
 
     /* === DROPS === */

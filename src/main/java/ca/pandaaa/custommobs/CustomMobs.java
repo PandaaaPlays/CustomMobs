@@ -4,25 +4,23 @@ import ca.pandaaa.custommobs.commands.Commands;
 import ca.pandaaa.custommobs.commands.TabCompletion;
 import ca.pandaaa.custommobs.configurations.ConfigurationManager;
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
-import ca.pandaaa.custommobs.custommobs.Drop;
-import ca.pandaaa.custommobs.custommobs.Events;
-import ca.pandaaa.custommobs.custommobs.Manager;
-import ca.pandaaa.custommobs.custommobs.Spawner;
-import ca.pandaaa.custommobs.custommobs.Sound;
+import ca.pandaaa.custommobs.custommobs.*;
+import ca.pandaaa.custommobs.utils.DamageRange;
 import ca.pandaaa.custommobs.utils.Metrics;
+import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.Callable;
 
 public class CustomMobs extends JavaPlugin {
     private File mobFolder;
@@ -34,7 +32,6 @@ public class CustomMobs extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
-        int pluginId = 21648;
 
         /* TODO
         FAT LOG ERROR : [CustomMobs] Task #102 for CustomMobs v1.0.0 generated an exception
@@ -56,7 +53,7 @@ Caused by: java.lang.ClassNotFoundException: ca.pandaaa.custommobs.utils.Metrics
 
         // TODO Sounds Enum might miss new sounds... add thing to show on console saying its missing one
 
-        Metrics metrics = new Metrics(this, pluginId);
+        Metrics metrics = new Metrics(this, 21648);
 
         this.sendStartedMessage();
 
@@ -64,6 +61,8 @@ Caused by: java.lang.ClassNotFoundException: ca.pandaaa.custommobs.utils.Metrics
         ConfigurationSerialization.registerClass(Drop.class, "ca.pandaaa.custommobs.custommobs.Drop");
         ConfigurationSerialization.registerClass(Sound.class, "ca.pandaaa.custommobs.custommobs.Sound");
         ConfigurationSerialization.registerClass(Spawner.class, "ca.pandaaa.custommobs.custommobs.Spawner");
+        ConfigurationSerialization.registerClass(DamageRange.class, "ca.pandaaa.custommobs.utils.DamageRange");
+        ConfigurationSerialization.registerClass(PotionEffect.class, "ca.pandaaa.custommobs.custommobs.PotionEffect");
 
         // Initialize SoundEnum for faster timings on click
         try {
@@ -80,6 +79,8 @@ Caused by: java.lang.ClassNotFoundException: ca.pandaaa.custommobs.utils.Metrics
         customMobsManager.loadCustomMobs();
 
         getCommandsAndListeners();
+
+        this.addMetrics(metrics);
     }
 
     @Override
@@ -143,5 +144,19 @@ Caused by: java.lang.ClassNotFoundException: ca.pandaaa.custommobs.utils.Metrics
         getServer().getPluginManager().registerEvents(new Events(), this);
         command.setExecutor(new Commands(configManager, customMobsManager));
         command.setTabCompleter(new TabCompletion());
+    }
+
+    private void addMetrics(Metrics metrics) {
+        metrics.addCustomChart(new Metrics.AdvancedPie("custommobs_entity_types", () -> {
+            Map<String, Integer> entityTypeAmount = new HashMap<>();
+            for (CustomMob customMob : customMobsManager.getCustomMobs()) {
+                String entityType = Utils.getSentenceCase(customMob.getType().getEntityClass().getSimpleName());
+                if (!entityTypeAmount.containsKey(entityType))
+                    entityTypeAmount.put(entityType, 1);
+                else
+                    entityTypeAmount.put(entityType, entityTypeAmount.get(entityType) + 1);
+            }
+            return entityTypeAmount;
+        }));
     }
 }

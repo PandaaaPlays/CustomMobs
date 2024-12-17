@@ -32,10 +32,7 @@ public class EditGUI extends CustomMobsGUI {
     private final ItemStack types;
     private final ItemStack options;
     private final ItemStack drops;
-    private final ItemStack potions;
     private final ItemStack name;
-    private final ItemStack message;
-    private final ItemStack sound;
     private final ItemStack previous;
     private final ItemStack item;
     private final ItemStack spawner;
@@ -63,10 +60,7 @@ public class EditGUI extends CustomMobsGUI {
         this.types = getMenuItem(new ItemStack(Material.ALLAY_SPAWN_EGG), true);
         this.options = getMenuItem(new ItemStack(Material.END_CRYSTAL), true);
         this.name = getMenuItem(new ItemStack(Material.SPRUCE_HANGING_SIGN), true);
-        this.message = getMenuItem(new ItemStack(Material.WRITABLE_BOOK), true);
         this.drops = getMenuItem(new ItemStack(Material.PITCHER_POD), true);
-        this.sound = getMenuItem(new ItemStack(Material.JUKEBOX), true);
-        this.potions = getMenuItem(new ItemStack(Material.OMINOUS_BOTTLE), true);
         this.previous = getMenuItem(Utils.createHead("a2f0425d64fdc8992928d608109810c1251fe243d60d175bed427c651cbe"), true);
         this.item = getMenuItem(customMob.getItem(), true);
         this.spawner = getMenuItem(customMob.getSpawnerItem(), true);
@@ -214,7 +208,7 @@ public class EditGUI extends CustomMobsGUI {
                 new OptionsGUI(customMob).openInventory(clicker, 1);
                 break;
             case 30:
-                // TODO clicker in waitingForRename (like main menu?)
+                // TODO Test if this works with 2 players...
                 clicker.closeInventory();
                 clicker.sendMessage(Utils.applyFormat("&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &eCustomMob renaming"));
                 clicker.sendMessage(Utils.applyFormat(" &6&l- &fEnter the name you want &e&nin the chat&f."));
@@ -420,7 +414,7 @@ public class EditGUI extends CustomMobsGUI {
     private ItemStack getCustomEffectsItem() {
         CustomMobsItem item = new CustomMobsItem(Material.TORCHFLOWER);
         item.setName("&6&lCustom effects");
-        item.addLore("", "&7&o(( Click to edit this CustomMob's custom effect(s) ))");
+        item.addLore("", "&c&l[!] Coming soon!", "", "&7&o(( Click to edit this CustomMob's custom effect(s) ))");
         return getMenuItem(item, true);
     }
 

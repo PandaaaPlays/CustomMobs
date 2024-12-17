@@ -118,7 +118,7 @@ public class PotionsGUI extends CustomMobsGUI {
                 break;
             case 49:
                  new PotionEffectsGUI(customMob, (value) -> {
-                     customMob.addPotionMeta(value);
+                     customMob.addPotionEffect(value);
                      new PotionsGUI(customMob).openInventory(clicker, currentPage);
                  }).openInventory(clicker, 1);
                 break;
@@ -156,30 +156,27 @@ public class PotionsGUI extends CustomMobsGUI {
     }
     private List<ItemStack> getPotionsItems() {
         List<ItemStack> items = new ArrayList<>();
-        if(customMob.getPotionMeta() != null) {
-            List<PotionMeta> potionMetas = customMob.getPotionMeta();
+        if(customMob.getPotionEffects() != null) {
 
-            for(PotionMeta potionMeta1 : potionMetas) {
+            for(ca.pandaaa.custommobs.custommobs.PotionEffect potionEffect : customMob.getPotionEffects()) {
                 ItemStack potion = new ItemStack(Material.POTION);
                 PotionMeta potionMeta = (PotionMeta) new ItemStack(Material.POTION).getItemMeta();
-                if(potionMeta1.getCustomEffects().get(0).getType() == PotionEffectType.ABSORPTION)
+                if(potionEffect.getType() == PotionEffectType.ABSORPTION)
                     potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.STRENGTH,1 ,1),true);
                 else
-                    potionMeta.addCustomEffect(new PotionEffect(potionMeta1.getCustomEffects().get(0).getType(),1 ,1),true);
+                    potionMeta.addCustomEffect(new PotionEffect(potionEffect.getType(),1 ,1),true);
                 ArrayList<String> lore = new ArrayList<>();
-                PotionEffect effect = potionMeta1.getCustomEffects().get(0);
-                lore.add(Utils.applyFormat("&f&l* &eAmplifier:&f " + effect.getAmplifier()));
-                lore.add(Utils.applyFormat("&f&l* &bDuration:&f " + (effect.getDuration() <= 0 ? "Infinite" : Utils.getFormattedTime(effect.getDuration() / 20, false, true))));
-                String ambient = effect.isAmbient() ? "&a&lOn" : "&c&lOff";
+                lore.add(Utils.applyFormat("&f&l* &eAmplifier:&f " + potionEffect.getAmplifier()));
+                lore.add(Utils.applyFormat("&f&l* &bDuration:&f " + (potionEffect.getDuration() <= 0 ? "Infinite" : Utils.getFormattedTime(potionEffect.getDuration() / 20, false, true))));
+                String ambient = potionEffect.isAmbient() ? "&a&lOn" : "&c&lOff";
                 lore.add(Utils.applyFormat("&f&l* &aAmbient:&f " + ambient));
-                String particles = effect.hasParticles() ? "&a&lOn" : "&c&lOff";
-                lore.add(Utils.applyFormat("&f&l* &dParticules:&f " + particles));
-                // TODO Look into has-icon of potionmeta
+                String particles = potionEffect.hasParticles() ? "&a&lOn" : "&c&lOff";
+                lore.add(Utils.applyFormat("&f&l* &dParticles:&f " + particles));
                 lore.add("");
                 lore.add(Utils.applyFormat("&7&o(( Left-Click to edit this potion effect ))"));
                 lore.add(Utils.applyFormat("&7&o(( Right-Click to remove this potion effect ))"));
                 potionMeta.setLore(lore);
-                potionMeta.setDisplayName(Utils.applyFormat("&6&l" + Utils.getStartCase(potionMeta1.getCustomEffects().get(0).getType().getKey().getKey())));
+                potionMeta.setDisplayName(Utils.applyFormat("&6&l" + Utils.getStartCase(potionEffect.getType().getKey().getKey())));
                 potion.setItemMeta(potionMeta);
                 items.add(getMenuItem(potion, true));
             }

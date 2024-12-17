@@ -20,7 +20,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.function.Consumer;
-//TODO faire la shit de son hardcode enum
+
 public class AddSoundsGUI extends CustomMobsGUI {
     private final CustomMob customMob;
     private final ItemStack previous;

@@ -81,14 +81,13 @@ public class CustomMobConfiguration {
                 getItem(SPAWNER_ITEM),
                 getEquipment(),
                 getSpawner(),
-                getPotionMeta(),
+                getPotionEffects(),
                 getDrops(),
                 getName(),
                 getSounds(),
                 this);
 
-        // TODO sounds
-        // TODO Horses, lama etc saddles should be able to have saddle
+        // TODO Horses, lama etc saddles should be able to have saddle (maybe add an option?)
 
         setCustomMobConfigurations(customMob, type);
 
@@ -118,7 +117,6 @@ public class CustomMobConfiguration {
                     AbstractHorse(getJumpStrength()));
 
         // "Ageable" mobs that cannot actually be babies : Parrot, Bat, Piglin Brute
-        // TODO Verify that there are no other mobs (probably not)
         if(Ageable.class.isAssignableFrom(type.getEntityClass())
             && !Arrays.asList(Parrot.class, Bat.class, PiglinBrute.class).contains(type.getEntityClass()))
             customMob.addCustomMobType(new ca.pandaaa.custommobs.custommobs.options.
@@ -328,14 +326,14 @@ public class CustomMobConfiguration {
     }
 
     public static final String POTIONS = "potions";
-    public List<PotionMeta> getPotionMeta() {
+    public List<PotionEffect> getPotionEffects() {
         if(!mobConfiguration.contains(POTIONS, true))
             return new ArrayList<>();
-        return (List<PotionMeta>) mobConfiguration.getList(POTIONS);
+        return (List<PotionEffect>) mobConfiguration.getList(POTIONS);
     }
 
-    public void setPotionMeta(List<PotionMeta> potionMeta) {
-        mobConfiguration.set(POTIONS, potionMeta);
+    public void setPotionEffects(List<PotionEffect> potionEffects) {
+        mobConfiguration.set(POTIONS, potionEffects);
         saveConfigurationFile();
     }
 
@@ -938,21 +936,16 @@ public class CustomMobConfiguration {
         saveConfigurationFile();
     }
 
-    private static final String MINIMUM_DAMAGE = "special.damage-range.minimum";
-    private static final String MAXIMUM_DAMAGE = "special.damage-range.maximum";
     private static final String DAMAGE = "special.damage";
     private DamageRange getDamageRange() {
-        if(mobConfiguration.contains(MINIMUM_DAMAGE, true)
-                && mobConfiguration.contains(MAXIMUM_DAMAGE, true))
-            return new DamageRange(
-                    mobConfiguration.getDouble(MINIMUM_DAMAGE),
-                    mobConfiguration.getDouble(MAXIMUM_DAMAGE));
-        else if (mobConfiguration.contains(DAMAGE, true))
-            return new DamageRange(
-                    mobConfiguration.getDouble(DAMAGE),
-                    mobConfiguration.getDouble(DAMAGE));
-        else
+        if(!mobConfiguration.contains(DAMAGE, true))
             return null;
+        return (DamageRange) mobConfiguration.get(DAMAGE);
+    }
+
+    public void setDamageRange(DamageRange damageRange) {
+        mobConfiguration.set(DAMAGE, damageRange);
+        saveConfigurationFile();
     }
 
 

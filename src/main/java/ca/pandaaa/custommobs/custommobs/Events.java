@@ -139,7 +139,6 @@ public class Events implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        // TODO This kicks the client.
         if (event.getClickedInventory() == null || event.getClickedInventory().getType() != InventoryType.PLAYER)
             return;
 
@@ -213,7 +212,6 @@ public class Events implements Listener {
             }
         }
 
-        // TODO Maybe shouldnt use DyeColor (custom object)?
         for(DyeColor group : dropsByGroup.keySet()) {
             List<Drop> groupDropList = dropsByGroup.get(group);
             if(groupDropList.size() == 1)
@@ -249,7 +247,7 @@ public class Events implements Listener {
         List<Drop> globalFilteredDrops = filterJustOnePerGroup(successfulGlobalDrops);
         if(globalFilteredDrops == null)
             return;
-// TODO BUG WHEN DROPPING WITH LOW PERCENTS
+// TODO MAYBE A BUG WHEN DROPPING WITH LOW PERCENTS
         // Global drops (one for everyone)
         for (Drop successfulDrop : globalFilteredDrops) {
             switch (successfulDrop.getDropCondition()) {
@@ -265,12 +263,9 @@ public class Events implements Listener {
                     double mostDamage = 0;
                     Player player = null;
                     for(NamespacedKey entityNamespacedKey : entity.getPersistentDataContainer().getKeys()) {
-                        Bukkit.broadcastMessage(entityNamespacedKey + "");
                         if (entityNamespacedKey.getKey().contains("CustomMobs.Damage.".toLowerCase())) {
                             UUID uuid = UUID.fromString(entityNamespacedKey.getKey().replaceAll("CustomMobs.Damage.".toLowerCase(), ""));
-                            Bukkit.broadcastMessage(uuid + "");
                             double damage = entity.getPersistentDataContainer().get(entityNamespacedKey, PersistentDataType.DOUBLE);
-                            Bukkit.broadcastMessage(damage + "");
                             // TODO make sure this work if the player is offline (should not receive it)
                             if(Bukkit.getPlayer(uuid) != null && damage > mostDamage) {
                                 mostDamage = damage;
@@ -308,8 +303,7 @@ public class Events implements Listener {
             event.getEntity().remove();
             if (nearbyCustomMobs < customMob.getSpawner().getMaxNearbyCount()) {
                 int availableSpawnCount = customMob.getSpawner().getMaxNearbyCount() - nearbyCustomMobs;
-                int random = new Random().nextInt(Math.min(customMob.getSpawner().getSpawnCount(), availableSpawnCount))+ 1;
-                
+                int random = new Random().nextInt(Math.min(customMob.getSpawner().getSpawnCount(), availableSpawnCount)) + 1;
                 for (int i = 0; i < random; i++) {
                     double offsetX = (new Random().nextDouble() * 2 - 1) * range;
                     double offsetY = (new Random().nextDouble() * 2 - 1) * range;
