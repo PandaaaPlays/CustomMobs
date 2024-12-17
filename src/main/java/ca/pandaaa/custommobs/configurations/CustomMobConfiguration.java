@@ -7,6 +7,7 @@ import ca.pandaaa.custommobs.custommobs.Drop;
 import ca.pandaaa.custommobs.custommobs.Equipment;
 import ca.pandaaa.custommobs.custommobs.Messages;
 import ca.pandaaa.custommobs.custommobs.Sound;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.TypesGUI;
 import ca.pandaaa.custommobs.utils.DamageRange;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.*;
@@ -261,7 +262,7 @@ public class CustomMobConfiguration {
     public ItemStack getItem(String configurationPath) {
         ItemStack item = getItemStack(configurationPath);
         if(item == null) {
-            item = new ItemStack(configurationPath.equalsIgnoreCase(ITEM) ? Material.ALLAY_SPAWN_EGG : Material.SPAWNER);
+            item = new ItemStack(configurationPath.equalsIgnoreCase(ITEM) ? TypesGUI.getSpawnEggMaterial(getType()) : Material.SPAWNER);
         }
 
         if(item.getItemMeta().getDisplayName().isEmpty()) {
@@ -900,7 +901,7 @@ public class CustomMobConfiguration {
     private static final String CAN_PICKUP_LOOT = "special.can-pickup-loot";
     public boolean canPickupLoot() {
         if(!mobConfiguration.contains(CAN_PICKUP_LOOT, true))
-            return true;
+            return false;
 
         return mobConfiguration.getBoolean(CAN_PICKUP_LOOT);
     }

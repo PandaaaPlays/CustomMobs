@@ -148,7 +148,7 @@ public class TypesGUI extends CustomMobsGUI {
         return items;
     }
 
-    private Material getSpawnEggMaterial(EntityType type) {
+    public static Material getSpawnEggMaterial(EntityType type) {
         try {
             if(type == EntityType.ILLUSIONER)
                 return Material.SPECTRAL_ARROW;
