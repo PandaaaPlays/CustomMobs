@@ -334,7 +334,7 @@ public class Events implements Listener {
         if(itemStack.containsEnchantment(Enchantment.SILK_TOUCH) && container.has(key, PersistentDataType.STRING) ) {
 
             ItemStack spawnerItem = manager.getCustomMobItem(manager.getCustomMob(container.get(key, PersistentDataType.STRING)),"spawner",1);
-            block.getLocation().getWorld().dropItemNaturally(block.getLocation(), spawnerItem);
+            block.getLocation().getWorld().dropItem(block.getLocation(), spawnerItem);
         }
     }
 }

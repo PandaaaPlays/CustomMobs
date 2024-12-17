@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public enum SoundEnum {
@@ -1636,6 +1637,14 @@ public enum SoundEnum {
             }
         }
         return sounds;
+    }
+
+    public static List<String> getSoundsName() {
+        List<String> soundsName = new ArrayList<>();
+        for(SoundEnum sound : SoundEnum.values()) {
+            soundsName.add(sound.name());
+        }
+        return soundsName;
     }
 
     public Material getMaterial() {

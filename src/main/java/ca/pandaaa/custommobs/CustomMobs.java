@@ -7,9 +7,11 @@ import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.*;
 import ca.pandaaa.custommobs.utils.DamageRange;
 import ca.pandaaa.custommobs.utils.Metrics;
+import ca.pandaaa.custommobs.utils.SoundEnum;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Registry;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -80,6 +82,7 @@ Caused by: java.lang.ClassNotFoundException: ca.pandaaa.custommobs.utils.Metrics
 
         getCommandsAndListeners();
 
+        checkSoundEnum();
         this.addMetrics(metrics);
     }
 
@@ -158,5 +161,25 @@ Caused by: java.lang.ClassNotFoundException: ca.pandaaa.custommobs.utils.Metrics
             }
             return entityTypeAmount;
         }));
+    }
+
+    private void checkSoundEnum(){
+        List<String> soundsName = SoundEnum.getSoundsName();
+        List<org.bukkit.Sound> sounds =  new ArrayList<>();
+        List<String> newSounds = new ArrayList<>();
+
+        Registry.SOUNDS.iterator().forEachRemaining(sounds::add);
+        Collections.sort(sounds);
+
+        for (int i = 0; i < soundsName.size(); i++){
+            //System.out.println(soundsName.get(i));
+            while(!sounds.get(i+newSounds.size()).toString().equals(soundsName.get(i))){
+                newSounds.add(sounds.get(i+newSounds.size()-1).toString());
+                System.out.println(sounds.get(i+newSounds.size()-1).toString() +" i="+i+" pis" + newSounds.size());
+            }
+        }
+        for(String mot : newSounds){
+            System.out.println(mot);
+        }
     }
 }
