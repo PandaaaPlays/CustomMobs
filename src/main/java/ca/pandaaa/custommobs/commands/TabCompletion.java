@@ -24,6 +24,7 @@ public class TabCompletion implements TabCompleter {
                 completionList.add("give");
                 completionList.add("message");
                 completionList.add("death-message");
+                completionList.add("silk-spawner");
             }
             if(args.length == 2 && (args[0].equalsIgnoreCase("summon")
                 || args[0].equalsIgnoreCase("message")
@@ -33,6 +34,10 @@ public class TabCompletion implements TabCompleter {
             if(args.length == 2 && args[0].equalsIgnoreCase("give")) {
                 completionList = Bukkit.getOnlinePlayers().stream()
                         .map(Player::getName).collect(Collectors.toList());
+            }
+            if(args.length == 2 && args[0].equalsIgnoreCase("silk-spawner")) {
+                completionList.add("On");
+                completionList.add("Off");
             }
 
             if(args.length == 3 && args[0].equalsIgnoreCase("give")) {

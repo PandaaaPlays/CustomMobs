@@ -33,7 +33,7 @@ public class Commands implements CommandExecutor {
 
         if (command.getName().equalsIgnoreCase("custommobs")) {
             if (args.length == 0) {
-                if(sender instanceof Player)
+                if (sender instanceof Player)
                     openCustomMobsGUI((Player) sender);
                 else
                     sendConsoleUnknownCommandMessage(sender, "The console cannot use this command.");
@@ -59,6 +59,9 @@ public class Commands implements CommandExecutor {
                 case "death-message":
                     messageCommand(sender, args, true);
                     break;
+                case "silk-spawner":
+                    silkSpawnerCommand(sender, args);
+                    break;
                 default:
                     sendUnknownCommandMessage(sender);
                     break;
@@ -73,24 +76,24 @@ public class Commands implements CommandExecutor {
             return;
         }
 
-        if(args.length != 2 && args.length != 5) {
+        if (args.length != 2 && args.length != 5) {
             sendUnknownCommandMessage(sender);
             return;
         }
 
-        if(args.length == 2 && !(sender instanceof Player)) {
+        if (args.length == 2 && !(sender instanceof Player)) {
             sendConsoleUnknownCommandMessage(sender, "Please use : /custommobs summon [name] [x] [y] [z]");
             return;
         }
 
-        if(!customMobsManager.getCustomMobNames().contains(args[1].toLowerCase())) {
+        if (!customMobsManager.getCustomMobNames().contains(args[1].toLowerCase())) {
             sendUnknownMobMessage(sender, args[1]);
             return;
         }
 
-        if(args.length == 2)
+        if (args.length == 2)
             customMobsManager.getCustomMob(args[1]).spawnCustomMob(((Player) sender).getLocation());
-        if(args.length == 5) {
+        if (args.length == 5) {
             try {
                 double x = Double.parseDouble(args[2]);
                 double y = Double.parseDouble(args[3]);
@@ -108,31 +111,31 @@ public class Commands implements CommandExecutor {
             return;
         }
 
-        if(args.length != 4 && args.length != 5) {
+        if (args.length != 4 && args.length != 5) {
             sendUnknownGiveMessage(sender);
             return;
         }
 
         Player receiver = Objects.requireNonNull(Bukkit.getPlayer(args[1]));
-        if(!Bukkit.getOnlinePlayers().contains(receiver)) {
+        if (!Bukkit.getOnlinePlayers().contains(receiver)) {
             sendUnknownCommandMessage(sender, "Player " + args[1] + " is not online.");
             return;
         }
 
         String customMob = args[2].toLowerCase();
-        if(!customMobsManager.getCustomMobNames().contains(args[2].toLowerCase())) {
+        if (!customMobsManager.getCustomMobNames().contains(args[2].toLowerCase())) {
             sendUnknownMobMessage(sender, args[2]);
             return;
         }
 
         String type = args[3];
-        if(!type.equalsIgnoreCase("item") && !type.equalsIgnoreCase("spawner")) {
+        if (!type.equalsIgnoreCase("item") && !type.equalsIgnoreCase("spawner")) {
             sendUnknownGiveMessage(sender);
             return;
         }
 
         int amount = 1;
-        if(args.length == 5) {
+        if (args.length == 5) {
             try {
                 amount = Integer.parseInt(args[4]);
             } catch (Exception e) {
@@ -142,7 +145,7 @@ public class Commands implements CommandExecutor {
 
         sender.sendMessage(configManager.getSenderGiveMessage(receiver.getName(), customMob, type, amount));
         String senderName;
-        if(sender instanceof ConsoleCommandSender) {
+        if (sender instanceof ConsoleCommandSender) {
             senderName = "Console";
         } else {
             senderName = sender.getName();
@@ -158,26 +161,26 @@ public class Commands implements CommandExecutor {
             return;
         }
 
-        if(args.length < 4) {
+        if (args.length < 4) {
             sendUnknownCommandMessage(sender);
             return;
         }
 
-        if(!customMobsManager.getCustomMobNames().contains(args[1].toLowerCase())) {
+        if (!customMobsManager.getCustomMobNames().contains(args[1].toLowerCase())) {
             sendUnknownMobMessage(sender, args[1]);
         }
 
-        if(args[2].equalsIgnoreCase("add")) {
+        if (args[2].equalsIgnoreCase("add")) {
             String message = String.join(" ", Arrays.copyOfRange(args, 3, args.length));
             customMobsManager.getCustomMob(args[1]).getCustomMobConfiguration().addMessageText(message, death);
             sendMessagesChangeMessage(sender, "Added the following" + (death ? " death " : " ") + "message to " + args[1] + " : &r" + message);
-        } else if(args.length == 4 && args[2].equalsIgnoreCase("remove")) {
+        } else if (args.length == 4 && args[2].equalsIgnoreCase("remove")) {
             try {
-                if(args[3].equalsIgnoreCase("all")) {
+                if (args[3].equalsIgnoreCase("all")) {
                     customMobsManager.getCustomMob(args[1]).getCustomMobConfiguration()
                             .clearMessageText(death);
                     sendMessagesChangeMessage(sender, "Removed all the" + (death ? " death " : " ") + "messages of " + args[1] + ".");
-                } else if(customMobsManager.getCustomMob(args[1]).getCustomMobConfiguration().removeMessageText(Integer.parseInt(args[3]), death)) {
+                } else if (customMobsManager.getCustomMob(args[1]).getCustomMobConfiguration().removeMessageText(Integer.parseInt(args[3]), death)) {
                     sendMessagesChangeMessage(sender, "Removed" + (death ? " death " : " ") + "message " + Integer.parseInt(args[3]) + " of " + args[1] + ".");
                 } else {
                     sendUnknownCommandMessage(sender, "There isn't " + Integer.parseInt(args[3]) + " messages.");
@@ -185,11 +188,11 @@ public class Commands implements CommandExecutor {
             } catch (Exception e) {
                 sendUnknownCommandMessage(sender, args[3] + " is not a valid Integer.");
             }
-        } else if(args.length >= 5 && args[2].equalsIgnoreCase("edit")) {
+        } else if (args.length >= 5 && args[2].equalsIgnoreCase("edit")) {
             try {
                 String message = String.join(" ", Arrays.copyOfRange(args, 4, args.length));
-                if(customMobsManager.getCustomMob(args[1]).getCustomMobConfiguration().editMessageText(Integer.parseInt(args[3]), message, death)) {
-                    sendMessagesChangeMessage(sender, "Edited" + (death ? " death " : " ") + "message " + Integer.parseInt(args[3]) + " of " + args[1] +  " to : " + message);
+                if (customMobsManager.getCustomMob(args[1]).getCustomMobConfiguration().editMessageText(Integer.parseInt(args[3]), message, death)) {
+                    sendMessagesChangeMessage(sender, "Edited" + (death ? " death " : " ") + "message " + Integer.parseInt(args[3]) + " of " + args[1] + " to : " + message);
                 } else {
                     sendUnknownCommandMessage(sender, "There isn't " + Integer.parseInt(args[3]) + (death ? " death " : " ") + "messages.");
                 }
@@ -198,6 +201,32 @@ public class Commands implements CommandExecutor {
             }
         } else {
             sendUnknownCommandMessage(sender, "Messages command formatted incorrectly.");
+        }
+    }
+
+    private void silkSpawnerCommand(CommandSender sender, String[] args) {
+        if (!sender.hasPermission("custommobs.admin")) {
+            sendNoPermissionMessage(sender);
+            return;
+        }
+
+        if (args.length == 1) {
+            configManager.setSilkSpawner(!configManager.getSilkSpawner());
+        } else if (args.length == 2) {
+            if (args[1].equalsIgnoreCase("on")) {
+                configManager.setSilkSpawner(true);
+            } else if (args[1].equalsIgnoreCase("off")) {
+                configManager.setSilkSpawner(false);
+            } else {
+                configManager.setSilkSpawner(!configManager.getSilkSpawner());
+            }
+        } else {
+            sendUnknownCommandMessage(sender, "Messages command formatted incorrectly.");
+        }
+        if(configManager.getSilkSpawner()){
+            sendSilkSpawnerMessage(sender, "&a&lOn");
+        }else{
+            sendSilkSpawnerMessage(sender, "&c&lOff");
         }
     }
 
@@ -250,4 +279,9 @@ public class Commands implements CommandExecutor {
     private void sendMessagesChangeMessage(CommandSender sender, String complement) {
         sender.sendMessage(configManager.getMessagesChangeMessage(complement));
     }
+
+    private void sendSilkSpawnerMessage(CommandSender sender, String complement) {
+        sender.sendMessage(configManager.getSilkSpawnerMessage(complement));
+    }
+
 }
