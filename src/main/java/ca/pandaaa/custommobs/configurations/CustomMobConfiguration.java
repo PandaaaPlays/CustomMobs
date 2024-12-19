@@ -114,7 +114,7 @@ public class CustomMobConfiguration {
 
         if(AbstractHorse.class.isAssignableFrom(type.getEntityClass()))
             customMob.addCustomMobType(new ca.pandaaa.custommobs.custommobs.options.
-                    AbstractHorse(getJumpStrength()));
+                    AbstractHorse(getJumpStrength(),hasSaddle()));
 
         // "Ageable" mobs that cannot actually be babies : Parrot, Bat, Piglin Brute
         if(Ageable.class.isAssignableFrom(type.getEntityClass())

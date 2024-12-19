@@ -12,12 +12,14 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//TODO saddle drop on mob death (pig aussi)
 public class AbstractHorse extends CustomMobOption {
     private Double jumpStrength;
+    private boolean saddle;
 
-    public AbstractHorse(Double jumpStrength) {
+    public AbstractHorse(Double jumpStrength, boolean saddle) {
         this.jumpStrength = jumpStrength;
+        this.saddle = saddle;
     }
 
     public void applyOptions(Entity customMob) {
@@ -26,12 +28,16 @@ public class AbstractHorse extends CustomMobOption {
 
         if(jumpStrength != null)
             ((org.bukkit.entity.AbstractHorse) customMob).setJumpStrength(jumpStrength);
+        if(saddle)
+            ((org.bukkit.entity.AbstractHorse) customMob).getInventory().setSaddle(new ItemStack(Material.SADDLE));
+
     }
 
     public List<ItemStack> getOptionItems(CustomMob customMob) {
         List<ItemStack> items = new ArrayList<>();
 
         items.add(getOptionItemStack(getJumpStrengthItem(), true, false));
+        items.add(getOptionItemStack(getSaddleItem(), true, false));
 
         return items;
     }
@@ -52,6 +58,13 @@ public class AbstractHorse extends CustomMobOption {
                 }
                 return getOptionItemStack(getJumpStrengthItem(), true, false);
             }
+            case "saddle": {
+                saddle = !saddle;
+                customMob.getCustomMobConfiguration().setHasSaddle(saddle);
+                new OptionsGUI(customMob).openInventory((Player) clicker, 1);
+
+                return getOptionItemStack(getSaddleItem(), true, false);
+            }
 
         }
         return null;
@@ -62,6 +75,15 @@ public class AbstractHorse extends CustomMobOption {
         item.setName("&a&lJump strength");
         item.addLore("&eJump strength: &f" + jumpStrength);
         item.setPersistentDataContainer(this.getClass().getSimpleName(), "JumpStrength");
+        return item;
+    }
+
+    public CustomMobsItem getSaddleItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.SADDLE);
+        item.setName("&a&lSaddle");
+        String saddle = this.saddle ? "&a&lOn" : "&c&lOff";
+        item.addLore("&eSaddle: &f" + saddle);
+        item.setPersistentDataContainer(this.getClass().getSimpleName(), "Saddle");
         return item;
     }
 }
