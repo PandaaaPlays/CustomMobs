@@ -208,7 +208,6 @@ public class EditGUI extends CustomMobsGUI {
                 new OptionsGUI(customMob).openInventory(clicker, 1);
                 break;
             case 30:
-                // TODO Test if this works with 2 players...
                 clicker.closeInventory();
                 clicker.sendMessage(Utils.applyFormat("&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &eCustomMob renaming"));
                 clicker.sendMessage(Utils.applyFormat(" &6&l- &fEnter the name you want &e&nin the chat&f."));
