@@ -163,23 +163,38 @@ Caused by: java.lang.ClassNotFoundException: ca.pandaaa.custommobs.utils.Metrics
         }));
     }
 
-    private void checkSoundEnum(){
+    private void checkSoundEnum() {
         List<String> soundsName = SoundEnum.getSoundsName();
-        List<org.bukkit.Sound> sounds =  new ArrayList<>();
+        List<org.bukkit.Sound> sounds = new ArrayList<>();
         List<String> newSounds = new ArrayList<>();
 
         Registry.SOUNDS.iterator().forEachRemaining(sounds::add);
         Collections.sort(sounds);
+        Collections.sort(soundsName);
 
-        for (int i = 0; i < soundsName.size(); i++){
-            //System.out.println(soundsName.get(i));
-            while(!sounds.get(i+newSounds.size()).toString().equals(soundsName.get(i))){
-                newSounds.add(sounds.get(i+newSounds.size()-1).toString());
-                System.out.println(sounds.get(i+newSounds.size()-1).toString() +" i="+i+" pis" + newSounds.size());
+        int i = 0, j = 0;
+
+        while (j < sounds.size()) {
+            String registrySound = sounds.get(j).toString();
+
+            if (i >= soundsName.size() || registrySound.compareToIgnoreCase(soundsName.get(i)) < 0) {
+                newSounds.add(registrySound);
+                j++;
             }
+            // If registrySound matches the current soundName
+            else if (registrySound.equalsIgnoreCase(soundsName.get(i))) {
+                i++;
+                j++;
+            }
+            else
+                i++;
         }
-        for(String mot : newSounds){
-            System.out.println(mot);
+
+        if(!newSounds.isEmpty()) {
+            getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&',  "&c[!] SoundEnum is missing some Sound values :"));
+            for(String value : newSounds) {
+                getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&c - " + value));
+            }
         }
     }
 }
