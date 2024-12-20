@@ -222,10 +222,12 @@ public class Commands implements CommandExecutor {
             }
         } else {
             sendUnknownCommandMessage(sender, "Messages command formatted incorrectly.");
+            return;
         }
+
         if(configManager.getSilkSpawner()){
             sendSilkSpawnerMessage(sender, "&a&lOn");
-        }else{
+        } else {
             sendSilkSpawnerMessage(sender, "&c&lOff");
         }
     }

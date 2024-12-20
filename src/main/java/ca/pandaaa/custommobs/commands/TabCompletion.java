@@ -36,8 +36,8 @@ public class TabCompletion implements TabCompleter {
                         .map(Player::getName).collect(Collectors.toList());
             }
             if(args.length == 2 && args[0].equalsIgnoreCase("silk-spawner")) {
-                completionList.add("On");
-                completionList.add("Off");
+                completionList.add("on");
+                completionList.add("off");
             }
 
             if(args.length == 3 && args[0].equalsIgnoreCase("give")) {

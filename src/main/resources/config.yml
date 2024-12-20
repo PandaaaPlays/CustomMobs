@@ -11,7 +11,7 @@ silk-spawner: true
 
 # The message displayed when the command silk-spawner is sent.
 # %complement% -> Will change to the status of silk-spawner.
-silk-spawner-command: "&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &eSilk touch on spawner is : %complement%"
+silk-spawner-command: "&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &eSilk touch on spawners toggled : %complement%"
 
 # The message displayed when the command provided is invalid.
 # %complement% -> Will change to a useful tip if applicable.
