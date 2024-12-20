@@ -3,6 +3,7 @@ package ca.pandaaa.custommobs.custommobs;
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.utils.DropConditions;
 import org.bukkit.*;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.enchantments.Enchantment;
@@ -11,6 +12,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.SpawnerSpawnEvent;
@@ -306,14 +308,30 @@ public class Events implements Listener {
                 int random = new Random().nextInt(Math.min(customMob.getSpawner().getSpawnCount(), availableSpawnCount)) + 1;
                 for (int i = 0; i < random; i++) {
                     double offsetX = (new Random().nextDouble() * 2 - 1) * range;
-                    double offsetY = (new Random().nextDouble() * 2 - 1) * range;
                     double offsetZ = (new Random().nextDouble() * 2 - 1) * range;
-                    Location spawnLocation = location.clone().add(offsetX, offsetY, offsetZ);
+
+                    Location spawnLocation = location.clone().add(offsetX, 0, offsetZ);
+                    spawnLocation.setY(getNearestY(location.getWorld(), location.getX() + offsetX, location.getY(), location.getZ() + offsetZ));
 
                     CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(mobName).spawnCustomMob(spawnLocation);
                 }
             }
         }
+    }
+
+    private double getNearestY(World world, double x, double y, double z) {
+        Location location = new Location(world, x, y, z);
+
+        for(int i = -2; i < 5; i++) {
+            boolean blockUnder = !location.clone().add(0, i - 1, 0).getBlock().isPassable();
+            boolean passable = location.clone().add(0, i, 0).getBlock().isPassable();
+            boolean passableOver = location.clone().add(0, i + 1, 0).getBlock().isPassable();
+
+            if(blockUnder && passable && passableOver) {
+                return y + i;
+            }
+        }
+        return y;
     }
 
     @EventHandler

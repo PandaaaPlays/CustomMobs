@@ -57,7 +57,7 @@ public class EditGUI extends CustomMobsGUI {
         this.chestplate = getMenuItem(new ItemStack(Material.NETHERITE_CHESTPLATE), true);
         this.leggings = getMenuItem(new ItemStack(Material.NETHERITE_LEGGINGS), true);
         this.boots = getMenuItem(new ItemStack(Material.NETHERITE_BOOTS), true);
-        this.types = getMenuItem(new ItemStack(Material.ALLAY_SPAWN_EGG), true);
+        this.types = getMenuItem(new ItemStack(TypesGUI.getSpawnEggMaterial(customMob.getType())), true);
         this.options = getMenuItem(new ItemStack(Material.END_CRYSTAL), true);
         this.name = getMenuItem(new ItemStack(Material.SPRUCE_HANGING_SIGN), true);
         this.drops = getMenuItem(new ItemStack(Material.PITCHER_POD), true);

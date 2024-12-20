@@ -3,6 +3,7 @@ package ca.pandaaa.custommobs.custommobs;
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.options.CustomMobOption;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.TypesGUI;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.*;
 import org.bukkit.attribute.Attributable;
@@ -259,6 +260,11 @@ public class CustomMob implements Listener {
     }
 
     public void setType(EntityType entityType) {
+        if(item.getType() == TypesGUI.getSpawnEggMaterial(getType())) {
+            ItemStack newItem = item.clone();
+            newItem.setType(TypesGUI.getSpawnEggMaterial(entityType));
+            setItem(newItem);
+        }
         mobConfiguration.resetType(this.entityType);
         mobConfiguration.setType(entityType);
         this.entityType = entityType;
