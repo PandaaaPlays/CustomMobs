@@ -4,7 +4,11 @@ import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.utils.DropConditions;
 import org.bukkit.*;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
+import org.bukkit.block.CreatureSpawner;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -20,6 +24,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.event.block.BlockBreakEvent;
 
 import java.util.*;
 
@@ -328,4 +333,27 @@ public class Events implements Listener {
         }
         return y;
     }
+
+    @EventHandler
+    public void onSpawnerBreak(BlockBreakEvent event) {
+        Manager manager = CustomMobs.getPlugin().getCustomMobsManager();
+        Player player = event.getPlayer();
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        Block block = event.getBlock();
+
+        if(!manager.configManager.getSilkSpawner() || block.getType() != Material.SPAWNER || !itemStack.getType().toString().contains("PICKAXE")){
+            return;
+        }
+
+        CreatureSpawner spawnerBlock = (CreatureSpawner) block.getState();
+        PersistentDataContainer container = spawnerBlock.getPersistentDataContainer();
+        NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Spawner");
+
+        if(itemStack.containsEnchantment(Enchantment.SILK_TOUCH) && container.has(key, PersistentDataType.STRING) ) {
+
+            ItemStack spawnerItem = manager.getCustomMobItem(manager.getCustomMob(container.get(key, PersistentDataType.STRING)),"spawner",1);
+            block.getLocation().getWorld().dropItem(block.getLocation(), spawnerItem);
+        }
+    }
 }
+

@@ -1,13 +1,25 @@
 package ca.pandaaa.custommobs.configurations;
 
+import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.configuration.file.FileConfiguration;
+
+import java.io.IOException;
 
 public class ConfigurationManager {
     private final FileConfiguration configuration;
 
     public ConfigurationManager(FileConfiguration configuration) {
         this.configuration = configuration;
+    }
+
+    public boolean getSilkSpawner() {
+        return configuration.getBoolean("silk-spawner");
+    }
+
+    public void setSilkSpawner(boolean bool){
+        configuration.set("silk-spawner", bool);
+        CustomMobs.getPlugin().saveConfig();
     }
 
     public String getUnknownCommandMessage(String complement) {
@@ -49,4 +61,9 @@ public class ConfigurationManager {
     public String getPluginReloadMessage() {
         return Utils.applyFormat(configuration.getString("plugin-reload"));
     }
+
+    public String getSilkSpawnerMessage(String complement) {
+        return Utils.applyFormat(configuration.getString("silk-spawner-command").replaceAll("%complement%", complement));
+    }
+
 }

@@ -4,6 +4,7 @@ import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.EditGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.OthersGUI;
 import ca.pandaaa.custommobs.utils.Utils;
 import ca.pandaaa.custommobs.custommobs.Sound;
 import org.bukkit.Material;
@@ -136,7 +137,7 @@ public class SoundsGUI extends CustomMobsGUI {
         switch (event.getSlot()) {
             case 45:
                 if(!name.contains("("))
-                    new EditGUI(customMob, CustomMobs.getPlugin().getCustomMobsManager(), clicker).openInventory();
+                    new OthersGUI(customMob).openInventory(clicker);
                 else {
                     openInventory(clicker, currentPage);
                 }
