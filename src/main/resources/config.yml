@@ -6,6 +6,13 @@
 #  |_____|___|_|_|_| |_|_  |___|_| |__,|_| |_|___|_|_|
 #                      |___|
 
+# Describe if CustomMob spawners are dropped when mining with a silk touch pickaxe
+silk-spawner: true
+
+# The message displayed when the command silk-spawner is sent.
+# %complement% -> Will change to the status of silk-spawner.
+silk-spawner-command: "&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &eSilk touch on spawners toggled : %complement%"
+
 # The message displayed when the command provided is invalid.
 # %complement% -> Will change to a useful tip if applicable.
 unknown-command: "&c&l[!] &cUnknown Command. %complement%"
@@ -32,3 +39,4 @@ messages-change: "&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &eMessage changed. %compleme
 
 # The message displayed when the configuration of the plugin is reloaded.
 plugin-reload: "&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &ePlugin Reloaded."
+

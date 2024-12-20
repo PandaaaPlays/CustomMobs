@@ -7,9 +7,11 @@ import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.*;
 import ca.pandaaa.custommobs.utils.DamageRange;
 import ca.pandaaa.custommobs.utils.Metrics;
+import ca.pandaaa.custommobs.utils.SoundEnum;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Registry;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -80,6 +82,7 @@ Caused by: java.lang.ClassNotFoundException: ca.pandaaa.custommobs.utils.Metrics
 
         getCommandsAndListeners();
 
+        checkSoundEnum();
         this.addMetrics(metrics);
     }
 
@@ -158,5 +161,40 @@ Caused by: java.lang.ClassNotFoundException: ca.pandaaa.custommobs.utils.Metrics
             }
             return entityTypeAmount;
         }));
+    }
+
+    private void checkSoundEnum() {
+        List<String> soundsName = SoundEnum.getSoundsName();
+        List<org.bukkit.Sound> sounds = new ArrayList<>();
+        List<String> newSounds = new ArrayList<>();
+
+        Registry.SOUNDS.iterator().forEachRemaining(sounds::add);
+        Collections.sort(sounds);
+        Collections.sort(soundsName);
+
+        int i = 0, j = 0;
+
+        while (j < sounds.size()) {
+            String registrySound = sounds.get(j).toString();
+
+            if (i >= soundsName.size() || registrySound.compareToIgnoreCase(soundsName.get(i)) < 0) {
+                newSounds.add(registrySound);
+                j++;
+            }
+            // If registrySound matches the current soundName
+            else if (registrySound.equalsIgnoreCase(soundsName.get(i))) {
+                i++;
+                j++;
+            }
+            else
+                i++;
+        }
+
+        if(!newSounds.isEmpty()) {
+            getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&',  "&c[!] SoundEnum is missing some Sound values :"));
+            for(String value : newSounds) {
+                getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&c - " + value));
+            }
+        }
     }
 }

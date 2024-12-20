@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomMobsItem extends org.bukkit.inventory.ItemStack {
-
-    // TODO test if this works with 2 players, if not, we need to clone the item before actually changing the itme
     public CustomMobsItem(Material material) {
         super(material);
     }
