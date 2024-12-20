@@ -3,12 +3,10 @@ package ca.pandaaa.custommobs.custommobs;
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.utils.DropConditions;
 import org.bukkit.*;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -24,7 +22,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.event.block.BlockBreakEvent;
 
 import java.util.*;
 

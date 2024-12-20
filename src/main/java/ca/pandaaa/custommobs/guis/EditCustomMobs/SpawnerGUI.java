@@ -8,7 +8,6 @@ import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

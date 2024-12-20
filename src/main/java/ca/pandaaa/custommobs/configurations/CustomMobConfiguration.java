@@ -2,10 +2,6 @@ package ca.pandaaa.custommobs.configurations;
 
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.*;
-import ca.pandaaa.custommobs.custommobs.CustomMob;
-import ca.pandaaa.custommobs.custommobs.Drop;
-import ca.pandaaa.custommobs.custommobs.Equipment;
-import ca.pandaaa.custommobs.custommobs.Messages;
 import ca.pandaaa.custommobs.custommobs.Sound;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.TypesGUI;
 import ca.pandaaa.custommobs.utils.DamageRange;
@@ -15,7 +11,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.io.File;

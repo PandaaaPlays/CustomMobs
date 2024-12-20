@@ -4,8 +4,6 @@ import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.io.IOException;
-
 public class ConfigurationManager {
     private final FileConfiguration configuration;
 
