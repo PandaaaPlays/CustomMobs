@@ -86,41 +86,57 @@ public class DoubleRangeGUI extends CustomMobsGUI implements Listener {
 
         switch (event.getSlot()) {
             case 1:
-                if (((!shifting && currentMin >= minimum + 1) || (shifting && currentMin >= minimum + 5)) && !small)
+                if(((!shifting && currentMin - 1 <= minimum) || (shifting && currentMin - 5 <= minimum)) && !small)
+                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), minimum,"Minimum"));
+                else if (((!shifting && currentMin >= minimum + 1) || (shifting && currentMin >= minimum + 5)) && !small)
                     inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? currentMin - 5 : currentMin - 1, "Minimum"));
                 break;
             case 2:
-                if ((!shifting && currentMin >= minimum + 0.1) || (shifting && currentMin >= minimum + 0.5))
+                if(((!shifting && currentMin - 0.1 <= minimum) || (shifting && currentMin - 0.5 <= minimum)) && !small)
+                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), minimum,"Minimum"));
+                else if ((!shifting && currentMin >= minimum + 0.1) || (shifting && currentMin >= minimum + 0.5))
                     inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? currentMin - 0.5 : currentMin - 0.1, "Minimum"));
                 break;
             case 4:
                 consumer.accept(new double[]{currentMin, currentMax});
                 break;
             case 6:
-                if ((!shifting && currentMin <= currentMax - 0.1) || (shifting && currentMin <= currentMax - 0.5))
+                if(((!shifting && currentMin + 0.1 >= currentMax) || (shifting && currentMin + 0.5 >= currentMax)) && !small)
+                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), currentMax,"Minimum"));
+                else if ((!shifting && currentMin <= currentMax - 0.1) || (shifting && currentMin <= currentMax - 0.5))
                     inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? currentMin + 0.5 : currentMin + 0.1,"Minimum"));
                 break;
             case 7:
-                if (((!shifting && currentMin <= currentMax - 1) || (shifting && currentMin <= currentMax - 5)) && !small)
+                if(((!shifting && currentMin + 1 >= currentMax) || (shifting && currentMin + 5 >= currentMax)) && !small)
+                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), currentMax,"Minimum"));
+                else if (((!shifting && currentMin <= currentMax - 1) || (shifting && currentMin <= currentMax - 5)) && !small)
                     inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? currentMin + 5 : currentMin + 1,"Minimum"));
                 break;
             case 10:
-                if (((!shifting && currentMax >= currentMin + 1) || (shifting && currentMax >= currentMin + 5)) && !small)
+                if(((!shifting && currentMax - 1 <= currentMin) || (shifting && currentMax - 5 <= currentMin)) && !small)
+                    inventory.setItem(4, getConfirmItem(inventory.getItem(13), currentMin,"Maximum"));
+                else if (((!shifting && currentMax >= currentMin + 1) || (shifting && currentMax >= currentMin + 5)) && !small)
                     inventory.setItem(13, getConfirmItem(inventory.getItem(13), shifting ? currentMax - 5 : currentMax - 1,"Maximum"));
                 break;
             case 11:
-                if ((!shifting && currentMax >= currentMin + 0.1) || (shifting && currentMax >= currentMin + 0.5))
+                if(((!shifting && currentMax - 0.1 <= currentMin) || (shifting &&  currentMax - 0.5 <= currentMin)) && !small)
+                    inventory.setItem(4, getConfirmItem(inventory.getItem(13), currentMin, "Maximum"));
+                else if ((!shifting && currentMax >= currentMin + 0.1) || (shifting && currentMax >= currentMin + 0.5))
                     inventory.setItem(13, getConfirmItem(inventory.getItem(13), shifting ? currentMax - 0.5 : currentMax - 0.1,"Maximum"));
                 break;
             case 13:
                 consumer.accept(new double[]{currentMin, currentMax});
                 break;
             case 15:
-                if ((!shifting && currentMax <= maximum - 0.1) || (shifting && currentMax <= maximum - 0.5))
+                if(((!shifting && currentMax + 0.1 >= maximum) || (shifting && currentMax + 0.5 >= maximum)) && !small)
+                    inventory.setItem(4, getConfirmItem(inventory.getItem(13), maximum,"Maximum"));
+                else if ((!shifting && currentMax <= maximum - 0.1) || (shifting && currentMax <= maximum - 0.5))
                     inventory.setItem(13, getConfirmItem(inventory.getItem(13), shifting ? currentMax + 0.5 : currentMax + 0.1,"Maximum"));
                 break;
             case 16:
-                if (((!shifting && currentMax <= maximum - 1) || (shifting && currentMax <= maximum - 5)) && !small)
+                if(((!shifting && currentMax + 1 >= maximum) || (shifting && currentMax + 5 >= maximum)) && !small)
+                    inventory.setItem(4, getConfirmItem(inventory.getItem(13), maximum,"Maximum"));
+                else if (((!shifting && currentMax <= maximum - 1) || (shifting && currentMax <= maximum - 5)) && !small)
                     inventory.setItem(13, getConfirmItem(inventory.getItem(13), shifting ? currentMax + 5 : currentMax + 1,"Maximum"));
                 break;
             default:
