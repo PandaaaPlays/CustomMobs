@@ -36,22 +36,22 @@ public class MessagesGUI extends CustomMobsGUI {
 
     public void openInventory(Player player) {
         inventory.setItem(0, filler);
-        inventory.setItem(1, getMinusItem(minusBig, true));
-        inventory.setItem(2, getMinusItem(minusSmall, false));
+        inventory.setItem(1, getMinusItem(minusBig, true, "top"));
+        inventory.setItem(2, getMinusItem(minusSmall, false, "top"));
         inventory.setItem(3, filler);
         inventory.setItem(4, getMessageItem(new ItemStack(Material.WRITABLE_BOOK), customMob.getCustomMobMessages().getRadius(), false));
         inventory.setItem(5, filler);
-        inventory.setItem(6, getPlusItem(plusSmall, false));
-        inventory.setItem(7, getPlusItem(plusBig, true));
+        inventory.setItem(6, getPlusItem(plusSmall, false, "top"));
+        inventory.setItem(7, getPlusItem(plusBig, true, "top"));
         inventory.setItem(8, filler);
         inventory.setItem(9, filler);
-        inventory.setItem(10, getMinusItem(minusBig, true));
-        inventory.setItem(11, getMinusItem(minusSmall, false));
+        inventory.setItem(10, getMinusItem(minusBig, true, "bottom"));
+        inventory.setItem(11, getMinusItem(minusSmall, false, "bottom"));
         inventory.setItem(12, filler);
         inventory.setItem(13, getMessageItem(new ItemStack(Material.DEAD_BUSH), customMob.getCustomMobMessages().getDeathRadius(), true));
         inventory.setItem(14, filler);
-        inventory.setItem(15, getPlusItem(plusSmall, false));
-        inventory.setItem(16, getPlusItem(plusBig, true));
+        inventory.setItem(15, getPlusItem(plusSmall, false, "bottom"));
+        inventory.setItem(16, getPlusItem(plusBig, true, "bottom"));
         inventory.setItem(17, filler);
         player.openInventory(inventory);
     }
@@ -157,9 +157,11 @@ public class MessagesGUI extends CustomMobsGUI {
         return item;
     }
 
-    private ItemStack getMinusItem(ItemStack item, boolean big) {
+    private ItemStack getMinusItem(ItemStack item, boolean big, String type) {
         ItemMeta meta = item.getItemMeta();
         List<String> itemLore = new ArrayList<>();
+        NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Messages");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, type);
         itemLore.add("");
         if (big) {
             meta.setDisplayName(Utils.applyFormat("&c&l[-] Remove 1 to radius"));
@@ -175,9 +177,11 @@ public class MessagesGUI extends CustomMobsGUI {
         return item;
     }
 
-    private ItemStack getPlusItem(ItemStack item, boolean big) {
+    private ItemStack getPlusItem(ItemStack item, boolean big, String type) {
         ItemMeta meta = item.getItemMeta();
         List<String> itemLore = new ArrayList<>();
+        NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Messages");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, type);
         itemLore.add("");
         if (big) {
             meta.setDisplayName(Utils.applyFormat("&a&l[+] Add 1 to radius"));

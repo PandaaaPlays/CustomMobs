@@ -74,22 +74,30 @@ public class DoubleGUI extends CustomMobsGUI implements Listener {
 
         switch (event.getSlot()) {
             case 1:
-                if (((!shifting && current >= minimum + 1) || (shifting && current >= minimum + 5)) && !small)
+                if(((!shifting && current -1 <= minimum) || (shifting && current - 5 <= minimum)) && !small)
+                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), minimum));
+                else if (((!shifting && current >= minimum + 1) || (shifting && current >= minimum + 5)) && !small)
                     inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? current - 5 : current - 1));
                 break;
             case 2:
-                if ((!shifting && current >= minimum + 0.1) || (shifting && current >= minimum + 0.5))
+                if(((!shifting && current - 0.1 <= minimum) || (shifting && current - 0.5 <= minimum)) && !small)
+                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), minimum));
+                else if ((!shifting && current >= minimum + 0.1) || (shifting && current >= minimum + 0.5))
                     inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? current - 0.5 : current - 0.1));
                 break;
             case 4:
                 consumer.accept(current);
                 break;
             case 6:
-                if ((!shifting && current <= maximum - 0.1) || (shifting && current <= maximum - 0.5))
+                if(((!shifting && current + 0.1 >= maximum) || (shifting && current + 0.5 >= maximum)) && !small)
+                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), maximum));
+                else if ((!shifting && current <= maximum - 0.1) || (shifting && current <= maximum - 0.5))
                     inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? current + 0.5 : current + 0.1));
                 break;
             case 7:
-                if (((!shifting && current <= maximum - 1) || (shifting && current <= maximum - 5)) && !small)
+                if(((!shifting && current + 1 >= maximum) || (shifting && current + 5 >= maximum)) && !small)
+                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), maximum));
+                else if (((!shifting && current <= maximum - 1) || (shifting && current <= maximum - 5)) && !small)
                     inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? current + 5 : current + 1));
                 break;
             default:
