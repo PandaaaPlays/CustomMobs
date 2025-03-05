@@ -52,10 +52,6 @@ public class ConfigurationManager {
         return Utils.applyFormat(configuration.getString("no-permission"));
     }
 
-    public String getMessagesChangeMessage(String complement) {
-        return Utils.applyFormat(configuration.getString("messages-change").replaceAll("%complement%", complement));
-    }
-
     public String getPluginReloadMessage() {
         return Utils.applyFormat(configuration.getString("plugin-reload"));
     }

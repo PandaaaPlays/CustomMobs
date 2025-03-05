@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Panda extends CustomMobOption {
@@ -43,7 +44,12 @@ public class Panda extends CustomMobOption {
                 if (clickType.isRightClick()) {
                     this.pandaGene = null;
                 } else {
-                    this.pandaGene = NextOptions.getNextPandaGene(pandaGene);
+                    List<org.bukkit.entity.Panda.Gene> pandaGenes = Arrays.asList(org.bukkit.entity.Panda.Gene.values());
+
+                    if (pandaGenes.indexOf(pandaGene) == pandaGenes.size() - 1)
+                        this.pandaGene = pandaGenes.get(0);
+                    else
+                        this.pandaGene = pandaGenes.get(pandaGenes.indexOf(pandaGene) + 1);
                 }
                 customMob.getCustomMobConfiguration().setPandaGene(pandaGene);
                 return getOptionItemStack(getPandaGeneItem(), true, true);

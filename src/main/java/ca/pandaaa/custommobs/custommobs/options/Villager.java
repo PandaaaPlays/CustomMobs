@@ -4,6 +4,7 @@ import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
+import org.bukkit.Registry;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -48,7 +49,12 @@ public class Villager extends CustomMobOption {
                 if(clickType.isRightClick()) {
                     this.villagerType = null;
                 } else {
-                    this.villagerType = NextOptions.getNextVillagerType(villagerType);
+                    List<org.bukkit.entity.Villager.Type> villagerTypes = Registry.VILLAGER_TYPE.stream().toList();
+
+                    if (villagerTypes.indexOf(villagerType) == villagerTypes.size() - 1)
+                        this.villagerType = villagerTypes.get(0);
+                    else
+                        this.villagerType = villagerTypes.get(villagerTypes.indexOf(villagerType) + 1);
                 }
                 customMob.getCustomMobConfiguration().setVillagerType(villagerType);
                 return getOptionItemStack(getVillagerTypeItem(), true, true);
@@ -58,7 +64,12 @@ public class Villager extends CustomMobOption {
                 if(clickType.isRightClick()) {
                     this.villagerProfession = org.bukkit.entity.Villager.Profession.NONE;
                 } else {
-                    this.villagerProfession = NextOptions.getNextVillagerProfession(villagerProfession);
+                    List<org.bukkit.entity.Villager.Profession> villagerProfessions = Registry.VILLAGER_PROFESSION.stream().toList();
+
+                    if (villagerProfessions.indexOf(villagerProfession) == villagerProfessions.size() - 1)
+                        this.villagerProfession = villagerProfessions.get(0);
+                    else
+                        this.villagerProfession = villagerProfessions.get(villagerProfessions.indexOf(villagerProfession) + 1);
                 }
                 customMob.getCustomMobConfiguration().setVillagerProfession(villagerProfession);
                 return getOptionItemStack(getVillagerProfessionItem(), true, true);

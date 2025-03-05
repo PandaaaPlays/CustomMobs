@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 public class Equipment {
 
     private final CustomMobConfiguration customMobConfiguration;
+    private CustomMob customMob;
     private ItemStack mainHand;
     private ItemStack offHand;
     private ItemStack helmet;
@@ -82,12 +83,17 @@ public class Equipment {
     public void giveEquipments(Entity customMob) {
         if(customMob instanceof LivingEntity) {
             ((LivingEntity) customMob).getEquipment().setItemInMainHand(mainHand, true);
+            ((LivingEntity) customMob).getEquipment().setItemInMainHandDropChance(0f);
             ((LivingEntity) customMob).getEquipment().setItemInOffHand(offHand, true);
+            ((LivingEntity) customMob).getEquipment().setItemInOffHandDropChance(0f);
             ((LivingEntity) customMob).getEquipment().setHelmet(helmet, true);
+            ((LivingEntity) customMob).getEquipment().setHelmetDropChance(0f);
             ((LivingEntity) customMob).getEquipment().setChestplate(chestplate, true);
+            ((LivingEntity) customMob).getEquipment().setChestplateDropChance(0f);
             ((LivingEntity) customMob).getEquipment().setLeggings(leggings, true);
+            ((LivingEntity) customMob).getEquipment().setLeggingsDropChance(0f);
             ((LivingEntity) customMob).getEquipment().setBoots(boots, true);
+            ((LivingEntity) customMob).getEquipment().setBootsDropChance(0f);
         }
-        // TODO Natural drop chance (and disable) (Shift-Left-Click maybe?)
     }
 }

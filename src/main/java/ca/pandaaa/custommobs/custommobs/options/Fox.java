@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Fox extends CustomMobOption {
@@ -41,7 +42,12 @@ public class Fox extends CustomMobOption {
                 if(clickType.isRightClick()) {
                     this.foxType = null;
                 } else {
-                    this.foxType = NextOptions.getNextFoxType(foxType);
+                    List<org.bukkit.entity.Fox.Type> foxTypes = Arrays.asList(org.bukkit.entity.Fox.Type.values());
+
+                    if (foxTypes.indexOf(foxType) == foxTypes.size() - 1)
+                        this.foxType = foxTypes.get(0);
+                    else
+                        this.foxType = foxTypes.get(foxTypes.indexOf(foxType) + 1);
                 }
                 customMob.getCustomMobConfiguration().setFoxType(foxType);
                 return getOptionItemStack(getFoxTypeItem(), true, true);

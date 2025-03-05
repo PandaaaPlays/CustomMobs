@@ -76,7 +76,7 @@ public class SpecificPotionGUI extends CustomMobsGUI {
         switch (event.getSlot()) {
             // Amplifier
             case 11:
-                new IntegerGUI("Amplifier", customMob, false, 1, 255, (value) -> {
+                new IntegerGUI("Amplifier", false, 1, 255, (value) -> {
                     this.amplifier = value;
                     customMob.editPotion(new PotionEffect(type, duration, amplifier, ambient, particles), potionIndex);
                     new SpecificPotionGUI(customMob, potionIndex).openInventory((Player) event.getWhoClicked());

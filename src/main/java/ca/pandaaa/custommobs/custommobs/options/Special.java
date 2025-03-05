@@ -42,8 +42,9 @@ public class Special extends CustomMobOption {
     private boolean intelligent;
     private double followRange;
     private double size;
+    private boolean naturalDrops;
 
-    public Special(boolean isNameVisible, Double health, boolean aggressive, boolean glowing, boolean canPickupLoot, Double knockbackResistance, Double speed, DamageRange damageRange, boolean invincible, boolean silent, boolean gravity, boolean persistent, boolean intelligent, Double followRange, double size) {
+    public Special(boolean isNameVisible, Double health, boolean aggressive, boolean glowing, boolean canPickupLoot, Double knockbackResistance, Double speed, DamageRange damageRange, boolean invincible, boolean silent, boolean gravity, boolean persistent, boolean intelligent, Double followRange, double size, boolean naturalDrops) {
         this.isNameVisible = isNameVisible;
         this.health = health;
         this.aggressive = aggressive;
@@ -59,6 +60,7 @@ public class Special extends CustomMobOption {
         this.intelligent = intelligent;
         this.followRange = followRange;
         this.size = size;
+        this.naturalDrops = naturalDrops;
     }
 
     public void applyOptions(Entity customMob) {
@@ -233,7 +235,7 @@ public class Special extends CustomMobOption {
                     this.size = 1;
                     customMob.getCustomMobConfiguration().setSize(size);
                 } else {
-                    //TODO custom GUI for 0.06 value
+                    //TODO Custom GUI for 0.06 value
                     new DoubleGUI("Size", true, 0.06, 16, (value) -> {
                         this.size = value;
                         customMob.getCustomMobConfiguration().setSize(size);
@@ -242,8 +244,18 @@ public class Special extends CustomMobOption {
                 }
                 return getOptionItemStack(getSizeItem(), true, false);
             }
+
+            case "naturaldrops": {
+                this.naturalDrops = !naturalDrops;
+                customMob.getCustomMobConfiguration().setNaturalDrops(naturalDrops);
+                return getOptionItemStack(getNaturalDropsItem(), false, false);
+            }
         }
         return null;
+    }
+
+    public boolean getNaturalDrops() {
+        return naturalDrops;
     }
 
     public List<ItemStack> getOptionItems(CustomMob customMob) {
@@ -264,6 +276,7 @@ public class Special extends CustomMobOption {
         items.add(getOptionItemStack(getIntelligentItem(), false, false));
         items.add(getOptionItemStack(getFollowRangeItem(), true, false));
         items.add(getOptionItemStack(getSizeItem(), true, false));
+        items.add(getOptionItemStack(getNaturalDropsItem(), false, false));
 
         return items;
     }
@@ -405,6 +418,15 @@ public class Special extends CustomMobOption {
         item.setName("&b&lSize");
         item.addLore("&eSize: &f" + size);
         item.setPersistentDataContainer(this.getClass().getSimpleName(), "Size");
+        return item;
+    }
+
+    public CustomMobsItem getNaturalDropsItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.IRON_SHOVEL);
+        item.setName("&9&lNatural drops");
+        String naturalDrops = this.naturalDrops ? "&a&lOn" : "&c&lOff";
+        item.addLore("&eNatural mob drops: &f" + naturalDrops);
+        item.setPersistentDataContainer(this.getClass().getSimpleName(), "NaturalDrops");
         return item;
     }
 }

@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Rabbit extends CustomMobOption {
@@ -41,7 +42,12 @@ public class Rabbit extends CustomMobOption {
                 if(clickType.isRightClick()) {
                     this.rabbitType = null;
                 } else {
-                    this.rabbitType = NextOptions.getNextRabbitType(rabbitType);
+                    List<org.bukkit.entity.Rabbit.Type> rabbitTypes = Arrays.asList(org.bukkit.entity.Rabbit.Type.values());
+
+                    if (rabbitTypes.indexOf(rabbitType) == rabbitTypes.size() - 1)
+                        this.rabbitType = rabbitTypes.get(0);
+                    else
+                        this.rabbitType = rabbitTypes.get(rabbitTypes.indexOf(rabbitType) + 1);
                 }
                 customMob.getCustomMobConfiguration().setRabbitType(rabbitType);
                 return getOptionItemStack(getRabbitTypeItem(), true, true);

@@ -1,38 +1,27 @@
 package ca.pandaaa.custommobs.custommobs.options;
 
-import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.guis.BasicTypes.PlayerGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.OptionsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
-import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Tameable extends CustomMobOption implements Listener {
+public class Tameable extends CustomMobOption {
     private UUID owner;
     private boolean tamed;
-    private boolean waitingForOwner;
-    private Player player = null;
-    private CustomMob customMob = null;
 
     public Tameable(UUID owner, boolean tamed) {
         this.owner = owner;
         this.tamed = tamed;
-        waitingForOwner = false;
-
-        CustomMobs plugin = CustomMobs.getPlugin();
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     public void applyOptions(Entity customMob) {
@@ -56,20 +45,19 @@ public class Tameable extends CustomMobOption implements Listener {
     public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {
         switch(option.toLowerCase()) {
 
-            // TODO Gui for players instead
             case "owner": {
                 if(clickType.isRightClick()) {
                     this.owner = null;
                     customMob.getCustomMobConfiguration().setOwner(null);
                     return getOptionItemStack(getOwnerItem(), true, false);
                 } else {
-                    clicker.closeInventory();
-                    clicker.sendMessage(Utils.applyFormat("&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &eCustomMob owner"));
-                    clicker.sendMessage(Utils.applyFormat(" &6&l- &fEnter the name of the owner in the chat."));
-                    clicker.sendMessage(Utils.applyFormat(" &6&l- &fType &ccancel &fin the chat to cancel owner change."));
-                    this.player = clicker;
-                    this.customMob = customMob;
-                    waitingForOwner = true;
+                    new PlayerGUI("Select player", (value) -> {
+                        if(value != null) {
+                            this.owner = value.getUniqueId();
+                            customMob.getCustomMobConfiguration().setOwner(owner);
+                        }
+                        new OptionsGUI(customMob).openInventory((Player) clicker, 1);
+                    }).openInventory(clicker, 1);
                 }
             }
 
@@ -81,32 +69,6 @@ public class Tameable extends CustomMobOption implements Listener {
 
         }
         return null;
-    }
-
-    @EventHandler
-    public void onPlayerChat(AsyncPlayerChatEvent event) {
-        if (event.getPlayer() != player)
-            return;
-        if (!waitingForOwner)
-            return;
-
-        event.setCancelled(true);
-
-        String message = event.getMessage();
-        if (!message.equalsIgnoreCase("cancel")) {
-            Player newOwner = Bukkit.getPlayer(message);
-            if (newOwner == null) {
-                player.sendMessage(Utils.applyFormat("&c&l[!] &cPlayer not found."));
-                return;
-            }
-
-            player.sendMessage(Utils.applyFormat("&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &eSuccessfully changed owner to: &r" + newOwner.getName()));
-            customMob.getCustomMobConfiguration().setOwner(newOwner.getUniqueId());
-            this.owner = newOwner.getUniqueId();
-        }
-
-        Bukkit.getScheduler().runTask(CustomMobs.getPlugin(), () -> new OptionsGUI(customMob).openInventory(player, 1));
-        waitingForOwner = false;
     }
 
     public CustomMobsItem getOwnerItem() {

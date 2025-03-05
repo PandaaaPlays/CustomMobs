@@ -43,7 +43,7 @@ public class PigZombie extends CustomMobOption {
                     this.anger = 0;
                     customMob.getCustomMobConfiguration().setZombifiedPiglinAnger(anger);
                 } else {
-                    new IntegerGUI("Anger", customMob, false, 0, 72000, (value) -> {
+                    new IntegerGUI("Anger", false, 0, 72000, (value) -> {
                         this.anger = value;
                         customMob.getCustomMobConfiguration().setZombifiedPiglinAnger(anger);
                         new OptionsGUI(customMob).openInventory(clicker, 1);

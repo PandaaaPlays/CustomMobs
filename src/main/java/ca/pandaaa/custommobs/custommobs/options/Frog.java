@@ -4,6 +4,7 @@ import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
+import org.bukkit.Registry;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -41,7 +42,12 @@ public class Frog extends CustomMobOption {
                 if (clickType.isRightClick()) {
                     this.frogVariant = null;
                 } else {
-                    this.frogVariant = NextOptions.getNextFrogVariant(frogVariant);
+                    List<org.bukkit.entity.Frog.Variant> frogVariants = Registry.FROG_VARIANT.stream().toList();
+
+                    if (frogVariants.indexOf(frogVariant) == frogVariants.size() - 1)
+                        this.frogVariant = frogVariants.get(0);
+                    else
+                        this.frogVariant = frogVariants.get(frogVariants.indexOf(frogVariant) + 1);
                 }
                 customMob.getCustomMobConfiguration().setFrogVariant(frogVariant);
                 return getOptionItemStack(getFrogVariantItem(), true, true);

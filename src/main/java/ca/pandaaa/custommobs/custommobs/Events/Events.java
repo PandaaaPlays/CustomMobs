@@ -1,7 +1,12 @@
-package ca.pandaaa.custommobs.custommobs;
+package ca.pandaaa.custommobs.custommobs.Events;
 
 import ca.pandaaa.custommobs.CustomMobs;
-import ca.pandaaa.custommobs.utils.DropConditions;
+import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.custommobs.DropManager;
+import ca.pandaaa.custommobs.custommobs.Manager;
+import ca.pandaaa.custommobs.custommobs.Messages.Message;
+import ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage;
+import ca.pandaaa.custommobs.custommobs.options.Special;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
@@ -25,7 +30,6 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
 
-// TODO this class needs a big refactor.
 public class Events implements Listener {
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
@@ -77,22 +81,22 @@ public class Events implements Listener {
 
         String name = event.getEntity().getPersistentDataContainer().get(key, PersistentDataType.STRING);
         CustomMob customMob = CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(name);
-
-        if(customMob.getDrops().isEmpty())
+        if(customMob == null)
             return;
-        event.getDrops().clear();
 
-        List<Drop> globalDrops = new ArrayList<>();
-        List<Drop> playerDrops = new ArrayList<>();
-        for(Drop drop : customMob.getDrops()) {
-            if(drop.getDropCondition() == DropConditions.NEARBY)
-                playerDrops.add(drop);
-            else
-                globalDrops.add(drop);
+        CustomMobDeathEvent customEvent = new CustomMobDeathEvent(event.getEntity(), customMob);
+        Bukkit.getServer().getPluginManager().callEvent(customEvent);
+
+        for(Message message : customMob.getCustomMobMessages()) {
+            if(((SpawnDeathMessage) message).isOnDeath())
+                message.sendMessage(event.getEntity());
         }
 
-        sendPlayerDrops(playerDrops, event.getEntity());
-        sendGlobalDrops(globalDrops, event.getEntity());
+        if(!((Special)customMob.getCustomMobOption("Special")).getNaturalDrops())
+            event.getDrops().clear();
+
+        if(!customMob.getDrops().isEmpty())
+            DropManager.sendDrops(customMob.getDrops(), event.getEntity());
     }
 
     // Menu Item deletion //
@@ -125,6 +129,9 @@ public class Events implements Listener {
         if (player.getGameMode() != GameMode.CREATIVE)
             item.setAmount(item.getAmount() - 1);
         CustomMob customMob = CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(container.get(new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.FileName"), PersistentDataType.STRING));
+
+        if(customMob == null)
+            return;
 
         String itemType = container.get(itemTypeKey, PersistentDataType.STRING);
         if (itemType.equalsIgnoreCase("Item")) {
@@ -159,132 +166,8 @@ public class Events implements Listener {
         }
     }
 
-    private void sendPlayerDrops(List<Drop> playerDrops, Entity entity) {
-        Map<Player, List<Drop>> successfulPlayerDrops = new HashMap<>();
-        for (Drop drop : playerDrops) {
-            double nearbyRange = drop.getNearbyRange();
-            List<Player> nearbyPlayers = entity.getNearbyEntities(nearbyRange, nearbyRange, nearbyRange).stream()
-                    .filter(e -> e instanceof Player)
-                    .map(e -> (Player) e)
-                    .toList();
-
-            for (Player player : nearbyPlayers) {
-                if (drop.draw()) {
-                    List<Drop> drops = new ArrayList<>();
-                    if (successfulPlayerDrops.containsKey(player))
-                        drops = successfulPlayerDrops.get(player);
-                    drops.add(drop);
-                    successfulPlayerDrops.put(player, drops);
-                }
-            }
-        }
-
-        for (Player player : successfulPlayerDrops.keySet()) {
-            for (Drop drop : filterJustOnePerGroup(successfulPlayerDrops.get(player))) {
-                player.getInventory().addItem(drop.getItemStack());
-            }
-            // TODO messages
-        }
-    }
-
-    // TODO refactor
-    private List<Drop> filterJustOnePerGroup(List<Drop> dropList) {
-        if(dropList.isEmpty())
-            return null;
-        if(dropList.size() == 1) {
-            List<Drop> drops = new ArrayList<>();
-            drops.add(dropList.get(0));
-            return drops;
-        }
-
-        List<Drop> returnedDrops = new ArrayList<>();
-        Map<DyeColor, List<Drop>> dropsByGroup = new HashMap<>();
-        for(Drop drop : dropList) {
-            if(drop.getGroupColor() == null)
-                returnedDrops.add(drop);
-            else {
-                List<Drop> currentGroupDrops = new ArrayList<>();
-                if(dropsByGroup.containsKey(drop.getGroupColor()))
-                    currentGroupDrops = dropsByGroup.get(drop.getGroupColor());
-                currentGroupDrops.add(drop);
-                dropsByGroup.put(drop.getGroupColor(), currentGroupDrops);
-            }
-        }
-
-        for(DyeColor group : dropsByGroup.keySet()) {
-            List<Drop> groupDropList = dropsByGroup.get(group);
-            if(groupDropList.size() == 1)
-                returnedDrops.add(groupDropList.get(0));
-            else {
-                double totalChance = 0;
-                for (Drop drop : groupDropList) {
-                    totalChance += drop.getProbability();
-                }
-
-                double randomValue = Math.random() * totalChance;
-                // Iterate over the drops and subtract their chances until the random value is reached
-                for (Drop drop : groupDropList) {
-                    randomValue -= drop.getProbability();
-                    if (randomValue <= 0) {
-                        returnedDrops.add(drop);  // Return the drop when we find the one that corresponds to the random value
-                        break;
-                    }
-                }
-            }
-        }
-
-        return returnedDrops;
-    }
-
-    private void sendGlobalDrops(List<Drop> globalDrops, LivingEntity entity) {
-        List<Drop> successfulGlobalDrops = new ArrayList<>();
-        for (Drop drop : globalDrops){
-            if (drop.draw())
-                successfulGlobalDrops.add(drop);
-        }
-
-        List<Drop> globalFilteredDrops = filterJustOnePerGroup(successfulGlobalDrops);
-        if(globalFilteredDrops == null)
-            return;
-// TODO MAYBE A BUG WHEN DROPPING WITH LOW PERCENTS
-        // Global drops (one for everyone)
-        for (Drop successfulDrop : globalFilteredDrops) {
-            switch (successfulDrop.getDropCondition()) {
-                case KILLER:
-                    LivingEntity killer = entity.getKiller();
-                    if (killer instanceof Player)
-                        entity.getKiller().getInventory().addItem(successfulDrop.getItemStack());
-                    break;
-                case DROP:
-                    entity.getLocation().getWorld().dropItemNaturally(entity.getLocation(), successfulDrop.getItemStack());
-                    break;
-                case MOST_DAMAGE:
-                    double mostDamage = 0;
-                    Player player = null;
-                    for(NamespacedKey entityNamespacedKey : entity.getPersistentDataContainer().getKeys()) {
-                        if (entityNamespacedKey.getKey().contains("CustomMobs.Damage.".toLowerCase())) {
-                            UUID uuid = UUID.fromString(entityNamespacedKey.getKey().replaceAll("CustomMobs.Damage.".toLowerCase(), ""));
-                            double damage = entity.getPersistentDataContainer().get(entityNamespacedKey, PersistentDataType.DOUBLE);
-                            // TODO make sure this work if the player is offline (should not receive it)
-                            if(Bukkit.getPlayer(uuid) != null && damage > mostDamage) {
-                                mostDamage = damage;
-                                player = Bukkit.getPlayer(uuid);
-                            }
-                        }
-                    }
-                    if(player != null)
-                        player.getInventory().addItem(successfulDrop.getItemStack());
-                    break;
-            }
-        }
-        // TODO Message
-    }
-
     @EventHandler
     public void onSpawnerSpawn(SpawnerSpawnEvent event) {
-        if(event.getEntity().getType() != EntityType.AREA_EFFECT_CLOUD)
-            return;
-
         PersistentDataContainer container = event.getSpawner().getPersistentDataContainer();
         Location location = event.getEntity().getLocation();
 
@@ -292,6 +175,8 @@ public class Events implements Listener {
         if (container.has(key, PersistentDataType.STRING)) {
             String mobName = container.get(key, PersistentDataType.STRING);
             CustomMob customMob = CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(mobName);
+            if(customMob == null || customMob.getSpawner() == null)
+                return;
             int range = customMob.getSpawner().getSpawnRange();
 
             // With this, we find the mobs of the same type. If that is ever a problem, we could filter on the persistent key of the CustomMob.
@@ -338,7 +223,7 @@ public class Events implements Listener {
         ItemStack itemStack = player.getInventory().getItemInMainHand();
         Block block = event.getBlock();
 
-        if(!manager.configManager.getSilkSpawner() || block.getType() != Material.SPAWNER || !itemStack.getType().toString().contains("PICKAXE")){
+        if(!manager.getConfigManager().getSilkSpawner() || block.getType() != Material.SPAWNER || !itemStack.getType().toString().contains("PICKAXE")){
             return;
         }
 

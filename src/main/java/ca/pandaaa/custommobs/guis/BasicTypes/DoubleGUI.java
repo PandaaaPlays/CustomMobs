@@ -29,6 +29,8 @@ public class DoubleGUI extends CustomMobsGUI implements Listener {
     private final boolean small;
     private final double maximum;
     private final double minimum;
+    private String minusPrettyValue = "w";
+
     public DoubleGUI(String option, boolean small, double minValue, double maxValue, Consumer<Double> consumer) {
         super(9, "&8Parameter &8&l» &8" + option);
         this.consumer = consumer;
@@ -54,6 +56,11 @@ public class DoubleGUI extends CustomMobsGUI implements Listener {
         inventory.setItem(8, filler);
 
         player.openInventory(inventory);
+    }
+
+    public DoubleGUI setMinusPrettyValue(String minusPrettyValue) {
+        this.minusPrettyValue = minusPrettyValue;
+        return this;
     }
 
     @EventHandler
@@ -100,11 +107,14 @@ public class DoubleGUI extends CustomMobsGUI implements Listener {
     private ItemStack getConfirmItem(ItemStack item, Double value) {
         ItemMeta meta = item.getItemMeta();
         value = Math.round(value * 10.0) / 10.0;
+        if(value < 0)
+            value = 0D;
         NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Double");
         meta.getPersistentDataContainer().set(key, PersistentDataType.DOUBLE, value);
         meta.setDisplayName(Utils.applyFormat("&a&l[+] Confirm"));
         List<String> itemLore = new ArrayList<>();
-        itemLore.add(Utils.applyFormat("&eCurrent value: &f" + value));
+        String prettyValue = value > 0 && !minusPrettyValue.isEmpty() ? value.toString() : minusPrettyValue;
+        itemLore.add(Utils.applyFormat("&eCurrent value: &f" + prettyValue));
         itemLore.add("");
         itemLore.add(Utils.applyFormat("&7&o(( Click to confirm! ))"));
         meta.setLore(itemLore);

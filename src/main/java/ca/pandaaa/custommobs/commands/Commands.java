@@ -2,6 +2,7 @@ package ca.pandaaa.custommobs.commands;
 
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.configurations.ConfigurationManager;
+import ca.pandaaa.custommobs.custommobs.DropManager;
 import ca.pandaaa.custommobs.custommobs.Manager;
 import ca.pandaaa.custommobs.guis.MainGUI;
 import org.bukkit.Bukkit;
@@ -12,7 +13,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 public class Commands implements CommandExecutor {
@@ -52,12 +52,6 @@ public class Commands implements CommandExecutor {
                     break;
                 case "give":
                     giveCommand(sender, args);
-                    break;
-                case "message":
-                    messageCommand(sender, args, false);
-                    break;
-                case "death-message":
-                    messageCommand(sender, args, true);
                     break;
                 case "silk-spawner":
                     silkSpawnerCommand(sender, args);
@@ -155,55 +149,6 @@ public class Commands implements CommandExecutor {
         customMobsManager.giveCustomMob(receiver, customMob, type, amount);
     }
 
-    private void messageCommand(CommandSender sender, String[] args, boolean death) {
-        if (!sender.hasPermission("custommobs.admin")) {
-            sendNoPermissionMessage(sender);
-            return;
-        }
-
-        if (args.length < 4) {
-            sendUnknownCommandMessage(sender);
-            return;
-        }
-
-        if (!customMobsManager.getCustomMobNames().contains(args[1].toLowerCase())) {
-            sendUnknownMobMessage(sender, args[1]);
-        }
-
-        if (args[2].equalsIgnoreCase("add")) {
-            String message = String.join(" ", Arrays.copyOfRange(args, 3, args.length));
-            customMobsManager.getCustomMob(args[1]).getCustomMobConfiguration().addMessageText(message, death);
-            sendMessagesChangeMessage(sender, "Added the following" + (death ? " death " : " ") + "message to " + args[1] + " : &r" + message);
-        } else if (args.length == 4 && args[2].equalsIgnoreCase("remove")) {
-            try {
-                if (args[3].equalsIgnoreCase("all")) {
-                    customMobsManager.getCustomMob(args[1]).getCustomMobConfiguration()
-                            .clearMessageText(death);
-                    sendMessagesChangeMessage(sender, "Removed all the" + (death ? " death " : " ") + "messages of " + args[1] + ".");
-                } else if (customMobsManager.getCustomMob(args[1]).getCustomMobConfiguration().removeMessageText(Integer.parseInt(args[3]), death)) {
-                    sendMessagesChangeMessage(sender, "Removed" + (death ? " death " : " ") + "message " + Integer.parseInt(args[3]) + " of " + args[1] + ".");
-                } else {
-                    sendUnknownCommandMessage(sender, "There isn't " + Integer.parseInt(args[3]) + " messages.");
-                }
-            } catch (Exception e) {
-                sendUnknownCommandMessage(sender, args[3] + " is not a valid Integer.");
-            }
-        } else if (args.length >= 5 && args[2].equalsIgnoreCase("edit")) {
-            try {
-                String message = String.join(" ", Arrays.copyOfRange(args, 4, args.length));
-                if (customMobsManager.getCustomMob(args[1]).getCustomMobConfiguration().editMessageText(Integer.parseInt(args[3]), message, death)) {
-                    sendMessagesChangeMessage(sender, "Edited" + (death ? " death " : " ") + "message " + Integer.parseInt(args[3]) + " of " + args[1] + " to : " + message);
-                } else {
-                    sendUnknownCommandMessage(sender, "There isn't " + Integer.parseInt(args[3]) + (death ? " death " : " ") + "messages.");
-                }
-            } catch (Exception e) {
-                sendUnknownCommandMessage(sender, args[3] + " is not a valid Integer.");
-            }
-        } else {
-            sendUnknownCommandMessage(sender, "Messages command formatted incorrectly.");
-        }
-    }
-
     private void silkSpawnerCommand(CommandSender sender, String[] args) {
         if (!sender.hasPermission("custommobs.admin")) {
             sendNoPermissionMessage(sender);
@@ -276,10 +221,6 @@ public class Commands implements CommandExecutor {
 
     private void sendNoPermissionMessage(CommandSender sender) {
         sender.sendMessage(configManager.getNoPermissionMessage());
-    }
-
-    private void sendMessagesChangeMessage(CommandSender sender, String complement) {
-        sender.sendMessage(configManager.getMessagesChangeMessage(complement));
     }
 
     private void sendSilkSpawnerMessage(CommandSender sender, String complement) {

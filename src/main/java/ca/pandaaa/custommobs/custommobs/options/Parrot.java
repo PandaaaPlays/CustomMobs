@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Parrot extends CustomMobOption {
@@ -41,7 +42,12 @@ public class Parrot extends CustomMobOption {
                 if (clickType.isRightClick()) {
                     this.parrotVariant = null;
                 } else {
-                    this.parrotVariant = NextOptions.getNextParrotVariant(parrotVariant);
+                    List<org.bukkit.entity.Parrot.Variant> parrotVariants = Arrays.asList(org.bukkit.entity.Parrot.Variant.values());
+
+                    if (parrotVariants.indexOf(parrotVariant) == parrotVariants.size() - 1)
+                        this.parrotVariant = parrotVariants.get(0);
+                    else
+                        this.parrotVariant = parrotVariants.get(parrotVariants.indexOf(parrotVariant) + 1);
                 }
                 customMob.getCustomMobConfiguration().setParrotVariant(parrotVariant);
                 return getOptionItemStack(getParrotVariantItem(), true, true);

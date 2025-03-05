@@ -1,9 +1,11 @@
 package ca.pandaaa.custommobs.custommobs.options;
 
 import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.custommobs.Drop;
 import ca.pandaaa.custommobs.guis.BasicTypes.DoubleGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.OptionsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
+import ca.pandaaa.custommobs.utils.DropConditions;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -12,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
-//TODO saddle drop on mob death (pig aussi)
+
 public class AbstractHorse extends CustomMobOption {
     private Double jumpStrength;
     private boolean saddle;
@@ -61,7 +63,12 @@ public class AbstractHorse extends CustomMobOption {
             case "saddle": {
                 saddle = !saddle;
                 customMob.getCustomMobConfiguration().setHasSaddle(saddle);
-                new OptionsGUI(customMob).openInventory((Player) clicker, 1);
+
+                if(saddle) {
+                    customMob.addDrop(new Drop(new ItemStack(Material.SADDLE), 1, "Saddle"));
+                } else {
+                    customMob.removeDropItem("Saddle");
+                }
 
                 return getOptionItemStack(getSaddleItem(), true, false);
             }

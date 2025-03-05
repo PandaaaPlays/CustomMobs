@@ -5,6 +5,9 @@ import ca.pandaaa.custommobs.commands.TabCompletion;
 import ca.pandaaa.custommobs.configurations.ConfigurationManager;
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.*;
+import ca.pandaaa.custommobs.custommobs.Events.Events;
+import ca.pandaaa.custommobs.custommobs.Messages.DropMessage;
+import ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage;
 import ca.pandaaa.custommobs.utils.DamageRange;
 import ca.pandaaa.custommobs.utils.Metrics;
 import ca.pandaaa.custommobs.utils.SoundEnum;
@@ -23,41 +26,29 @@ import java.io.File;
 import java.util.*;
 
 public class CustomMobs extends JavaPlugin {
+    private Metrics metrics;
     private File mobFolder;
     private List<CustomMobConfiguration> mobConfigurations = new ArrayList<>();
     private static CustomMobs plugin;
     private ConfigurationManager configManager;
     private Manager customMobsManager;
 
+    public API getMobAPI(String customMobName) {
+        if (!customMobsManager.getCustomMobNames().contains(customMobName.toLowerCase())) {
+            return null;
+        }
+        return new API(customMobsManager.getCustomMob(customMobName.toLowerCase()));
+    }
+
     @Override
     public void onEnable() {
+        // TODO Multi version support.
         plugin = this;
-
-        /* TODO
-        FAT LOG ERROR : [CustomMobs] Task #102 for CustomMobs v1.0.0 generated an exception
-java.lang.NoClassDefFoundError: ca/pandaaa/custommobs/utils/Metrics$CustomChart
-        at ca.pandaaa.custommobs.utils.Metrics$MetricsBase.submitData(Metrics.java:258) ~[?:?]
-        at org.bukkit.craftbukkit.v1_21_R2.scheduler.CraftTask.run(CraftTask.java:82) ~[spigot-1.21.3-R0.1-SNAPSHOT.jar:4378-Spigot-e65d67a-8ef9079]
-        at org.bukkit.craftbukkit.v1_21_R2.scheduler.CraftScheduler.mainThreadHeartbeat(CraftScheduler.java:415) ~[spigot-1.21.3-R0.1-SNAPSHOT.jar:4378-Spigot-e65d67a-8ef9079]
-        at net.minecraft.server.MinecraftServer.c(MinecraftServer.java:1502) ~[spigot-1.21.3-R0.1-SNAPSHOT.jar:4378-Spigot-e65d67a-8ef9079]
-        at net.minecraft.server.MinecraftServer.a(MinecraftServer.java:1391) ~[spigot-1.21.3-R0.1-SNAPSHOT.jar:4378-Spigot-e65d67a-8ef9079]
-        at net.minecraft.server.MinecraftServer.y(MinecraftServer.java:1093) ~[spigot-1.21.3-R0.1-SNAPSHOT.jar:4378-Spigot-e65d67a-8ef9079]
-        at net.minecraft.server.MinecraftServer.lambda$spin$0(MinecraftServer.java:329) ~[spigot-1.21.3-R0.1-SNAPSHOT.jar:4378-Spigot-e65d67a-8ef9079]
-        at java.base/java.lang.Thread.run(Thread.java:1570) [?:?]
-Caused by: java.lang.ClassNotFoundException: ca.pandaaa.custommobs.utils.Metrics$CustomChart
-        at org.bukkit.plugin.java.PluginClassLoader.loadClass0(PluginClassLoader.java:160) ~[spigot-api-1.21.3-R0.1-SNAPSHOT.jar:?]
-        at org.bukkit.plugin.java.PluginClassLoader.loadClass(PluginClassLoader.java:112) ~[spigot-api-1.21.3-R0.1-SNAPSHOT.jar:?]
-        at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?]
-        ... 8 more
-         */
-
-        // TODO Sounds Enum might miss new sounds... add thing to show on console saying its missing one
-
-        Metrics metrics = new Metrics(this, 21648);
 
         this.sendStartedMessage();
 
-        // DropItem serialization
+        ConfigurationSerialization.registerClass(DropMessage.class, "ca.pandaaa.custommobs.custommobs.Messages.DropMessage");
+        ConfigurationSerialization.registerClass(SpawnDeathMessage.class, "ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage");
         ConfigurationSerialization.registerClass(Drop.class, "ca.pandaaa.custommobs.custommobs.Drop");
         ConfigurationSerialization.registerClass(Sound.class, "ca.pandaaa.custommobs.custommobs.Sound");
         ConfigurationSerialization.registerClass(Spawner.class, "ca.pandaaa.custommobs.custommobs.Spawner");
@@ -81,7 +72,11 @@ Caused by: java.lang.ClassNotFoundException: ca.pandaaa.custommobs.utils.Metrics
         getCommandsAndListeners();
 
         checkSoundEnum();
-        this.addMetrics(metrics);
+
+        Bukkit.getScheduler().runTask(this, () -> {
+            metrics = new Metrics(this, 21648);
+            this.addMetrics(metrics);
+        });
     }
 
     @Override
@@ -166,7 +161,12 @@ Caused by: java.lang.ClassNotFoundException: ca.pandaaa.custommobs.utils.Metrics
         List<org.bukkit.Sound> sounds = new ArrayList<>();
         List<String> newSounds = new ArrayList<>();
 
-        Registry.SOUNDS.iterator().forEachRemaining(sounds::add);
+        if (Bukkit.getBukkitVersion().startsWith("1.21.1") || Bukkit.getBukkitVersion().startsWith("1.21.2")) {
+            return;
+        } else {
+            Registry.SOUNDS.iterator().forEachRemaining(sounds::add);
+        }
+
         Collections.sort(sounds);
         Collections.sort(soundsName);
 
