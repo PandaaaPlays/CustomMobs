@@ -2,9 +2,12 @@ package ca.pandaaa.custommobs.custommobs;
 
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
+import ca.pandaaa.custommobs.custommobs.Events.CustomMobSpawnEvent;
+import ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage;
 import ca.pandaaa.custommobs.custommobs.options.CustomMobOption;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.TypesGUI;
 import ca.pandaaa.custommobs.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -18,10 +21,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class CustomMob implements Listener {
     private final LocalDateTime creationDate;
@@ -36,7 +36,8 @@ public class CustomMob implements Listener {
     private String name;
     private final List<Sound> sounds;
     private final List<PotionEffect> potionEffects;
-    private final CustomMobConfiguration mobConfiguration;;
+    private final List<SpawnDeathMessage> messages;
+    private final CustomMobConfiguration mobConfiguration;
 
     public CustomMob(LocalDateTime creationDate,
                      EntityType entityType,
@@ -49,6 +50,7 @@ public class CustomMob implements Listener {
                      List<Drop> drops,
                      String name,
                      List<Sound> sounds,
+                     List<SpawnDeathMessage> messages,
                      CustomMobConfiguration mobConfiguration) {
         this.creationDate = creationDate;
         this.entityType = entityType;
@@ -61,6 +63,7 @@ public class CustomMob implements Listener {
         this.drops = drops;
         this.name = name;
         this.sounds = sounds;
+        this.messages = messages;
         this.mobConfiguration = mobConfiguration;
     }
 
@@ -80,7 +83,10 @@ public class CustomMob implements Listener {
         }
 
         // Message
-        mobConfiguration.getMessages().sendMessages(customMob);
+        for(SpawnDeathMessage message : messages) {
+            if(!message.isOnDeath())
+                message.sendMessage(customMob);
+        }
 
         // Equipment
         equipment.giveEquipments(customMob);
@@ -98,6 +104,9 @@ public class CustomMob implements Listener {
         for(PotionEffect potionEffect : potionEffects) {
             potionEffect.apply((LivingEntity) customMob);
         }
+
+        CustomMobSpawnEvent customEvent = new CustomMobSpawnEvent(customMob);
+        Bukkit.getServer().getPluginManager().callEvent(customEvent);
     }
 
     public void placeCustomMobSpawner(Location location) {
@@ -149,6 +158,7 @@ public class CustomMob implements Listener {
     }
 
     public List<Drop> getDrops() {
+        drops.sort(Comparator.comparingInt(Drop::getPriority));
         return drops;
     }
 
@@ -231,6 +241,8 @@ public class CustomMob implements Listener {
      * @param drop The DropItem to be added to the list.
      */
     public void addDrop(Drop drop) {
+        if(!drop.getCustomType().isEmpty())
+            removeDropItem(drop.getCustomType());
         drops.add(drop);
         mobConfiguration.setDrops(drops);
     }
@@ -240,7 +252,6 @@ public class CustomMob implements Listener {
         mobConfiguration.setDrops(drops);
     }
 
-    // TODO This clearly works... Might not really be the best thing to just trust that the order is synchronized between the GUI and the List index...
     /**
      * Remove a custom Drop from the drop list of the CustomMob.
      * @param dropIndex The index of the Drop to be removed to the list.
@@ -248,6 +259,15 @@ public class CustomMob implements Listener {
     public void removeDropItem(int dropIndex) {
         drops.remove(dropIndex);
         mobConfiguration.setDrops(drops);
+    }
+
+    public void removeDropItem(String customType) {
+        for(int i = 0; i < getDrops().size(); i++) {
+            if(getDrops().get(i).getCustomType().equalsIgnoreCase(customType)) {
+                removeDropItem(i);
+                break;
+            }
+        }
     }
 
     /* === TYPE === */
@@ -265,6 +285,13 @@ public class CustomMob implements Listener {
         mobConfiguration.resetType(this.entityType);
         mobConfiguration.setType(entityType);
         this.entityType = entityType;
+
+        for(int i = 0; i < getDrops().size(); i++) {
+            if(getDrops().get(i).getCustomType().equalsIgnoreCase("Saddle")) {
+                removeDropItem(i);
+                break;
+            }
+        }
 
         customMobOptions = new HashMap<>();
         mobConfiguration.setCustomMobConfigurations(this, entityType);
@@ -291,8 +318,21 @@ public class CustomMob implements Listener {
 
     /* === Others === */
 
-    public Messages getCustomMobMessages() {
-        return mobConfiguration.getMessages();
+    public void removeMessage(int index) {
+        messages.remove(index);
+        mobConfiguration.setMessages(messages);
+    }
+
+    public void editMessage(int index, SpawnDeathMessage message) {
+        if(messages.size() - 1 >= index)
+            messages.set(index, message);
+        else
+            messages.add(message);
+        mobConfiguration.setMessages(messages);
+    }
+
+    public List<SpawnDeathMessage> getCustomMobMessages() {
+        return messages;
     }
 
     public void delete() {

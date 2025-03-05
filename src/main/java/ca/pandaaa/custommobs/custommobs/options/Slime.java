@@ -42,7 +42,7 @@ public class Slime extends CustomMobOption {
                     this.size = null;
                     customMob.getCustomMobConfiguration().setSlimeSize(size);
                 } else {
-                    new IntegerGUI("Slime size", customMob, false, 0, 126, (value) -> {
+                    new IntegerGUI("Slime size", false, 0, 126, (value) -> {
                         this.size = value;
                         customMob.getCustomMobConfiguration().setSlimeSize(size);
                         new OptionsGUI(customMob).openInventory(clicker, 1);

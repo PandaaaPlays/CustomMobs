@@ -11,6 +11,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Shulker extends CustomMobOption {
@@ -42,7 +43,12 @@ public class Shulker extends CustomMobOption {
                 if (clickType.isRightClick()) {
                     this.color = null;
                 } else {
-                    this.color = NextOptions.getNextDyeColor(color);
+                    List<DyeColor> colors = Arrays.asList(DyeColor.values());
+
+                    if (colors.indexOf(color) == colors.size() - 1)
+                        this.color = colors.get(0);
+                    else
+                        this.color = colors.get(colors.indexOf(color) + 1);
                 }
                 customMob.getCustomMobConfiguration().setShulkerColor(color);
                 return getOptionItemStack(getShulkerColorItem(), true, true);

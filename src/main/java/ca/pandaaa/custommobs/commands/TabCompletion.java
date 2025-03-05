@@ -22,13 +22,9 @@ public class TabCompletion implements TabCompleter {
                 completionList.add("reload");
                 completionList.add("summon");
                 completionList.add("give");
-                completionList.add("message");
-                completionList.add("death-message");
                 completionList.add("silk-spawner");
             }
-            if(args.length == 2 && (args[0].equalsIgnoreCase("summon")
-                || args[0].equalsIgnoreCase("message")
-                    || args[0].equalsIgnoreCase("death-message"))) {
+            if(args.length == 2 && (args[0].equalsIgnoreCase("summon"))) {
                 completionList.addAll(customMobNames);
             }
             if(args.length == 2 && args[0].equalsIgnoreCase("give")) {
@@ -42,12 +38,6 @@ public class TabCompletion implements TabCompleter {
 
             if(args.length == 3 && args[0].equalsIgnoreCase("give")) {
                 completionList.addAll(customMobNames);
-            }
-            if(args.length == 3 && (args[0].equalsIgnoreCase("message")
-                    || args[0].equalsIgnoreCase("death-message"))) {
-                completionList.add("add");
-                completionList.add("edit");
-                completionList.add("remove");
             }
 
             if(args.length == 4 && args[0].equalsIgnoreCase("give")) {

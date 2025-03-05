@@ -15,7 +15,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Manager {
-    ConfigurationManager configManager;
+    private final ConfigurationManager configManager;
     private final List<CustomMobConfiguration> mobsConfigurations;
     private final Map<String, CustomMob> customMobs = new HashMap<>();
 
@@ -85,5 +85,9 @@ public class Manager {
         return customMobs.values().stream()
                 .sorted(Comparator.comparing(CustomMob::getCreationDate))
                 .collect(Collectors.toList());
+    }
+
+    public ConfigurationManager getConfigManager() {
+        return configManager;
     }
 }

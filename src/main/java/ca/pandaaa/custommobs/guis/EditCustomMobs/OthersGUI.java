@@ -58,7 +58,7 @@ public class OthersGUI extends CustomMobsGUI {
                 new SoundsGUI(customMob).openInventory(clicker, 1);
                 break;
             case 14:
-                new MessagesGUI(customMob).openInventory(clicker);
+                new MessagesGUI(customMob, "Spawn / Death", clicker).openInventory();
                 break;
             case 18:
                 new EditGUI(customMob, CustomMobs.getPlugin().getCustomMobsManager(), clicker).openInventory();

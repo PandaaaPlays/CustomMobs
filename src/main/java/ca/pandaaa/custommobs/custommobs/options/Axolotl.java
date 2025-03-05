@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Axolotl extends CustomMobOption {
@@ -41,7 +42,12 @@ public class Axolotl extends CustomMobOption {
                 if (clickType.isRightClick()) {
                     this.axolotlVariant = null;
                 } else {
-                    this.axolotlVariant = NextOptions.getNextAxolotlVariant(axolotlVariant);
+                    List<org.bukkit.entity.Axolotl.Variant> axolotlVariants = Arrays.asList(org.bukkit.entity.Axolotl.Variant.values());
+
+                    if (axolotlVariants.indexOf(axolotlVariant) == axolotlVariants.size() - 1)
+                        this.axolotlVariant = axolotlVariants.get(0);
+                    else
+                        this.axolotlVariant = axolotlVariants.get(axolotlVariants.indexOf(axolotlVariant) + 1);
                 }
                 customMob.getCustomMobConfiguration().setAxolotlVariant(axolotlVariant);
                 return getOptionItemStack(getAxolotlVariantItem(), true, true);

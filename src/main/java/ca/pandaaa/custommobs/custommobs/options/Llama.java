@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Llama extends CustomMobOption {
@@ -41,7 +42,12 @@ public class Llama extends CustomMobOption {
                 if (clickType.isRightClick()) {
                     this.llamaColor = null;
                 } else {
-                    this.llamaColor = NextOptions.getNextLlamaColor(llamaColor);
+                    List<org.bukkit.entity.Llama.Color> llamaColors = Arrays.asList(org.bukkit.entity.Llama.Color.values());
+
+                    if (llamaColors.indexOf(llamaColor) == llamaColors.size() - 1)
+                        this.llamaColor = llamaColors.get(0);
+                    else
+                        this.llamaColor = llamaColors.get(llamaColors.indexOf(llamaColor) + 1);
                 }
                 customMob.getCustomMobConfiguration().setLlamaColor(llamaColor);
                 return getOptionItemStack(getLlamaColorItem(), true, true);

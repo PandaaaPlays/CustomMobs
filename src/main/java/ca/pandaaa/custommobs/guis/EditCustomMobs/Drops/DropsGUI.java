@@ -137,7 +137,7 @@ public class DropsGUI extends CustomMobsGUI {
                 if (event.getSlot() < 45) {
                     int dropItemIndex = (currentPage - 1) * 45 + event.getSlot();
                     NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Drop.Remove.Confirm");
-                    if (event.isRightClick()) {
+                    if (event.isRightClick() && dropsItems.get(event.getSlot()).isDeletable()) {
                         if (event.getCurrentItem().getItemMeta().getPersistentDataContainer().getKeys().contains(key)) {
                             customMob.removeDropItem(dropItemIndex);
                             // DropItems is desynchronized until the reopening of the inventory.
@@ -164,9 +164,22 @@ public class DropsGUI extends CustomMobsGUI {
         ItemStack item = dropItem.getItemStack().clone();
         ItemMeta itemMeta = item.getItemMeta();
         ArrayList<String> lore = itemMeta.getLore() == null ? new ArrayList<>() : (ArrayList<String>) itemMeta.getLore();
+        lore.add(Utils.applyFormat("&f&l* &dProbability:&f " + dropItem.getProbability() + "%"));
+        String looting = dropItem.isLooting() ? "&a&lOn" : "&c&lOff";
+        lore.add(Utils.applyFormat("&f&l* &6Looting:&f " + looting));
+        lore.add(Utils.applyFormat("&f&l* &cCondition:&f " + Utils.getStartCase(dropItem.getDropCondition().name())));
+        String color = "&fNone";
+        if(dropItem.getGroupColor() != null) {
+            color = Utils.getChatColorOfColor(dropItem.getGroupColor().name()) + Utils.getSentenceCase(dropItem.getGroupColor().toString());
+        }
+
+        lore.add(Utils.applyFormat("&f&l* &aGroup:&f " + color));
         lore.add("");
         lore.add(Utils.applyFormat("&7&o(( Left-Click to edit this drop ))"));
-        lore.add(Utils.applyFormat("&7&o(( Right-Click to remove this drop ))"));
+        if(dropItem.isDeletable())
+            lore.add(Utils.applyFormat("&7&o(( Right-Click to remove this drop ))"));
+        if(!dropItem.isDeletable())
+            lore.add(Utils.applyFormat("&c&l[!] &cThis drop cannot be deleted from this menu."));
         itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
         return getMenuItem(item, false);

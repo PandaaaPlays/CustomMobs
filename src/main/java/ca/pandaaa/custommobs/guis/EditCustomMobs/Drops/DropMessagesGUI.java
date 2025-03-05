@@ -1,10 +1,13 @@
-package ca.pandaaa.custommobs.guis.EditCustomMobs;
+package ca.pandaaa.custommobs.guis.EditCustomMobs.Drops;
 
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
-import ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage;
+import ca.pandaaa.custommobs.custommobs.Drop;
+import ca.pandaaa.custommobs.custommobs.Messages.DropMessage;
+import ca.pandaaa.custommobs.custommobs.Messages.Message;
 import ca.pandaaa.custommobs.guis.BasicTypes.DoubleGUI;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
+import ca.pandaaa.custommobs.utils.DropConditions;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -21,17 +24,21 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MessagesGUI extends CustomMobsGUI {
+public class DropMessagesGUI extends CustomMobsGUI {
 
     private final CustomMob customMob;
+    private final Drop drop;
     private final Player player;
     private final ItemStack previous;
+    private final int dropIndex;
 
     private Integer waitingForChange;
 
-    public MessagesGUI(CustomMob customMob, String option, Player player) {
+    public DropMessagesGUI(CustomMob customMob, Drop drop, String option, Player player) {
         super(18, "&8Message &8&l» &8" + option);
         this.customMob = customMob;
+        this.dropIndex = customMob.getDrops().indexOf(drop);
+        this.drop = drop;
         this.player = player;
         previous = getMenuItem(Utils.createHead("a2f0425d64fdc8992928d608109810c1251fe243d60d175bed427c651cbe"), true);
 
@@ -83,16 +90,18 @@ public class MessagesGUI extends CustomMobsGUI {
 
         switch(event.getSlot()) {
             case 9:
-                new OthersGUI(customMob).openInventory(clicker);
+                new SpecificDropGUI(customMob, drop, dropIndex).openInventory(clicker);
                 break;
             case 13:
-                if(customMob.getCustomMobConfiguration().getMessages().size() != 9) {
+                if(drop.getMessages().size() != 9) {
                     clicker.closeInventory();
                     clicker.sendMessage(Utils.applyFormat("&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &eCreate message"));
                     clicker.sendMessage(Utils.applyFormat(" &6&l- &fEnter the message you want &e&nin the chat&f."));
+                    if(drop.getDropCondition() != DropConditions.NEARBY)
+                        clicker.sendMessage(Utils.applyFormat(" &6&l- &fThe placeholder &e%player%&f will be replaced by the dropper's name."));
                     clicker.sendMessage(Utils.applyFormat(" &6&l- &fThe messages supports &4c&co&6l&eo&ar&bs&f ( &* (&ebasic&f) and &#* (&#cbff0fhex&f) )"));
                     clicker.sendMessage(Utils.applyFormat(" &6&l- &fType &ccancel &fin the chat to cancel creation."));
-                    waitingForChange = customMob.getCustomMobMessages().size();
+                    waitingForChange = drop.getMessages().size();
                 }
                 break;
             default:
@@ -100,7 +109,8 @@ public class MessagesGUI extends CustomMobsGUI {
                     NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Message.Remove.Confirm");
                     if (event.getCurrentItem().getItemMeta().getPersistentDataContainer().getKeys().contains(key)) {
                         if (event.isRightClick()) {
-                            customMob.removeMessage(event.getSlot());
+                            drop.getMessages().remove(event.getSlot());
+                            customMob.editDrop(drop, dropIndex);
                             openInventory();
                         } else {
                             openInventory();
@@ -109,25 +119,31 @@ public class MessagesGUI extends CustomMobsGUI {
                     } else {
                         if (event.isRightClick()) {
                             if (event.isShiftClick()) {
-                                new DoubleGUI("Radius", false, 0, 200, (value) -> {
-                                    SpawnDeathMessage message = customMob.getCustomMobMessages().get(event.getSlot());
-                                    message.setRadius(value);
-                                    customMob.editMessage(event.getSlot(), message);
-                                    openInventory();
-                                }).setMinusPrettyValue("Everyone").openInventory(player, customMob.getCustomMobMessages().get(event.getSlot()).getRadius());
+                                if(!((DropMessage) drop.getMessages().get(event.getSlot())).isDropperOnly()) {
+                                    new DoubleGUI("Radius", false, 0, 200, (value) -> {
+                                        Message message = drop.getMessages().get(event.getSlot());
+                                        message.setRadius(value);
+                                        customMob.editDrop(drop, dropIndex);
+                                        openInventory();
+                                    }).setMinusPrettyValue("Everyone").openInventory(player, drop.getMessages().get(event.getSlot()).getRadius());
+                                }
                             } else {
                                 event.getInventory().setItem(event.getSlot(), getMenuItem(getDeleteItem(new ItemStack(Material.BARRIER)), true));
                             }
                         } else {
                             if (event.isShiftClick()) {
-                                SpawnDeathMessage message = (SpawnDeathMessage) customMob.getCustomMobMessages().get(event.getSlot());
-                                message.setOnDeath(!message.isOnDeath());
-                                customMob.editMessage(event.getSlot(), message);
-                                openInventory();
+                                if(drop.getDropCondition() != DropConditions.DROP) {
+                                    DropMessage message = (DropMessage) drop.getMessages().get(event.getSlot());
+                                    message.setDropperOnly(!message.isDropperOnly());
+                                    customMob.editDrop(drop, dropIndex);
+                                    openInventory();
+                                }
                             } else {
                                 clicker.closeInventory();
                                 clicker.sendMessage(Utils.applyFormat("&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &eEdit message"));
                                 clicker.sendMessage(Utils.applyFormat(" &6&l- &fEnter the message you want &e&nin the chat&f."));
+                                if(drop.getDropCondition() != DropConditions.NEARBY)
+                                    clicker.sendMessage(Utils.applyFormat(" &6&l- &fThe placeholder &e%player%&f will be replaced by the dropper's name."));
                                 clicker.sendMessage(Utils.applyFormat(" &6&l- &fThe messages supports &4c&co&6l&eo&ar&bs&f ( &* (&ebasic&f) and &#* (&#cbff0fhex&f) )"));
                                 clicker.sendMessage(Utils.applyFormat(" &6&l- &fType &ccancel &fin the chat to cancel creation."));
                                 waitingForChange = event.getSlot();
@@ -150,37 +166,42 @@ public class MessagesGUI extends CustomMobsGUI {
 
         String message = event.getMessage();
         if (!message.equalsIgnoreCase("cancel")) {
-            SpawnDeathMessage mobMessage = new SpawnDeathMessage(null, false, 100);
-            if(customMob.getCustomMobMessages().size() - 1 >= waitingForChange)
-                mobMessage = (SpawnDeathMessage) customMob.getCustomMobMessages().get(waitingForChange);
-
+            DropMessage mobMessage = new DropMessage(null, true, 100);
+            if(drop.getMessages().size() - 1 >= waitingForChange)
+                mobMessage = (DropMessage) drop.getMessages().get(waitingForChange);
             mobMessage.setMessage(message);
-            customMob.editMessage(waitingForChange, mobMessage);
+            drop.editMessages(waitingForChange, mobMessage);
+            customMob.editDrop(drop, dropIndex);
+
             player.sendMessage(Utils.applyFormat("&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &eMessage saved : &r" + message));
         }
 
         waitingForChange = null;
-        Bukkit.getScheduler().runTask(CustomMobs.getPlugin(), new MessagesGUI(customMob, "Spawn / Death", player)::openInventory);
+        Bukkit.getScheduler().runTask(CustomMobs.getPlugin(), new DropMessagesGUI(customMob, drop, "Drop", player)::openInventory);
     }
 
     private List<ItemStack> getMessageItems() {
         List<ItemStack> messageItems = new ArrayList<>();
-        for(SpawnDeathMessage message : customMob.getCustomMobMessages()) {
+        for(Message message : drop.getMessages()) {
             ItemStack item = new ItemStack(Material.WRITABLE_BOOK);
-            if(message.isOnDeath())
-                item.setType(Material.DEAD_BUSH);
             ItemMeta meta = item.getItemMeta();
             meta.setDisplayName(Utils.applyFormat(message.getMessage()));
             List<String> lore = new ArrayList<>();
-            String event = message.isOnDeath() ? "&c&lDeath" : "&b&lSpawn";
-            lore.add(Utils.applyFormat("&f&l* &eHappens on:&f " + event));
-            String radius = message.getRadius() > 0 ? message.getRadius() + " block(s)" : "Everyone";
-            lore.add(Utils.applyFormat("&f&l* &aRadius:&f " + radius));
+            if(drop.getDropCondition() != DropConditions.DROP) {
+                String type = ((DropMessage) message).isDropperOnly() ? "Dropper only" : "Nearby players / Everyone";
+                lore.add(Utils.applyFormat("&f&l* &cMessage type:&f " + type));
+            }
+            if(!((DropMessage) message).isDropperOnly()) {
+                String radius = message.getRadius() > 0 ? message.getRadius() + (drop.getDropCondition() == DropConditions.DROP ? " block(s) around the mob" : " block(s) around the 'dropper'") : "Everyone";
+                lore.add(Utils.applyFormat("&f&l* &aRadius:&f " + radius));
+            }
             lore.add("");
             lore.add(Utils.applyFormat("&7&o(( Left-Click to edit this message ))"));
-            lore.add(Utils.applyFormat("&7&o(( Shift-Left-Click to edit this message's type ))"));
+            if(drop.getDropCondition() != DropConditions.DROP)
+                lore.add(Utils.applyFormat("&7&o(( Shift-Left-Click to change the type of this message ))"));
             lore.add(Utils.applyFormat("&7&o(( Right-Click to remove this message ))"));
-            lore.add(Utils.applyFormat("&7&o(( Shift-Right-Click to edit this message's radius ))"));
+            if(!((DropMessage) message).isDropperOnly())
+                lore.add(Utils.applyFormat("&7&o(( Shift-Right-Click to edit this message's radius ))"));
             meta.setLore(lore);
             item.setItemMeta(meta);
             messageItems.add(item);
@@ -202,5 +223,4 @@ public class MessagesGUI extends CustomMobsGUI {
         item.setItemMeta(itemMeta);
         return item;
     }
-
 }

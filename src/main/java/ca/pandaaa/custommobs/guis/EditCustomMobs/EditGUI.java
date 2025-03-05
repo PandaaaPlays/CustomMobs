@@ -2,6 +2,7 @@ package ca.pandaaa.custommobs.guis.EditCustomMobs;
 
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.custommobs.Drop;
 import ca.pandaaa.custommobs.custommobs.Equipment;
 import ca.pandaaa.custommobs.custommobs.Manager;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
@@ -148,55 +149,67 @@ public class EditGUI extends CustomMobsGUI {
 
         switch (event.getSlot()) {
             case 10:
-                if (event.isRightClick())
+                if (event.isRightClick()) {
                     equipment.setMainHand(null);
-                else if (cursorItem.getType() != Material.AIR) {
+                    customMob.removeDropItem("MainHand");
+                } else if (cursorItem.getType() != Material.AIR) {
                     equipment.setMainHand(cursorItem.clone());
+                    customMob.addDrop(new Drop(equipment.getMainHand().clone(), 2, "MainHand"));
                     clicker.setItemOnCursor(null);
                 } else
                     clicker.setItemOnCursor(equipment.getMainHand());
                 break;
             case 11:
-                if (event.isRightClick())
+                if (event.isRightClick()) {
                     equipment.setOffHand(null);
-                else if (cursorItem.getType() != Material.AIR) {
+                    customMob.removeDropItem("OffHand");
+                } else if (cursorItem.getType() != Material.AIR) {
                     equipment.setOffHand(cursorItem.clone());
+                    customMob.addDrop(new Drop(equipment.getOffHand().clone(), 3, "OffHand"));
                     clicker.setItemOnCursor(null);
                 } else
                     clicker.setItemOnCursor(equipment.getOffHand());
                 break;
             case 13:
-                if (event.isRightClick())
+                if (event.isRightClick()) {
                     equipment.setHelmet(null);
-                else if (cursorItem.getType() != Material.AIR) {
+                    customMob.removeDropItem("Helmet");
+                } else if (cursorItem.getType() != Material.AIR) {
                     equipment.setHelmet(cursorItem.clone());
+                    customMob.addDrop(new Drop(equipment.getHelmet().clone(), 4, "Helmet"));
                     clicker.setItemOnCursor(null);
                 } else
                     clicker.setItemOnCursor(equipment.getHelmet());
                 break;
             case 14:
-                if (event.isRightClick())
+                if (event.isRightClick()) {
                     equipment.setChestplate(null);
-                else if (cursorItem.getType() != Material.AIR) {
+                    customMob.removeDropItem("Chestplate");
+                } else if (cursorItem.getType() != Material.AIR) {
                     equipment.setChestplate(cursorItem.clone());
+                    customMob.addDrop(new Drop(equipment.getChestplate().clone(), 5, "Chestplate"));
                     clicker.setItemOnCursor(null);
                 } else
                     clicker.setItemOnCursor(equipment.getChestplate());
                 break;
             case 15:
-                if (event.isRightClick())
+                if (event.isRightClick()) {
                     equipment.setLeggings(null);
-                else if (cursorItem.getType() != Material.AIR) {
+                    customMob.removeDropItem("Leggings");
+                } else if (cursorItem.getType() != Material.AIR) {
                     equipment.setLeggings(cursorItem.clone());
+                    customMob.addDrop(new Drop(equipment.getLeggings().clone(), 6, "Leggings"));
                     clicker.setItemOnCursor(null);
                 } else
                     clicker.setItemOnCursor(equipment.getLeggings());
                 break;
             case 16:
-                if (event.isRightClick())
+                if (event.isRightClick()) {
                     equipment.setBoots(null);
-                else if (cursorItem.getType() != Material.AIR) {
+                    customMob.removeDropItem("Boots");
+                } else if (cursorItem.getType() != Material.AIR) {
                     equipment.setBoots(cursorItem.clone());
+                    customMob.addDrop(new Drop(equipment.getBoots().clone(), 7, "Boots"));
                     clicker.setItemOnCursor(null);
                 } else
                     clicker.setItemOnCursor(equipment.getBoots());

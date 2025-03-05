@@ -5,12 +5,14 @@ import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.Registry;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Cat extends CustomMobOption {
@@ -47,7 +49,12 @@ public class Cat extends CustomMobOption {
                 if(clickType.isRightClick()) {
                     this.collarColor = null;
                 } else {
-                    this.collarColor = NextOptions.getNextDyeColor(collarColor);
+                    List<DyeColor> colors = Arrays.asList(DyeColor.values());
+
+                    if (colors.indexOf(collarColor) == colors.size() - 1)
+                        this.collarColor = colors.get(0);
+                    else
+                        this.collarColor = colors.get(colors.indexOf(collarColor) + 1);
                 }
                 customMob.getCustomMobConfiguration().setCollarColor(collarColor);
                 return getOptionItemStack(getCollarColorItem(), true, true);
@@ -57,7 +64,12 @@ public class Cat extends CustomMobOption {
                 if(clickType.isRightClick()) {
                     this.catType = null;
                 } else {
-                    this.catType = NextOptions.getNextCatType(catType);
+                    List<org.bukkit.entity.Cat.Type> catTypes = Registry.CAT_VARIANT.stream().toList();
+
+                    if (catTypes.indexOf(catType) == catTypes.size() - 1)
+                        this.catType = catTypes.get(0);
+                    else
+                        this.catType = catTypes.get(catTypes.indexOf(catType) + 1);
                 }
                 customMob.getCustomMobConfiguration().setCatType(catType);
                 return getOptionItemStack(getCatTypeItem(), true, true);

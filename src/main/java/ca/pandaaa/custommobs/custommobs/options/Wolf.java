@@ -11,6 +11,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Wolf extends CustomMobOption {
@@ -46,7 +47,12 @@ public class Wolf extends CustomMobOption {
                 if(clickType.isRightClick()) {
                     this.collarColor = null;
                 } else {
-                    this.collarColor = NextOptions.getNextDyeColor(collarColor);
+                    List<DyeColor> colors = Arrays.asList(DyeColor.values());
+
+                    if (colors.indexOf(collarColor) == colors.size() - 1)
+                        this.collarColor = colors.get(0);
+                    else
+                        this.collarColor = colors.get(colors.indexOf(collarColor) + 1);
                 }
                 customMob.getCustomMobConfiguration().setCollarColor(collarColor);
                 return getOptionItemStack(getCollarColorItem(), true, true);

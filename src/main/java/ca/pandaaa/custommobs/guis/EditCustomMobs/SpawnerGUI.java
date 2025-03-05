@@ -21,7 +21,7 @@ public class SpawnerGUI extends CustomMobsGUI {
     private final Manager customMobsManager;
 
     public SpawnerGUI(CustomMob customMob, Manager customMobsManager) {
-        super(36, "&8CustomMobs &8&l» &8Spawners");
+        super(36, "&8CustomMobs &8&l» &8Spawner");
 
         this.customMob = customMob;
         this.customMobsManager = customMobsManager;
@@ -70,7 +70,7 @@ public class SpawnerGUI extends CustomMobsGUI {
                     customMob.setSpawner(spawner);
                     new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());
                 } else {
-                    new IntegerGUI("Spawn Count", customMob, true, 1, 25, (value) -> {
+                    new IntegerGUI("Spawn Count", true, 1, 25, (value) -> {
                         spawner.setSpawnCount(value);
                         customMob.setSpawner(spawner);
                         new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());
@@ -83,7 +83,7 @@ public class SpawnerGUI extends CustomMobsGUI {
                     customMob.setSpawner(spawner);
                     new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());
                 } else {
-                    new IntegerGUI("Maximum nearby count", customMob, false, 1, 150, (value) -> {
+                    new IntegerGUI("Maximum nearby count", false, 1, 150, (value) -> {
                         spawner.setMaxNearbyCount(value);
                         customMob.setSpawner(spawner);
                         new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());
@@ -96,7 +96,7 @@ public class SpawnerGUI extends CustomMobsGUI {
                     customMob.setSpawner(spawner);
                     new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());
                 } else {
-                    new IntegerGUI("Spawn range", customMob, true, 0, 128, (value) -> {
+                    new IntegerGUI("Spawn range", true, 0, 128, (value) -> {
                         spawner.setSpawnRange(value);
                         customMob.setSpawner(spawner);
                         new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());
@@ -109,7 +109,7 @@ public class SpawnerGUI extends CustomMobsGUI {
                     customMob.setSpawner(spawner);
                     new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());
                 } else {
-                    new IntegerGUI("Spawn delay", customMob, false, 0, 72000, (value) -> {
+                    new IntegerGUI("Spawn delay", false, 0, 72000, (value) -> {
                         spawner.setSpawnDelay(value);
                         customMob.setSpawner(spawner);
                         new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());
@@ -137,7 +137,7 @@ public class SpawnerGUI extends CustomMobsGUI {
                     customMob.setSpawner(spawner);
                     new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());
                 } else {
-                    new IntegerGUI("Required player range", customMob, false, 0, 128, (value) -> {
+                    new IntegerGUI("Required player range", false, 0, 128, (value) -> {
                         spawner.setRequiredPlayerRange(value);
                         customMob.setSpawner(spawner);
                         new SpawnerGUI(customMob, customMobsManager).openInventory((Player) event.getWhoClicked());

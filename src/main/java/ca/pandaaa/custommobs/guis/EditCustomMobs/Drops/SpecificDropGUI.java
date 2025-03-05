@@ -2,12 +2,12 @@ package ca.pandaaa.custommobs.guis.EditCustomMobs.Drops;
 
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.custommobs.Drop;
-import ca.pandaaa.custommobs.custommobs.options.NextOptions;
 import ca.pandaaa.custommobs.guis.BasicTypes.DoubleGUI;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.DropConditions;
 import ca.pandaaa.custommobs.utils.Utils;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SpecificDropGUI extends CustomMobsGUI {
@@ -36,12 +37,11 @@ public class SpecificDropGUI extends CustomMobsGUI {
         for(int i = 0; i < 36; i++)
             inventory.setItem(i, filler);
 
-        inventory.setItem(10, getChanceItem());
-        inventory.setItem(11, getLootingItem());
-        inventory.setItem(12, getCommandItem());
-        inventory.setItem(14, getConditionItem());
-        inventory.setItem(15, getGroupItem(drop.getDropCondition() == DropConditions.NEARBY));
-        inventory.setItem(16, getMessageItem());
+        inventory.setItem(11, getChanceItem());
+        inventory.setItem(12, getLootingItem());
+        inventory.setItem(13, getConditionItem());
+        inventory.setItem(14, getGroupItem(drop.getDropCondition() == DropConditions.NEARBY));
+        inventory.setItem(15, getMessageItem());
         inventory.setItem(27, getPreviousItem());
         inventory.setItem(31, getDropItem());
         inventory.setItem(35, getDeleteItem(false));
@@ -67,18 +67,19 @@ public class SpecificDropGUI extends CustomMobsGUI {
         ItemStack cursorItem = clicker.getItemOnCursor();
 
         switch (event.getSlot()) {
-            case 10:
+            case 11:
                 new SpecificDropChanceGUI(customMob, drop, dropIndex, (value) -> {
                     drop.setProbability(value);
                     customMob.editDrop(drop, dropIndex);
                 }).openInventory(clicker);
                 break;
-            case 11:
+            case 12:
                 drop.setLooting(!drop.isLooting());
                 customMob.editDrop(drop, dropIndex);
                 event.getView().setItem(event.getSlot(), getLootingItem());
+                event.getView().setItem(event.getSlot() - 1, getChanceItem());
                 break;
-            case 14:
+            case 13:
                 if(event.isRightClick() && drop.getDropCondition().name().equals("NEARBY")){
                     new DoubleGUI("Maximum range", false, 1, 255, (value) -> {
                         drop.setNearbyRange(value);
@@ -92,17 +93,23 @@ public class SpecificDropGUI extends CustomMobsGUI {
                 event.getView().setItem(event.getSlot(), getConditionItem());
                 event.getView().setItem(event.getSlot() + 1, getGroupItem(drop.getDropCondition() == DropConditions.NEARBY));
                 break;
-            case 15:
+            case 14:
                 if(event.isRightClick())
                     drop.setGroupColor(null);
-                else
-                    drop.setGroupColor(NextOptions.getNextDyeColor(drop.getGroupColor()));
+                else {
+                    List<DyeColor> colors = Arrays.asList(DyeColor.values());
+
+                    if (colors.indexOf(drop.getGroupColor()) == colors.size() - 1)
+                        drop.setGroupColor(colors.get(0));
+                    else
+                        drop.setGroupColor(colors.get(colors.indexOf(drop.getGroupColor()) + 1));
+                }
 
                 customMob.editDrop(drop, dropIndex);
                 event.getView().setItem(event.getSlot(), getGroupItem(false));
                 break;
-            case 16:
-                new SpecificDropMessageGUI().openInventory(clicker);
+            case 15:
+                new DropMessagesGUI(customMob, drop, "Drop", clicker).openInventory();
                 break;
             case 27:
                 new DropsGUI(customMob).openInventory(clicker, 1);
@@ -136,23 +143,23 @@ public class SpecificDropGUI extends CustomMobsGUI {
     private ItemStack getChanceItem() {
         CustomMobsItem item = new CustomMobsItem(Material.BLAZE_POWDER);
         item.setName("&d&lProbability");
-        item.addLore("&eCurrent proability:&f " + drop.getProbability() + "%", "", "&7&o(( Click to edit this option ))");
+        item.addLore("&eCurrent proability:&f " + drop.getProbability() + "%");
+        if(drop.isLooting()) {
+            item.addLore("&f&l* &cWith looting I:&f " + Math.round(drop.getProbability() * 2 * 1000.0) / 1000.0 + "%");
+            item.addLore("&f&l* &cWith looting II:&f " + Math.round(drop.getProbability() * 3 * 1000.0) / 1000.0 + "%");
+            item.addLore("&f&l* &cWith looting III:&f " + Math.round(drop.getProbability() * 4 * 1000.0) / 1000.0 + "%");
+        }
+        item.addLore("", "&7&o(( Click to edit this option ))");
         return getMenuItem(item, true);
     }
 
     private ItemStack getLootingItem() {
         CustomMobsItem item = new CustomMobsItem(Material.WITHER_SKELETON_SKULL);
         String looting = drop.isLooting() ? "&a&lOn" : "&c&lOff";
-        item.setName("&6&lLooting");
-        item.addLore("&eAffected by looting: " + looting, "", "&7&o(( Click to edit this option ))");
-        return getMenuItem(item, true);
-    }
-
-    private ItemStack getCommandItem() {
-        CustomMobsItem item = new CustomMobsItem(Material.COMMAND_BLOCK);
-        item.setName("&4&lCommands");
-        // TODO cycle the NEARBY, KILLER, MOST DAMAGE
-        item.addLore("", "&7&o(( Click to edit this option ))");
+        item.setName("&6&lLooting");;
+        item.addLore("&eAffected by looting: " + looting, "", "&7&o(( Adds (probability * looting level) to the probability ))", "", "&7&o(( Click to edit this option ))");
+        if(drop.getDropCondition() == DropConditions.NEARBY)
+            item.addLore("&c&l[!] &cNearby drops cannot be affected by looting.");
         return getMenuItem(item, true);
     }
 
@@ -160,9 +167,7 @@ public class SpecificDropGUI extends CustomMobsGUI {
         CustomMobsItem item = new CustomMobsItem(Material.MACE);
         item.setName("&c&lCondition");
         String dropCondtionName = drop.getDropCondition().name();
-        item.addLore("&eCondition: &f"
-                + dropCondtionName.toUpperCase().charAt(0)
-                + dropCondtionName.toLowerCase().substring(1).replaceAll("_", " "));
+        item.addLore("&eCondition: &f" + Utils.getStartCase(dropCondtionName));
         switch (drop.getDropCondition().name()){
             case "NEARBY":
                 item.addLore("&f&l* &bRange:&f " + drop.getNearbyRange());
@@ -189,9 +194,7 @@ public class SpecificDropGUI extends CustomMobsGUI {
         item.setName("&a&lGroup");
         String color = "&fNone";
         if(drop.getGroupColor() != null) {
-            color = Utils.getChatColorOfColor(drop.getGroupColor().name())
-                    + drop.getGroupColor().name().toUpperCase().substring(0, 1)
-                    + drop.getGroupColor().name().toLowerCase().substring(1).replaceAll("_", " ");
+            color = Utils.getChatColorOfColor(drop.getGroupColor().name()) + Utils.getSentenceCase(drop.getGroupColor().toString());
             Material material = Material.getMaterial(drop.getGroupColor() + "_CANDLE");
             item.setType(material);
         }

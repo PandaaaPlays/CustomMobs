@@ -90,7 +90,6 @@ public class SpecificSoundGUI  extends CustomMobsGUI {
 
             // Category
             case 14:
-                // TODO faire les autres comme ca
                 List<SoundCategory> soundCategories = Arrays.asList(SoundCategory.values());
 
                 if (event.isRightClick())

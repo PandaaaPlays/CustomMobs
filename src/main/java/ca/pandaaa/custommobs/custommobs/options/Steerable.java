@@ -1,8 +1,11 @@
 package ca.pandaaa.custommobs.custommobs.options;
 
 import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.custommobs.Drop;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
+import ca.pandaaa.custommobs.utils.DropConditions;
 import ca.pandaaa.custommobs.utils.Utils;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -45,6 +48,13 @@ public class Steerable extends CustomMobOption {
             case "saddle": {
                 this.saddle = !this.saddle;
                 customMob.getCustomMobConfiguration().setHasSaddle(saddle);
+
+                if(saddle) {
+                    customMob.addDrop(new Drop(new ItemStack(Material.SADDLE), 1, "Saddle"));
+                } else {
+                    customMob.removeDropItem("Saddle");
+                }
+
                 return getOptionItemStack(getSaddleItem(), false, false);
             }
         }

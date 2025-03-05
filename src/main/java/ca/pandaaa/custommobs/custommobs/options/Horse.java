@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Horse extends CustomMobOption {
@@ -46,7 +47,12 @@ public class Horse extends CustomMobOption {
                 if(clickType.isRightClick()) {
                     this.horseColor = null;
                 } else {
-                    this.horseColor = NextOptions.getNextHorseColor(horseColor);
+                    List<org.bukkit.entity.Horse.Color> horseColors = Arrays.asList(org.bukkit.entity.Horse.Color.values());
+
+                    if (horseColors.indexOf(horseColor) == horseColors.size() - 1)
+                        this.horseColor = horseColors.get(0);
+                    else
+                        this.horseColor = horseColors.get(horseColors.indexOf(horseColor) + 1);
                 }
                 customMob.getCustomMobConfiguration().setHorseColor(horseColor);
                 return getOptionItemStack(getHorseColorItem(), true, true);
@@ -56,7 +62,12 @@ public class Horse extends CustomMobOption {
                 if(clickType.isRightClick()) {
                     this.horseStyle = null;
                 } else {
-                    this.horseStyle = NextOptions.getNextHorseStyle(horseStyle);
+                    List<org.bukkit.entity.Horse.Style> horseStyles = Arrays.asList(org.bukkit.entity.Horse.Style.values());
+
+                    if (horseStyles.indexOf(horseStyle) == horseStyles.size() - 1)
+                        this.horseStyle = horseStyles.get(0);
+                    else
+                        this.horseStyle = horseStyles.get(horseStyles.indexOf(horseStyle) + 1);
                 }
                 customMob.getCustomMobConfiguration().setHorseStyle(horseStyle);
                 return getOptionItemStack(getHorseStyleItem(), true, true);

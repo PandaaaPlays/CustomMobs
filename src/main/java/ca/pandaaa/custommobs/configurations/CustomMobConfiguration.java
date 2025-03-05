@@ -2,6 +2,7 @@ package ca.pandaaa.custommobs.configurations;
 
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.*;
+import ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage;
 import ca.pandaaa.custommobs.custommobs.Sound;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.TypesGUI;
 import ca.pandaaa.custommobs.utils.DamageRange;
@@ -81,9 +82,8 @@ public class CustomMobConfiguration {
                 getDrops(),
                 getName(),
                 getSounds(),
+                getMessages(),
                 this);
-
-        // TODO Horses, lama etc saddles should be able to have saddle (maybe add an option?)
 
         setCustomMobConfigurations(customMob, type);
 
@@ -106,11 +106,12 @@ public class CustomMobConfiguration {
                 isPersistent(),
                 isIntelligent(),
                 getFollowRange(),
-                getSize()));
+                getSize(),
+                getNaturalDrops()));
 
         if(AbstractHorse.class.isAssignableFrom(type.getEntityClass()))
             customMob.addCustomMobType(new ca.pandaaa.custommobs.custommobs.options.
-                    AbstractHorse(getJumpStrength(),hasSaddle()));
+                    AbstractHorse(getJumpStrength(), hasSaddle()));
 
         // "Ageable" mobs that cannot actually be babies : Parrot, Bat, Piglin Brute
         if(Ageable.class.isAssignableFrom(type.getEntityClass())
@@ -186,8 +187,10 @@ public class CustomMobConfiguration {
     }
 
     public void resetType(EntityType type) {
-        if(AbstractHorse.class.isAssignableFrom(type.getEntityClass()))
+        if(AbstractHorse.class.isAssignableFrom(type.getEntityClass())) {
             setJumpStrength(null);
+            setHasSaddle(null);
+        }
         if (Ageable.class.isAssignableFrom(type.getEntityClass()))
             setBaby(null);
         if (Axolotl.class.isAssignableFrom(type.getEntityClass()))
@@ -345,9 +348,16 @@ public class CustomMobConfiguration {
         saveConfigurationFile();
     }
 
-    public Messages getMessages() {
-        return new Messages(getMessageText(false), getMessageRadius(false),
-                getMessageText(true), getMessageRadius(true));
+    public static final String MESSAGES = "messages";
+    public List<SpawnDeathMessage> getMessages() {
+        if(!mobConfiguration.contains(MESSAGES, true))
+            return new ArrayList<>();
+        return (List<SpawnDeathMessage>) mobConfiguration.getList(MESSAGES);
+    }
+
+    public void setMessages(List<SpawnDeathMessage> messages) {
+        mobConfiguration.set(MESSAGES, messages);
+        saveConfigurationFile();
     }
 
     private static final String TYPE = "mob.type";
@@ -711,7 +721,7 @@ public class CustomMobConfiguration {
     }
 
     private static final String SADDLE = "mob.saddle";
-    private boolean hasSaddle() {
+    public boolean hasSaddle() {
         if(!mobConfiguration.contains(SADDLE, true))
             return false;
 
@@ -1035,72 +1045,15 @@ public class CustomMobConfiguration {
         saveConfigurationFile();
     }
 
-
-    // Messages //
-
-    private static final String MESSAGE_TEXT = "messages.text";
-    private static final String DEATH_MESSAGE_TEXT = "death-messages.text";
-    private List<String> getMessageText(boolean death) {
-        if(!mobConfiguration.contains(death ? DEATH_MESSAGE_TEXT : MESSAGE_TEXT, true))
-            return new ArrayList<>();
-
-        return mobConfiguration.getStringList(death ? DEATH_MESSAGE_TEXT : MESSAGE_TEXT);
+    private static final String NATURAL_DROPS = "special.natural-drops";
+    private boolean getNaturalDrops() {
+        if(!mobConfiguration.contains(NATURAL_DROPS, true))
+            return true;
+        return mobConfiguration.getBoolean(NATURAL_DROPS);
     }
 
-    public void addMessageText(String text, boolean death) {
-        List<String> messages = new ArrayList<>();
-        if(mobConfiguration.contains(death ? DEATH_MESSAGE_TEXT : MESSAGE_TEXT, true))
-            messages = mobConfiguration.getStringList(death ? DEATH_MESSAGE_TEXT : MESSAGE_TEXT);
-        messages.add(text);
-
-        mobConfiguration.set(death ? DEATH_MESSAGE_TEXT : MESSAGE_TEXT, messages);
-        saveConfigurationFile();
-    }
-
-    public boolean removeMessageText(int number, boolean death) {
-        List<String> messages = new ArrayList<>();
-        if(mobConfiguration.contains(death ? DEATH_MESSAGE_TEXT : MESSAGE_TEXT, true))
-            messages = mobConfiguration.getStringList(death ? DEATH_MESSAGE_TEXT : MESSAGE_TEXT);
-        if(messages.size() < number)
-            return false;
-
-        messages.remove(number - 1);
-        mobConfiguration.set(death ? DEATH_MESSAGE_TEXT : MESSAGE_TEXT, messages);
-        saveConfigurationFile();
-        return true;
-    }
-
-    public void clearMessageText(boolean death) {
-        List<String> messages = new ArrayList<>();
-
-        mobConfiguration.set(death ? DEATH_MESSAGE_TEXT : MESSAGE_TEXT, messages);
-        saveConfigurationFile();
-    }
-
-    public boolean editMessageText(int number, String text, boolean death) {
-        List<String> messages = new ArrayList<>();
-        if(mobConfiguration.contains(death ? DEATH_MESSAGE_TEXT : MESSAGE_TEXT, true))
-            messages = mobConfiguration.getStringList(death ? DEATH_MESSAGE_TEXT : MESSAGE_TEXT);
-        if(messages.size() < number)
-            return false;
-
-        messages.set(number - 1, text);
-        mobConfiguration.set(death ? DEATH_MESSAGE_TEXT : MESSAGE_TEXT, messages);
-        saveConfigurationFile();
-        return true;
-    }
-
-    private static final String MESSAGE_RADIUS = "messages.radius";
-    private static final String DEATH_MESSAGE_RADIUS = "death-messages.radius";
-    private double getMessageRadius(boolean death) {
-        if(!mobConfiguration.contains(death ? DEATH_MESSAGE_RADIUS : MESSAGE_RADIUS, true))
-            return -1;
-
-        return mobConfiguration.getDouble(death ? DEATH_MESSAGE_RADIUS : MESSAGE_RADIUS);
-    }
-
-    public void setMessagesRadius(double radius, boolean death) {
-        mobConfiguration.set(death ? DEATH_MESSAGE_RADIUS : MESSAGE_RADIUS, radius < 0 ? -1 : radius);
+    public void setNaturalDrops(boolean naturalDrops) {
+        mobConfiguration.set(NATURAL_DROPS, naturalDrops);
         saveConfigurationFile();
     }
 
