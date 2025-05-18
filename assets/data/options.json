@@ -1,0 +1,22 @@
+{
+  "Creeper" : [
+    {
+      "key": "EXPLOSION_COOLDOWN",
+      "description": "Ouioui baguette"
+    },
+    {
+      "key": "EXPLOSION_RADIUS",
+      "description": "Ouioui baguette2"
+    }
+  ],
+  "Cow" : [
+    {
+      "key": "EXPLOSION_COOLDOWN",
+      "description": "Ouioui baguette"
+    },
+    {
+      "key": "EXPLOSION_RADIUS",
+      "description": "Ouioui baguette2"
+    }
+  ]
+}
