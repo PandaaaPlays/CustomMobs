@@ -2,7 +2,9 @@
   "Creeper" : [
     {
       "key": "EXPLOSION_COOLDOWN",
-      "description": "Ouioui baguette"
+      "description": "O",
+      "minimum": "5",
+      "maximum": "8.8"
     },
     {
       "key": "EXPLOSION_RADIUS",
