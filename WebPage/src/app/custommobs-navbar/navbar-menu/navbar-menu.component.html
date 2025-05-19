@@ -10,6 +10,6 @@
     </div>
   </div>
   <div class="options" [ngClass]="{ 'selected': selected }">
-    <div *ngFor="let menuItem of menuItems" (click)="navigateTo(menuItem)" class="option text">{{ formatMenuItem(menuItem) }}</div>
+    <div *ngFor="let menuItem of menuItems" (click)="navigateTo(menuItem)" class="option text" [ngClass]="{ 'selected': isItemSelected(menuItem) }">{{ formatMenuItem(menuItem) }}</div>
   </div>
 </div>

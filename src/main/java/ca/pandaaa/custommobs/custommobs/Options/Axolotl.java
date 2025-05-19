@@ -14,6 +14,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Axolotl extends CustomMobOption {
+    /**
+     * Indicates the color variant of the axolotl CustomMob (e.g., pink, gold, cyan, blue). If left unset, the color will
+     * be chosen randomly.
+     */
     private static final String AXOLOTL_VARIANT = "mob.axolotl-variant";
     private org.bukkit.entity.Axolotl.Variant axolotlVariant;
 

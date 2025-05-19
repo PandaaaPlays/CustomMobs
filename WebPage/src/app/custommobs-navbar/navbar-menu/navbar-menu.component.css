@@ -1,12 +1,15 @@
 .navbar-menu {
   position: relative;
-  margin: 8px 7px 0 15px;
+  margin: 0 7px 0 15px;
   color: white;
   height: auto;
   transition: background-color 0.4s ease-in-out, color 0.2s ease-in-out;
 }
 
 .header {
+  background: #141B30;
+  position: sticky;
+  top: 0;
   cursor: pointer;
   padding: 10px 20px;
   display: flex;
@@ -14,6 +17,12 @@
   align-items: center;
   height: 30px;
   border-radius: 7px;
+  z-index: 2;
+}
+
+.header.selected {
+  background: white;
+  color: #141B30;
 }
 
 .options {
@@ -23,9 +32,9 @@
   overflow: hidden;
   transform: translateY(-10px);
   transition:
-    max-height 0.5s ease,
-    opacity 0.5s ease,
-    transform 0.5s ease;
+    max-height 0.15s ease,
+    opacity 0.15s ease,
+    transform 0.15s ease;
   border-radius: 7px;
 }
 
@@ -65,9 +74,15 @@
 
 .option {
   margin-left: 20px;
+  margin-right: 5px;
   padding: 10px 20px;
   border-radius: 7px;
   cursor: pointer;
+}
+
+.option.selected {
+  background: white;
+  color: #141B30;
 }
 
 .header:hover {

@@ -13,6 +13,10 @@ import java.util.List;
 
 // "Ageable" mobs that cannot actually be babies : Parrot, Bat, Piglin Brute
 public class Ageable extends CustomMobOption {
+    /**
+     * Specifies whether the entity is a baby (true/false), affecting size and behavior. If left unset, the CustomMob's age
+     * will be randomly chosen (like the default behavior of minecraft mob spawning).
+     */
     private static final String BABY = "mob.baby";
     private Boolean isBaby;
 

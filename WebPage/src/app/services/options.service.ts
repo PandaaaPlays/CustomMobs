@@ -24,11 +24,16 @@ export class OptionsService {
     this.http.get<{ [key: string]: Option[] }>('assets/data/options.json')
       .subscribe(data => {
         const sortedEntries = Object.entries(data)
-          .sort((a: [string, Option[]], b: [string, Option[]]) => a[0].localeCompare(b[0]));
+          .sort(([keyA], [keyB]) => {
+            if (keyA === 'Default') return -1;
+            if (keyB === 'Default') return 1;
+            return keyA.localeCompare(keyB);
+          });
 
         const sortedData: { [key: string]: Option[] } = Object.fromEntries(sortedEntries);
 
         this.optionsSubject.next(sortedData);
       });
   }
+
 }

@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SkeletonHorse extends CustomMobOption {
+    /**
+     * Indicates whether the skeleton horse is a trap variant (spawns skeleton riders when triggered by player(s) nearby).
+     */
     private static final String SKELETON_TRAP = "mob.skeleton-trap";
     private boolean trapped;
 
@@ -29,7 +32,6 @@ public class SkeletonHorse extends CustomMobOption {
         ((org.bukkit.entity.SkeletonHorse) customMob).setTrapped(trapped);
     }
 
-    @Override
     public void resetOptions() {
 
     }

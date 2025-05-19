@@ -16,6 +16,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Fox extends CustomMobOption {
+    /**
+     * Specifies the variant of the fox CustomMob, such as normal or a biome-specific type. When this value is
+     * not set, the variant will be based on the biome it is spawned in (like it would by spawning a normal fox).
+     */
     private static final String FOX_TYPE = "mob.fox-type";
     private org.bukkit.entity.Fox.Type foxType;
 

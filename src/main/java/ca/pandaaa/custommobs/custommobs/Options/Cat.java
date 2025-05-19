@@ -18,8 +18,15 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Cat extends CustomMobOption {
+    /**
+     * Sets the dye color of the wolf CustomMob's color. The wolf needs to be tamed in order to have the collar
+     * rendered (see Tameable option).
+     */
     private static final String CAT_TYPE = "mob.cat-type";
     private org.bukkit.entity.Cat.Type catType;
+    /**
+     * Determines the breed or appearance of the cat CustomMob (e.g., tabby, siamese, black).
+     */
     private static final String COLLAR_COLOR = "mob.collar-color";
     private DyeColor collarColor;
 

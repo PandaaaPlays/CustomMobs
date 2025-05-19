@@ -16,6 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PigZombie extends CustomMobOption {
+    /**
+     * Indicates the anger duration (in ticks) of a zombified piglin, which states for how long the zombified piglin
+     * will try to attack the player.
+     */
     private static final String ZOMBIFIED_PIGLIN_ANGER = "mob.zombified-piglin-anger";
     private int anger;
 

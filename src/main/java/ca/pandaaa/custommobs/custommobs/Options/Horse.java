@@ -17,10 +17,19 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Horse extends CustomMobOption {
+    /**
+     *
+     */
     private static final String HORSE_COLOR = "mob.horse-color";
     private org.bukkit.entity.Horse.Color horseColor;
+    /**
+     *
+     */
     private static final String HORSE_STYLE = "mob.horse-style";
     private org.bukkit.entity.Horse.Style horseStyle;
+    /**
+     *
+     */
     private static final String HORSE_ARMOR = "mob.horse-armor";
     private Material horseArmor;
 

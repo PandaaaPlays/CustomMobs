@@ -2,7 +2,7 @@
     "Llama":  [
                   {
                       "minimum":  null,
-                      "description":  "",
+                      "description":  "Defines the color variant of the llama CustomMob (e.g., creamy, white, brown, gray), used for appearance customization. When this value is not set, the color will be applied randomly (like it would by spawning a normal llama).",
                       "type":  "Llama color",
                       "key":  "LLAMA_COLOR",
                       "maximum":  null
@@ -11,7 +11,7 @@
     "Zombie":  [
                    {
                        "minimum":  null,
-                       "description":  "",
+                       "description":  "Determines whether the zombie CustomMob can break doors. This option is used to configure hostile behavior against villages or structures.",
                        "type":  "On / Off",
                        "key":  "CAN_BREAK_DOORS",
                        "maximum":  null
@@ -20,14 +20,14 @@
     "Tameable":  [
                      {
                          "minimum":  null,
-                         "description":  "",
+                         "description":  "Stores the unique identifier (UUID) of the player who \"owns\" the tameable CustomMob. The \"tamed\" option must also be toggled on for the mob to actually be \"owned\" by a player. The player will remain the owner even after a username change.",
                          "type":  "Unique user ID",
                          "key":  "OWNER",
                          "maximum":  null
                      },
                      {
                          "minimum":  null,
-                         "description":  "",
+                         "description":  "Indicates if the entity has been tamed by a player (true/false).",
                          "type":  "On / Off",
                          "key":  "TAMED",
                          "maximum":  null
@@ -36,7 +36,7 @@
     "ChestedHorse":  [
                          {
                              "minimum":  null,
-                             "description":  "",
+                             "description":  "Determines whether the horse CustomMob has a chest attached (true/false), enabling additional storage. This option will only work on \"horses\" that can have a Chest (Donkeys, Mules).",
                              "type":  "On / Off",
                              "key":  "CHEST",
                              "maximum":  null
@@ -45,7 +45,7 @@
     "Pig":  [
                 {
                     "minimum":  null,
-                    "description":  "",
+                    "description":  "Specifies the variant of the pig CustomMob, such as normal or a biome-specific type. When this value is not set, the variant will be based on the biome it is spawned in (like it would by spawning a normal pig).",
                     "type":  "Pig variant",
                     "key":  "PIG_VARIANT",
                     "maximum":  null
@@ -54,28 +54,28 @@
     "Wolf":  [
                  {
                      "minimum":  null,
-                     "description":  "",
+                     "description":  "Sets the dye color of the wolf CustomMob\u0027s color. The wolf needs to be tamed in order to have the collar rendered (see Tameable option).",
                      "type":  "Dye color",
                      "key":  "COLLAR_COLOR",
                      "maximum":  null
                  },
                  {
                      "minimum":  null,
-                     "description":  "",
+                     "description":  "Indicates whether the wolf is in an aggressive (angry) state. Typically, an angry wolf will have red eyes but will not attack the players unless they attack it. If you wish that the wolf mobs attacks the players by themselves, see Default \u003e Aggressive.",
                      "type":  "On / Off",
                      "key":  "ANGRY_WOLF",
                      "maximum":  null
                  },
                  {
                      "minimum":  null,
-                     "description":  "",
+                     "description":  "Specifies the variant of the wolf CustomMob, such as normal or a biome-specific type. When this value is not set, the variant will be based on the biome it is spawned in (like it would by spawning a normal wolf).",
                      "type":  "Wolf variant",
                      "key":  "WOLF_VARIANT",
                      "maximum":  null
                  },
                  {
                      "minimum":  null,
-                     "description":  "",
+                     "description":  "Indicates if the wolf should be equipped with armor.",
                      "type":  "On / Off",
                      "key":  "WOLF_ARMOR",
                      "maximum":  null
@@ -84,14 +84,14 @@
     "Cat":  [
                 {
                     "minimum":  null,
-                    "description":  "",
+                    "description":  "Sets the dye color of the wolf CustomMob\u0027s color. The wolf needs to be tamed in order to have the collar rendered (see Tameable option).",
                     "type":  "Cat type",
                     "key":  "CAT_TYPE",
                     "maximum":  null
                 },
                 {
                     "minimum":  null,
-                    "description":  "",
+                    "description":  "Determines the breed or appearance of the cat CustomMob (e.g., tabby, siamese, black).",
                     "type":  "Dye color",
                     "key":  "COLLAR_COLOR",
                     "maximum":  null
@@ -100,21 +100,21 @@
     "Creeper":  [
                     {
                         "minimum":  "0",
-                        "description":  "Represents the key for configuring the explosion cooldown of a Creeper entity. This variable is used to retrieve or define the cooldown time before a Creeper entity can perform another explosion.",
+                        "description":  "Represents the cooldown time (in ticks) before the creeper CustomMob explodes when it is near a player.",
                         "type":  "Integer",
                         "key":  "EXPLOSION_COOLDOWN",
                         "maximum":  "1200"
                     },
                     {
-                        "minimum":  "5",
-                        "description":  "Represents the configuration key used to set or retrieve the explosion radius for a mob, commonly associated with entities like Creepers. This value determines the blast radius of an explosion caused by the mob. The key is used within the configuration to dynamically adjust the explosion radius in the mob system.",
+                        "minimum":  "0",
+                        "description":  "Represents the distance (in block(s)) that the nearest player needs to be from the creeper CustomMob for it to explode.",
                         "type":  "Integer",
                         "key":  "EXPLOSION_RADIUS",
-                        "maximum":  "1600"
+                        "maximum":  "128"
                     },
                     {
                         "minimum":  null,
-                        "description":  "Represents the identifier for the configuration of a charged creeper mob. This constant is used in the customization and configuration of the charged creeper entity within the system, allowing specific options to be applied or manipulated for it. The \"mob.charged-creeper\" identifier is likely used in configuration files or system logic to reference the charged creeper entity type.",
+                        "description":  "Indicates whether the creeper is charged (electrified), making its explosion more powerful.",
                         "type":  "On / Off",
                         "key":  "CHARGED_CREEPER",
                         "maximum":  null
@@ -123,7 +123,7 @@
     "Cow":  [
                 {
                     "minimum":  null,
-                    "description":  "",
+                    "description":  "Specifies the variant of the cow CustomMob, such as normal or a biome-specific type. When this value is not set, the variant will be based on the biome it is spawned in (like it would by spawning a normal cow).",
                     "type":  "Cow variant",
                     "key":  "COW_VARIANT",
                     "maximum":  null
@@ -132,7 +132,7 @@
     "SkeletonHorse":  [
                           {
                               "minimum":  null,
-                              "description":  "",
+                              "description":  "Indicates whether the skeleton horse is a trap variant (spawns skeleton riders when triggered by player(s) nearby).",
                               "type":  "On / Off",
                               "key":  "SKELETON_TRAP",
                               "maximum":  null
@@ -141,7 +141,7 @@
     "Ageable":  [
                     {
                         "minimum":  null,
-                        "description":  "",
+                        "description":  "Specifies whether the entity is a baby (true/false), affecting size and behavior. If left unset, the CustomMob\u0027s age will be randomly chosen (like the default behavior of minecraft mob spawning).",
                         "type":  "On / Off",
                         "key":  "BABY",
                         "maximum":  null
@@ -150,7 +150,7 @@
     "Axolotl":  [
                     {
                         "minimum":  null,
-                        "description":  "",
+                        "description":  "Indicates the color variant of the axolotl CustomMob (e.g., pink, gold, cyan, blue). If left unset, the color will be chosen randomly.",
                         "type":  "Axolotl variant",
                         "key":  "AXOLOTL_VARIANT",
                         "maximum":  null
@@ -159,7 +159,7 @@
     "Steerable":  [
                       {
                           "minimum":  null,
-                          "description":  "",
+                          "description":  "Indicates if the entity (like a pig or strider) has a saddle and can be ridden.",
                           "type":  "On / Off",
                           "key":  "SADDLE",
                           "maximum":  null
@@ -168,7 +168,7 @@
     "Panda":  [
                   {
                       "minimum":  null,
-                      "description":  "",
+                      "description":  "Describes the genetic trait (gene) of the panda CustomMob (e.g., lazy, aggressive, playful), influencing its behavior.",
                       "type":  "Panda gene",
                       "key":  "PANDA_GENE",
                       "maximum":  null
@@ -177,137 +177,32 @@
     "Villager":  [
                      {
                          "minimum":  null,
-                         "description":  "",
+                         "description":  "Indicates the biome-based appearance of the villager CustomMob (e.g., plains, desert, jungle).",
                          "type":  "Villager type",
                          "key":  "VILLAGER_TYPE",
                          "maximum":  null
                      },
                      {
                          "minimum":  null,
-                         "description":  "",
+                         "description":  "Specifies the CustomMob villager’s job or role (e.g., farmer, librarian, blacksmith).",
                          "type":  "Villager profession",
                          "key":  "VILLAGER_PROFESSION",
                          "maximum":  null
                      }
                  ],
-    "Special":  [
-                    {
-                        "minimum":  null,
-                        "description":  "",
-                        "type":  "On / Off",
-                        "key":  "VISIBLE_NAME",
-                        "maximum":  null
-                    },
-                    {
-                        "minimum":  null,
-                        "description":  "",
-                        "type":  "Decimal",
-                        "key":  "HEALTH",
-                        "maximum":  null
-                    },
-                    {
-                        "minimum":  null,
-                        "description":  "",
-                        "type":  "On / Off",
-                        "key":  "AGGRESSIVE",
-                        "maximum":  null
-                    },
-                    {
-                        "minimum":  null,
-                        "description":  "",
-                        "type":  "On / Off",
-                        "key":  "GLOWING",
-                        "maximum":  null
-                    },
-                    {
-                        "minimum":  null,
-                        "description":  "",
-                        "type":  "On / Off",
-                        "key":  "CAN_PICKUP_LOOT",
-                        "maximum":  null
-                    },
-                    {
-                        "minimum":  null,
-                        "description":  "",
-                        "type":  "Decimal",
-                        "key":  "KNOCKBACK_RESISTANCE",
-                        "maximum":  null
-                    },
-                    {
-                        "minimum":  null,
-                        "description":  "",
-                        "type":  "Decimal",
-                        "key":  "SPEED",
-                        "maximum":  null
-                    },
-                    {
-                        "minimum":  null,
-                        "description":  "",
-                        "type":  "Range of damage",
-                        "key":  "DAMAGE",
-                        "maximum":  null
-                    },
-                    {
-                        "minimum":  null,
-                        "description":  "",
-                        "type":  "On / Off",
-                        "key":  "INVINCIBLE",
-                        "maximum":  null
-                    },
-                    {
-                        "minimum":  null,
-                        "description":  "",
-                        "type":  "On / Off",
-                        "key":  "SILENT",
-                        "maximum":  null
-                    },
-                    {
-                        "minimum":  null,
-                        "description":  "",
-                        "type":  "On / Off",
-                        "key":  "GRAVITY",
-                        "maximum":  null
-                    },
-                    {
-                        "minimum":  null,
-                        "description":  "",
-                        "type":  "On / Off",
-                        "key":  "PERSISTENT",
-                        "maximum":  null
-                    },
-                    {
-                        "minimum":  null,
-                        "description":  "",
-                        "type":  "On / Off",
-                        "key":  "INTELLIGENT",
-                        "maximum":  null
-                    },
-                    {
-                        "minimum":  null,
-                        "description":  "",
-                        "type":  "Decimal",
-                        "key":  "FOLLOW_RANGE",
-                        "maximum":  null
-                    },
-                    {
-                        "minimum":  null,
-                        "description":  "",
-                        "type":  "Decimal",
-                        "key":  "SIZE",
-                        "maximum":  null
-                    },
-                    {
-                        "minimum":  null,
-                        "description":  "",
-                        "type":  "On / Off",
-                        "key":  "NATURAL_DROPS",
-                        "maximum":  null
-                    }
-                ],
+    "Rabbit":  [
+                   {
+                       "minimum":  null,
+                       "description":  "",
+                       "type":  "Rabbit type",
+                       "key":  "RABBIT_TYPE",
+                       "maximum":  null
+                   }
+               ],
     "Frog":  [
                  {
                      "minimum":  null,
-                     "description":  "",
+                     "description":  "Specifies the variant of the frog CustomMob, such as normal or a biome-specific type. When this value is not set, the variant will be based on the biome it is spawned in (like it would by spawning a normal frog).",
                      "type":  "Frog variant",
                      "key":  "FROG_VARIANT",
                      "maximum":  null
@@ -316,7 +211,7 @@
     "PigZombie":  [
                       {
                           "minimum":  null,
-                          "description":  "",
+                          "description":  "Indicates the anger duration (in ticks) of a zombified piglin, which states for how long the zombified piglin will try to attack the player.",
                           "type":  "Integer",
                           "key":  "ZOMBIFIED_PIGLIN_ANGER",
                           "maximum":  null
@@ -325,7 +220,7 @@
     "Parrot":  [
                    {
                        "minimum":  null,
-                       "description":  "",
+                       "description":  "Specifies the color variant of the parrot (e.g., red, blue, green). If left unset, the color will be chosen randomly.",
                        "type":  "Parrot variant",
                        "key":  "PARROT_VARIANT",
                        "maximum":  null
@@ -334,7 +229,7 @@
     "Fox":  [
                 {
                     "minimum":  null,
-                    "description":  "",
+                    "description":  "Specifies the variant of the fox CustomMob, such as normal or a biome-specific type. When this value is not set, the variant will be based on the biome it is spawned in (like it would by spawning a normal fox).",
                     "type":  "Fox type",
                     "key":  "FOX_TYPE",
                     "maximum":  null
@@ -372,15 +267,6 @@
                            "maximum":  null
                        }
                    ],
-    "Rabbit":  [
-                   {
-                       "minimum":  null,
-                       "description":  "",
-                       "type":  "Rabbit type",
-                       "key":  "RABBIT_TYPE",
-                       "maximum":  null
-                   }
-               ],
     "Shulker":  [
                     {
                         "minimum":  null,
@@ -393,7 +279,7 @@
     "Chicken":  [
                     {
                         "minimum":  null,
-                        "description":  "",
+                        "description":  "Specifies the variant of the chicken CustomMob, such as normal or a biome-specific type. When this value is not set, the variant will be based on the biome it is spawned in (like it would by spawning a normal chicken).",
                         "type":  "Chicken variant",
                         "key":  "CHICKEN_VARIANT",
                         "maximum":  null
@@ -432,5 +318,119 @@
                          "key":  "SITTING",
                          "maximum":  null
                      }
-                 ]
+                 ],
+    "Default":  [
+                    {
+                        "minimum":  null,
+                        "description":  "Toggles the visibility of the entity\u0027s name tag, even when not directly looking at it.",
+                        "type":  "On / Off",
+                        "key":  "VISIBLE_NAME",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  "0",
+                        "description":  "Sets the entity\u0027s health (in half heart(s)). A health of 20 means that the CustomMob has 10 hearts of health.",
+                        "type":  "Decimal",
+                        "key":  "HEALTH",
+                        "maximum":  "1024"
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "Indicates whether the entity is in an aggressive state, which means that they will attack any nearby player (even if the mob is normally passive).",
+                        "type":  "On / Off",
+                        "key":  "AGGRESSIVE",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "Toggles the glowing effect around the entity.",
+                        "type":  "On / Off",
+                        "key":  "GLOWING",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "When enabled, allows the entity to pick up dropped items.",
+                        "type":  "On / Off",
+                        "key":  "CAN_PICKUP_LOOT",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  "0",
+                        "description":  "Indicates how far the entity is knocked back when hit (a high value indicates that the CustomMob should not go far).",
+                        "type":  "Decimal",
+                        "key":  "KNOCKBACK_RESISTANCE",
+                        "maximum":  "1"
+                    },
+                    {
+                        "minimum":  "0",
+                        "description":  "Controls the movement speed of the entity. The default value is 0,3.",
+                        "type":  "Decimal",
+                        "key":  "SPEED",
+                        "maximum":  "1024"
+                    },
+                    {
+                        "minimum":  "0",
+                        "description":  "Defines the range of damage the entity can inflict. For a mob to inflict exactly \"x\" damage every time, set the lower and higher bounds of the range to the same \"x\" value.",
+                        "type":  "Range of damage",
+                        "key":  "DAMAGE",
+                        "maximum":  "1024"
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "When enabled, prevents the entity from taking any damage.",
+                        "type":  "On / Off",
+                        "key":  "INVINCIBLE",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "MWhen enabled, mutes all sounds made by the entity.",
+                        "type":  "On / Off",
+                        "key":  "SILENT",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "Determines whether the entity is affected by gravity or not.",
+                        "type":  "On / Off",
+                        "key":  "GRAVITY",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "When enabled, keeps the entity from despawning naturally.",
+                        "type":  "On / Off",
+                        "key":  "PERSISTENT",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "Specifies whether the entity uses advanced AI behaviors (such as moving around, attacking, etc.).",
+                        "type":  "On / Off",
+                        "key":  "INTELLIGENT",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  "0",
+                        "description":  "Sets the range at which the entity can detect and follow targets. The default value is 32.",
+                        "type":  "Decimal",
+                        "key":  "FOLLOW_RANGE",
+                        "maximum":  "2048"
+                    },
+                    {
+                        "minimum":  "0.06",
+                        "description":  "Adjusts the entity’s physical size. The default value is 1. .06",
+                        "type":  "Decimal",
+                        "key":  "SIZE",
+                        "maximum":  "16"
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "Toggles whether the entity drops default loot on death.",
+                        "type":  "On / Off",
+                        "key":  "NATURAL_DROPS",
+                        "maximum":  null
+                    }
+                ]
 }

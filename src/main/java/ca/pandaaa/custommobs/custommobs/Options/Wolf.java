@@ -19,19 +19,35 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Wolf extends CustomMobOption {
+    /**
+     * Sets the dye color of the wolf CustomMob's color. The wolf needs to be tamed in order to have the collar
+     * rendered (see Tameable option).
+     */
     private static final String COLLAR_COLOR = "mob.collar-color";
     private DyeColor collarColor;
+    /**
+     * Indicates whether the wolf is in an aggressive (angry) state. Typically, an angry wolf will have red eyes
+     * but will not attack the players unless they attack it. If you wish that the wolf mobs attacks the players by
+     * themselves, see Default > Aggressive.
+     */
     private static final String ANGRY_WOLF = "mob.angry-wolf";
     private boolean angry;
+    /**
+     * Specifies the variant of the wolf CustomMob, such as normal or a biome-specific type. When this value is
+     * not set, the variant will be based on the biome it is spawned in (like it would by spawning a normal wolf).
+     */
     private static final String WOLF_VARIANT = "mob.wolf-variant";
     private org.bukkit.entity.Wolf.Variant wolfVariant;
+    /**
+     * Indicates if the wolf should be equipped with armor.
+     */
     private static final String WOLF_ARMOR = "mob.wolf-armor";
     private boolean wolfArmor;
 
     public Wolf(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
-        this.collarColor = collarColor;
-        this.angry = angry;
+        this.collarColor = getOption(COLLAR_COLOR, DyeColor.class);
+        this.angry = getOption(ANGRY_WOLF, Boolean.class, false);
         this.wolfVariant = wolfVariant;
         this.wolfArmor = wolfArmor;
     }
@@ -51,7 +67,8 @@ public class Wolf extends CustomMobOption {
 
     @Override
     public void resetOptions() {
-
+        setOption(COLLAR_COLOR, null);
+        setOption(ANGRY_WOLF, null);
     }
 
     public List<ItemStack> getOptionItems() {
@@ -78,13 +95,13 @@ public class Wolf extends CustomMobOption {
                     else
                         this.collarColor = colors.get(colors.indexOf(collarColor) + 1);
                 }
-                customMob.getCustomMobConfiguration().setCollarColor(collarColor);
+                setOption(COLLAR_COLOR, this.collarColor.name());
                 return getOptionItemStack(getCollarColorItem(), true, true);
             }
 
             case "angry": {
                 this.angry = !angry;
-                customMob.getCustomMobConfiguration().setAngryWolf(angry);
+                setOption(ANGRY_WOLF, this.angry);
                 return getOptionItemStack(getAngryItem(), false, false);
             }
 
@@ -120,7 +137,7 @@ public class Wolf extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return false;
+        return entityType.getEntityClass() == org.bukkit.entity.Wolf.class;
     }
 
     public CustomMobsItem getCollarColorItem() {

@@ -16,6 +16,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Panda extends CustomMobOption {
+    /**
+     * Describes the genetic trait (gene) of the panda CustomMob (e.g., lazy, aggressive, playful), influencing its behavior.
+     */
     private static final String PANDA_GENE = "mob.panda-gene";
     private org.bukkit.entity.Panda.Gene pandaGene;
 

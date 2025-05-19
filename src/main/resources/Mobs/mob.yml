@@ -67,8 +67,8 @@ equipment:
 #  right-hand:
 #  left-hand:
 
-# CustomMob's special attributes
-special:
+# CustomMob's default attributes
+default:
   visible-name:
   health:
   # Aggressive must be turned on for a passive animal to attack the players.

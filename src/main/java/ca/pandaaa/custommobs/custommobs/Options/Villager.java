@@ -16,8 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Villager extends CustomMobOption {
+    /**
+     * Indicates the biome-based appearance of the villager CustomMob (e.g., plains, desert, jungle).
+     */
     private static final String VILLAGER_TYPE = "mob.villager-type";
     private org.bukkit.entity.Villager.Type villagerType;
+    /**
+     * Specifies the CustomMob villager’s job or role (e.g., farmer, librarian, blacksmith).
+     */
     private static final String VILLAGER_PROFESSION = "mob.villager-profession";
     private org.bukkit.entity.Villager.Profession villagerProfession;
 

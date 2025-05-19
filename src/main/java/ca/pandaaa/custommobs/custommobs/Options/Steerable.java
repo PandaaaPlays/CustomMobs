@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Steerable extends CustomMobOption {
+    /**
+     * Indicates if the entity (like a pig or strider) has a saddle and can be ridden.
+     */
     private static final String SADDLE = "mob.saddle";
     private boolean saddle;
 

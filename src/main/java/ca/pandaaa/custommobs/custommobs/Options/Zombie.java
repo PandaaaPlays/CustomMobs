@@ -14,6 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Zombie extends CustomMobOption {
+    /**
+     * Determines whether the zombie CustomMob can break doors. This option is used to configure hostile behavior
+     * against villages or structures.
+     */
     private static final String CAN_BREAK_DOORS = "mob.can-break-doors";
     private boolean canBreakDoors;
 

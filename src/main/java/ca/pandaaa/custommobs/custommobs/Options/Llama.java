@@ -16,6 +16,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Llama extends CustomMobOption {
+    /**
+     * Defines the color variant of the llama CustomMob (e.g., creamy, white, brown, gray), used for appearance
+     * customization. When this value is not set, the color will be applied randomly (like it would by spawning
+     * a normal llama).
+     */
     private static final String LLAMA_COLOR = "mob.llama-color";
     private org.bukkit.entity.Llama.Color llamaColor;
 

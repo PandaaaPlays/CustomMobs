@@ -318,7 +318,7 @@ public class CustomMob implements Listener {
 
     /**
      * Get the option associated with the provided name.
-     * @param optionName The option name. e.g.: Special
+     * @param optionName The option name. e.g.: Default
      * @return The actual CustomMobOption associated with the provided option name.
      */
     public CustomMobOption getCustomMobOption(String optionName) {

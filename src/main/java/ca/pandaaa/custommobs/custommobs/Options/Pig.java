@@ -17,6 +17,10 @@ import java.util.Collections;
 import java.util.List;
 
 public class Pig extends CustomMobOption {
+    /**
+     * Specifies the variant of the pig CustomMob, such as normal or a biome-specific type. When this value is
+     * not set, the variant will be based on the biome it is spawned in (like it would by spawning a normal pig).
+     */
     private static final String PIG_VARIANT = "mob.pig-variant";
     private org.bukkit.entity.Pig.Variant pigVariant;
 

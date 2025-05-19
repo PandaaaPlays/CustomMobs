@@ -18,8 +18,16 @@ import java.util.List;
 import java.util.UUID;
 
 public class Tameable extends CustomMobOption {
+    /**
+     * Stores the unique identifier (UUID) of the player who "owns" the tameable CustomMob. The "tamed" option must
+     * also be toggled on for the mob to actually be "owned" by a player. The player will remain the owner even
+     * after a username change.
+     */
     private static final String OWNER = "mob.owner";
     private UUID owner;
+    /**
+     * Indicates if the entity has been tamed by a player (true/false).
+     */
     private static final String TAMED = "mob.tamed";
     private boolean tamed;
 

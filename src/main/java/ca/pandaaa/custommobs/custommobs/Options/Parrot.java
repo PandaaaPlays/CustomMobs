@@ -16,6 +16,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Parrot extends CustomMobOption {
+    /**
+     * Specifies the color variant of the parrot (e.g., red, blue, green). If left unset, the color will be chosen randomly.
+     */
     private static final String PARROT_VARIANT = "mob.parrot-variant";
     private org.bukkit.entity.Parrot.Variant parrotVariant;
 

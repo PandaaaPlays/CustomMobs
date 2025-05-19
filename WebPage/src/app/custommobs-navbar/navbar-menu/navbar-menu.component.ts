@@ -33,4 +33,9 @@ export class NavbarMenu {
   formatMenuItem(name: string): string {
     return name.replace(/([a-z])([A-Z])/g, '$1 $2');
   }
+
+  isItemSelected(name: string): boolean {
+    return window.location.pathname.split('/')[3] != ""
+      && window.location.pathname.split('/')[3] == name;
+  }
 }

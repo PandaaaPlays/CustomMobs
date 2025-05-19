@@ -17,33 +17,22 @@ import java.util.List;
 
 public class Creeper extends CustomMobOption {
     /**
-     * Represents the key for configuring the explosion cooldown of a Creeper entity.
-     * This variable is used to retrieve or define the cooldown time before a Creeper
-     * entity can perform another explosion.
+     * Represents the cooldown time (in ticks) before the creeper CustomMob explodes when it is near a player.
      * @minimum 0
      * @maximum 1200
      */
     private static final String EXPLOSION_COOLDOWN = "mob.explosion-cooldown";
     private int explosionCooldown;
     /**
-     * Represents the configuration key used to set or retrieve the explosion radius for a mob,
-     * commonly associated with entities like Creepers.
-     * This value determines the blast radius of an explosion caused by the mob.
-     * The key is used within the configuration to dynamically adjust the explosion radius in the mob system.
-     * @minimum 5
-     * @maximum 1600
+     * Represents the distance (in block(s)) that the nearest player needs to be from the creeper CustomMob for it
+     * to explode.
+     * @minimum 0
+     * @maximum 128
      */
     private static final String EXPLOSION_RADIUS = "mob.explosion-radius";
     private int explosionRadius;
     /**
-     * Represents the identifier for the configuration of a charged creeper mob.
-     *
-     * This constant is used in the customization and configuration of the charged
-     * creeper entity within the system, allowing specific options to be applied
-     * or manipulated for it.
-     *
-     * The "mob.charged-creeper" identifier is likely used in configuration files
-     * or system logic to reference the charged creeper entity type.
+     * Indicates whether the creeper is charged (electrified), making its explosion more powerful.
      */
     private static final String CHARGED_CREEPER = "mob.charged-creeper";
     private boolean charged;

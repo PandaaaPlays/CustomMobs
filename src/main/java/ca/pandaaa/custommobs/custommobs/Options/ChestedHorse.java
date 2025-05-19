@@ -14,6 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChestedHorse extends CustomMobOption {
+    /**
+     * Determines whether the horse CustomMob has a chest attached (true/false), enabling additional storage. This
+     * option will only work on "horses" that can have a Chest (Donkeys, Mules).
+     */
     private static final String CHEST = "mob.chested";
     private boolean chested;
 
