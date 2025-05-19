@@ -4,7 +4,7 @@ target/
 !**/src/main/**/out/
 !**/src/test/**/out/
 .idea
-.iml
+/CustomMobs.iml
 
 ### Eclipse ###
 .apt_generated
