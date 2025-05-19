@@ -23,7 +23,7 @@ jobs:
         working-directory: WebPage
 
       - name: Build Angular app
-        run: ng build --configuration production
+        run: npx ng build --configuration production
         working-directory: WebPage
 
       - name: Deploy to GitHub Pages
