@@ -1,0 +1,81 @@
+.navbar-menu {
+  position: relative;
+  margin: 8px 15px 0 15px;
+  color: white;
+  height: auto;
+  transition: background-color 0.4s ease-in-out, color 0.2s ease-in-out;
+}
+
+.header {
+  cursor: pointer;
+  padding: 10px 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 30px;
+  border-radius: 7px;
+}
+
+.options {
+  display: block;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateY(-10px);
+  transition:
+    max-height 0.5s ease,
+    opacity 0.5s ease,
+    transform 0.5s ease;
+  border-radius: 7px;
+}
+
+.options.selected {
+  max-height: 100%;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.menu-left {
+  align-items: center;
+  display: flex;
+  font-size: 23px;
+
+  .icon, .arrow {
+    text-align: center;
+    width: 25px;
+  }
+
+  .text {
+    margin-left: 13px;
+  }
+}
+
+.menu-right {
+  align-items: center;
+  display: flex;
+  justify-content: flex-end;
+  margin-left: auto;
+  font-size: 18px;
+}
+
+.text {
+  font-size: 20px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.option {
+  margin-left: 20px;
+  padding: 10px 20px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.header:hover {
+  background: white;
+  color: #141B30;
+}
+
+.option:hover {
+  background: white;
+  color: #141B30;
+}

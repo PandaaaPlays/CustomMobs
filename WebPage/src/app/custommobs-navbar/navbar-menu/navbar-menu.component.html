@@ -1,0 +1,15 @@
+<div class="navbar-menu">
+  <div class="header" (click)="toggleSelected()">
+    <div class="menu-left">
+      <i class="{{iconClass}} icon"></i>
+      <div class="text">{{ menuName }}</div>
+    </div>
+    <div class="menu-right">
+      <i class="fa-solid fa-angle-right arrow" *ngIf="!selected"></i>
+      <i class="fa-solid fa-angle-down arrow" *ngIf="selected"></i>
+    </div>
+  </div>
+  <div class="options" [ngClass]="{ 'selected': selected }">
+    <div *ngFor="let menuItem of menuItems" (click)="navigateTo(menuItem)" class="option text">{{ formatMenuItem(menuItem) }}</div>
+  </div>
+</div>

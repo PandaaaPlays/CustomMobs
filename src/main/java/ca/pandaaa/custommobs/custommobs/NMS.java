@@ -57,7 +57,9 @@ public class NMS {
                 getHandleMethod = craftLivingEntityClass.getMethod("getHandle");
                 // To find the fields corresponding to the version, see : https://minidigger.github.io/MiniMappingViewer/#/mojang/client/1.XX.XX/LivingEntity
                 // Field in NMS LivingEntity class of type : AttributeMap
-                if(Bukkit.getBukkitVersion().contains("1.21.4"))
+                if(Bukkit.getBukkitVersion().contains("1.21.5"))
+                    attributeMap = LivingEntity.class.getDeclaredField("bF");
+                else if(Bukkit.getBukkitVersion().contains("1.21.4"))
                     attributeMap = LivingEntity.class.getDeclaredField("bR");
                 else if(Bukkit.getBukkitVersion().contains("1.21.3"))
                     attributeMap = LivingEntity.class.getDeclaredField("bS");
@@ -66,7 +68,10 @@ public class NMS {
                 }
                 // To find the fields corresponding to the version, see : https://minidigger.github.io/MiniMappingViewer/#/mojang/client/1.XX.XX/AttributeMap
                 // Field in NMS AttributeMap class of type : Map
-                attributes = AttributeMap.class.getDeclaredField("b");
+                if(Bukkit.getBukkitVersion().contains("1.21.5"))
+                    attributes = AttributeMap.class.getDeclaredField("a");
+                else if(Bukkit.getBukkitVersion().contains("1.21.4") || Bukkit.getBukkitVersion().contains("1.21.3"))
+                    attributes = AttributeMap.class.getDeclaredField("b");
                 attributeMap.setAccessible(true);
                 attributes.setAccessible(true);
             } catch (Exception e) {

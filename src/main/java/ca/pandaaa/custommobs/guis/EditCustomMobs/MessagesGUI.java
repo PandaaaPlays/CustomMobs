@@ -25,7 +25,6 @@ public class MessagesGUI extends CustomMobsGUI {
 
     private final CustomMob customMob;
     private final Player player;
-    private final ItemStack previous;
 
     private Integer waitingForChange;
 
@@ -33,7 +32,6 @@ public class MessagesGUI extends CustomMobsGUI {
         super(18, "&8Message &8&l» &8" + option);
         this.customMob = customMob;
         this.player = player;
-        previous = getMenuItem(Utils.createHead("a2f0425d64fdc8992928d608109810c1251fe243d60d175bed427c651cbe"), true);
 
         waitingForChange = null;
     }
@@ -59,7 +57,7 @@ public class MessagesGUI extends CustomMobsGUI {
             addMessage.setItemMeta(addItemMeta);
         }
 
-        inventory.setItem(9, previous);
+        inventory.setItem(9, getPreviousItem());
         inventory.setItem(13, addMessage);
 
         player.openInventory(inventory);

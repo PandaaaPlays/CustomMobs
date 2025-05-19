@@ -6,7 +6,7 @@ import ca.pandaaa.custommobs.custommobs.DropManager;
 import ca.pandaaa.custommobs.custommobs.Manager;
 import ca.pandaaa.custommobs.custommobs.Messages.Message;
 import ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage;
-import ca.pandaaa.custommobs.custommobs.options.Special;
+import ca.pandaaa.custommobs.custommobs.Options.Special;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
@@ -35,16 +35,16 @@ public class Events implements Listener {
     public void onDamage(EntityDamageByEntityEvent event) {
         Entity entity = event.getDamager();
 
-        if(entity instanceof Projectile)
+        if (entity instanceof Projectile)
             entity = (LivingEntity) ((Projectile) entity).getShooter();
 
-        if(entity == null)
+        if (entity == null)
             return;
 
         Set<NamespacedKey> keys = entity.getPersistentDataContainer().getKeys();
         NamespacedKey minDamageKey = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.MinDamage");
         NamespacedKey maxDamageKey = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.MaxDamage");
-        if(keys.contains(minDamageKey) && keys.contains(maxDamageKey)) {
+        if (keys.contains(minDamageKey) && keys.contains(maxDamageKey)) {
             double minDamage = entity.getPersistentDataContainer().get(minDamageKey, PersistentDataType.DOUBLE);
             double maxDamage = entity.getPersistentDataContainer().get(maxDamageKey, PersistentDataType.DOUBLE);
             Random rand = new Random();
@@ -53,20 +53,28 @@ public class Events implements Listener {
         }
     }
 
+    /**
+     * Damage of players on the CustomMob, which is used for MOST_DAMAGE.
+     */
     @EventHandler
     public void onPlayerDamage(EntityDamageByEntityEvent event) {
         Entity entity = event.getDamager();
 
-        if(!(entity instanceof Player))
+        if (!(entity instanceof Player))
             return;
 
         NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Name");
-        if(!event.getEntity().getPersistentDataContainer().getKeys().contains(key))
+        if (!event.getEntity().getPersistentDataContainer().getKeys().contains(key))
             return;
+
+        // Enable the custom effects of the CustomMob.
+        CustomMobs.getPlugin().getCustomMobsManager()
+                .getCustomMob(event.getEntity().getPersistentDataContainer().get(key, PersistentDataType.STRING))
+                .enableCustomEffects(event.getEntity());
 
         double damage = 0;
         NamespacedKey damageKey = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Damage." + entity.getUniqueId());
-        if(event.getEntity().getPersistentDataContainer().getKeys().contains(damageKey)) {
+        if (event.getEntity().getPersistentDataContainer().getKeys().contains(damageKey)) {
             damage = event.getEntity().getPersistentDataContainer().get(damageKey, PersistentDataType.DOUBLE);
         }
         damage += event.getFinalDamage();
@@ -76,26 +84,29 @@ public class Events implements Listener {
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
         NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Name");
-        if(!event.getEntity().getPersistentDataContainer().getKeys().contains(key))
+        if (!event.getEntity().getPersistentDataContainer().getKeys().contains(key))
             return;
 
         String name = event.getEntity().getPersistentDataContainer().get(key, PersistentDataType.STRING);
         CustomMob customMob = CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(name);
-        if(customMob == null)
+        if (customMob == null)
             return;
+
+        // Cancel the custom effects of the CustomMob.
+        customMob.cancelCustomEffects(event.getEntity().getUniqueId());
 
         CustomMobDeathEvent customEvent = new CustomMobDeathEvent(event.getEntity(), customMob);
         Bukkit.getServer().getPluginManager().callEvent(customEvent);
 
-        for(Message message : customMob.getCustomMobMessages()) {
-            if(((SpawnDeathMessage) message).isOnDeath())
+        for (Message message : customMob.getCustomMobMessages()) {
+            if (((SpawnDeathMessage) message).isOnDeath())
                 message.sendMessage(event.getEntity());
         }
 
-        if(!((Special)customMob.getCustomMobOption("Special")).getNaturalDrops())
+        if (customMob.getCustomMobOption("Special") != null && !((Special) customMob.getCustomMobOption("Special")).getNaturalDrops())
             event.getDrops().clear();
 
-        if(!customMob.getDrops().isEmpty())
+        if (!customMob.getDrops().isEmpty())
             DropManager.sendDrops(customMob.getDrops(), event.getEntity());
     }
 
@@ -103,15 +114,15 @@ public class Events implements Listener {
     @EventHandler
     public void onClickEvent(PlayerInteractEvent event) {
         Action action = event.getAction();
-        if(!action.equals(Action.RIGHT_CLICK_BLOCK))
+        if (!action.equals(Action.RIGHT_CLICK_BLOCK))
             return;
 
-        if(!Objects.equals(event.getHand(), EquipmentSlot.HAND))
+        if (!Objects.equals(event.getHand(), EquipmentSlot.HAND))
             return;
 
         Player player = event.getPlayer();
         ItemStack item = player.getInventory().getItemInMainHand();
-        if(item.getType().equals(Material.AIR))
+        if (item.getType().equals(Material.AIR))
             return;
 
         ItemMeta itemMeta = item.getItemMeta();
@@ -130,7 +141,7 @@ public class Events implements Listener {
             item.setAmount(item.getAmount() - 1);
         CustomMob customMob = CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(container.get(new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.FileName"), PersistentDataType.STRING));
 
-        if(customMob == null)
+        if (customMob == null)
             return;
 
         String itemType = container.get(itemTypeKey, PersistentDataType.STRING);
@@ -175,7 +186,7 @@ public class Events implements Listener {
         if (container.has(key, PersistentDataType.STRING)) {
             String mobName = container.get(key, PersistentDataType.STRING);
             CustomMob customMob = CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(mobName);
-            if(customMob == null || customMob.getSpawner() == null)
+            if (customMob == null || customMob.getSpawner() == null)
                 return;
             int range = customMob.getSpawner().getSpawnRange();
 
@@ -204,12 +215,12 @@ public class Events implements Listener {
     private double getNearestY(World world, double x, double y, double z) {
         Location location = new Location(world, x, y, z);
 
-        for(int i = -2; i < 5; i++) {
+        for (int i = -2; i < 5; i++) {
             boolean blockUnder = !location.clone().add(0, i - 1, 0).getBlock().isPassable();
             boolean passable = location.clone().add(0, i, 0).getBlock().isPassable();
             boolean passableOver = location.clone().add(0, i + 1, 0).getBlock().isPassable();
 
-            if(blockUnder && passable && passableOver) {
+            if (blockUnder && passable && passableOver) {
                 return y + i;
             }
         }
@@ -223,7 +234,7 @@ public class Events implements Listener {
         ItemStack itemStack = player.getInventory().getItemInMainHand();
         Block block = event.getBlock();
 
-        if(!manager.getConfigManager().getSilkSpawner() || block.getType() != Material.SPAWNER || !itemStack.getType().toString().contains("PICKAXE")){
+        if (!manager.getConfigManager().getSilkSpawner() || block.getType() != Material.SPAWNER || !itemStack.getType().toString().contains("PICKAXE")) {
             return;
         }
 
@@ -231,9 +242,9 @@ public class Events implements Listener {
         PersistentDataContainer container = spawnerBlock.getPersistentDataContainer();
         NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Spawner");
 
-        if(itemStack.containsEnchantment(Enchantment.SILK_TOUCH) && container.has(key, PersistentDataType.STRING) ) {
+        if (itemStack.containsEnchantment(Enchantment.SILK_TOUCH) && container.has(key, PersistentDataType.STRING)) {
 
-            ItemStack spawnerItem = manager.getCustomMobItem(manager.getCustomMob(container.get(key, PersistentDataType.STRING)),"spawner",1);
+            ItemStack spawnerItem = manager.getCustomMobItem(manager.getCustomMob(container.get(key, PersistentDataType.STRING)), "spawner", 1);
             block.getLocation().getWorld().dropItem(block.getLocation(), spawnerItem);
         }
     }

@@ -1,0 +1,15 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow-x: auto;
+}
+
+@font-face {
+  font-family: 'Huge Promo';
+  src: url('assets/fonts/huge-promo.regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+

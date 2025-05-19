@@ -6,6 +6,7 @@ import ca.pandaaa.custommobs.custommobs.Drop;
 import ca.pandaaa.custommobs.custommobs.Equipment;
 import ca.pandaaa.custommobs.custommobs.Manager;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects.CustomEffectsGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.Drops.DropsGUI;
 import ca.pandaaa.custommobs.guis.MainGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
@@ -34,7 +35,6 @@ public class EditGUI extends CustomMobsGUI {
     private final ItemStack options;
     private final ItemStack drops;
     private final ItemStack name;
-    private final ItemStack previous;
     private final ItemStack item;
     private final ItemStack spawner;
     private final ItemStack delete;
@@ -62,7 +62,6 @@ public class EditGUI extends CustomMobsGUI {
         this.options = getMenuItem(new ItemStack(Material.END_CRYSTAL), true);
         this.name = getMenuItem(new ItemStack(Material.SPRUCE_HANGING_SIGN), true);
         this.drops = getMenuItem(new ItemStack(Material.PITCHER_POD), true);
-        this.previous = getMenuItem(Utils.createHead("a2f0425d64fdc8992928d608109810c1251fe243d60d175bed427c651cbe"), true);
         this.item = getMenuItem(customMob.getItem(), true);
         this.spawner = getMenuItem(customMob.getSpawnerItem(), true);
         this.delete = getMenuItem(new ItemStack(Material.BARRIER), true);
@@ -115,7 +114,7 @@ public class EditGUI extends CustomMobsGUI {
         inventory.setItem(34, getOtherItem());
 
         // Previous page (back to main menu)
-        inventory.setItem(45, getPreviousItem(previous));
+        inventory.setItem(45, getPreviousItem());
 
         // Get the item (Shift click for 64)
         inventory.setItem(48, getGiveItem(item));
@@ -235,7 +234,7 @@ public class EditGUI extends CustomMobsGUI {
                 new SpawnerGUI(customMob, customMobsManager).openInventory(clicker);
                 break;
             case 33:
-                // TODO Special effects
+                new CustomEffectsGUI(customMob).openInventory(clicker, 1);
                 break;
             case 34:
                 new OthersGUI(customMob).openInventory(clicker);
@@ -371,13 +370,6 @@ public class EditGUI extends CustomMobsGUI {
         return item;
     }
 
-    private ItemStack getPreviousItem(ItemStack item) {
-        ItemMeta itemMeta = item.getItemMeta();
-        itemMeta.setDisplayName(Utils.applyFormat("&e&lPrevious"));
-        item.setItemMeta(itemMeta);
-        return item;
-    }
-
     private ItemStack getGiveItem(ItemStack item) {
         ItemMeta itemMeta = item.getItemMeta();
         ArrayList<String> lore = new ArrayList<>();
@@ -426,7 +418,7 @@ public class EditGUI extends CustomMobsGUI {
     private ItemStack getCustomEffectsItem() {
         CustomMobsItem item = new CustomMobsItem(Material.TORCHFLOWER);
         item.setName("&6&lCustom effects");
-        item.addLore("", "&c&l[!] Coming soon!", "", "&7&o(( Click to edit this CustomMob's custom effect(s) ))");
+        item.addLore("", "&7&o(( Click to edit this CustomMob's custom effect(s) ))");
         return getMenuItem(item, true);
     }
 

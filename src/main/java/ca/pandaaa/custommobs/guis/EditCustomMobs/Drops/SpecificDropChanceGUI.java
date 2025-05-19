@@ -85,19 +85,27 @@ public class SpecificDropChanceGUI extends CustomMobsGUI {
 
         switch (event.getSlot()) {
             case 0:
-                if (((!shifting && current >= minimum + 1) || (shifting && current >= minimum + 5)))
+                if((!shifting && current - 1 <= minimum) || (shifting && current - 5 <= minimum))
+                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), minimum));
+                else if (((!shifting && current >= minimum + 1) || (shifting && current >= minimum + 5)))
                     inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? current - 5 : current - 1));
                 break;
             case 1:
-                if (((!shifting && current >= minimum + 0.1) || (shifting && current >= minimum + 0.5)))
+                if((!shifting && current - 0.1 <= minimum) || (shifting && current - 0.5 <= minimum))
+                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), minimum));
+                else if (((!shifting && current >= minimum + 0.1) || (shifting && current >= minimum + 0.5)))
                     inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? current - 0.5 : current - 0.1));
                 break;
             case 2:
-                if (((!shifting && current >= minimum + 0.01) || (shifting && current >= minimum + 0.05)))
+                if((!shifting && current - 0.01 <= minimum) || (shifting && current - 0.05 <= minimum))
+                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), minimum));
+                else if (((!shifting && current >= minimum + 0.01) || (shifting && current >= minimum + 0.05)))
                     inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? current - 0.05 : current - 0.01));
                 break;
             case 3:
-                if (((!shifting && current >= minimum + 0.001) || (shifting && current >= minimum + 0.005)))
+                if((!shifting && current - 0.001 <= minimum) || (shifting && current - 0.005 <= minimum))
+                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), minimum));
+                else if (((!shifting && current >= minimum + 0.001) || (shifting && current >= minimum + 0.005)))
                     inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? current - 0.005 : current - 0.001));
                 break;
             case 4:
@@ -105,19 +113,27 @@ public class SpecificDropChanceGUI extends CustomMobsGUI {
                 new SpecificDropGUI(customMob, dropItem, dropIndex).openInventory((Player) event.getWhoClicked());
                 break;
             case 5:
-                if ((!shifting && current <= maximum - 0.001) || (shifting && current <= maximum - 0.005))
+                if((!shifting && current + 0.001 >= minimum) || (shifting && current + 0.005 >= maximum))
+                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), maximum));
+                else if ((!shifting && current <= maximum - 0.001) || (shifting && current <= maximum - 0.005))
                     inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? current + 0.005 : current + 0.001));
                 break;
             case 6:
-                if ((!shifting && current <= maximum - 0.01) || (shifting && current <= maximum - 0.05))
+                if((!shifting && current + 0.01 >= maximum) || (shifting && current + 0.05 >= maximum))
+                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), maximum));
+                else if ((!shifting && current <= maximum - 0.01) || (shifting && current <= maximum - 0.05))
                     inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? current + 0.05 : current + 0.01));
                 break;
             case 7:
-                if ((!shifting && current <= maximum - 0.1) || (shifting && current <= maximum - 0.5))
+                if((!shifting && current + 0.1 >= maximum) || (shifting && current + 0.5 >= maximum))
+                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), maximum));
+                else if ((!shifting && current <= maximum - 0.1) || (shifting && current <= maximum - 0.5))
                     inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? current + 0.5 : current + 0.1));
                 break;
             case 8:
-                if ((!shifting && current <= maximum - 1) || (shifting && current <= maximum - 5))
+                if((!shifting && current + 1 >= maximum) || (shifting && current + 5 >= maximum))
+                    inventory.setItem(4, getConfirmItem(inventory.getItem(4), maximum));
+                else if ((!shifting && current <= maximum - 1) || (shifting && current <= maximum - 5))
                     inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? current + 5 : current + 1));
                 break;
             default:

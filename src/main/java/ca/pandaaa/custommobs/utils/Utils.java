@@ -149,4 +149,18 @@ public class Utils {
 
         return formattedSize;
     }
+
+    public static boolean isVersionAtLeast(String version) {
+        String serverVersion = Bukkit.getBukkitVersion().split("-")[0];
+        String[] versionParts = version.split("\\.");
+        String[] serverVersionParts = serverVersion.split("\\.");
+
+        if(Integer.parseInt(serverVersionParts[0]) > Integer.parseInt(versionParts[0]))
+            return true;
+        if(Integer.parseInt(serverVersionParts[1]) > Integer.parseInt(versionParts[1]))
+            return true;
+        if(Integer.parseInt(serverVersionParts[2]) > Integer.parseInt(versionParts[2]))
+            return true;
+        return version.equals(serverVersion);
+    }
 }

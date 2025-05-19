@@ -6,9 +6,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public class ConfigurationManager {
     private final FileConfiguration configuration;
+    private final FileConfiguration customEffectConfiguration;
 
-    public ConfigurationManager(FileConfiguration configuration) {
+    public ConfigurationManager(FileConfiguration configuration, FileConfiguration customEffectConfiguration) {
         this.configuration = configuration;
+        this.customEffectConfiguration = customEffectConfiguration;
     }
 
     public boolean getSilkSpawner() {
@@ -60,4 +62,11 @@ public class ConfigurationManager {
         return Utils.applyFormat(configuration.getString("silk-spawner-command").replaceAll("%complement%", complement));
     }
 
+    public String getCustomEffectMessage(String className) {
+        return customEffectConfiguration.getString(className.toLowerCase());
+    }
+
+    public String getDisabledCustomEffectMessage(String customEffectName) {
+        return Utils.applyFormat(configuration.getString("disabled-custom-effect").replaceAll("%custom-effect%", customEffectName));
+    }
 }

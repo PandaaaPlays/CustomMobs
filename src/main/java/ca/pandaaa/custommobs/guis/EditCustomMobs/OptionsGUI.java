@@ -33,7 +33,7 @@ public class OptionsGUI extends CustomMobsGUI {
 
         this.optionsItems = new ArrayList<>();
         customMob.getCustomMobOptions().stream()
-                .flatMap(customMobType -> customMobType.getOptionItems(customMob).stream())
+                .flatMap(customMobType -> customMobType.getOptionItems().stream())
                 .map(item -> getMenuItem(item, true))
                 .forEach(this.optionsItems::add);
     }
@@ -46,7 +46,7 @@ public class OptionsGUI extends CustomMobsGUI {
 
         boolean nextPage = true;
 
-        // Make sure we set the extra ca.pandaaa.custommobs.items to air, so that other page(s) item(s) are not persisted.
+        // Make sure we set the extra items to air, so that other page(s) item(s) are not persisted.
         for(int i = 0; i < 45; i++) {
             int position = ((page - 1) * 45) + i;
             if (optionsItems.size() > position)
@@ -95,7 +95,7 @@ public class OptionsGUI extends CustomMobsGUI {
         event.setCancelled(true);
 
         final ItemStack item = event.getCurrentItem();
-        if(item == null)
+        if(item == null || item.getType() == Material.GRAY_STAINED_GLASS_PANE)
             return;
 
         final ItemMeta itemMeta = item.getItemMeta();

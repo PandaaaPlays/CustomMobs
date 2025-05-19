@@ -1,0 +1,436 @@
+{
+    "Llama":  [
+                  {
+                      "minimum":  null,
+                      "description":  "",
+                      "type":  "Llama color",
+                      "key":  "LLAMA_COLOR",
+                      "maximum":  null
+                  }
+              ],
+    "Zombie":  [
+                   {
+                       "minimum":  null,
+                       "description":  "",
+                       "type":  "On / Off",
+                       "key":  "CAN_BREAK_DOORS",
+                       "maximum":  null
+                   }
+               ],
+    "Tameable":  [
+                     {
+                         "minimum":  null,
+                         "description":  "",
+                         "type":  "Unique user ID",
+                         "key":  "OWNER",
+                         "maximum":  null
+                     },
+                     {
+                         "minimum":  null,
+                         "description":  "",
+                         "type":  "On / Off",
+                         "key":  "TAMED",
+                         "maximum":  null
+                     }
+                 ],
+    "ChestedHorse":  [
+                         {
+                             "minimum":  null,
+                             "description":  "",
+                             "type":  "On / Off",
+                             "key":  "CHEST",
+                             "maximum":  null
+                         }
+                     ],
+    "Pig":  [
+                {
+                    "minimum":  null,
+                    "description":  "",
+                    "type":  "Pig variant",
+                    "key":  "PIG_VARIANT",
+                    "maximum":  null
+                }
+            ],
+    "Wolf":  [
+                 {
+                     "minimum":  null,
+                     "description":  "",
+                     "type":  "Dye color",
+                     "key":  "COLLAR_COLOR",
+                     "maximum":  null
+                 },
+                 {
+                     "minimum":  null,
+                     "description":  "",
+                     "type":  "On / Off",
+                     "key":  "ANGRY_WOLF",
+                     "maximum":  null
+                 },
+                 {
+                     "minimum":  null,
+                     "description":  "",
+                     "type":  "Wolf variant",
+                     "key":  "WOLF_VARIANT",
+                     "maximum":  null
+                 },
+                 {
+                     "minimum":  null,
+                     "description":  "",
+                     "type":  "On / Off",
+                     "key":  "WOLF_ARMOR",
+                     "maximum":  null
+                 }
+             ],
+    "Cat":  [
+                {
+                    "minimum":  null,
+                    "description":  "",
+                    "type":  "Cat type",
+                    "key":  "CAT_TYPE",
+                    "maximum":  null
+                },
+                {
+                    "minimum":  null,
+                    "description":  "",
+                    "type":  "Dye color",
+                    "key":  "COLLAR_COLOR",
+                    "maximum":  null
+                }
+            ],
+    "Creeper":  [
+                    {
+                        "minimum":  "0",
+                        "description":  "Represents the key for configuring the explosion cooldown of a Creeper entity. This variable is used to retrieve or define the cooldown time before a Creeper entity can perform another explosion.",
+                        "type":  "Integer",
+                        "key":  "EXPLOSION_COOLDOWN",
+                        "maximum":  "1200"
+                    },
+                    {
+                        "minimum":  "5",
+                        "description":  "Represents the configuration key used to set or retrieve the explosion radius for a mob, commonly associated with entities like Creepers. This value determines the blast radius of an explosion caused by the mob. The key is used within the configuration to dynamically adjust the explosion radius in the mob system.",
+                        "type":  "Integer",
+                        "key":  "EXPLOSION_RADIUS",
+                        "maximum":  "1600"
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "Represents the identifier for the configuration of a charged creeper mob. This constant is used in the customization and configuration of the charged creeper entity within the system, allowing specific options to be applied or manipulated for it. The \"mob.charged-creeper\" identifier is likely used in configuration files or system logic to reference the charged creeper entity type.",
+                        "type":  "On / Off",
+                        "key":  "CHARGED_CREEPER",
+                        "maximum":  null
+                    }
+                ],
+    "Cow":  [
+                {
+                    "minimum":  null,
+                    "description":  "",
+                    "type":  "Cow variant",
+                    "key":  "COW_VARIANT",
+                    "maximum":  null
+                }
+            ],
+    "SkeletonHorse":  [
+                          {
+                              "minimum":  null,
+                              "description":  "",
+                              "type":  "On / Off",
+                              "key":  "SKELETON_TRAP",
+                              "maximum":  null
+                          }
+                      ],
+    "Ageable":  [
+                    {
+                        "minimum":  null,
+                        "description":  "",
+                        "type":  "On / Off",
+                        "key":  "BABY",
+                        "maximum":  null
+                    }
+                ],
+    "Axolotl":  [
+                    {
+                        "minimum":  null,
+                        "description":  "",
+                        "type":  "Axolotl variant",
+                        "key":  "AXOLOTL_VARIANT",
+                        "maximum":  null
+                    }
+                ],
+    "Steerable":  [
+                      {
+                          "minimum":  null,
+                          "description":  "",
+                          "type":  "On / Off",
+                          "key":  "SADDLE",
+                          "maximum":  null
+                      }
+                  ],
+    "Panda":  [
+                  {
+                      "minimum":  null,
+                      "description":  "",
+                      "type":  "Panda gene",
+                      "key":  "PANDA_GENE",
+                      "maximum":  null
+                  }
+              ],
+    "Villager":  [
+                     {
+                         "minimum":  null,
+                         "description":  "",
+                         "type":  "Villager type",
+                         "key":  "VILLAGER_TYPE",
+                         "maximum":  null
+                     },
+                     {
+                         "minimum":  null,
+                         "description":  "",
+                         "type":  "Villager profession",
+                         "key":  "VILLAGER_PROFESSION",
+                         "maximum":  null
+                     }
+                 ],
+    "Special":  [
+                    {
+                        "minimum":  null,
+                        "description":  "",
+                        "type":  "On / Off",
+                        "key":  "VISIBLE_NAME",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "",
+                        "type":  "Decimal",
+                        "key":  "HEALTH",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "",
+                        "type":  "On / Off",
+                        "key":  "AGGRESSIVE",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "",
+                        "type":  "On / Off",
+                        "key":  "GLOWING",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "",
+                        "type":  "On / Off",
+                        "key":  "CAN_PICKUP_LOOT",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "",
+                        "type":  "Decimal",
+                        "key":  "KNOCKBACK_RESISTANCE",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "",
+                        "type":  "Decimal",
+                        "key":  "SPEED",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "",
+                        "type":  "Range of damage",
+                        "key":  "DAMAGE",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "",
+                        "type":  "On / Off",
+                        "key":  "INVINCIBLE",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "",
+                        "type":  "On / Off",
+                        "key":  "SILENT",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "",
+                        "type":  "On / Off",
+                        "key":  "GRAVITY",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "",
+                        "type":  "On / Off",
+                        "key":  "PERSISTENT",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "",
+                        "type":  "On / Off",
+                        "key":  "INTELLIGENT",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "",
+                        "type":  "Decimal",
+                        "key":  "FOLLOW_RANGE",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "",
+                        "type":  "Decimal",
+                        "key":  "SIZE",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "",
+                        "type":  "On / Off",
+                        "key":  "NATURAL_DROPS",
+                        "maximum":  null
+                    }
+                ],
+    "Frog":  [
+                 {
+                     "minimum":  null,
+                     "description":  "",
+                     "type":  "Frog variant",
+                     "key":  "FROG_VARIANT",
+                     "maximum":  null
+                 }
+             ],
+    "PigZombie":  [
+                      {
+                          "minimum":  null,
+                          "description":  "",
+                          "type":  "Integer",
+                          "key":  "ZOMBIFIED_PIGLIN_ANGER",
+                          "maximum":  null
+                      }
+                  ],
+    "Parrot":  [
+                   {
+                       "minimum":  null,
+                       "description":  "",
+                       "type":  "Parrot variant",
+                       "key":  "PARROT_VARIANT",
+                       "maximum":  null
+                   }
+               ],
+    "Fox":  [
+                {
+                    "minimum":  null,
+                    "description":  "",
+                    "type":  "Fox type",
+                    "key":  "FOX_TYPE",
+                    "maximum":  null
+                }
+            ],
+    "Horse":  [
+                  {
+                      "minimum":  null,
+                      "description":  "",
+                      "type":  "Horse color",
+                      "key":  "HORSE_COLOR",
+                      "maximum":  null
+                  },
+                  {
+                      "minimum":  null,
+                      "description":  "",
+                      "type":  "Horse style",
+                      "key":  "HORSE_STYLE",
+                      "maximum":  null
+                  },
+                  {
+                      "minimum":  null,
+                      "description":  "",
+                      "type":  "Item",
+                      "key":  "HORSE_ARMOR",
+                      "maximum":  null
+                  }
+              ],
+    "Vindicator":  [
+                       {
+                           "minimum":  null,
+                           "description":  "",
+                           "type":  "On / Off",
+                           "key":  "JOHNNY_VANDICATOR",
+                           "maximum":  null
+                       }
+                   ],
+    "Rabbit":  [
+                   {
+                       "minimum":  null,
+                       "description":  "",
+                       "type":  "Rabbit type",
+                       "key":  "RABBIT_TYPE",
+                       "maximum":  null
+                   }
+               ],
+    "Shulker":  [
+                    {
+                        "minimum":  null,
+                        "description":  "",
+                        "type":  "Dye color",
+                        "key":  "SHULKER_COLOR",
+                        "maximum":  null
+                    }
+                ],
+    "Chicken":  [
+                    {
+                        "minimum":  null,
+                        "description":  "",
+                        "type":  "Chicken variant",
+                        "key":  "CHICKEN_VARIANT",
+                        "maximum":  null
+                    }
+                ],
+    "Slime":  [
+                  {
+                      "minimum":  null,
+                      "description":  "",
+                      "type":  "Integer",
+                      "key":  "SLIME_SIZE",
+                      "maximum":  null
+                  }
+              ],
+    "AbstractHorse":  [
+                          {
+                              "minimum":  null,
+                              "description":  "",
+                              "type":  "Decimal",
+                              "key":  "JUMP_STRENGTH",
+                              "maximum":  null
+                          },
+                          {
+                              "minimum":  null,
+                              "description":  "",
+                              "type":  "On / Off",
+                              "key":  "SADDLE",
+                              "maximum":  null
+                          }
+                      ],
+    "Sittable":  [
+                     {
+                         "minimum":  null,
+                         "description":  "",
+                         "type":  "On / Off",
+                         "key":  "SITTING",
+                         "maximum":  null
+                     }
+                 ]
+}

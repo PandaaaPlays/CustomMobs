@@ -1,0 +1,31 @@
+.custommobs-navbar {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  height: 100%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  background: #141B30;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 8px;
+}
+
+.logo {
+  margin-top: 5px;
+  width: 80%;
+}
+
+.body {
+  overflow-y: auto;
+  transition: scrollbar-color 0.4s;
+  scrollbar-color: transparent transparent;
+  margin-bottom: 15px;
+}
+
+.body:hover {
+  scrollbar-color: white transparent;
+}

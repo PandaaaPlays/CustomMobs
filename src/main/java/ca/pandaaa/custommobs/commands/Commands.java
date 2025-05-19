@@ -2,11 +2,9 @@ package ca.pandaaa.custommobs.commands;
 
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.configurations.ConfigurationManager;
-import ca.pandaaa.custommobs.custommobs.DropManager;
 import ca.pandaaa.custommobs.custommobs.Manager;
 import ca.pandaaa.custommobs.guis.MainGUI;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -42,7 +40,7 @@ public class Commands implements CommandExecutor {
 
             switch (args[0].toLowerCase()) {
                 case "test":
-                    sendUnknownCommandMessage(sender);
+                    //
                     break;
                 case "reload":
                     reloadPlugin(sender);

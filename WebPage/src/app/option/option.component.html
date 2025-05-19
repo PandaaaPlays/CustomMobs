@@ -1,0 +1,21 @@
+<div class="header">
+  <span class="text">{{formatClassName(className)}}</span>
+  <div class="splitter"></div>
+</div>
+<div class="body">
+  <div class="option" *ngFor="let option of options">
+    <div class="title">
+      {{ option.key.replaceAll('_', ' ') }}
+      <div class="details" *ngIf="option.type">
+        <div class="minmax" *ngIf="option.minimum">
+          <span class="min">Min: {{option.minimum}}</span>
+          <span class="max">Max: {{option.maximum}}</span>
+        </div>
+        {{option.type}}
+      </div>
+    </div>
+    <div class="description">
+      {{ option.description }}
+    </div>
+  </div>
+</div>

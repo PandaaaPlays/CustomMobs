@@ -30,7 +30,7 @@ public class IntegerGUI extends CustomMobsGUI implements Listener {
     private final boolean small;
     private final int maximum;
     private final int minimum;
-    public IntegerGUI(String option, CustomMob customMob, boolean small, int minValue, int maxValue, Consumer<Integer> consumer) {
+    public IntegerGUI(String option, boolean small, int minValue, int maxValue, Consumer<Integer> consumer) {
         super(9, "&8Parameter &8&l» &8" + option);
         this.consumer = consumer;
         this.small = small;

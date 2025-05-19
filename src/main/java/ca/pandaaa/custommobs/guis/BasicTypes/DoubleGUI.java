@@ -29,7 +29,7 @@ public class DoubleGUI extends CustomMobsGUI implements Listener {
     private final boolean small;
     private final double maximum;
     private final double minimum;
-    private String minusPrettyValue = "w";
+    private String minusPrettyValue = "-1";
 
     public DoubleGUI(String option, boolean small, double minValue, double maxValue, Consumer<Double> consumer) {
         super(9, "&8Parameter &8&l» &8" + option);
@@ -75,7 +75,7 @@ public class DoubleGUI extends CustomMobsGUI implements Listener {
         event.setCancelled(true);
 
         NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Double");
-        double current = Math.round(event.getInventory().getItem(4).getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.DOUBLE) * 10.0) / 10.0;
+        double current = Math.round(event.getInventory().getItem(4).getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.DOUBLE) * 100.0) / 100.0;
 
         boolean shifting = !small && event.isShiftClick();
 
@@ -114,7 +114,7 @@ public class DoubleGUI extends CustomMobsGUI implements Listener {
 
     private ItemStack getConfirmItem(ItemStack item, Double value) {
         ItemMeta meta = item.getItemMeta();
-        value = Math.round(value * 10.0) / 10.0;
+        value = Math.round(value * 100.0) / 100.0;
         if(value < 0)
             value = 0D;
         NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Double");

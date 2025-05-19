@@ -23,7 +23,6 @@ import java.util.function.Consumer;
 
 public class AddSoundsGUI extends CustomMobsGUI {
     private final CustomMob customMob;
-    private final ItemStack previous;
     private final NamespacedKey keyFavorite;
     private final Consumer<Sound> consumer;
 
@@ -32,17 +31,15 @@ public class AddSoundsGUI extends CustomMobsGUI {
         this.keyFavorite = new NamespacedKey(CustomMobs.getPlugin(),"CustomMobs.Favorite");
         this.customMob = customMob;
         this.consumer = consumer;
-        previous = getMenuItem(Utils.createHead("a2f0425d64fdc8992928d608109810c1251fe243d60d175bed427c651cbe"), true);
     }
+
     public void openInventory(Player player) {
 
         // Make sure we set the extra items to air, so that other page(s) item(s) are not persisted.
         for (int i = 0; i < 54; i++) {
             inventory.setItem(i, filler);
         }
-        ItemMeta previousItemMeta = previous.getItemMeta();
-        if (previousItemMeta != null) previousItemMeta.setDisplayName(Utils.applyFormat("&e&lPrevious"));
-        previous.setItemMeta(previousItemMeta);
+
         inventory.setItem(10, getCategory(Material.WIND_CHARGE, "Ambient"));
         inventory.setItem(11, getCategory(Material.GRASS_BLOCK, "Block"));
         inventory.setItem(12, getCategory(Material.ZOMBIE_SPAWN_EGG, "Entity"));
@@ -56,7 +53,7 @@ public class AddSoundsGUI extends CustomMobsGUI {
         inventory.setItem(32, getFavorite(SoundEnum.ITEM_GOAT_HORN_SOUND_0));
         inventory.setItem(33, getFavorite(SoundEnum.EVENT_MOB_EFFECT_TRIAL_OMEN));
         inventory.setItem(34, getFavorite(SoundEnum.ENTITY_ENDER_DRAGON_DEATH));
-        inventory.setItem(45, previous);
+        inventory.setItem(45, getPreviousItem());
         player.openInventory(inventory);
     }
 

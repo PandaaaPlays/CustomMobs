@@ -17,12 +17,17 @@ import org.bukkit.ChatColor;
 import org.bukkit.Registry;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 public class CustomMobs extends JavaPlugin {
@@ -42,7 +47,6 @@ public class CustomMobs extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // TODO Multi version support.
         plugin = this;
 
         this.sendStartedMessage();
@@ -65,7 +69,7 @@ public class CustomMobs extends JavaPlugin {
         saveDefaultConfigurations();
         loadAllMobsConfigurations();
 
-        configManager = new ConfigurationManager(getConfig());
+        configManager = new ConfigurationManager(getConfig(), getCustomEffectConfiguration());
         customMobsManager = new Manager(configManager, mobConfigurations);
         customMobsManager.loadCustomMobs();
 
@@ -100,7 +104,7 @@ public class CustomMobs extends JavaPlugin {
         plugin.reloadConfig();
         loadAllMobsConfigurations();
 
-        configManager = new ConfigurationManager(getConfig());
+        configManager = new ConfigurationManager(getConfig(), getCustomEffectConfiguration());
         customMobsManager = new Manager(configManager, mobConfigurations);
         customMobsManager.loadCustomMobs();
 
@@ -123,6 +127,10 @@ public class CustomMobs extends JavaPlugin {
         mobFolder = new File(getDataFolder(), "Mobs");
         if (!mobFolder.exists())
             mobFolder.mkdirs();
+
+        File customEffectsMessagesFile = new File(getDataFolder(), "custom-effects-messages.yml");
+        if (!customEffectsMessagesFile.exists())
+            saveResource("custom-effects-messages.yml", false);
     }
 
     private void loadAllMobsConfigurations() {
@@ -130,6 +138,17 @@ public class CustomMobs extends JavaPlugin {
         for(File mobFile : Objects.requireNonNull(mobFolder.listFiles())) {
             mobConfigurations.add(new CustomMobConfiguration(YamlConfiguration.loadConfiguration(mobFile), mobFile));
         }
+    }
+
+    private FileConfiguration getCustomEffectConfiguration() {
+        FileConfiguration fileConfiguration = new YamlConfiguration();
+        File file = new File(getDataFolder(), "custom-effects-messages.yml");
+        try {
+            fileConfiguration.load(file);
+        } catch (IOException | InvalidConfigurationException exception) {
+            getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&c[!] An error occurred while fetching the values in custom-effects-messages.yml."));
+        }
+        return fileConfiguration;
     }
 
     private void getCommandsAndListeners() {
@@ -154,44 +173,55 @@ public class CustomMobs extends JavaPlugin {
             }
             return entityTypeAmount;
         }));
+
+        metrics.addCustomChart(new Metrics.SingleLineChart("custommobs_amount", () -> customMobsManager.getCustomMobs().size()));
     }
 
     private void checkSoundEnum() {
-        List<String> soundsName = SoundEnum.getSoundsName();
+        List<String> soundKeys = SoundEnum.getSoundKeys();
         List<org.bukkit.Sound> sounds = new ArrayList<>();
         List<String> newSounds = new ArrayList<>();
 
-        if (Bukkit.getBukkitVersion().startsWith("1.21.1") || Bukkit.getBukkitVersion().startsWith("1.21.2")) {
+        if (Bukkit.getBukkitVersion().startsWith("1.21.1") ||
+            Bukkit.getBukkitVersion().startsWith("1.21.2") ||
+            Bukkit.getBukkitVersion().startsWith("1.21.3") ||
+            Bukkit.getBukkitVersion().startsWith("1.21.4") ||
+            Bukkit.getBukkitVersion().startsWith("1.21.5")) {
             return;
         } else {
             Registry.SOUNDS.iterator().forEachRemaining(sounds::add);
         }
 
         Collections.sort(sounds);
-        Collections.sort(soundsName);
+        Collections.sort(soundKeys);
 
-        int i = 0, j = 0;
-
-        while (j < sounds.size()) {
-            String registrySound = sounds.get(j).toString();
-
-            if (i >= soundsName.size() || registrySound.compareToIgnoreCase(soundsName.get(i)) < 0) {
-                newSounds.add(registrySound);
-                j++;
+        for (org.bukkit.Sound sound : sounds) {
+            boolean found = false;
+            for (int j = 0; j < soundKeys.size(); j++) {
+                if (sound.toString().equalsIgnoreCase(soundKeys.get(j)) || sound.toString().equalsIgnoreCase(soundKeys.get(j).replaceAll("\\.", "_"))) {
+                    found = true;
+                    break;
+                }
             }
-            // If registrySound matches the current soundName
-            else if (registrySound.equalsIgnoreCase(soundsName.get(i))) {
-                i++;
-                j++;
+
+            if (!found) {
+                newSounds.add(sound.toString());
             }
-            else
-                i++;
         }
 
         if(!newSounds.isEmpty()) {
-            getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&',  "&c[!] SoundEnum is missing some Sound values :"));
-            for(String value : newSounds) {
-                getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&c - " + value));
+            try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(new File(CustomMobs.getPlugin().getDataFolder(), "MissingSounds.txt")));
+                Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&',  "&c[!] SoundEnum is missing some Sound values, please refer to the MissingSounds.txt file."));
+                writer.write("MISSING SOUND(S): ");
+                writer.newLine();
+                for(String value : newSounds) {
+                    writer.write(value);
+                    writer.newLine();
+                }
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

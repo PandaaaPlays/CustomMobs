@@ -8,7 +8,6 @@ import org.bukkit.inventory.ItemStack;
 public class Equipment {
 
     private final CustomMobConfiguration customMobConfiguration;
-    private CustomMob customMob;
     private ItemStack mainHand;
     private ItemStack offHand;
     private ItemStack helmet;

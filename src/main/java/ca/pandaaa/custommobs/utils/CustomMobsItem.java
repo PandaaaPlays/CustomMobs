@@ -45,13 +45,25 @@ public class CustomMobsItem extends org.bukkit.inventory.ItemStack {
         }
     }
 
-    public void setPersistentDataContainer(String className, String containerName) {
+    public void setOptionPersistentDataContainer(String className, String containerName) {
         ItemMeta itemMeta = getItemMeta();
         if(itemMeta != null) {
             NamespacedKey keyIndex = new NamespacedKey(CustomMobs.getPlugin(),
                     "CustomMobs" + ".Option");
 
             itemMeta.getPersistentDataContainer().set(keyIndex, PersistentDataType.STRING, className + "." + containerName);
+
+            setItemMeta(itemMeta);
+        }
+    }
+
+    public void setCustomEffectPersistentDataContainer(String className) {
+        ItemMeta itemMeta = getItemMeta();
+        if(itemMeta != null) {
+            NamespacedKey keyIndex = new NamespacedKey(CustomMobs.getPlugin(),
+                    "CustomMobs" + ".CustomEffect");
+
+            itemMeta.getPersistentDataContainer().set(keyIndex, PersistentDataType.STRING, className);
 
             setItemMeta(itemMeta);
         }

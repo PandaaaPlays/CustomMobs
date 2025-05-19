@@ -1,0 +1,22 @@
+:host {
+  display: flex;
+  height: 100%;
+  background-color: #FAFBE6;
+  max-width: 100%;
+}
+
+.content {
+  flex-grow: 1;
+  margin: 10px 0 10px 30px;
+  padding-right: 20px;
+  overflow-y: auto;
+  box-sizing: border-box;
+  border-color: rgba(0, 0, 0, 0.0);
+  transition: scrollbar-color 0.4s;
+  scrollbar-color: transparent transparent;
+}
+
+.content:hover {
+  scrollbar-color: #141B30 transparent;
+}
+
