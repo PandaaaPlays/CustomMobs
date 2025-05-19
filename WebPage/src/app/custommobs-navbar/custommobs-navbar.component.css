@@ -24,6 +24,7 @@
   transition: scrollbar-color 0.4s;
   scrollbar-color: transparent transparent;
   margin-bottom: 15px;
+  scrollbar-gutter: stable;
 }
 
 .body:hover {
