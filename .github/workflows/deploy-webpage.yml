@@ -20,12 +20,15 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: WebPage
 
       - name: Build Angular app
         run: npm run build --configuration production
+        working-directory: WebPage
 
       - name: Deploy to GitHub Pages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           npx angular-cli-ghpages --dir=dist/custommobs/browser --no-silent
+        working-directory: WebPage
