@@ -1,4 +1,4 @@
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {NgForOf, NgIf} from '@angular/common';
 import {Component, Input, OnInit} from '@angular/core';
 import {Option, OptionsService} from '../services/options.service';
@@ -16,14 +16,20 @@ export class OptionComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private optionsService: OptionsService
   ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.className = params['name'];
+
       this.optionsService.options$.subscribe((data: { [key: string]: Option[] }) => {
-        this.options = data[this.className] || [];
+        if (data[this.className]) {
+          this.options = data[this.className];
+        } else {
+          this.router.navigate(['/']);
+        }
       });
     });
   }
