@@ -26,6 +26,11 @@ jobs:
         run: npx ng build --configuration production
         working-directory: WebPage
 
+      - name: Set git user info
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions Bot"
+
       - name: Deploy to GitHub Pages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
