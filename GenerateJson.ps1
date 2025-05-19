@@ -8,9 +8,9 @@ Write-Host "===================="
 switch ($UserChoice)
 {
     "1" {
-        $JavaFilesDirectory = ".\main\java\ca\pandaaa\custommobs\custommobs\Options"
+        $JavaFilesDirectory = ".\src\main\java\ca\pandaaa\custommobs\custommobs\Options"
         Write-Host "Processing .java files in directory: $JavaFilesDirectory"
-        $OutputJsonFile = ".\options.json"
+        $OutputJsonFile = ".\WebPage\src\assets\data\options.json"
     }
     "2" {
         Write-Host "Option 2 selected - Feature not implemented yet."
