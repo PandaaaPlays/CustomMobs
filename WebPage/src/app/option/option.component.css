@@ -187,6 +187,11 @@
   color: #4d4033;
 }
 
+.option-link:hover {
+  color: #4d4033;
+  text-decoration: none;
+}
+
 img {
   margin-right: 10px;
   max-height: 30px;
