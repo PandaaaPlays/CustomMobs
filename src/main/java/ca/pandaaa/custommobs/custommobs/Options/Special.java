@@ -23,48 +23,48 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Default extends CustomMobOption {
+public class Special extends CustomMobOption {
     /**
      *  Toggles the visibility of the entity's name tag, even when not directly looking at it.
      */
-    private static final String VISIBLE_NAME = "default.visible-name";
+    private static final String VISIBLE_NAME = "special.visible-name";
     private boolean isNameVisible;
     /**
      * Sets the entity's health (in half heart(s)). A health of 20 means that the CustomMob has 10 hearts of health.
      * @minimum 0
      * @maximum 1024
      */
-    private static final String HEALTH = "default.health";
+    private static final String HEALTH = "special.health";
     private Double health;
     /**
      * Indicates whether the entity is in an aggressive state, which means that they will attack any nearby player (even
      * if the mob is normally passive).
      */
-    private static final String AGGRESSIVE = "default.aggressive";
+    private static final String AGGRESSIVE = "special.aggressive";
     private boolean aggressive;
     /**
      * Toggles the glowing effect around the entity.
      */
-    private static final String GLOWING = "default.glowing";
+    private static final String GLOWING = "special.glowing";
     private boolean glowing;
     /**
      * When enabled, allows the entity to pick up dropped items.
      */
-    private static final String CAN_PICKUP_LOOT = "default.can-pickup-loot";
+    private static final String CAN_PICKUP_LOOT = "special.can-pickup-loot";
     private boolean canPickupLoot;
     /**
      * Indicates how far the entity is knocked back when hit (a high value indicates that the CustomMob should not go far).
      * @minimum 0
      * @maximum 1
      */
-    private static final String KNOCKBACK_RESISTANCE = "default.knockback-resistance";
+    private static final String KNOCKBACK_RESISTANCE = "special.knockback-resistance";
     private double knockbackResistance;
     /**
      * Controls the movement speed of the entity. The default value is 0,3.
      * @minimum 0
      * @maximum 1024
      */
-    private static final String SPEED = "default.speed";
+    private static final String SPEED = "special.speed";
     private double speed;
     /**
      * Defines the range of damage the entity can inflict. For a mob to inflict exactly "x" damage every time, set the
@@ -72,54 +72,54 @@ public class Default extends CustomMobOption {
      * @minimum 0
      * @maximum 1024
      */
-    private static final String DAMAGE = "default.damage";
+    private static final String DAMAGE = "special.damage";
     private DamageRange damageRange;
     /**
      * When enabled, prevents the entity from taking any damage.
      */
-    private static final String INVINCIBLE = "default.invincible";
+    private static final String INVINCIBLE = "special.invincible";
     private boolean invincible;
     /**
      * MWhen enabled, mutes all sounds made by the entity.
      */
-    private static final String SILENT = "default.silent";
+    private static final String SILENT = "special.silent";
     private boolean silent;
     /**
      * Determines whether the entity is affected by gravity or not.
      */
-    private static final String GRAVITY = "default.gravity";
+    private static final String GRAVITY = "special.gravity";
     private boolean gravity;
     /**
      * When enabled, keeps the entity from despawning naturally.
      */
-    private static final String PERSISTENT = "default.persistent";
+    private static final String PERSISTENT = "special.persistent";
     private boolean persistent;
     /**
      * Specifies whether the entity uses advanced AI behaviors (such as moving around, attacking, etc.).
      */
-    private static final String INTELLIGENT = "default.intelligent";
+    private static final String INTELLIGENT = "special.intelligent";
     private boolean intelligent;
     /**
      * Sets the range at which the entity can detect and follow targets. The default value is 32.
      * @minimum 0
      * @maximum 2048
      */
-    private static final String FOLLOW_RANGE = "default.follow-range";
+    private static final String FOLLOW_RANGE = "special.follow-range";
     private double followRange;
     /**
      * Adjusts the entity’s physical size. The default value is 1.
      * @minimum 0.06
      * @maximum 16
      */
-    private static final String SIZE = "default.size";
+    private static final String SIZE = "special.size";
     private double size;
     /**
      * Toggles whether the entity drops default loot on death.
      */
-    private static final String NATURAL_DROPS = "default.natural-drops";
+    private static final String NATURAL_DROPS = "special.natural-drops";
     private boolean naturalDrops;
 
-    public Default(CustomMobConfiguration mobConfiguration) {
+    public Special(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
         this.isNameVisible = getOption(VISIBLE_NAME, Boolean.class, false);
         this.health = getOption(HEALTH, Double.class);

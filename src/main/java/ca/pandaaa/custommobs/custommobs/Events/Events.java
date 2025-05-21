@@ -6,7 +6,7 @@ import ca.pandaaa.custommobs.custommobs.DropManager;
 import ca.pandaaa.custommobs.custommobs.Manager;
 import ca.pandaaa.custommobs.custommobs.Messages.Message;
 import ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage;
-import ca.pandaaa.custommobs.custommobs.Options.Default;
+import ca.pandaaa.custommobs.custommobs.Options.Special;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
@@ -103,7 +103,7 @@ public class Events implements Listener {
                 message.sendMessage(event.getEntity());
         }
 
-        if (customMob.getCustomMobOption("Default") != null && !((Default) customMob.getCustomMobOption("Default")).getNaturalDrops())
+        if (customMob.getCustomMobOption("Special") != null && !((Special) customMob.getCustomMobOption("Special")).getNaturalDrops())
             event.getDrops().clear();
 
         if (!customMob.getDrops().isEmpty())

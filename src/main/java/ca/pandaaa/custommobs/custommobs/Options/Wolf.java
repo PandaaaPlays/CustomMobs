@@ -28,7 +28,7 @@ public class Wolf extends CustomMobOption {
     /**
      * Indicates whether the wolf is in an aggressive (angry) state. Typically, an angry wolf will have red eyes
      * but will not attack the players unless they attack it. If you wish that the wolf mobs attacks the players by
-     * themselves, see Default > Aggressive.
+     * themselves, see Special > Aggressive.
      */
     private static final String ANGRY_WOLF = "mob.angry-wolf";
     private boolean angry;

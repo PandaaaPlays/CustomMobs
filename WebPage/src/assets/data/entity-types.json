@@ -1,0 +1,309 @@
+{
+  "MOOSHROOM": [
+    "Ageable",
+    "Special"
+  ],
+  "SILVERFISH": [
+    "Special"
+  ],
+  "MAGMA_CUBE": [
+    "Special"
+  ],
+  "MULE": [
+    "AbstractHorse",
+    "Ageable",
+    "ChestedHorse",
+    "Special"
+  ],
+  "FROG": [
+    "Special"
+  ],
+  "HOGLIN": [
+    "Ageable",
+    "Special"
+  ],
+  "HUSK": [
+    "Ageable",
+    "Special"
+  ],
+  "VEX": [
+    "Special"
+  ],
+  "SHEEP": [
+    "Ageable",
+    "Special"
+  ],
+  "VINDICATOR": [
+    "Special"
+  ],
+  "WARDEN": [
+    "Special"
+  ],
+  "PILLAGER": [
+    "Special"
+  ],
+  "VILLAGER": [
+    "Ageable",
+    "Special"
+  ],
+  "PIGLIN_BRUTE": [
+    "Special"
+  ],
+  "POLAR_BEAR": [
+    "Ageable",
+    "Special"
+  ],
+  "TURTLE": [
+    "Ageable",
+    "Special"
+  ],
+  "TRADER_LLAMA": [
+    "AbstractHorse",
+    "Ageable",
+    "ChestedHorse",
+    "Special"
+  ],
+  "SLIME": [
+    "Special"
+  ],
+  "CAVE_SPIDER": [
+    "Special"
+  ],
+  "DROWNED": [
+    "Ageable",
+    "Special"
+  ],
+  "EVOKER": [
+    "Special"
+  ],
+  "SQUID": [
+    "Ageable",
+    "Special"
+  ],
+  "ELDER_GUARDIAN": [
+    "Special"
+  ],
+  "HORSE": [
+    "AbstractHorse",
+    "Ageable",
+    "Special"
+  ],
+  "PARROT": [
+    "Special"
+  ],
+  "ENDERMITE": [
+    "Special"
+  ],
+  "FOX": [
+    "Ageable",
+    "Special"
+  ],
+  "GIANT": [
+    "Special"
+  ],
+  "AXOLOTL": [
+    "Ageable",
+    "Axolotl",
+    "Special"
+  ],
+  "STRAY": [
+    "Special"
+  ],
+  "ZOMBIE": [
+    "Ageable",
+    "Special"
+  ],
+  "SALMON": [
+    "Special"
+  ],
+  "CAT": [
+    "Ageable",
+    "Cat",
+    "Special"
+  ],
+  "RABBIT": [
+    "Ageable",
+    "Special"
+  ],
+  "GOAT": [
+    "Ageable",
+    "Special"
+  ],
+  "DONKEY": [
+    "AbstractHorse",
+    "Ageable",
+    "ChestedHorse",
+    "Special"
+  ],
+  "STRIDER": [
+    "Ageable",
+    "Special",
+    "Steerable"
+  ],
+  "PANDA": [
+    "Ageable",
+    "Special"
+  ],
+  "OCELOT": [
+    "Ageable",
+    "Special"
+  ],
+  "ENDERMAN": [
+    "Special"
+  ],
+  "CREAKING": [
+    "Special"
+  ],
+  "ZOMBIE_VILLAGER": [
+    "Ageable",
+    "Special"
+  ],
+  "LLAMA": [
+    "AbstractHorse",
+    "Ageable",
+    "ChestedHorse",
+    "Special"
+  ],
+  "ENDER_DRAGON": [
+    "Special"
+  ],
+  "WITCH": [
+    "Special"
+  ],
+  "TROPICAL_FISH": [
+    "Special"
+  ],
+  "SPIDER": [
+    "Special"
+  ],
+  "ALLAY": [
+    "Special"
+  ],
+  "ARMADILLO": [
+    "Ageable",
+    "Special"
+  ],
+  "WITHER_SKELETON": [
+    "Special"
+  ],
+  "SKELETON": [
+    "Special"
+  ],
+  "WITHER": [
+    "Special"
+  ],
+  "CREEPER": [
+    "Special"
+  ],
+  "BOGGED": [
+    "Special"
+  ],
+  "ILLUSIONER": [
+    "Special"
+  ],
+  "CHICKEN": [
+    "Ageable",
+    "Chicken",
+    "Special"
+  ],
+  "ZOMBIFIED_PIGLIN": [
+    "Ageable",
+    "Special"
+  ],
+  "CAMEL": [
+    "AbstractHorse",
+    "Ageable",
+    "Special"
+  ],
+  "BREEZE": [
+    "Special"
+  ],
+  "COD": [
+    "Special"
+  ],
+  "ZOMBIE_HORSE": [
+    "AbstractHorse",
+    "Ageable",
+    "Special"
+  ],
+  "SNOW_GOLEM": [
+    "Special"
+  ],
+  "RAVAGER": [
+    "Special"
+  ],
+  "GLOW_SQUID": [
+    "Ageable",
+    "Special"
+  ],
+  "SHULKER": [
+    "Special"
+  ],
+  "PUFFERFISH": [
+    "Special"
+  ],
+  "SNIFFER": [
+    "Ageable",
+    "Special"
+  ],
+  "GUARDIAN": [
+    "Special"
+  ],
+  "BEE": [
+    "Ageable",
+    "Special"
+  ],
+  "PHANTOM": [
+    "Special"
+  ],
+  "SKELETON_HORSE": [
+    "AbstractHorse",
+    "Ageable",
+    "Special"
+  ],
+  "BLAZE": [
+    "Special"
+  ],
+  "COW": [
+    "Ageable",
+    "Special"
+  ],
+  "PIGLIN": [
+    "Ageable",
+    "Special"
+  ],
+  "GHAST": [
+    "Special"
+  ],
+  "WANDERING_TRADER": [
+    "Ageable",
+    "Special"
+  ],
+  "PIG": [
+    "Ageable",
+    "Special",
+    "Steerable"
+  ],
+  "ZOGLIN": [
+    "Ageable",
+    "Special"
+  ],
+  "BAT": [
+    "Special"
+  ],
+  "DOLPHIN": [
+    "Ageable",
+    "Special"
+  ],
+  "TADPOLE": [
+    "Special"
+  ],
+  "WOLF": [
+    "Ageable",
+    "Special",
+    "Wolf"
+  ],
+  "IRON_GOLEM": [
+    "Special"
+  ]
+}

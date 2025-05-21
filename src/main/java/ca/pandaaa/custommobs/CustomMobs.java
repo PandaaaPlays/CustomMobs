@@ -12,6 +12,9 @@ import ca.pandaaa.custommobs.utils.DamageRange;
 import ca.pandaaa.custommobs.utils.Metrics;
 import ca.pandaaa.custommobs.utils.SoundEnum;
 import ca.pandaaa.custommobs.utils.Utils;
+import com.google.common.reflect.ClassPath;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Registry;
@@ -21,6 +24,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -28,6 +32,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.*;
 
 public class CustomMobs extends JavaPlugin {
@@ -50,6 +56,7 @@ public class CustomMobs extends JavaPlugin {
         plugin = this;
 
         this.sendStartedMessage();
+        this.generateEntityTypesJson();
 
         ConfigurationSerialization.registerClass(DropMessage.class, "ca.pandaaa.custommobs.custommobs.Messages.DropMessage");
         ConfigurationSerialization.registerClass(SpawnDeathMessage.class, "ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage");
@@ -223,6 +230,46 @@ public class CustomMobs extends JavaPlugin {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void generateEntityTypesJson() {
+        Map<String, List<String>> entityTypeOptions = new HashMap<>();
+
+        for (EntityType type : EntityType.values()) {
+            if (type != null && type.isAlive() && type != EntityType.PLAYER && type != EntityType.ARMOR_STAND) {
+                List<Class<?>> optionClasses = new ArrayList<>();
+                try {
+                    ClassPath path = ClassPath.from(this.getClassLoader());
+                    for (ClassPath.ClassInfo info : path.getTopLevelClassesRecursive("ca.pandaaa.custommobs.custommobs.Options")) {
+                        Class clazz = Class.forName(info.getName(), true, this.getClass().getClassLoader());
+                        if (!Modifier.isAbstract(clazz.getModifiers())) {
+                            try {
+                                if((boolean) clazz.getMethod("isApplicable", EntityType.class).invoke(null, type)) {
+                                    optionClasses.add(clazz);
+                                }
+                            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {}
+                        }
+                    }
+                    entityTypeOptions.put(type.name(), optionClasses.stream().map(Class::getSimpleName).toList());
+                } catch (IOException | ClassNotFoundException e) {
+                    Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[CustomMobs] Failed to scan option classes.");
+                    e.printStackTrace();
+                    return;
+                }
+            }
+        }
+
+        // Write to JSON
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        File jsonFile = new File(getDataFolder(), "entity-types.json");
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(jsonFile))) {
+            writer.write(gson.toJson(entityTypeOptions));
+            Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "[CustomMobs] entity-types.json successfully generated.");
+        } catch (IOException e) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[CustomMobs] Failed to write entity-types.json.");
+            e.printStackTrace();
         }
     }
 }

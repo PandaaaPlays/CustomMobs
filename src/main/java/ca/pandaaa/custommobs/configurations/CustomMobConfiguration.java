@@ -197,7 +197,7 @@ public class CustomMobConfiguration {
             ClassPath path = ClassPath.from(this.getClass().getClassLoader());
             for (ClassPath.ClassInfo info : path.getTopLevelClassesRecursive("ca.pandaaa.custommobs.custommobs.Options")) {
                 Class clazz = Class.forName(info.getName(), true, this.getClass().getClassLoader());
-                if (Modifier.isAbstract(clazz.getModifiers()) || clazz.getSimpleName().contains("Default")) // Skip abstract class and Default (not applicable)
+                if (Modifier.isAbstract(clazz.getModifiers()) || clazz.getSimpleName().contains("Special")) // Skip abstract class and Default (not applicable)
                     continue;
                 if((boolean) clazz.getMethod("isApplicable", EntityType.class).invoke(null, type)) {
                     CustomMobOption instance = (CustomMobOption) clazz.getDeclaredConstructor(CustomMobConfiguration.class).newInstance(this);

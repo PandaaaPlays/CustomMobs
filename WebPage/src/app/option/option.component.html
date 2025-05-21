@@ -1,26 +1,51 @@
-<div class="header">
-  <div class="text">
-    {{formatClassName(className)}}
-    <div class="searchbar">
-
-    </div>
-  </div>
-  <div class="splitter"></div>
-</div>
-<div class="body">
-  <div class="option" *ngFor="let option of options">
-    <div class="title">
-      {{ option.key.replaceAll('_', ' ') }}
-      <div class="details" *ngIf="option.type">
-        <div class="minmax" *ngIf="option.minimum">
-          <span class="min">Min: {{option.minimum}}</span>
-          <span class="max">Max: {{option.maximum}}</span>
+<div class="custommob-option">
+  <div class="header">
+    <div class="text">
+      {{formatClassName(className)}}
+      <div class="searchbar">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input
+          [ngClass]="{ 'open': searchResults.length > 0 || (searchResults.length == 0 && this.searchTerm != '' && searching)}"
+          type="text"
+          placeholder="Search your CustomMob's type..."
+          [(ngModel)]="searchTerm"
+          (input)="onSearchChange()"
+          (focus)="onSearchFocus()"
+        />
+        <i class="fa-solid fa-circle-xmark" (click)="resetSearch()"></i>
+      </div>
+      <div class="search-results" *ngIf="searchResults.length > 0">
+        <div class="result" *ngFor="let result of searchResults">
+          <div class="entity-type">{{ result.entityType.replaceAll('_', ' ') }}</div>
+          <div class="entity-options">
+            Options:
+            <ng-container *ngFor="let option of result.options; let last = last">
+              <a class="option-link" [routerLink]="['/option', option]">{{option}}</a><span *ngIf="!last">, </span>
+            </ng-container>
+          </div>
         </div>
-        {{option.type}}
+      </div>
+      <div class="search-results" *ngIf="searchResults.length == 0 && this.searchTerm != '' && searching">
+        <div class="no-result">No mob matches the search '{{ this.searchTerm }}'</div>
       </div>
     </div>
-    <div class="description">
-      {{ option.description }}
+    <div class="splitter"></div>
+  </div>
+  <div class="body">
+    <div class="option" *ngFor="let option of options">
+      <div class="title">
+        {{ option.key.replaceAll('_', ' ') }}
+        <div class="details" *ngIf="option.type">
+          <div class="minmax" *ngIf="option.minimum">
+            <span class="min">Min: {{option.minimum}}</span>
+            <span class="max">Max: {{option.maximum}}</span>
+          </div>
+          {{option.type}}
+        </div>
+      </div>
+      <div class="description">
+        {{ option.description }}
+      </div>
     </div>
   </div>
 </div>

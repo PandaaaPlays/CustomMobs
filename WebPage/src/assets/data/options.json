@@ -61,7 +61,7 @@
                  },
                  {
                      "minimum":  null,
-                     "description":  "Indicates whether the wolf is in an aggressive (angry) state. Typically, an angry wolf will have red eyes but will not attack the players unless they attack it. If you wish that the wolf mobs attacks the players by themselves, see Default \u003e Aggressive.",
+                     "description":  "Indicates whether the wolf is in an aggressive (angry) state. Typically, an angry wolf will have red eyes but will not attack the players unless they attack it. If you wish that the wolf mobs attacks the players by themselves, see Special \u003e Aggressive.",
                      "type":  "On / Off",
                      "key":  "ANGRY_WOLF",
                      "maximum":  null
@@ -190,136 +190,7 @@
                          "maximum":  null
                      }
                  ],
-    "Rabbit":  [
-                   {
-                       "minimum":  null,
-                       "description":  "",
-                       "type":  "Rabbit type",
-                       "key":  "RABBIT_TYPE",
-                       "maximum":  null
-                   }
-               ],
-    "Frog":  [
-                 {
-                     "minimum":  null,
-                     "description":  "Specifies the variant of the frog CustomMob, such as normal or a biome-specific type. When this value is not set, the variant will be based on the biome it is spawned in (like it would by spawning a normal frog).",
-                     "type":  "Frog variant",
-                     "key":  "FROG_VARIANT",
-                     "maximum":  null
-                 }
-             ],
-    "PigZombie":  [
-                      {
-                          "minimum":  null,
-                          "description":  "Indicates the anger duration (in ticks) of a zombified piglin, which states for how long the zombified piglin will try to attack the player.",
-                          "type":  "Integer",
-                          "key":  "ZOMBIFIED_PIGLIN_ANGER",
-                          "maximum":  null
-                      }
-                  ],
-    "Parrot":  [
-                   {
-                       "minimum":  null,
-                       "description":  "Specifies the color variant of the parrot (e.g., red, blue, green). If left unset, the color will be chosen randomly.",
-                       "type":  "Parrot variant",
-                       "key":  "PARROT_VARIANT",
-                       "maximum":  null
-                   }
-               ],
-    "Fox":  [
-                {
-                    "minimum":  null,
-                    "description":  "Specifies the variant of the fox CustomMob, such as normal or a biome-specific type. When this value is not set, the variant will be based on the biome it is spawned in (like it would by spawning a normal fox).",
-                    "type":  "Fox type",
-                    "key":  "FOX_TYPE",
-                    "maximum":  null
-                }
-            ],
-    "Horse":  [
-                  {
-                      "minimum":  null,
-                      "description":  "",
-                      "type":  "Horse color",
-                      "key":  "HORSE_COLOR",
-                      "maximum":  null
-                  },
-                  {
-                      "minimum":  null,
-                      "description":  "",
-                      "type":  "Horse style",
-                      "key":  "HORSE_STYLE",
-                      "maximum":  null
-                  },
-                  {
-                      "minimum":  null,
-                      "description":  "",
-                      "type":  "Item",
-                      "key":  "HORSE_ARMOR",
-                      "maximum":  null
-                  }
-              ],
-    "Vindicator":  [
-                       {
-                           "minimum":  null,
-                           "description":  "",
-                           "type":  "On / Off",
-                           "key":  "JOHNNY_VANDICATOR",
-                           "maximum":  null
-                       }
-                   ],
-    "Shulker":  [
-                    {
-                        "minimum":  null,
-                        "description":  "",
-                        "type":  "Dye color",
-                        "key":  "SHULKER_COLOR",
-                        "maximum":  null
-                    }
-                ],
-    "Chicken":  [
-                    {
-                        "minimum":  null,
-                        "description":  "Specifies the variant of the chicken CustomMob, such as normal or a biome-specific type. When this value is not set, the variant will be based on the biome it is spawned in (like it would by spawning a normal chicken).",
-                        "type":  "Chicken variant",
-                        "key":  "CHICKEN_VARIANT",
-                        "maximum":  null
-                    }
-                ],
-    "Slime":  [
-                  {
-                      "minimum":  null,
-                      "description":  "",
-                      "type":  "Integer",
-                      "key":  "SLIME_SIZE",
-                      "maximum":  null
-                  }
-              ],
-    "AbstractHorse":  [
-                          {
-                              "minimum":  null,
-                              "description":  "",
-                              "type":  "Decimal",
-                              "key":  "JUMP_STRENGTH",
-                              "maximum":  null
-                          },
-                          {
-                              "minimum":  null,
-                              "description":  "",
-                              "type":  "On / Off",
-                              "key":  "SADDLE",
-                              "maximum":  null
-                          }
-                      ],
-    "Sittable":  [
-                     {
-                         "minimum":  null,
-                         "description":  "",
-                         "type":  "On / Off",
-                         "key":  "SITTING",
-                         "maximum":  null
-                     }
-                 ],
-    "Default":  [
+    "Special":  [
                     {
                         "minimum":  null,
                         "description":  "Toggles the visibility of the entity\u0027s name tag, even when not directly looking at it.",
@@ -432,5 +303,134 @@
                         "key":  "NATURAL_DROPS",
                         "maximum":  null
                     }
-                ]
+                ],
+    "Frog":  [
+                 {
+                     "minimum":  null,
+                     "description":  "Specifies the variant of the frog CustomMob, such as normal or a biome-specific type. When this value is not set, the variant will be based on the biome it is spawned in (like it would by spawning a normal frog).",
+                     "type":  "Frog variant",
+                     "key":  "FROG_VARIANT",
+                     "maximum":  null
+                 }
+             ],
+    "PigZombie":  [
+                      {
+                          "minimum":  null,
+                          "description":  "Indicates the anger duration (in ticks) of a zombified piglin, which states for how long the zombified piglin will try to attack the player.",
+                          "type":  "Integer",
+                          "key":  "ZOMBIFIED_PIGLIN_ANGER",
+                          "maximum":  null
+                      }
+                  ],
+    "Parrot":  [
+                   {
+                       "minimum":  null,
+                       "description":  "Specifies the color variant of the parrot (e.g., red, blue, green). If left unset, the color will be chosen randomly.",
+                       "type":  "Parrot variant",
+                       "key":  "PARROT_VARIANT",
+                       "maximum":  null
+                   }
+               ],
+    "Fox":  [
+                {
+                    "minimum":  null,
+                    "description":  "Specifies the variant of the fox CustomMob, such as normal or a biome-specific type. When this value is not set, the variant will be based on the biome it is spawned in (like it would by spawning a normal fox).",
+                    "type":  "Fox type",
+                    "key":  "FOX_TYPE",
+                    "maximum":  null
+                }
+            ],
+    "Horse":  [
+                  {
+                      "minimum":  null,
+                      "description":  "",
+                      "type":  "Horse color",
+                      "key":  "HORSE_COLOR",
+                      "maximum":  null
+                  },
+                  {
+                      "minimum":  null,
+                      "description":  "",
+                      "type":  "Horse style",
+                      "key":  "HORSE_STYLE",
+                      "maximum":  null
+                  },
+                  {
+                      "minimum":  null,
+                      "description":  "",
+                      "type":  "Item",
+                      "key":  "HORSE_ARMOR",
+                      "maximum":  null
+                  }
+              ],
+    "Vindicator":  [
+                       {
+                           "minimum":  null,
+                           "description":  "",
+                           "type":  "On / Off",
+                           "key":  "JOHNNY_VANDICATOR",
+                           "maximum":  null
+                       }
+                   ],
+    "Rabbit":  [
+                   {
+                       "minimum":  null,
+                       "description":  "",
+                       "type":  "Rabbit type",
+                       "key":  "RABBIT_TYPE",
+                       "maximum":  null
+                   }
+               ],
+    "Shulker":  [
+                    {
+                        "minimum":  null,
+                        "description":  "",
+                        "type":  "Dye color",
+                        "key":  "SHULKER_COLOR",
+                        "maximum":  null
+                    }
+                ],
+    "Chicken":  [
+                    {
+                        "minimum":  null,
+                        "description":  "Specifies the variant of the chicken CustomMob, such as normal or a biome-specific type. When this value is not set, the variant will be based on the biome it is spawned in (like it would by spawning a normal chicken).",
+                        "type":  "Chicken variant",
+                        "key":  "CHICKEN_VARIANT",
+                        "maximum":  null
+                    }
+                ],
+    "Slime":  [
+                  {
+                      "minimum":  null,
+                      "description":  "",
+                      "type":  "Integer",
+                      "key":  "SLIME_SIZE",
+                      "maximum":  null
+                  }
+              ],
+    "AbstractHorse":  [
+                          {
+                              "minimum":  null,
+                              "description":  "",
+                              "type":  "Decimal",
+                              "key":  "JUMP_STRENGTH",
+                              "maximum":  null
+                          },
+                          {
+                              "minimum":  null,
+                              "description":  "",
+                              "type":  "On / Off",
+                              "key":  "SADDLE",
+                              "maximum":  null
+                          }
+                      ],
+    "Sittable":  [
+                     {
+                         "minimum":  null,
+                         "description":  "",
+                         "type":  "On / Off",
+                         "key":  "SITTING",
+                         "maximum":  null
+                     }
+                 ]
 }
