@@ -16,6 +16,7 @@
       </div>
       <div class="search-results" *ngIf="searchResults.length > 0">
         <div class="result" *ngFor="let result of searchResults">
+          <img src="assets/images/entity-types/{{result.entityType.toLowerCase()}}.png" alt="" class="logo" />
           <div class="entity-type">{{ result.entityType.replaceAll('_', ' ') }}</div>
           <div class="entity-options">
             Options:

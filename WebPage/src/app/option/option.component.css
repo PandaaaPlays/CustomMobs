@@ -187,6 +187,12 @@
   color: #4d4033;
 }
 
+img {
+  margin-right: 10px;
+  max-height: 30px;
+  width: 30px;
+}
+
 
 
 
