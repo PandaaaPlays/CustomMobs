@@ -54,7 +54,7 @@
     "Wolf":  [
                  {
                      "minimum":  null,
-                     "description":  "Sets the dye color of the wolf CustomMob\u0027s color. The wolf needs to be tamed in order to have the collar rendered (see Tameable option).",
+                     "description":  "Sets the dye color of the wolf CustomMob\u0027s collar. The wolf needs to be tamed and have an owner in order to have the collar rendered (see Tameable option).",
                      "type":  "Dye color",
                      "key":  "COLLAR_COLOR",
                      "maximum":  null
@@ -84,14 +84,14 @@
     "Cat":  [
                 {
                     "minimum":  null,
-                    "description":  "Sets the dye color of the wolf CustomMob\u0027s color. The wolf needs to be tamed in order to have the collar rendered (see Tameable option).",
+                    "description":  "Determines the breed or appearance of the cat CustomMob (e.g., tabby, siamese, black).",
                     "type":  "Cat type",
                     "key":  "CAT_TYPE",
                     "maximum":  null
                 },
                 {
                     "minimum":  null,
-                    "description":  "Determines the breed or appearance of the cat CustomMob (e.g., tabby, siamese, black).",
+                    "description":  "Sets the dye color of the cat CustomMob\u0027s collar. The cat needs to be tamed and have an owner in order to have the collar rendered (see Tameable option).",
                     "type":  "Dye color",
                     "key":  "COLLAR_COLOR",
                     "maximum":  null
@@ -315,11 +315,11 @@
              ],
     "PigZombie":  [
                       {
-                          "minimum":  null,
+                          "minimum":  "0",
                           "description":  "Indicates the anger duration (in ticks) of a zombified piglin, which states for how long the zombified piglin will try to attack the player.",
                           "type":  "Integer",
                           "key":  "ZOMBIFIED_PIGLIN_ANGER",
-                          "maximum":  null
+                          "maximum":  "72000"
                       }
                   ],
     "Parrot":  [
@@ -343,21 +343,21 @@
     "Horse":  [
                   {
                       "minimum":  null,
-                      "description":  "",
+                      "description":  "Specifies the base color of the horse CustomMob. If left unset, the color will be chosen randomly.",
                       "type":  "Horse color",
                       "key":  "HORSE_COLOR",
                       "maximum":  null
                   },
                   {
                       "minimum":  null,
-                      "description":  "",
+                      "description":  "Specifies the pattern or markings of the horse CustomMob. If left unset, it will be chosen randomly.",
                       "type":  "Horse style",
                       "key":  "HORSE_STYLE",
                       "maximum":  null
                   },
                   {
                       "minimum":  null,
-                      "description":  "",
+                      "description":  "Represents the armor item equipped on the horse CustomMob.",
                       "type":  "Item",
                       "key":  "HORSE_ARMOR",
                       "maximum":  null
@@ -366,7 +366,7 @@
     "Vindicator":  [
                        {
                            "minimum":  null,
-                           "description":  "",
+                           "description":  "Represents whether the vindicator CustomMob should attack almost all entities (as when vindicators are renamed \"Johnny\").",
                            "type":  "On / Off",
                            "key":  "JOHNNY_VANDICATOR",
                            "maximum":  null
@@ -375,7 +375,7 @@
     "Rabbit":  [
                    {
                        "minimum":  null,
-                       "description":  "",
+                       "description":  "Sets the appearance or breed of the rabbit CustomMob (e.g., black, brown, white, Toast). If left unset, the type will be chosen randomly.",
                        "type":  "Rabbit type",
                        "key":  "RABBIT_TYPE",
                        "maximum":  null
@@ -384,7 +384,7 @@
     "Shulker":  [
                     {
                         "minimum":  null,
-                        "description":  "",
+                        "description":  "Determines the dye color of the shulker CustomMob\u0027s shell. If left unset, the color will be the purple-ish (default) one.",
                         "type":  "Dye color",
                         "key":  "SHULKER_COLOR",
                         "maximum":  null
@@ -401,24 +401,24 @@
                 ],
     "Slime":  [
                   {
-                      "minimum":  null,
-                      "description":  "",
+                      "minimum":  "0",
+                      "description":  "Integer value indicating the size of the slime CustomMob (affects health and split count).",
                       "type":  "Integer",
                       "key":  "SLIME_SIZE",
-                      "maximum":  null
+                      "maximum":  "126"
                   }
               ],
     "AbstractHorse":  [
                           {
-                              "minimum":  null,
-                              "description":  "",
+                              "minimum":  "0",
+                              "description":  "Determines how high the horse CustomMob can jump. The default value is 0.7. When left unset, the jump strength will be randomly chosen.",
                               "type":  "Decimal",
                               "key":  "JUMP_STRENGTH",
-                              "maximum":  null
+                              "maximum":  "2"
                           },
                           {
                               "minimum":  null,
-                              "description":  "",
+                              "description":  "Indicates whether the horse is equipped with a saddle.",
                               "type":  "On / Off",
                               "key":  "SADDLE",
                               "maximum":  null
@@ -427,7 +427,7 @@
     "Sittable":  [
                      {
                          "minimum":  null,
-                         "description":  "",
+                         "description":  "Determines whether the CustomMob entity is currently in a sitting state.",
                          "type":  "On / Off",
                          "key":  "SITTING",
                          "maximum":  null

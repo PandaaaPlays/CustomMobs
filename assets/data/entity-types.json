@@ -1,21 +1,25 @@
 {
   "MOOSHROOM": [
     "Ageable",
+    "Cow",
     "Special"
   ],
   "SILVERFISH": [
     "Special"
   ],
   "MAGMA_CUBE": [
+    "Slime",
     "Special"
   ],
   "MULE": [
     "AbstractHorse",
     "Ageable",
     "ChestedHorse",
-    "Special"
+    "Special",
+    "Tameable"
   ],
   "FROG": [
+    "Frog",
     "Special"
   ],
   "HOGLIN": [
@@ -24,7 +28,8 @@
   ],
   "HUSK": [
     "Ageable",
-    "Special"
+    "Special",
+    "Zombie"
   ],
   "VEX": [
     "Special"
@@ -34,7 +39,8 @@
     "Special"
   ],
   "VINDICATOR": [
-    "Special"
+    "Special",
+    "Vindicator"
   ],
   "WARDEN": [
     "Special"
@@ -44,7 +50,8 @@
   ],
   "VILLAGER": [
     "Ageable",
-    "Special"
+    "Special",
+    "Villager"
   ],
   "PIGLIN_BRUTE": [
     "Special"
@@ -61,9 +68,12 @@
     "AbstractHorse",
     "Ageable",
     "ChestedHorse",
-    "Special"
+    "Llama",
+    "Special",
+    "Tameable"
   ],
   "SLIME": [
+    "Slime",
     "Special"
   ],
   "CAVE_SPIDER": [
@@ -71,7 +81,8 @@
   ],
   "DROWNED": [
     "Ageable",
-    "Special"
+    "Special",
+    "Zombie"
   ],
   "EVOKER": [
     "Special"
@@ -86,16 +97,23 @@
   "HORSE": [
     "AbstractHorse",
     "Ageable",
-    "Special"
+    "Horse",
+    "Special",
+    "Tameable"
   ],
   "PARROT": [
-    "Special"
+    "Parrot",
+    "Sittable",
+    "Special",
+    "Tameable"
   ],
   "ENDERMITE": [
     "Special"
   ],
   "FOX": [
     "Ageable",
+    "Fox",
+    "Sittable",
     "Special"
   ],
   "GIANT": [
@@ -111,7 +129,8 @@
   ],
   "ZOMBIE": [
     "Ageable",
-    "Special"
+    "Special",
+    "Zombie"
   ],
   "SALMON": [
     "Special"
@@ -119,10 +138,13 @@
   "CAT": [
     "Ageable",
     "Cat",
-    "Special"
+    "Sittable",
+    "Special",
+    "Tameable"
   ],
   "RABBIT": [
     "Ageable",
+    "Rabbit",
     "Special"
   ],
   "GOAT": [
@@ -133,7 +155,8 @@
     "AbstractHorse",
     "Ageable",
     "ChestedHorse",
-    "Special"
+    "Special",
+    "Tameable"
   ],
   "STRIDER": [
     "Ageable",
@@ -142,6 +165,8 @@
   ],
   "PANDA": [
     "Ageable",
+    "Panda",
+    "Sittable",
     "Special"
   ],
   "OCELOT": [
@@ -156,13 +181,16 @@
   ],
   "ZOMBIE_VILLAGER": [
     "Ageable",
-    "Special"
+    "Special",
+    "Zombie"
   ],
   "LLAMA": [
     "AbstractHorse",
     "Ageable",
     "ChestedHorse",
-    "Special"
+    "Llama",
+    "Special",
+    "Tameable"
   ],
   "ENDER_DRAGON": [
     "Special"
@@ -193,6 +221,7 @@
     "Special"
   ],
   "CREEPER": [
+    "Creeper",
     "Special"
   ],
   "BOGGED": [
@@ -208,12 +237,16 @@
   ],
   "ZOMBIFIED_PIGLIN": [
     "Ageable",
-    "Special"
+    "PigZombie",
+    "Special",
+    "Zombie"
   ],
   "CAMEL": [
     "AbstractHorse",
     "Ageable",
-    "Special"
+    "Sittable",
+    "Special",
+    "Tameable"
   ],
   "BREEZE": [
     "Special"
@@ -224,7 +257,8 @@
   "ZOMBIE_HORSE": [
     "AbstractHorse",
     "Ageable",
-    "Special"
+    "Special",
+    "Tameable"
   ],
   "SNOW_GOLEM": [
     "Special"
@@ -237,6 +271,7 @@
     "Special"
   ],
   "SHULKER": [
+    "Shulker",
     "Special"
   ],
   "PUFFERFISH": [
@@ -259,13 +294,16 @@
   "SKELETON_HORSE": [
     "AbstractHorse",
     "Ageable",
-    "Special"
+    "SkeletonHorse",
+    "Special",
+    "Tameable"
   ],
   "BLAZE": [
     "Special"
   ],
   "COW": [
     "Ageable",
+    "Cow",
     "Special"
   ],
   "PIGLIN": [
@@ -281,6 +319,7 @@
   ],
   "PIG": [
     "Ageable",
+    "Pig",
     "Special",
     "Steerable"
   ],
@@ -300,7 +339,9 @@
   ],
   "WOLF": [
     "Ageable",
+    "Sittable",
     "Special",
+    "Tameable",
     "Wolf"
   ],
   "IRON_GOLEM": [
