@@ -5,15 +5,14 @@ import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
+import org.bukkit.Registry;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Pig extends CustomMobOption {
@@ -26,7 +25,7 @@ public class Pig extends CustomMobOption {
 
     public Pig(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
-        this.pigVariant = pigVariant;
+        this.pigVariant = getOption(PIG_VARIANT, Registry.PIG_VARIANT);
     }
 
     public void applyOptions(Entity customMob) {
@@ -38,15 +37,13 @@ public class Pig extends CustomMobOption {
 
     @Override
     public void resetOptions() {
-
+        setOption(PIG_VARIANT, null);
     }
 
     public List<ItemStack> getOptionItems() {
         List<ItemStack> items = new ArrayList<>();
 
-        if (!getPigVariants().isEmpty()) {
-            items.add(getOptionItemStack(getPigVariantItem(), true, true));
-        }
+        items.add(getOptionItemStack(getPigVariantItem(), true, true));
 
         return items;
     }
@@ -57,7 +54,7 @@ public class Pig extends CustomMobOption {
                 if (clickType.isRightClick()) {
                     this.pigVariant = null;
                 } else {
-                    List<org.bukkit.entity.Pig.Variant> pigVariants = getPigVariants();
+                    List<org.bukkit.entity.Pig.Variant> pigVariants = Registry.PIG_VARIANT.stream().toList();
                     if(pigVariants.isEmpty())
                         return null;
 
@@ -66,7 +63,7 @@ public class Pig extends CustomMobOption {
                     else
                         this.pigVariant = pigVariants.get(pigVariants.indexOf(pigVariant) + 1);
                 }
-                customMob.getCustomMobConfiguration().setPigVariant(pigVariant);
+                setOption(PIG_VARIANT, pigVariant != null ? pigVariant.getKeyOrNull().getKey() : null);
                 return getOptionItemStack(getPigVariantItem(), true, true);
             }
         }
@@ -74,28 +71,7 @@ public class Pig extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return false;
-    }
-
-    private List<org.bukkit.entity.Pig.Variant> getPigVariants() {
-        try {
-            Class<?> registryClass = Class.forName("org.bukkit.Registry");
-            Field pigVariantField = registryClass.getDeclaredField("PIG_VARIANT");
-            Object registry = pigVariantField.get(null);
-
-            if (registry instanceof Iterable<?>) {
-                List<org.bukkit.entity.Pig.Variant> variants = new ArrayList<>();
-                for (Object obj : (Iterable<?>) registry) {
-                    if (obj instanceof org.bukkit.entity.Pig.Variant) {
-                        variants.add((org.bukkit.entity.Pig.Variant) obj);
-                    }
-                }
-                return variants;
-            }
-        } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
-            // Registry or PIG_VARIANT doesn't exist in this version...
-        }
-        return Collections.emptyList();
+        return Utils.isVersionAtLeast("1.21.5") && org.bukkit.entity.Pig.class.isAssignableFrom(entityType.getEntityClass());
     }
 
     public CustomMobsItem getPigVariantItem() {

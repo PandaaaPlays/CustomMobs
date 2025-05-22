@@ -24,7 +24,7 @@ public class Panda extends CustomMobOption {
 
     public Panda(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
-        this.pandaGene = pandaGene;
+        this.pandaGene = getOption(PANDA_GENE, org.bukkit.entity.Panda.Gene.class);
     }
 
     public void applyOptions(Entity customMob) {
@@ -39,7 +39,7 @@ public class Panda extends CustomMobOption {
 
     @Override
     public void resetOptions() {
-
+        setOption(PANDA_GENE, null);
     }
 
     public List<ItemStack> getOptionItems() {
@@ -63,7 +63,7 @@ public class Panda extends CustomMobOption {
                     else
                         this.pandaGene = pandaGenes.get(pandaGenes.indexOf(pandaGene) + 1);
                 }
-                customMob.getCustomMobConfiguration().setPandaGene(pandaGene);
+                setOption(PANDA_GENE, pandaGene != null ? pandaGene.name() : null);
                 return getOptionItemStack(getPandaGeneItem(), true, true);
             }
         }
@@ -71,7 +71,7 @@ public class Panda extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return false;
+        return org.bukkit.entity.Panda.class.isAssignableFrom(entityType.getEntityClass());
     }
 
     public CustomMobsItem getPandaGeneItem() {

@@ -254,7 +254,7 @@ public class Special extends CustomMobOption {
             case "damagerange": {
                 if(clickType.isRightClick()) {
                     this.damageRange = null;
-                    setOption(DAMAGE, damageRange); // TODO This was not there... Why?
+                    setOption(DAMAGE, damageRange);
                 } else {
                     new DoubleRangeGUI("Damage range", false, 0, 1024, (value) -> {
                         this.damageRange = new DamageRange(value[0], value[1]);

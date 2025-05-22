@@ -25,7 +25,7 @@ public class Fox extends CustomMobOption {
 
     public Fox(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
-        this.foxType = foxType;
+        this.foxType = getOption(FOX_TYPE, org.bukkit.entity.Fox.Type.class);
     }
 
     public void applyOptions(Entity customMob) {
@@ -38,7 +38,7 @@ public class Fox extends CustomMobOption {
 
     @Override
     public void resetOptions() {
-
+        setOption(FOX_TYPE, null);
     }
 
     public List<ItemStack> getOptionItems() {
@@ -62,7 +62,7 @@ public class Fox extends CustomMobOption {
                     else
                         this.foxType = foxTypes.get(foxTypes.indexOf(foxType) + 1);
                 }
-                customMob.getCustomMobConfiguration().setFoxType(foxType);
+                setOption(FOX_TYPE, this.foxType != null ? this.foxType.toString() : null);
                 return getOptionItemStack(getFoxTypeItem(), true, true);
             }
         }
@@ -70,7 +70,7 @@ public class Fox extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return false;
+        return org.bukkit.entity.Fox.class.isAssignableFrom(entityType.getEntityClass());
     }
 
     public CustomMobsItem getFoxTypeItem() {

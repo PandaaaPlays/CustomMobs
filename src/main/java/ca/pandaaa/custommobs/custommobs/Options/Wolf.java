@@ -20,8 +20,8 @@ import java.util.List;
 
 public class Wolf extends CustomMobOption {
     /**
-     * Sets the dye color of the wolf CustomMob's color. The wolf needs to be tamed in order to have the collar
-     * rendered (see Tameable option).
+     * Sets the dye color of the wolf CustomMob's collar. The wolf needs to be tamed and have an owner
+     * in order to have the collar rendered (see Tameable option).
      */
     private static final String COLLAR_COLOR = "mob.collar-color";
     private DyeColor collarColor;
@@ -48,8 +48,8 @@ public class Wolf extends CustomMobOption {
         super(mobConfiguration);
         this.collarColor = getOption(COLLAR_COLOR, DyeColor.class);
         this.angry = getOption(ANGRY_WOLF, Boolean.class, false);
-        this.wolfVariant = wolfVariant;
-        this.wolfArmor = wolfArmor;
+        this.wolfVariant = getOption(WOLF_VARIANT, Registry.WOLF_VARIANT);
+        this.wolfArmor = getOption(WOLF_ARMOR, Boolean.class, false);
     }
 
     public void applyOptions(Entity customMob) {
@@ -69,6 +69,8 @@ public class Wolf extends CustomMobOption {
     public void resetOptions() {
         setOption(COLLAR_COLOR, null);
         setOption(ANGRY_WOLF, null);
+        setOption(WOLF_VARIANT, null);
+        setOption(WOLF_ARMOR, null);
     }
 
     public List<ItemStack> getOptionItems() {
@@ -116,13 +118,13 @@ public class Wolf extends CustomMobOption {
                     else
                         this.wolfVariant = wolfVariants.get(wolfVariants.indexOf(wolfVariant) + 1);
                 }
-                customMob.getCustomMobConfiguration().setWolfVariant(wolfVariant);
+                setOption(WOLF_VARIANT, wolfVariant != null ? wolfVariant.getKeyOrNull().getKey() : null);
                 return getOptionItemStack(getWolfVariantItem(), true, true);
             }
 
             case "wolfarmor": {
                 this.wolfArmor = !this.wolfArmor;
-                customMob.getCustomMobConfiguration().setHasWolfArmor(wolfArmor);
+                setOption(WOLF_ARMOR, this.wolfArmor);
 
                 if(wolfArmor) {
                     customMob.addDrop(new Drop(new ItemStack(Material.WOLF_ARMOR), 1, "WolfArmor"));

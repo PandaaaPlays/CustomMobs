@@ -22,7 +22,7 @@ public class SkeletonHorse extends CustomMobOption {
 
     public SkeletonHorse(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
-        this.trapped = trapped;
+        this.trapped = getOption(SKELETON_TRAP, Boolean.class, false);
     }
 
     public void applyOptions(Entity customMob) {
@@ -33,7 +33,7 @@ public class SkeletonHorse extends CustomMobOption {
     }
 
     public void resetOptions() {
-
+        setOption(SKELETON_TRAP, null);
     }
 
     public List<ItemStack> getOptionItems() {
@@ -48,7 +48,7 @@ public class SkeletonHorse extends CustomMobOption {
         switch(option.toLowerCase()) {
             case "trapped": {
                 this.trapped = !trapped;
-                customMob.getCustomMobConfiguration().setSkeletonTrap(trapped);
+                setOption(SKELETON_TRAP, trapped);
                 return getOptionItemStack(getTrappedItem(), false, false);
             }
         }
@@ -56,7 +56,7 @@ public class SkeletonHorse extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return false;
+        return org.bukkit.entity.SkeletonHorse.class.isAssignableFrom(entityType.getEntityClass());
     }
 
     public CustomMobsItem getTrappedItem() {

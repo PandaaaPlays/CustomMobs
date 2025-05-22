@@ -1,5 +1,6 @@
 package ca.pandaaa.custommobs.custommobs.CustomEffects;
 
+import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects.CustomEffectOptionsGUI;
@@ -15,11 +16,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Explosion extends CustomMobCustomEffect {
+
+    /**
+     * Determines the strength (size) of the explosion created by the CustomMob upon trigger of this
+     * custom effect.
+     */
+    private static final String EXPLOSION_STRENGTH = "custom-effects.explosion.explosion-strength";
     private int explosionStrength;
 
-    public Explosion(boolean enabled, int explosionStrength) {
-        this.enabled = enabled;
-        this.explosionStrength = explosionStrength;
+    public Explosion(CustomMobConfiguration mobConfiguration) {
+        super(mobConfiguration);
+        this.enabled = getCustomEffectStatus(this.getClass().getSimpleName());
+        this.explosionStrength = getCustomEffectOption(EXPLOSION_STRENGTH, Integer.class, 5);
         this.customEffectType = CustomEffectType.COOLDOWN;
     }
 
@@ -28,7 +36,7 @@ public class Explosion extends CustomMobCustomEffect {
     }
 
     public ItemStack modifyStatus(CustomMob customMob) {
-        customMob.getCustomMobConfiguration().setExplosionCustomEffect(this.enabled);
+        setCustomEffectStatus(this.getClass().getSimpleName());
         if(this.enabled)
             explosionStrength = 5;
         return getCustomEffectItem();
@@ -39,11 +47,11 @@ public class Explosion extends CustomMobCustomEffect {
             case "explosionstrength": {
                 if(clickType.isRightClick()) {
                     this.explosionStrength = 5;
-                    customMob.getCustomMobConfiguration().setExplosionCustomEffectExplosionStrength(explosionStrength);
+                    setCustomEffectOption(EXPLOSION_STRENGTH, this.explosionStrength);
                 } else {
                     new IntegerGUI("Explosion strength", false, 1, 100, (value) -> {
                         this.explosionStrength = value;
-                        customMob.getCustomMobConfiguration().setExplosionCustomEffectExplosionStrength(explosionStrength);
+                        setCustomEffectOption(EXPLOSION_STRENGTH, this.explosionStrength);
                         new CustomEffectOptionsGUI(customMob, this, getOptionsItems()).openInventory(clicker);
                     }).openInventory(clicker, explosionStrength);
                 }

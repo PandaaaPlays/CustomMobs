@@ -29,8 +29,8 @@ public class Villager extends CustomMobOption {
 
     public Villager(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
-        this.villagerType = villagerType;
-        this.villagerProfession = villagerProfession;
+        this.villagerType = getOption(VILLAGER_TYPE, Registry.VILLAGER_TYPE);
+        this.villagerProfession = getOption(VILLAGER_PROFESSION, Registry.VILLAGER_PROFESSION);
     }
 
     public void applyOptions(Entity customMob) {
@@ -47,7 +47,8 @@ public class Villager extends CustomMobOption {
 
     @Override
     public void resetOptions() {
-
+        setOption(VILLAGER_TYPE, null);
+        setOption(VILLAGER_PROFESSION, null);
     }
 
     public List<ItemStack> getOptionItems() {
@@ -72,13 +73,13 @@ public class Villager extends CustomMobOption {
                     else
                         this.villagerType = villagerTypes.get(villagerTypes.indexOf(villagerType) + 1);
                 }
-                customMob.getCustomMobConfiguration().setVillagerType(villagerType);
+                setOption(VILLAGER_TYPE, villagerType != null ? villagerType.toString() : null);
                 return getOptionItemStack(getVillagerTypeItem(), true, true);
             }
 
             case "villagerprofession": {
                 if(clickType.isRightClick()) {
-                    this.villagerProfession = org.bukkit.entity.Villager.Profession.NONE;
+                    this.villagerProfession = null;
                 } else {
                     List<org.bukkit.entity.Villager.Profession> villagerProfessions = Registry.VILLAGER_PROFESSION.stream().toList();
 
@@ -87,7 +88,7 @@ public class Villager extends CustomMobOption {
                     else
                         this.villagerProfession = villagerProfessions.get(villagerProfessions.indexOf(villagerProfession) + 1);
                 }
-                customMob.getCustomMobConfiguration().setVillagerProfession(villagerProfession);
+                setOption(VILLAGER_PROFESSION, villagerProfession != null ? villagerProfession.toString() : null);
                 return getOptionItemStack(getVillagerProfessionItem(), true, true);
             }
         }
@@ -95,7 +96,7 @@ public class Villager extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return false;
+        return org.bukkit.entity.Villager.class.isAssignableFrom(entityType.getEntityClass());
     }
 
     public CustomMobsItem getVillagerTypeItem() {

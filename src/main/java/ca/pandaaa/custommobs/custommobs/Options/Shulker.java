@@ -17,12 +17,16 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Shulker extends CustomMobOption {
+    /**
+     * Determines the dye color of the shulker CustomMob's shell. If left unset, the color will
+     * be the purple-ish (default) one.
+     */
     private static final String SHULKER_COLOR = "mob.shulker-color";
     private DyeColor color;
 
     public Shulker(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
-        this.color = color;
+        this.color = getOption(SHULKER_COLOR, DyeColor.class);
     }
 
     public void applyOptions(Entity customMob) {
@@ -35,7 +39,7 @@ public class Shulker extends CustomMobOption {
 
     @Override
     public void resetOptions() {
-
+        setOption(SHULKER_COLOR, null);
     }
 
     public List<ItemStack> getOptionItems() {
@@ -59,7 +63,7 @@ public class Shulker extends CustomMobOption {
                     else
                         this.color = colors.get(colors.indexOf(color) + 1);
                 }
-                customMob.getCustomMobConfiguration().setShulkerColor(color);
+                setOption(SHULKER_COLOR, this.color != null ? this.color.name() : null);
                 return getOptionItemStack(getShulkerColorItem(), true, true);
             }
         }
@@ -67,7 +71,7 @@ public class Shulker extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return false;
+        return org.bukkit.entity.Shulker.class.isAssignableFrom(entityType.getEntityClass());
     }
 
     public CustomMobsItem getShulkerColorItem() {

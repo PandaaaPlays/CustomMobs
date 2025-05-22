@@ -56,7 +56,6 @@ public class CustomMobs extends JavaPlugin {
         plugin = this;
 
         this.sendStartedMessage();
-        this.generateEntityTypesJson();
 
         ConfigurationSerialization.registerClass(DropMessage.class, "ca.pandaaa.custommobs.custommobs.Messages.DropMessage");
         ConfigurationSerialization.registerClass(SpawnDeathMessage.class, "ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage");
@@ -233,7 +232,7 @@ public class CustomMobs extends JavaPlugin {
         }
     }
 
-    private void generateEntityTypesJson() {
+    public void generateEntityTypesJson() {
         Map<String, List<String>> entityTypeOptions = new HashMap<>();
 
         for (EntityType type : EntityType.values()) {

@@ -16,12 +16,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Slime extends CustomMobOption {
+    /**
+     * Integer value indicating the size of the slime CustomMob (affects health and split count).
+     * @minimum 0
+     * @maximum 126
+     */
     private static final String SLIME_SIZE = "mob.slime-size";
     private Integer size;
 
     public Slime(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
-        this.size = size;
+        this.size = getOption(SLIME_SIZE, Integer.class);
     }
 
     public void applyOptions(Entity customMob) {
@@ -34,7 +39,7 @@ public class Slime extends CustomMobOption {
 
     @Override
     public void resetOptions() {
-
+        setOption(SLIME_SIZE, null);
     }
 
     public List<ItemStack> getOptionItems() {
@@ -49,11 +54,11 @@ public class Slime extends CustomMobOption {
             case "slimesize": {
                 if (clickType.isRightClick()) {
                     this.size = null;
-                    customMob.getCustomMobConfiguration().setSlimeSize(size);
+                    setOption(SLIME_SIZE, size);
                 } else {
                     new IntegerGUI("Slime size", false,0, 126, (value) -> {
                         this.size = value;
-                        customMob.getCustomMobConfiguration().setSlimeSize(size);
+                        setOption(SLIME_SIZE, size);
                         new OptionsGUI(customMob).openInventory(clicker, 1);
                     }).openInventory(clicker, size == null ? 0 : size);
                 }
@@ -64,7 +69,7 @@ public class Slime extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return false;
+        return org.bukkit.entity.Slime.class.isAssignableFrom(entityType.getEntityClass());
     }
 
     public CustomMobsItem getSlimeSizeItem() {

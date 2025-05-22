@@ -65,7 +65,7 @@ public class Axolotl extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return entityType.getEntityClass() == org.bukkit.entity.Axolotl.class;
+        return org.bukkit.entity.Axolotl.class.isAssignableFrom(entityType.getEntityClass());
     }
 
     public CustomMobsItem getAxolotlVariantItem() {

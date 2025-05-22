@@ -40,7 +40,10 @@ public class Commands implements CommandExecutor {
 
             switch (args[0].toLowerCase()) {
                 case "test":
-                    //
+                    if(sender.getName().equalsIgnoreCase("PandaaaPlays"))
+                        CustomMobs.getPlugin().generateEntityTypesJson();
+                    else
+                        sendUnknownCommandMessage(sender);
                     break;
                 case "reload":
                     reloadPlugin(sender);

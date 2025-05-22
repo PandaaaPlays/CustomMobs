@@ -39,9 +39,9 @@ public class Creeper extends CustomMobOption {
 
     public Creeper(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
-        this.explosionCooldown = explosionCooldown;
-        this.explosionRadius = explosionRadius;
-        this.charged = charged;
+        this.explosionCooldown = getOption(EXPLOSION_COOLDOWN, Integer.class, 30);
+        this.explosionRadius = getOption(EXPLOSION_RADIUS, Integer.class, 3);
+        this.charged = getOption(CHARGED_CREEPER, Boolean.class, false);
     }
 
     public void applyOptions(Entity customMob) {
@@ -55,7 +55,9 @@ public class Creeper extends CustomMobOption {
 
     @Override
     public void resetOptions() {
-
+        setOption(EXPLOSION_COOLDOWN, null);
+        setOption(EXPLOSION_RADIUS, null);
+        setOption(CHARGED_CREEPER, null);
     }
 
     public List<ItemStack> getOptionItems() {
@@ -74,11 +76,11 @@ public class Creeper extends CustomMobOption {
             case "explosioncooldown": {
                 if(clickType.isRightClick()) {
                     this.explosionCooldown = 30;
-                    customMob.getCustomMobConfiguration().setExplosionCooldown(explosionCooldown);
+                    setOption(EXPLOSION_COOLDOWN, explosionCooldown);
                 } else {
                     new IntegerGUI("Explosion cooldown", false, 0, 1200, (value) -> {
                         this.explosionCooldown = value;
-                        customMob.getCustomMobConfiguration().setExplosionCooldown(explosionCooldown);
+                        setOption(EXPLOSION_COOLDOWN, explosionCooldown);
                         new OptionsGUI(customMob).openInventory(clicker, 1);
                     }).openInventory(clicker, explosionCooldown);
                 }
@@ -88,11 +90,11 @@ public class Creeper extends CustomMobOption {
             case "explosionradius": {
                 if(clickType.isRightClick()) {
                     this.explosionRadius = charged ? 6 : 3;
-                    customMob.getCustomMobConfiguration().setExplosionRadius(explosionRadius);
+                    setOption(EXPLOSION_RADIUS, explosionRadius);
                 } else {
                     new IntegerGUI("Explosion radius", false, 0, 128, (value) -> {
                         this.explosionRadius = value;
-                        customMob.getCustomMobConfiguration().setExplosionRadius(explosionRadius);
+                        setOption(EXPLOSION_RADIUS, explosionRadius);
                         new OptionsGUI(customMob).openInventory(clicker, 1);
                     }).openInventory(clicker, explosionRadius);
                 }
@@ -101,7 +103,7 @@ public class Creeper extends CustomMobOption {
 
             case "charged": {
                 this.charged = !charged;
-                customMob.getCustomMobConfiguration().setChargedCreeper(charged);
+                setOption(CHARGED_CREEPER, charged);
                 return getOptionItemStack(getChargedItem(), false, false);
             }
 
@@ -110,7 +112,7 @@ public class Creeper extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return false;
+        return org.bukkit.entity.Creeper.class.isAssignableFrom(entityType.getEntityClass());
     }
 
     public CustomMobsItem getExplosionCooldownItem() {

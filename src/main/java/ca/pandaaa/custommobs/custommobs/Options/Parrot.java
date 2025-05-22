@@ -24,7 +24,7 @@ public class Parrot extends CustomMobOption {
 
     public Parrot(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
-        this.parrotVariant = parrotVariant;
+        this.parrotVariant = getOption(PARROT_VARIANT, org.bukkit.entity.Parrot.Variant.class);
     }
 
     public void applyOptions(Entity customMob) {
@@ -37,7 +37,7 @@ public class Parrot extends CustomMobOption {
 
     @Override
     public void resetOptions() {
-
+        setOption(PARROT_VARIANT, null);
     }
 
     public List<ItemStack> getOptionItems() {
@@ -61,7 +61,7 @@ public class Parrot extends CustomMobOption {
                     else
                         this.parrotVariant = parrotVariants.get(parrotVariants.indexOf(parrotVariant) + 1);
                 }
-                customMob.getCustomMobConfiguration().setParrotVariant(parrotVariant);
+                setOption(PARROT_VARIANT, parrotVariant != null ? this.parrotVariant.toString() : null);
                 return getOptionItemStack(getParrotVariantItem(), true, true);
             }
         }
@@ -69,7 +69,7 @@ public class Parrot extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return false;
+        return org.bukkit.entity.Parrot.class.isAssignableFrom(entityType.getEntityClass());
     }
 
     public CustomMobsItem getParrotVariantItem() {

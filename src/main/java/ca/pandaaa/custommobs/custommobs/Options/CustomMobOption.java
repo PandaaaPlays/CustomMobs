@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 // Children of CustomMobOption must implement the isApplicable method for the plugin to work properly.
 public abstract class CustomMobOption {
@@ -65,6 +66,8 @@ public abstract class CustomMobOption {
         try {
             if (type.isEnum())
                 return (T) Enum.valueOf((Class<? extends Enum>) type, mobConfiguration.getFileConfiguration().getString(configurationPath));
+            if (type == UUID.class)
+                return type.cast(UUID.fromString(mobConfiguration.getFileConfiguration().getString(configurationPath)));
             if (type == Boolean.class)
                 return type.cast(mobConfiguration.getFileConfiguration().getBoolean(configurationPath));
             if (type == String.class)

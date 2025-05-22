@@ -25,7 +25,7 @@ public class Frog extends CustomMobOption {
 
     public Frog(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
-        this.frogVariant = frogVariant;
+        this.frogVariant = getOption(FROG_VARIANT, Registry.FROG_VARIANT);
     }
 
     public void applyOptions(Entity customMob) {
@@ -38,7 +38,7 @@ public class Frog extends CustomMobOption {
 
     @Override
     public void resetOptions() {
-
+        setOption(FROG_VARIANT, null);
     }
 
     public List<ItemStack> getOptionItems() {
@@ -62,7 +62,7 @@ public class Frog extends CustomMobOption {
                     else
                         this.frogVariant = frogVariants.get(frogVariants.indexOf(frogVariant) + 1);
                 }
-                customMob.getCustomMobConfiguration().setFrogVariant(frogVariant);
+                setOption(FROG_VARIANT, frogVariant != null ? frogVariant.toString() : null);
                 return getOptionItemStack(getFrogVariantItem(), true, true);
             }
         }
@@ -70,7 +70,7 @@ public class Frog extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return false;
+        return org.bukkit.entity.Frog.class.isAssignableFrom(entityType.getEntityClass());
     }
 
     public CustomMobsItem getFrogVariantItem() {

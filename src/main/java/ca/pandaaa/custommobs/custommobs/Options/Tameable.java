@@ -33,8 +33,8 @@ public class Tameable extends CustomMobOption {
 
     public Tameable(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
-        this.owner = owner;
-        this.tamed = tamed;
+        this.owner = getOption(OWNER, UUID.class);
+        this.tamed = getOption(TAMED, Boolean.class, false);
     }
 
     public void applyOptions(Entity customMob) {
@@ -48,7 +48,8 @@ public class Tameable extends CustomMobOption {
 
     @Override
     public void resetOptions() {
-
+        setOption(OWNER, null);
+        setOption(TAMED, null);
     }
 
     public List<ItemStack> getOptionItems() {
@@ -66,13 +67,13 @@ public class Tameable extends CustomMobOption {
             case "owner": {
                 if(clickType.isRightClick()) {
                     this.owner = null;
-                    customMob.getCustomMobConfiguration().setOwner(null);
+                    setOption(OWNER, null);
                     return getOptionItemStack(getOwnerItem(), true, false);
                 } else {
                     new PlayerGUI("Select player", (value) -> {
                         if(value != null) {
                             this.owner = value.getUniqueId();
-                            customMob.getCustomMobConfiguration().setOwner(owner);
+                            setOption(OWNER, this.owner.toString());
                         }
                         new OptionsGUI(customMob).openInventory((Player) clicker, 1);
                     }).openInventory(clicker, 1);
@@ -81,7 +82,7 @@ public class Tameable extends CustomMobOption {
 
             case "tamed": {
                 this.tamed = !tamed;
-                customMob.getCustomMobConfiguration().setTamed(tamed);
+                setOption(TAMED, this.tamed);
                 return getOptionItemStack(getTamedItem(), false, false);
             }
 
@@ -90,7 +91,7 @@ public class Tameable extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return false;
+        return org.bukkit.entity.Tameable.class.isAssignableFrom(entityType.getEntityClass());
     }
 
     public CustomMobsItem getOwnerItem() {

@@ -25,7 +25,7 @@ public class Chicken extends CustomMobOption {
 
     public Chicken(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
-        //this.chickenVariant = getOption(CHICKEN_VARIANT, Registry.CHICKEN_VARIANT);
+        this.chickenVariant = getOption(CHICKEN_VARIANT, Registry.CHICKEN_VARIANT);
     }
 
     public void applyOptions(Entity customMob) {
@@ -63,7 +63,7 @@ public class Chicken extends CustomMobOption {
                     else
                         this.chickenVariant = chickenVariants.get(chickenVariants.indexOf(chickenVariant) + 1);
                 }
-                setOption(CHICKEN_VARIANT, chickenVariant.getKeyOrNull().getKey());
+                setOption(CHICKEN_VARIANT, chickenVariant != null ? chickenVariant.getKeyOrNull().getKey() : null);
                 return getOptionItemStack(getChickenVariantItem(), true, true);
             }
         }
@@ -71,7 +71,7 @@ public class Chicken extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return Utils.isVersionAtLeast("1.21.5") && entityType.getEntityClass() == org.bukkit.entity.Chicken.class;
+        return Utils.isVersionAtLeast("1.21.5") && org.bukkit.entity.Chicken.class.isAssignableFrom(entityType.getEntityClass());
     }
 
     public CustomMobsItem getChickenVariantItem() {

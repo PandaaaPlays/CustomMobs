@@ -14,12 +14,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Sittable extends CustomMobOption {
+    /**
+     * Determines whether the CustomMob entity is currently in a sitting state.
+     */
     private static final String SITTING = "mob.sitting";
     private boolean sitting;
 
     public Sittable(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
-        this.sitting = sitting;
+        this.sitting = getOption(SITTING, Boolean.class, false);
     }
 
     public void applyOptions(Entity customMob) {
@@ -31,7 +34,7 @@ public class Sittable extends CustomMobOption {
 
     @Override
     public void resetOptions() {
-
+        setOption(SITTING, null);
     }
 
     public List<ItemStack> getOptionItems() {
@@ -46,7 +49,7 @@ public class Sittable extends CustomMobOption {
         switch(option.toLowerCase()) {
             case "sitting": {
                 this.sitting = !sitting;
-                customMob.getCustomMobConfiguration().setSitting(sitting);
+                setOption(SITTING, sitting);
                 return getOptionItemStack(getSittingItem(), false, false);
             }
         }
@@ -54,7 +57,7 @@ public class Sittable extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return false;
+        return org.bukkit.entity.Sittable.class.isAssignableFrom(entityType.getEntityClass());
     }
 
     public CustomMobsItem getSittingItem() {

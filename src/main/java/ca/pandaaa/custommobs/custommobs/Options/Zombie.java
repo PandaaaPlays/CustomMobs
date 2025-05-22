@@ -23,7 +23,7 @@ public class Zombie extends CustomMobOption {
 
     public Zombie(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
-        this.canBreakDoors = canBreakDoors;
+        this.canBreakDoors = getOption(CAN_BREAK_DOORS, Boolean.class, false);
     }
 
     public void applyOptions(Entity customMob) {
@@ -35,7 +35,7 @@ public class Zombie extends CustomMobOption {
 
     @Override
     public void resetOptions() {
-
+        setOption(CAN_BREAK_DOORS, null);
     }
 
     public List<ItemStack> getOptionItems() {
@@ -50,7 +50,7 @@ public class Zombie extends CustomMobOption {
         switch(option.toLowerCase()) {
             case "canbreakdoors": {
                 this.canBreakDoors = !canBreakDoors;
-                customMob.getCustomMobConfiguration().setCanBreakDoors(canBreakDoors);
+                setOption(CAN_BREAK_DOORS, this.canBreakDoors);
                 return getOptionItemStack(getCanBreakDoorsItem(), false, false);
             }
         }
@@ -58,7 +58,7 @@ public class Zombie extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return false;
+        return org.bukkit.entity.Zombie.class.isAssignableFrom(entityType.getEntityClass());
     }
 
     public CustomMobsItem getCanBreakDoorsItem() {

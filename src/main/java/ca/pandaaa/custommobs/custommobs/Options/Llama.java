@@ -26,7 +26,7 @@ public class Llama extends CustomMobOption {
 
     public Llama(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
-        this.llamaColor = llamaColor;
+        this.llamaColor = getOption(LLAMA_COLOR, org.bukkit.entity.Llama.Color.class);
     }
 
     public void applyOptions(Entity customMob) {
@@ -39,7 +39,7 @@ public class Llama extends CustomMobOption {
 
     @Override
     public void resetOptions() {
-
+        setOption(LLAMA_COLOR, null);
     }
 
     public List<ItemStack> getOptionItems() {
@@ -63,7 +63,7 @@ public class Llama extends CustomMobOption {
                     else
                         this.llamaColor = llamaColors.get(llamaColors.indexOf(llamaColor) + 1);
                 }
-                customMob.getCustomMobConfiguration().setLlamaColor(llamaColor);
+                setOption(LLAMA_COLOR, this.llamaColor != null ? this.llamaColor.name() : null);
                 return getOptionItemStack(getLlamaColorItem(), true, true);
             }
         }
@@ -71,7 +71,7 @@ public class Llama extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return false;
+        return org.bukkit.entity.Llama.class.isAssignableFrom(entityType.getEntityClass());
     }
 
     public CustomMobsItem getLlamaColorItem() {

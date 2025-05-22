@@ -18,26 +18,28 @@ import java.util.List;
 
 public class Horse extends CustomMobOption {
     /**
-     *
+     * Specifies the base color of the horse CustomMob. If left unset, the color will
+     * be chosen randomly.
      */
     private static final String HORSE_COLOR = "mob.horse-color";
     private org.bukkit.entity.Horse.Color horseColor;
     /**
-     *
+     * Specifies the pattern or markings of the horse CustomMob. If left unset, it will
+     * be chosen randomly.
      */
     private static final String HORSE_STYLE = "mob.horse-style";
     private org.bukkit.entity.Horse.Style horseStyle;
     /**
-     *
+     * Represents the armor item equipped on the horse CustomMob.
      */
     private static final String HORSE_ARMOR = "mob.horse-armor";
     private Material horseArmor;
 
     public Horse(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
-        this.horseColor = horseColor;
-        this.horseStyle = horseStyle;
-        this.horseArmor = horseArmor;
+        this.horseColor = getOption(HORSE_COLOR, org.bukkit.entity.Horse.Color.class);
+        this.horseStyle = getOption(HORSE_STYLE, org.bukkit.entity.Horse.Style.class);
+        this.horseArmor = getOption(HORSE_ARMOR, Material.class);
     }
 
     public void applyOptions(Entity customMob) {
@@ -54,7 +56,9 @@ public class Horse extends CustomMobOption {
 
     @Override
     public void resetOptions() {
-
+        setOption(HORSE_COLOR, null);
+        setOption(HORSE_STYLE, null);
+        setOption(HORSE_ARMOR, null);
     }
 
     public List<ItemStack> getOptionItems() {
@@ -80,7 +84,7 @@ public class Horse extends CustomMobOption {
                     else
                         this.horseColor = horseColors.get(horseColors.indexOf(horseColor) + 1);
                 }
-                customMob.getCustomMobConfiguration().setHorseColor(horseColor);
+                setOption(HORSE_COLOR, this.horseColor != null ? this.horseColor.name() : null);
                 return getOptionItemStack(getHorseColorItem(), true, true);
             }
 
@@ -95,7 +99,7 @@ public class Horse extends CustomMobOption {
                     else
                         this.horseStyle = horseStyles.get(horseStyles.indexOf(horseStyle) + 1);
                 }
-                customMob.getCustomMobConfiguration().setHorseStyle(horseStyle);
+                setOption(HORSE_STYLE, this.horseStyle != null ? this.horseStyle.name() : null);
                 return getOptionItemStack(getHorseStyleItem(), true, true);
             }
 
@@ -113,7 +117,7 @@ public class Horse extends CustomMobOption {
                     else
                         this.horseArmor = armors.get(armors.indexOf(horseArmor) + 1);
                 }
-                customMob.getCustomMobConfiguration().setHorseArmor(horseArmor);
+                setOption(HORSE_ARMOR, this.horseArmor != null ? this.horseArmor.toString() : null);
 
                 if(horseArmor != null) {
                     customMob.addDrop(new Drop(new ItemStack(horseArmor), 1, "HorseArmor"));
@@ -128,7 +132,7 @@ public class Horse extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return false;
+        return org.bukkit.entity.Horse.class.isAssignableFrom(entityType.getEntityClass());
     }
 
     public CustomMobsItem getHorseColorItem() {

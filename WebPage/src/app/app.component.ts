@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {CustomMobsNavbar} from './custommobs-navbar/custommobs-navbar.component';
 import {NavigationEnd, Router, RouterOutlet} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
 import {OptionsService} from './services/options.service';
 import {Title} from '@angular/platform-browser';
 import {filter} from 'rxjs';
@@ -15,7 +14,6 @@ import {filter} from 'rxjs';
 })
 export class AppComponent implements OnInit {
   constructor(
-    private http: HttpClient,
     private optionsService: OptionsService,
     private titleService: Title,
     private router: Router

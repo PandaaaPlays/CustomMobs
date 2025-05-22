@@ -5,15 +5,14 @@ import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
+import org.bukkit.Registry;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Cow extends CustomMobOption {
@@ -26,33 +25,25 @@ public class Cow extends CustomMobOption {
 
     public Cow(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
-        this.cowVariant = cowVariant;
+        this.cowVariant = getOption(COW_VARIANT, Registry.COW_VARIANT);
     }
 
     public void applyOptions(Entity customMob) {
         if(!(customMob instanceof org.bukkit.entity.Cow))
             return;
-        if(cowVariant != null) {
-            try {
-                org.bukkit.entity.Cow cow = (org.bukkit.entity.Cow) customMob;
-                cow.getClass().getMethod("setVariant", org.bukkit.entity.Cow.Variant.class)
-                        .invoke(cow, cowVariant);
-            } catch (Exception e) {
-            }
-        }
+        if(cowVariant != null)
+            ((org.bukkit.entity.Cow) customMob).setVariant(cowVariant);
     }
 
     @Override
     public void resetOptions() {
-
+        setOption(COW_VARIANT, null);
     }
 
     public List<ItemStack> getOptionItems() {
         List<ItemStack> items = new ArrayList<>();
 
-        if (!getCowVariants().isEmpty()) {
-            items.add(getOptionItemStack(getCowVariantItem(), true, true));
-        }
+        items.add(getOptionItemStack(getCowVariantItem(), true, true));
 
         return items;
     }
@@ -63,7 +54,7 @@ public class Cow extends CustomMobOption {
                 if (clickType.isRightClick()) {
                     this.cowVariant = null;
                 } else {
-                    List<org.bukkit.entity.Cow.Variant> cowVariants = getCowVariants();
+                    List<org.bukkit.entity.Cow.Variant> cowVariants = Registry.COW_VARIANT.stream().toList();
                     if(cowVariants.isEmpty())
                         return null;
 
@@ -72,7 +63,7 @@ public class Cow extends CustomMobOption {
                     else
                         this.cowVariant = cowVariants.get(cowVariants.indexOf(cowVariant) + 1);
                 }
-                customMob.getCustomMobConfiguration().setCowVariant(cowVariant);
+                setOption(COW_VARIANT, cowVariant != null ? cowVariant.getKeyOrNull().getKey() : null);
                 return getOptionItemStack(getCowVariantItem(), true, true);
             }
         }
@@ -80,28 +71,7 @@ public class Cow extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return false;
-    }
-
-    private List<org.bukkit.entity.Cow.Variant> getCowVariants() {
-        try {
-            Class<?> registryClass = Class.forName("org.bukkit.Registry");
-            Field cowVariantField = registryClass.getDeclaredField("COW_VARIANT");
-            Object registry = cowVariantField.get(null);
-
-            if (registry instanceof Iterable<?>) {
-                List<org.bukkit.entity.Cow.Variant> variants = new ArrayList<>();
-                for (Object obj : (Iterable<?>) registry) {
-                    if (obj instanceof org.bukkit.entity.Cow.Variant) {
-                        variants.add((org.bukkit.entity.Cow.Variant) obj);
-                    }
-                }
-                return variants;
-            }
-        } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
-            // Registry or COW_VARIANT doesn't exist in this version...
-        }
-        return Collections.emptyList();
+        return Utils.isVersionAtLeast("1.21.5") && org.bukkit.entity.Cow.class.isAssignableFrom(entityType.getEntityClass());
     }
 
     public CustomMobsItem getCowVariantItem() {

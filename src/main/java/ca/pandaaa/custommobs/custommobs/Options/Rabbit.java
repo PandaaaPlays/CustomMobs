@@ -16,12 +16,16 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Rabbit extends CustomMobOption {
+    /**
+     * Sets the appearance or breed of the rabbit CustomMob (e.g., black, brown, white, Toast).
+     * If left unset, the type will be chosen randomly.
+     */
     private static final String RABBIT_TYPE = "mob.rabbit-type";
     private org.bukkit.entity.Rabbit.Type rabbitType;
 
     public Rabbit(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
-        this.rabbitType = rabbitType;
+        this.rabbitType = getOption(RABBIT_TYPE, org.bukkit.entity.Rabbit.Type.class);
     }
 
     public void applyOptions(Entity customMob) {
@@ -34,7 +38,7 @@ public class Rabbit extends CustomMobOption {
 
     @Override
     public void resetOptions() {
-
+        setOption(RABBIT_TYPE, null);
     }
 
     public List<ItemStack> getOptionItems() {
@@ -58,7 +62,7 @@ public class Rabbit extends CustomMobOption {
                     else
                         this.rabbitType = rabbitTypes.get(rabbitTypes.indexOf(rabbitType) + 1);
                 }
-                customMob.getCustomMobConfiguration().setRabbitType(rabbitType);
+                setOption(RABBIT_TYPE, this.rabbitType != null ? this.rabbitType.toString() : null);
                 return getOptionItemStack(getRabbitTypeItem(), true, true);
             }
         }
@@ -66,7 +70,7 @@ public class Rabbit extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return false;
+        return org.bukkit.entity.Rabbit.class.isAssignableFrom(entityType.getEntityClass());
     }
 
     public CustomMobsItem getRabbitTypeItem() {

@@ -19,13 +19,13 @@ import java.util.List;
 
 public class Cat extends CustomMobOption {
     /**
-     * Sets the dye color of the wolf CustomMob's color. The wolf needs to be tamed in order to have the collar
-     * rendered (see Tameable option).
+     * Determines the breed or appearance of the cat CustomMob (e.g., tabby, siamese, black).
      */
     private static final String CAT_TYPE = "mob.cat-type";
     private org.bukkit.entity.Cat.Type catType;
     /**
-     * Determines the breed or appearance of the cat CustomMob (e.g., tabby, siamese, black).
+     * Sets the dye color of the cat CustomMob's collar. The cat needs to be tamed and have an owner
+     * in order to have the collar rendered (see Tameable option).
      */
     private static final String COLLAR_COLOR = "mob.collar-color";
     private DyeColor collarColor;
@@ -43,7 +43,7 @@ public class Cat extends CustomMobOption {
         if(catType != null)
             ((org.bukkit.entity.Cat) customMob).setCatType(catType);
         if(collarColor != null)
-            ((org.bukkit.entity.Cat) customMob).setCollarColor(collarColor); // TODO MAKE SURE THIS WORKS
+            ((org.bukkit.entity.Cat) customMob).setCollarColor(collarColor);
     }
 
     public void resetOptions() {
@@ -73,7 +73,7 @@ public class Cat extends CustomMobOption {
                     else
                         this.collarColor = colors.get(colors.indexOf(collarColor) + 1);
                 }
-                setOption(COLLAR_COLOR, collarColor.name());
+                setOption(COLLAR_COLOR, collarColor != null ? collarColor.name() : null);
                 return getOptionItemStack(getCollarColorItem(), true, true);
             }
 
@@ -88,7 +88,7 @@ public class Cat extends CustomMobOption {
                     else
                         this.catType = catTypes.get(catTypes.indexOf(catType) + 1);
                 }
-                setOption(CAT_TYPE, catType.toString());
+                setOption(CAT_TYPE, catType != null ? catType.toString() : null);
                 return getOptionItemStack(getCatTypeItem(), true, true);
             }
         }
@@ -96,7 +96,7 @@ public class Cat extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return entityType.getEntityClass() == org.bukkit.entity.Cat.class;
+        return org.bukkit.entity.Cat.class.isAssignableFrom(entityType.getEntityClass());
     }
 
     public CustomMobsItem getCollarColorItem() {

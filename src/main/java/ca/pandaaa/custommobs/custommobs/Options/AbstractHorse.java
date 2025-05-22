@@ -17,8 +17,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AbstractHorse extends CustomMobOption {
+    /**
+     * Determines how high the horse CustomMob can jump. The default value is 0.7. When left
+     * unset, the jump strength will be randomly chosen.
+     * @minimum 0
+     * @maximum 2
+     */
     private static final String JUMP_STRENGTH = "mob.jump-strength";
     private Double jumpStrength;
+    /**
+     *  Indicates whether the horse is equipped with a saddle.
+     */
     private static final String SADDLE = "mob.saddle";
     private boolean saddle;
 

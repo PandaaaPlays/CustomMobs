@@ -19,13 +19,15 @@ public class PigZombie extends CustomMobOption {
     /**
      * Indicates the anger duration (in ticks) of a zombified piglin, which states for how long the zombified piglin
      * will try to attack the player.
+     * @minimum 0
+     * @maximum 72000
      */
     private static final String ZOMBIFIED_PIGLIN_ANGER = "mob.zombified-piglin-anger";
     private int anger;
 
     public PigZombie(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
-        this.anger = anger;
+        this.anger = getOption(ZOMBIFIED_PIGLIN_ANGER, Integer.class, 0);
     }
 
     public void applyOptions(Entity customMob) {
@@ -37,7 +39,7 @@ public class PigZombie extends CustomMobOption {
 
     @Override
     public void resetOptions() {
-
+        setOption(ZOMBIFIED_PIGLIN_ANGER, null);
     }
 
     public List<ItemStack> getOptionItems() {
@@ -54,11 +56,11 @@ public class PigZombie extends CustomMobOption {
             case "anger": {
                 if (clickType.isRightClick()) {
                     this.anger = 0;
-                    customMob.getCustomMobConfiguration().setZombifiedPiglinAnger(anger);
+                    setOption(ZOMBIFIED_PIGLIN_ANGER, this.anger);
                 } else {
                     new IntegerGUI("Anger", false, 0, 72000, (value) -> {
                         this.anger = value;
-                        customMob.getCustomMobConfiguration().setZombifiedPiglinAnger(anger);
+                        setOption(ZOMBIFIED_PIGLIN_ANGER, this.anger);
                         new OptionsGUI(customMob).openInventory(clicker, 1);
                     }).openInventory(clicker, anger);
                 }
@@ -69,7 +71,7 @@ public class PigZombie extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return false;
+        return org.bukkit.entity.PigZombie.class.isAssignableFrom(entityType.getEntityClass());
     }
 
     public CustomMobsItem getAngerItem() {

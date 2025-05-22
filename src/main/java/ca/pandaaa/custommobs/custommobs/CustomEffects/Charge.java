@@ -1,5 +1,6 @@
 package ca.pandaaa.custommobs.custommobs.CustomEffects;
 
+import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
@@ -13,8 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Charge extends CustomMobCustomEffect {
-    public Charge(boolean enabled) {
-        this.enabled = enabled;
+
+    public Charge(CustomMobConfiguration mobConfiguration) {
+        super(mobConfiguration);
+        this.enabled = getCustomEffectStatus(this.getClass().getSimpleName());
         this.customEffectType = CustomEffectType.ON_IMPACT;
     }
 
@@ -26,7 +29,7 @@ public class Charge extends CustomMobCustomEffect {
     }
 
     public ItemStack modifyStatus(CustomMob customMob) {
-        customMob.getCustomMobConfiguration().setChargeCustomEffect(this.enabled);
+        setCustomEffectStatus(this.getClass().getSimpleName());
         return getCustomEffectItem();
     }
 

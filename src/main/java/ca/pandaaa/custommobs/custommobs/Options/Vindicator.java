@@ -14,12 +14,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Vindicator extends CustomMobOption {
+    /**
+     * Represents whether the vindicator CustomMob should attack almost all entities (as
+     * when vindicators are renamed "Johnny").
+     */
     private static final String JOHNNY_VANDICATOR = "mob.johnny-vandicator";
     private boolean johnny;
 
     public Vindicator(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
-        this.johnny = johnny;
+        this.johnny = getOption(JOHNNY_VANDICATOR, Boolean.class, false);
     }
 
     public void applyOptions(Entity customMob) {
@@ -31,7 +35,7 @@ public class Vindicator extends CustomMobOption {
 
     @Override
     public void resetOptions() {
-
+        setOption(JOHNNY_VANDICATOR, null);
     }
 
     public List<ItemStack> getOptionItems() {
@@ -46,7 +50,7 @@ public class Vindicator extends CustomMobOption {
         switch (option.toLowerCase()) {
             case "johnny": {
                 this.johnny = !johnny;
-                customMob.getCustomMobConfiguration().setJohnnyVindicator(johnny);
+                setOption(JOHNNY_VANDICATOR, johnny);
                 return getOptionItemStack(getJohnnyItem(), false, false);
             }
         }
@@ -54,7 +58,7 @@ public class Vindicator extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return false;
+        return org.bukkit.entity.Vindicator.class.isAssignableFrom(entityType.getEntityClass());
     }
 
     public CustomMobsItem getJohnnyItem() {
