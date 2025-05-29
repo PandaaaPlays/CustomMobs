@@ -34,9 +34,6 @@ no-permission: "&c&l[!] &cYou do not have enough permission to do this."
 # The message displayed when a command using coordinates was not used with valid coordinates.
 incorrect-coordinates: "&c&l[!] &cThe entered coordinates are incorrect. Make sure you are using numbers."
 
-# The message displayed when a CustomMob's custom effect is disabled and a player tries to edit it's options.
-disabled-custom-effect: "&c&l[!] &cEnable the current CustomMob's %custom-effect% to edit it's option(s)."
-
 # The message displayed when the configuration of the plugin is reloaded.
 plugin-reload: "&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &ePlugin Reloaded."
 

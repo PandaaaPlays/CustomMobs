@@ -319,7 +319,7 @@ public class EditGUI extends CustomMobsGUI {
         lore.add(Utils.applyFormat("&7&o(( Right-Click to delete (reset) the current item ))"));
         itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
-        return item;
+        return getMenuItem(item, true);
     }
 
     private ItemStack getArmorItem(ItemStack item, String armor) {
@@ -332,7 +332,7 @@ public class EditGUI extends CustomMobsGUI {
         lore.add(Utils.applyFormat("&7&o(( Right-Click to delete (reset) the current item ))"));
         itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
-        return item;
+        return getMenuItem(item, true);
     }
 
     private ItemStack getTypesItem(ItemStack item) {
@@ -344,7 +344,7 @@ public class EditGUI extends CustomMobsGUI {
         lore.add(Utils.applyFormat("&7&o(( Click to select the type of this CustomMob ))"));
         itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
-        return item;
+        return getMenuItem(item, true);
     }
 
     private ItemStack getOptionsItem(ItemStack item) {
@@ -355,7 +355,7 @@ public class EditGUI extends CustomMobsGUI {
         lore.add(Utils.applyFormat("&7&o(( Click to change the options of this CustomMob ))"));
         itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
-        return item;
+        return getMenuItem(item, true);
     }
 
     private ItemStack getRenameItem(ItemStack item) {
@@ -367,7 +367,7 @@ public class EditGUI extends CustomMobsGUI {
         lore.add(Utils.applyFormat("&7&o(( Click to rename this CustomMob ))"));
         itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
-        return item;
+        return getMenuItem(item, true);
     }
 
     private ItemStack getGiveItem(ItemStack item) {
@@ -380,7 +380,7 @@ public class EditGUI extends CustomMobsGUI {
         lore.add(Utils.applyFormat("&7&o(( Right-Click to delete (reset) the current item ))"));
         itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
-        return item;
+        return getMenuItem(item, true);
     }
 
     private ItemStack getDeleteItem(ItemStack item, boolean confirm) {
@@ -394,7 +394,7 @@ public class EditGUI extends CustomMobsGUI {
         lore.add(Utils.applyFormat("&c&l[!] &cThis will permanently delete this CustomMob."));
         itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
-        return item;
+        return getMenuItem(item, true);
     }
 
     private ItemStack getDropsItem(ItemStack item) {
@@ -405,7 +405,7 @@ public class EditGUI extends CustomMobsGUI {
         lore.add(Utils.applyFormat("&7&o(( Click to edit this CustomMob's drop(s) ))"));
         itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
-        return item;
+        return getMenuItem(item, true);
     }
 
     private ItemStack getSpawnerItem() {

@@ -1,5 +1,6 @@
 package ca.pandaaa.custommobs.custommobs;
 
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -55,7 +56,7 @@ public class PotionEffect implements ConfigurationSerializable {
     }
 
     public void apply(LivingEntity entity) {
-        new org.bukkit.potion.PotionEffect(type, duration, amplifier, ambient, particles).apply(entity);
+        new org.bukkit.potion.PotionEffect(type, duration * 20, amplifier, ambient, particles).apply(entity);
     }
 
     @Override

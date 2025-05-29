@@ -65,8 +65,4 @@ public class ConfigurationManager {
     public String getCustomEffectMessage(String className) {
         return customEffectConfiguration.getString(className.toLowerCase());
     }
-
-    public String getDisabledCustomEffectMessage(String customEffectName) {
-        return Utils.applyFormat(configuration.getString("disabled-custom-effect").replaceAll("%custom-effect%", customEffectName));
-    }
 }

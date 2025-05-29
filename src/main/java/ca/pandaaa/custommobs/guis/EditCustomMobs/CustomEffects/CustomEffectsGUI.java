@@ -3,8 +3,10 @@ package ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects;
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomEffects.CustomMobCustomEffect;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.EditGUI;
+import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -20,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomEffectsGUI extends CustomMobsGUI {
-
     private final List<ItemStack> customEffectsItems;
     private final CustomMob customMob;
     private final ItemStack previous;
@@ -72,7 +73,7 @@ public class CustomEffectsGUI extends CustomMobsGUI {
         inventory.setItem(46, filler);
         inventory.setItem(47, filler);
         inventory.setItem(48, filler);
-        inventory.setItem(49, filler);
+        inventory.setItem(49, getCooldownItem());
         inventory.setItem(50, filler);
         inventory.setItem(51, filler);
         inventory.setItem(52, filler);
@@ -113,6 +114,18 @@ public class CustomEffectsGUI extends CustomMobsGUI {
                     openInventory(clicker, page);
                 }
                 break;
+            case 49:
+                if(event.getClick().isRightClick()) {
+                    // TODO Tech debt, make sure nothing is hardocded like this, make sure everything are variables....
+                    customMob.setCustomEffectsCooldownDuration(5);
+                    inventory.setItem(49, getCooldownItem());
+                } else {
+                    new IntegerGUI("Cooldown duration", false, 3, 15000, (value) -> {
+                        customMob.setCustomEffectsCooldownDuration(value);
+                        new CustomEffectsGUI(customMob).openInventory(clicker, 1);
+                    }).setTimeGUI().openInventory(clicker, customMob.getCustomEffectsCooldownDuration());
+                }
+                break;
             case 53:
                 int page = Character.getNumericValue(name.charAt(name.indexOf('(') + 1));
                 openInventory(clicker, page);
@@ -124,19 +137,27 @@ public class CustomEffectsGUI extends CustomMobsGUI {
                         CustomMobCustomEffect customMobCustomEffect = customMob.getCustomMobCustomEffect(itemMeta.getPersistentDataContainer().get(key, PersistentDataType.STRING));
                         if(event.getClick().isRightClick()) {
                             customMobCustomEffect.toggle();
-                            event.setCurrentItem(getMenuItem(customMobCustomEffect.modifyStatus(customMob), true));
+                            event.setCurrentItem(getMenuItem(customMobCustomEffect.modifyStatus(), true));
                         } else {
-                            if(customMobCustomEffect.isEnabled()) {
-                                List<ItemStack> optionItems = customMobCustomEffect.getOptionsItems();
-                                if (optionItems != null && !optionItems.isEmpty())
-                                    new CustomEffectOptionsGUI(customMob, customMobCustomEffect, customMobCustomEffect.getOptionsItems()).openInventory(clicker);
-                            } else {
-                                clicker.sendMessage(CustomMobs.getPlugin().getCustomMobsManager().getConfigManager().getDisabledCustomEffectMessage(customMobCustomEffect.getClass().getSimpleName()));
-                            }
+                            List<ItemStack> optionItems = customMobCustomEffect.getOptionsItems();
+                            if (optionItems != null && !optionItems.isEmpty())
+                                new CustomEffectOptionsGUI(customMob, customMobCustomEffect, customMobCustomEffect.getOptionsItems()).openInventory(clicker);
                         }
                     }
                 }
                 break;
         }
+    }
+
+    private ItemStack getCooldownItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.CLOCK);
+        item.setName("&6&lCooldown duration");
+        item.addLore(
+                "&eDuration: &f" + Utils.getFormattedTime(customMob.getCustomEffectsCooldownDuration(), false, false),
+                "",
+                "&7&o(( Left-Click to change the cooldown in between 'Cooldown' effect(s) ))",
+                "&7&o(( Right-Click to reset the cooldown in between 'Cooldown' effect(s) ))"
+        );
+        return getMenuItem(item, true);
     }
 }

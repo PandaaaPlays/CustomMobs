@@ -33,6 +33,7 @@ public class CustomMob implements Listener {
     private final String customMobFileName;
     private HashMap<String, CustomMobOption> customMobOptions = new HashMap<>();
     private final HashMap<String, CustomMobCustomEffect> customMobCustomEffects = new HashMap<>();
+    private int customEffectsCooldownDuration;
     private ItemStack item;
     private ItemStack spawnerItem;
     private final Equipment equipment;
@@ -46,30 +47,21 @@ public class CustomMob implements Listener {
 
     public CustomMob(LocalDateTime creationDate,
                      EntityType entityType,
-                     String customMobFileName,
-                     ItemStack item,
-                     ItemStack spawnerItem,
-                     Equipment equipment,
-                     Spawner spawner,
-                     List<PotionEffect> potionEffects,
-                     List<Drop> drops,
-                     String name,
-                     List<Sound> sounds,
-                     List<SpawnDeathMessage> messages,
                      CustomMobConfiguration mobConfiguration) {
         this.creationDate = creationDate;
         this.entityType = entityType;
-        this.customMobFileName = customMobFileName;
-        this.item = item;
-        this.spawnerItem = spawnerItem;
-        this.equipment = equipment;
-        this.potionEffects = potionEffects;
-        this.spawner = spawner;
-        this.drops = drops;
-        this.name = name;
-        this.sounds = sounds;
-        this.messages = messages;
         this.mobConfiguration = mobConfiguration;
+        this.customMobFileName = mobConfiguration.getFileName();
+        this.item = mobConfiguration.getItem(CustomMobConfiguration.ITEM);
+        this.spawnerItem = mobConfiguration.getItem(CustomMobConfiguration.SPAWNER_ITEM);
+        this.equipment = mobConfiguration.getEquipment();
+        this.potionEffects = mobConfiguration.getPotionEffects();
+        this.spawner = mobConfiguration.getSpawner();
+        this.drops = mobConfiguration.getDrops();
+        this.name = mobConfiguration.getName();
+        this.sounds = mobConfiguration.getSounds();
+        this.messages = mobConfiguration.getMessages();
+        this.customEffectsCooldownDuration = mobConfiguration.getCustomEffectsCooldownDuration();
     }
 
     /**
@@ -164,6 +156,15 @@ public class CustomMob implements Listener {
 
     public Equipment getEquipment() {
         return equipment;
+    }
+
+    public int getCustomEffectsCooldownDuration() {
+        return customEffectsCooldownDuration;
+    }
+
+    public void setCustomEffectsCooldownDuration(int customEffectsCooldownDuration) {
+        mobConfiguration.setCustomEffectsCooldownDuration(customEffectsCooldownDuration);
+        this.customEffectsCooldownDuration = customEffectsCooldownDuration;
     }
 
     public List<Drop> getDrops() {
@@ -325,6 +326,69 @@ public class CustomMob implements Listener {
         return customMobOptions.get(optionName.toLowerCase());
     }
 
+    /* === CUSTOM EFFECTS === */
+    public void enableCustomEffects(Entity entity) {
+        UUID entityId = entity.getUniqueId();
+        if (activeCustomEffectRunnables.containsKey(entityId) || entity.isDead())
+            return;
+
+        BukkitTask task = new BukkitRunnable() {
+            @Override
+            public void run() {
+                List<Entity> nearbyEntities = entity.getNearbyEntities(32D, 32D, 32D);
+                if(nearbyEntities.stream().noneMatch(e -> e instanceof Player)) {
+                    cancelCustomEffects(entityId);
+                    nextCooldownOccurences.put(entityId, null);
+                    return;
+                }
+
+                List<Entity> impactEntities = entity.getNearbyEntities(1D, 1D, 1D);
+                if(impactEntities.stream().anyMatch(e -> e instanceof Player)) {
+                    customMobCustomEffects.values().stream()
+                            .filter(effect -> CustomEffectType.ON_IMPACT.equals(effect.getCustomEffectType()))
+                            .filter(CustomMobCustomEffect::isEnabled)
+                            .forEach(effect ->  {
+                                effect.triggerCustomEffect(entity);
+                                for(Entity player : impactEntities.stream().filter(e -> e instanceof Player).toList()) {
+                                    effect.trySendCustomEffectMessage((Player) player);
+                                }
+                            });
+                }
+
+                if(nextCooldownOccurences.get(entityId) == null)
+                    nextCooldownOccurences.put(entityId, LocalDateTime.now().plusSeconds(3));
+                if(nextCooldownOccurences.get(entityId).isAfter(LocalDateTime.now()))
+                    return;
+
+                List<CustomMobCustomEffect> cooldownCustomEffects = customMobCustomEffects.values().stream()
+                        .filter(effect -> CustomEffectType.COOLDOWN.equals(effect.getCustomEffectType()))
+                        .filter(CustomMobCustomEffect::isEnabled)
+                        .toList();
+                if(!cooldownCustomEffects.isEmpty()) {
+                    int randomIndex = new Random().nextInt(cooldownCustomEffects.size());
+                    cooldownCustomEffects.get(randomIndex).triggerCustomEffect(entity);
+                    double radius = cooldownCustomEffects.get(randomIndex).getMessageRadius();
+                    if(radius <= 0)
+                        cooldownCustomEffects.get(randomIndex).tryBroadcastCustomEffectMessage();
+                    else {
+                        for (Entity entity : entity.getNearbyEntities(radius, radius, radius).stream().filter(x -> x instanceof Player).toList())
+                            cooldownCustomEffects.get(randomIndex).trySendCustomEffectMessage((Player) entity);
+                    }
+                    nextCooldownOccurences.put(entityId, LocalDateTime.now().plusSeconds(customEffectsCooldownDuration));
+                }
+            }
+        }.runTaskTimer(CustomMobs.getPlugin(), 0L, 10L); // 0.5 sec
+
+        activeCustomEffectRunnables.put(entityId, task);
+    }
+
+    public void cancelCustomEffects(UUID entityId) {
+        BukkitTask task = activeCustomEffectRunnables.remove(entityId);
+        if (task != null) {
+            task.cancel();
+        }
+    }
+
     /* === Others === */
 
     public Collection<CustomMobCustomEffect> getCustomMobCustomEffects() {
@@ -367,63 +431,5 @@ public class CustomMob implements Listener {
 
     public CustomMobConfiguration getCustomMobConfiguration() {
         return mobConfiguration;
-    }
-
-    // TODO Find a way to trigger this other than just when the mob is hit... Maybe check once in a while when they move??
-    // TODO Basically the onimpact is weird (doesnt work) if the player doesnt hit the mob...
-    public void enableCustomEffects(Entity entity) {
-        UUID entityId = entity.getUniqueId();
-        if (activeCustomEffectRunnables.containsKey(entityId))
-            return;
-
-        BukkitTask task = new BukkitRunnable() {
-            @Override
-            public void run() {
-                List<Entity> nearbyEntities = entity.getNearbyEntities(32D, 32D, 32D);
-                if(nearbyEntities.stream().noneMatch(e -> e instanceof Player)) {
-                    cancelCustomEffects(entityId);
-                    nextCooldownOccurences.put(entityId, null);
-                    return;
-                }
-
-                List<Entity> impactEntities = entity.getNearbyEntities(1D, 1D, 1D);
-                if(impactEntities.stream().anyMatch(e -> e instanceof Player)) {
-                    customMobCustomEffects.values().stream()
-                            .filter(effect -> CustomEffectType.ON_IMPACT.equals(effect.getCustomEffectType()))
-                            .filter(CustomMobCustomEffect::isEnabled)
-                            .forEach(effect -> effect.triggerCustomEffect(entity));
-                }
-
-                if(nextCooldownOccurences.get(entityId) == null)
-                    nextCooldownOccurences.put(entityId, LocalDateTime.now().plusSeconds(5));
-                if(nextCooldownOccurences.get(entityId).isAfter(LocalDateTime.now()))
-                    return;
-
-                List<CustomMobCustomEffect> cooldownCustomEffects = customMobCustomEffects.values().stream()
-                            .filter(effect -> CustomEffectType.COOLDOWN.equals(effect.getCustomEffectType()))
-                            .filter(CustomMobCustomEffect::isEnabled)
-                            .toList();
-                if(!cooldownCustomEffects.isEmpty()) {
-                    int randomIndex = new Random().nextInt(cooldownCustomEffects.size());
-                    cooldownCustomEffects.get(randomIndex).triggerCustomEffect(entity);
-                    for (Entity entity : nearbyEntities.stream().filter(e -> e instanceof Player).toList()) {
-                        String message = CustomMobs.getPlugin().getCustomMobsManager().getConfigManager().getCustomEffectMessage(cooldownCustomEffects.get(randomIndex).getClass().getSimpleName());
-                        if(message != null) {
-                            entity.sendMessage(Utils.applyFormat(message.replaceAll("%name%", name)));
-                        }
-                    }
-                    nextCooldownOccurences.put(entityId, LocalDateTime.now().plusSeconds(15));
-                }
-            }
-        }.runTaskTimer(CustomMobs.getPlugin(), 0L, 10L); // 0.5 sec
-
-        activeCustomEffectRunnables.put(entityId, task);
-    }
-
-    public void cancelCustomEffects(UUID entityId) {
-        BukkitTask task = activeCustomEffectRunnables.remove(entityId);
-        if (task != null) {
-            task.cancel();
-        }
     }
 }

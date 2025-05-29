@@ -3,7 +3,6 @@ package ca.pandaaa.custommobs.guis.BasicTypes;
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 import ca.pandaaa.custommobs.utils.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -15,7 +14,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -156,7 +154,7 @@ public class TimeIntegerRangeGUI extends CustomMobsGUI implements Listener {
         itemLore.add(Utils.applyFormat("&7&o(( Click to confirm! ))"));
         meta.setLore(itemLore);
         item.setItemMeta(meta);
-        return item;
+        return getMenuItem(item, true);
     }
 
     private ItemStack getMinusItem(ItemStack item, boolean big, String type) {
@@ -179,7 +177,7 @@ public class TimeIntegerRangeGUI extends CustomMobsGUI implements Listener {
         }
         meta.setLore(itemLore);
         item.setItemMeta(meta);
-        return item;
+        return getMenuItem(item, true);
     }
 
     private ItemStack getPlusItem(ItemStack item, boolean big, String type) {
@@ -201,6 +199,6 @@ public class TimeIntegerRangeGUI extends CustomMobsGUI implements Listener {
         }
         meta.setLore(itemLore);
         item.setItemMeta(meta);
-        return item;
+        return getMenuItem(item, true);
     }
 }

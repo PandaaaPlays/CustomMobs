@@ -1,0 +1,28 @@
+<div class="custommob-custom-effect" *ngIf="customEffect">
+  <div class="header">
+    <div class="text">
+      {{ formatClassName(className) }}
+      <div class="type" title="{{title}}">
+        Type: {{ customEffect.effectType.replaceAll("_", " ") }}
+      </div>
+    </div>
+    <div class="splitter"></div>
+  </div>
+  <div class="body">
+    <div class="custom-effect-option" *ngFor="let field of customEffect.fields">
+      <div class="title">
+        {{ field.key.replaceAll('_', ' ') }}
+        <div class="details" *ngIf="field.type">
+          <div class="minmax" *ngIf="field.minimum">
+            <span class="min">Min: {{ field.minimum }}</span>
+            <span class="max">Max: {{ field.maximum }}</span>
+          </div>
+          {{ field.type }}
+        </div>
+      </div>
+      <div class="description">
+        {{ field.description }}
+      </div>
+    </div>
+  </div>
+</div>

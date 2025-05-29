@@ -2,6 +2,8 @@ package ca.pandaaa.custommobs.custommobs.CustomEffects;
 
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects.CustomEffectOptionsGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.Potions.SpecificPotionDurationGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
@@ -17,26 +19,42 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Vanish extends CustomMobCustomEffect {
-
+    /**
+     * Determines the time (in second(s)) that the invisibility effect is applied on the CustomMob.
+     * To set the time to be infinite, set the time to -1 (anything under 0).
+     * @minimum 1
+     * @maximum Infinite
+     */
+    private static final String VANISH_TIME = "custom-effects.vanish.vanish-time";
     private int vanishTime;
 
     public Vanish(CustomMobConfiguration mobConfiguration) {
-        super(mobConfiguration);
-        this.enabled = getCustomEffectStatus(this.getClass().getSimpleName());
-        this.customEffectType = CustomEffectType.COOLDOWN;
+        super(mobConfiguration, CustomEffectType.COOLDOWN);
+        this.vanishTime = getCustomEffectOption(VANISH_TIME, Integer.class, 5);
     }
 
     public void triggerCustomEffect(Entity entity) {
-        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 100, 1));
-    }
-
-    public ItemStack modifyStatus(CustomMob customMob) {
-        setCustomEffectStatus(this.getClass().getSimpleName());
-        return getCustomEffectItem();
+        ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, vanishTime * 20, 1));
     }
 
     public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {
-        return null;
+        switch(option.toLowerCase()) {
+            case "vanishtime": {
+                if(clickType.isRightClick()) {
+                    this.vanishTime = 5;
+                    setCustomEffectOption(VANISH_TIME, this.vanishTime);
+                } else {
+                    new SpecificPotionDurationGUI(this.vanishTime, (value) -> {
+                        this.vanishTime = value;
+                        setCustomEffectOption(VANISH_TIME, this.vanishTime);
+                        new CustomEffectOptionsGUI(customMob, this, getOptionsItems()).openInventory(clicker);
+                    }).openInventory(clicker);
+                }
+                return getCustomEffectOptionItemStack(getVanishTimeItem(), true);
+            }
+            default:
+                return handleMessageOption(clicker, customMob, option, clickType);
+        }
     }
 
     public ItemStack getCustomEffectItem() {
@@ -52,9 +70,17 @@ public class Vanish extends CustomMobCustomEffect {
 
     public List<ItemStack> getOptionsItems() {
         List<ItemStack> items = new ArrayList<>();
-        CustomMobsItem item = new CustomMobsItem(Material.BARRIER);
-        item.setName("&c&lInvisibility duration");
-        items.add(getCustomEffectOptionItemStack(item, false));
+        items.add(getCustomEffectOptionItemStack(getVanishTimeItem(), true));
+        items.add(getMessageItem());
         return items;
+    }
+
+    private CustomMobsItem getVanishTimeItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.BARRIER);
+        item.setName("&b&lInvisibility duration");
+        String duration = this.vanishTime <= 0 ? "Infinite" : Utils.getFormattedTime(this.vanishTime, false, true);
+        item.addLore("&eDuration: &f" + duration);
+        item.setCustomEffectPersistentDataContainer(this.getClass().getSimpleName() + ".VanishTime");
+        return item;
     }
 }

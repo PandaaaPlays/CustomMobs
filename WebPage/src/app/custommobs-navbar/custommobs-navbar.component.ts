@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {RouterLink} from '@angular/router';
 import {NavbarMenu} from './navbar-menu/navbar-menu.component';
 import {OptionsService} from '../services/options.service';
+import {CustomEffectComponent} from '../custom-effect/custom-effect.component';
+import {CustomEffectsService} from '../services/custom-effects.service';
 
 interface Option {
   optionName: string,
@@ -10,8 +12,8 @@ interface Option {
 }
 
 interface CustomEffect {
-  effectName: string,
-  option: string,
+  customEffectName: string,
+  key: string,
   description: string
 }
 
@@ -28,15 +30,20 @@ interface CustomEffect {
 
 export class CustomMobsNavbar implements OnInit {
   constructor(
-    private optionsService: OptionsService
+    private optionsService: OptionsService,
+    private customEffectsService: CustomEffectsService
   ) {}
 
   optionNames: string[] = [];
   customEffectNames: string[] = [];
 
   ngOnInit(): void {
-    this.optionsService.options$.subscribe((data: { [key: string]: Option[] }) => {
+    this.optionsService.options$.subscribe(data => {
       this.optionNames = Object.keys(data);
+    });
+
+    this.customEffectsService.customEffects$.subscribe(data => {
+      this.customEffectNames = Object.keys(data);
     });
   }
 }

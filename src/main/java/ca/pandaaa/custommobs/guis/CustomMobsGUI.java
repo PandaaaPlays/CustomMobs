@@ -16,6 +16,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 
@@ -65,9 +67,15 @@ public class CustomMobsGUI implements Listener {
         }
     }
 
+    private boolean debugMenuItem = false;
     protected ItemStack getMenuItem(ItemStack item, boolean hideItemFlags) {
         ItemStack menuItem = item.clone();
         ItemMeta itemMeta = menuItem.getItemMeta();
+        if(debugMenuItem) {
+            List<String> lore = itemMeta.getLore() != null ? itemMeta.getLore() : new ArrayList<>();
+            lore.add(Utils.applyFormat("&c&lMENU_ITEM"));
+            itemMeta.setLore(lore);
+        }
         NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.MenuItem");
         itemMeta.getPersistentDataContainer().set(key, PersistentDataType.BOOLEAN, true);
         if(hideItemFlags) {

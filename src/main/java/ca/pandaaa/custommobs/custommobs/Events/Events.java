@@ -22,6 +22,7 @@ import org.bukkit.event.entity.SpawnerSpawnEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -79,6 +80,36 @@ public class Events implements Listener {
         }
         damage += event.getFinalDamage();
         event.getEntity().getPersistentDataContainer().set(damageKey, PersistentDataType.DOUBLE, damage);
+    }
+
+
+    private final Map<UUID, Long> playerMoveCooldowns = new HashMap<>();
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        // Only trigger on meaningful movements (not only mouse)
+        if (event.getFrom().getBlockX() == event.getTo().getBlockX()
+                && event.getFrom().getBlockY() == event.getTo().getBlockY()
+                && event.getFrom().getBlockZ() == event.getTo().getBlockZ()) {
+            return;
+        }
+
+        // Check every 3 seconds, not more often
+        Player player = event.getPlayer();
+        long now = System.currentTimeMillis();
+        if (playerMoveCooldowns.containsKey(player.getUniqueId()) && now - playerMoveCooldowns.get(player.getUniqueId()) < 3000)
+            return;
+        playerMoveCooldowns.put(player.getUniqueId(), now);
+
+        List<Entity> entities = event.getPlayer().getNearbyEntities(10, 5, 10);
+        for(Entity entity : entities) {
+            NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Name");
+            if (!entity.getPersistentDataContainer().getKeys().contains(key))
+                continue;
+
+            CustomMobs.getPlugin().getCustomMobsManager()
+                    .getCustomMob(entity.getPersistentDataContainer().get(key, PersistentDataType.STRING))
+                    .enableCustomEffects(entity);
+        }
     }
 
     @EventHandler

@@ -154,7 +154,7 @@ public class SpecificDropChanceGUI extends CustomMobsGUI {
         itemLore.add(Utils.applyFormat("&7&o(( Click to confirm! ))"));
         meta.setLore(itemLore);
         item.setItemMeta(meta);
-        return item;
+        return getMenuItem(item, true);
     }
 
     private ItemStack getMinusItem(ItemStack item, double size) {
@@ -166,7 +166,7 @@ public class SpecificDropChanceGUI extends CustomMobsGUI {
         itemLore.add(Utils.applyFormat("&7&o(( Shift-Click to remove " + size * 5 + " ))"));
         meta.setLore(itemLore);
         item.setItemMeta(meta);
-        return item;
+        return getMenuItem(item, true);
     }
 
     private ItemStack getPlusItem(ItemStack item, double size) {
@@ -178,6 +178,6 @@ public class SpecificDropChanceGUI extends CustomMobsGUI {
         itemLore.add(Utils.applyFormat("&7&o(( Shift-Click to add " + size * 5 + " ))"));
         meta.setLore(itemLore);
         item.setItemMeta(meta);
-        return item;
+        return getMenuItem(item, true);
     }
 }

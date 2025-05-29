@@ -1,9 +1,8 @@
 package ca.pandaaa.custommobs.guis.BasicTypes;
 
 import ca.pandaaa.custommobs.CustomMobs;
-import ca.pandaaa.custommobs.guis.CustomMobsGUI;
+import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.utils.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -13,22 +12,20 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class PlayerGUI extends CustomMobsGUI implements Listener {
+public class CustomMobsGUI extends ca.pandaaa.custommobs.guis.CustomMobsGUI implements Listener {
 
-    private final Consumer<Player> consumer;
+    private final Consumer<CustomMob> consumer;
     private final ItemStack previous;
     private final ItemStack next;
     private int currentPage;
 
-    public PlayerGUI(String option, Consumer<Player> consumer) {
+    public CustomMobsGUI(String option, Consumer<CustomMob> consumer) {
         super(54, "&8Parameter &8&l» &8" + option);
         previous = getMenuItem(Utils.createHead("a2f0425d64fdc8992928d608109810c1251fe243d60d175bed427c651cbe"), true);
         next = getMenuItem(Utils.createHead("6d865aae2746a9b8e9a4fe629fb08d18d0a9251e5ccbe5fa7051f53eab9b94"), true);
@@ -37,18 +34,18 @@ public class PlayerGUI extends CustomMobsGUI implements Listener {
 
     public void openInventory(Player player, int page) {
         this.currentPage = page;
-        List<ItemStack> playerItems = getPlayerItems();
+        List<ItemStack> customMobItems = getCustomMobItems();
 
         for(int i = 45; i < 54; i++)
             inventory.setItem(i, filler);
 
-        boolean nextPage = playerItems.size() > (page * 45);
+        boolean nextPage = customMobItems.size() > (page * 45);
 
         // Make sure we set the extra items to air, so that other page(s) item(s) are not persisted.
         for(int i = 0; i < 45; i++) {
             int position = ((page - 1) * 45) + i;
-            if (playerItems.size() > position) {
-                inventory.setItem(i, playerItems.get(position));
+            if (customMobItems.size() > position) {
+                inventory.setItem(i, customMobItems.get(position));
             }
             else {
                 inventory.setItem(i, new ItemStack(Material.AIR));
@@ -104,34 +101,35 @@ public class PlayerGUI extends CustomMobsGUI implements Listener {
         } else if(event.getSlot() == 53 && item.getType() != Material.GRAY_STAINED_GLASS_PANE) {
             openInventory((Player) event.getWhoClicked(), currentPage + 1);
         } else if(event.getSlot() < 45) {
-            NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Player");
-            String playerName = item.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING);
-            if(Bukkit.getPlayer(playerName) != null) {
-                consumer.accept(Bukkit.getPlayer(playerName));
+            NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.FileName");
+            String customMobName = item.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING);
+            if(CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(customMobName) != null) {
+                consumer.accept(CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(customMobName));
             } else {
-                event.getWhoClicked().sendMessage(Utils.applyFormat("&c&l[!] &cPlayer not found."));
+                event.getWhoClicked().sendMessage(Utils.applyFormat("&c&l[!] &cCustomMob not found."));
                 openInventory((Player) event.getWhoClicked(), 1);
             }
         }
     }
 
-    private List<ItemStack> getPlayerItems() {
-        List<ItemStack> playerItems = new ArrayList<>();
-        for(Player player : Bukkit.getOnlinePlayers()) {
-            ItemStack item = new ItemStack(Material.PLAYER_HEAD);
-            ItemMeta meta = item.getItemMeta();
-            PersistentDataContainer container = meta.getPersistentDataContainer();
-            container.set(new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Player"), PersistentDataType.STRING, player.getName());
-            ((SkullMeta) meta).setOwningPlayer(player);
-            meta.setDisplayName(Utils.applyFormat("&6&l" + player.getName()));
+    private List<ItemStack> getCustomMobItems() {
+        List<ItemStack> customMobItems = new ArrayList<>();
+        for (CustomMob customMob : CustomMobs.getPlugin().getCustomMobsManager().getCustomMobs()) {
+            ItemStack item = new ItemStack(customMob.getItem().getType());
+
+            ItemMeta itemMeta = item.getItemMeta();
+            itemMeta.setDisplayName(Utils.applyFormat(customMob.getName()));
             List<String> lore = new ArrayList<>();
             lore.add("");
-            lore.add(Utils.applyFormat("&7&o(( Click on this head to select this player ))"));
-            meta.setLore(lore);
-            item.setItemMeta(meta);
-            playerItems.add(getMenuItem(item, true));
+            lore.add(Utils.applyFormat("&7&o(( Click to select this CustomMob ))"));
+            itemMeta.setLore(lore);
+            NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.FileName");
+            itemMeta.getPersistentDataContainer().set(key, PersistentDataType.STRING, customMob.getCustomMobFileName().replace(".yml", ""));
+            item.setItemMeta(itemMeta);
+
+            customMobItems.add(getMenuItem(item, true));
         }
-        return playerItems;
+        return customMobItems;
     }
 
 }

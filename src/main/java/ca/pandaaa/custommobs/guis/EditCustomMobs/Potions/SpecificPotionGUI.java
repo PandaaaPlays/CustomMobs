@@ -6,6 +6,7 @@ import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -38,7 +39,7 @@ public class SpecificPotionGUI extends CustomMobsGUI {
         this.type = potionEffect.getType();
         this.particles = potionEffect.hasParticles();
         this.ambient = potionEffect.isAmbient();
-        this.duration = potionEffect.getDuration()/20;
+        this.duration = potionEffect.getDuration();
         this.amplifier = potionEffect.getAmplifier();
 
     }

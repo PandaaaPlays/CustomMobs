@@ -13,8 +13,9 @@ switch ($UserChoice)
         $OutputJsonFile = ".\WebPage\src\assets\data\options.json"
     }
     "2" {
-        Write-Host "Option 2 selected - Feature not implemented yet."
-        exit
+        $JavaFilesDirectory = ".\src\main\java\ca\pandaaa\custommobs\custommobs\CustomEffects"
+        Write-Host "Processing .java files in directory: $JavaFilesDirectory"
+        $OutputJsonFile = ".\WebPage\src\assets\data\custom-effects.json"
     }
     default {
         Write-Host "Invalid selection."
@@ -27,7 +28,7 @@ $JavaFiles = Get-ChildItem -Path $JavaFilesDirectory -Filter *.java
 
 foreach ($file in $JavaFiles)
 {
-    if ($file.Name -match "CustomMobOption") {
+    if ($file.Name -match "CustomMobOption" -or $file.Name -match "CustomEffect") {
         continue
     }
 
@@ -43,6 +44,12 @@ foreach ($file in $JavaFiles)
 
     for ($i = 0; $i -lt $lines.Count; $i++) {
         $line = $lines[$i].Trim()
+
+        if ($line -match 'super\(.*?,\s*CustomEffectType\.([A-Z_]+)\)')
+        {
+            $customEffectType = $matches[1]
+            break
+        }
 
         # Start of JavaDoc
         if ($line -eq '/**')
@@ -69,7 +76,7 @@ foreach ($file in $JavaFiles)
         if ($line -match 'private\s+static\s+final\s+String\s+(\w+)\s*=\s*"([^"]+)";')
         {
             $constName = $matches[1]
-            $description = (($commentBuffer -join ' ') -replace '\s+', ' ' -replace '@minimum\s\d+', '' -replace '@maximum\s\d+', '').Trim()
+            $description = (($commentBuffer -join ' ') -replace '\s+', ' ' -replace '@minimum\s[-\w.]+', '' -replace '@maximum\s[-\w.]+', '').Trim()
 
             $minimum = $null
             $maximum = $null
@@ -141,7 +148,14 @@ foreach ($file in $JavaFiles)
         }
     }
 
-    $mobsData[$mobName] = $fields
+    if($null -eq $customEffectType) {
+        $mobsData[$mobName] = $fields
+    } else {
+        $mobsData[$mobName] = @{
+            effectType = $customEffectType
+            fields = $fields
+        }
+    }
 }
 
 $jsonOutput = $mobsData | ConvertTo-Json -Depth 10

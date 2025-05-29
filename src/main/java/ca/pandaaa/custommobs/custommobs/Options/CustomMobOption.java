@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+// TODO Add Jeb sheep
+
 // Children of CustomMobOption must implement the isApplicable method for the plugin to work properly.
 public abstract class CustomMobOption {
     protected CustomMobConfiguration mobConfiguration;

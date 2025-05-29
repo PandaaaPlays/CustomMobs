@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Java Class Code Generator</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; color: #333; }
+        .container { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); max-width: 800px; margin: auto; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"], select { width: calc(100% - 22px); padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 4px; }
+        button { background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background-color: #0056b3; }
+        .option-group { border: 1px solid #eee; padding: 15px; margin-bottom: 15px; border-radius: 5px; background-color: #f9f9f9; }
+        .option-group button { margin-top: 10px; }
+        pre { background-color: #e2e2e2; padding: 15px; border-radius: 5px; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Java Class Code Generator</h1>
+
+    <form id="codeGeneratorForm">
+        <label for="className">Class Name (e.g., MyEffect):</label>
+        <input type="text" id="className" value="MyEffect" required><br>
+
+        <label for="effectType">Effect Type:</label>
+        <select id="effectType">
+            <option value="COOLDOWN">COOLDOWN</option>
+            <option value="ON_IMPACT">ON_IMPACT</option>
+        </select><br>
+
+        <label for="menuMaterial">Main Menu Item Material (e.g., BLAZE_ROD):</label>
+        <input type="text" id="menuMaterial" value="BLAZE_ROD" required><br>
+
+        <label for="menuItemName">Display Name for the Effect (e.g., &6&lMyEffect):</label>
+        <input type="text" id="menuItemName" value="&6&lMyEffect" required><br>
+
+        <h2>Options</h2>
+        <div id="optionsContainer">
+        </div>
+        <button type="button" onclick="addOption()">Add Option</button>
+        <br><br>
+
+        <button type="submit">Generate Code</button>
+    </form>
+
+    <h2>Generated Code:</h2>
+    <pre id="generatedCode"></pre>
+</div>
+
+<script>
+    let optionCounter = 0;
+
+    function addOption() {
+        optionCounter++;
+        const optionsContainer = document.getElementById('optionsContainer');
+        const optionGroup = document.createElement('div');
+        optionGroup.classList.add('option-group');
+        optionGroup.innerHTML = `
+                <h3>Option ${optionCounter}</h3>
+                <label for="optionName${optionCounter}">  Option variable name (e.g., knockbackStrength):</label>
+                <input type="text" class="optionName" id="optionName${optionCounter}" required><br>
+
+                <label for="optionKey${optionCounter}">  Config key (e.g., custom-effects.my-effect.knockback-strength):</label>
+                <input type="text" class="optionKey" id="optionKey${optionCounter}" required><br>
+
+                <label for="optionType${optionCounter}">  Type:</label>
+                <select class="optionType" id="optionType${optionCounter}">
+                    <option value="Integer">int</option>
+                    <option value="Double">double</option>
+                    <option value="Boolean">boolean</option>
+                </select><br>
+
+                <label for="optionMaterial${optionCounter}">  Item material (e.g., STICK):</label>
+                <input type="text" class="optionMaterial" id="optionMaterial${optionCounter}" required><br>
+
+                <label for="optionItemName${optionCounter}">  Display name (e.g., &a&lKnockback Strength):</label>
+                <input type="text" class="optionItemName" id="optionItemName${optionCounter}" required><br>
+                <button type="button" onclick="this.parentNode.remove()">Remove Option</button>
+            `;
+        optionsContainer.appendChild(optionGroup);
+    }
+
+    document.getElementById('codeGeneratorForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        const className = document.getElementById('className').value;
+        const effectType = document.getElementById('effectType').value;
+        const menuMaterial = document.getElementById('menuMaterial').value;
+        const menuItemName = document.getElementById('menuItemName').value;
+
+        const options = [];
+        const optionElements = document.querySelectorAll('.option-group');
+        optionElements.forEach(group => {
+            const option = {
+                Name: group.querySelector('.optionName').value,
+                Key: group.querySelector('.optionKey').value,
+                Type: group.querySelector('.optionType').value,
+                Material: group.querySelector('.optionMaterial').value,
+                DisplayName: group.querySelector('.optionItemName').value
+            };
+            options.push(option);
+        });
+
+        let classCode = `
+package ca.pandaaa.custommobs.custommobs.CustomEffects;
+
+import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
+import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.guis.BasicTypes.*;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects.CustomEffectOptionsGUI;
+import ca.pandaaa.custommobs.utils.CustomMobsItem;
+import ca.pandaaa.custommobs.utils.Utils;
+import org.bukkit.Material;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ${className} extends CustomMobCustomEffect {
+
+`;
+
+        options.forEach(opt => {
+            const type = opt.Type;
+            const key = opt.Key;
+            const name = opt.Name;
+            const defaultVal = (type === "boolean") ? "false" : (type === "int") ? "1" : "1D";
+            const upperName = name.toUpperCase();
+
+            classCode += `    private static final String ${upperName} = "${key}";\n`;
+            classCode += `    private ${type} ${name} = getCustomEffectOption(${upperName}, ${type}.class, ${defaultVal});\n\n`;
+        });
+
+        classCode += `    public ${className}(CustomMobConfiguration mobConfiguration) {
+        super(mobConfiguration, CustomEffectType.${effectType});
+    }
+
+    public void triggerCustomEffect(Entity entity) {
+        // TODO: Implement effect logic
+    }
+
+    public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {
+        switch(option.toLowerCase()) {
+`;
+
+        options.forEach(opt => {
+            const name = opt.Name;
+            const keyConst = name.toUpperCase();
+            const type = opt.Type;
+            const resetValue = (type === "boolean") ? `${name} = !${name};` : (type === "int") ? `${name} = 1;` : `${name} = 1D;`;
+
+            let inputGui = "";
+            if (type === "int") {
+                inputGui = `new IntegerGUI("TODO", false, 1, 100, (value) -> {
+                        this.${name} = value;
+                        setCustomEffectOption(${keyConst}, this.${name});
+                        new CustomEffectOptionsGUI(customMob, this, getOptionsItems()).openInventory(clicker);
+                    }).openInventory(clicker, ${name});`;
+            } else if (type === "double") {
+                inputGui = `new DoubleGUI("TODO", false, 0.5, 3, (value) -> {
+                        this.${name} = value;
+                        setCustomEffectOption(${keyConst}, this.${name});
+                        new CustomEffectOptionsGUI(customMob, this, getOptionsItems()).openInventory(clicker);
+                    }).openInventory(clicker, ${name});`;
+            }
+
+            classCode += `            case "${name}": {
+                if(clickType.isRightClick()) {
+                    ${resetValue}
+                    setCustomEffectOption(${keyConst}, this.${name});
+                } else {
+                    ${inputGui}
+                }
+                return getCustomEffectOptionItemStack(get${name.charAt(0).toUpperCase() + name.slice(1)}Item(), ${type !== 'boolean' ? 'true' : 'false'});
+            }\n`;
+        });
+
+        classCode += `            default:
+                return handleMessageOption(clicker, customMob, option, clickType);
+        }
+    }
+
+    public ItemStack getCustomEffectItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.${menuMaterial});
+        item.setName("${menuItemName}");
+        String status = this.enabled ? "&a&lOn" : "&c&lOff";
+        item.addLore("&e${className}: &f" + status);
+        item.addLore("&bType: &f" + Utils.getSentenceCase(this.customEffectType.name()));
+        item.addLore("", "&7&o(( CustomMob ${className} effect ))");
+        item.setCustomEffectPersistentDataContainer(this.getClass().getSimpleName());
+        return getCustomEffectItemStack(item, this.getClass().getSimpleName());
+    }
+
+    public List<ItemStack> getOptionsItems() {
+        List<ItemStack> items = new ArrayList<>();
+`;
+
+        options.forEach(opt => {
+            const name = opt.Name;
+            classCode += `        items.add(getCustomEffectOptionItemStack(get${name.charAt(0).toUpperCase() + name.slice(1)}Item(), ${opt.Type !== 'boolean' ? 'true' : 'false'}));\n`;
+        });
+
+        classCode += `        items.add(getMessageItem());
+        return items;
+    }
+`;
+
+        options.forEach(opt => {
+            const name = opt.Name;
+            const material = opt.Material;
+            const displayName = opt.DisplayName;
+            const valueStr = (opt.Type === "boolean") ? `"&eStatus: &f (${name} ? "&a&lOn" : "&c&lOff")` : `"&e${name}: &f${name}"`;
+
+            classCode += `
+    private CustomMobsItem get${name.charAt(0).toUpperCase() + name.slice(1)}Item() {
+        CustomMobsItem item = new CustomMobsItem(Material.${material});
+        item.setName("${displayName}");
+        item.addLore(${valueStr});
+        item.setCustomEffectPersistentDataContainer(this.getClass().getSimpleName() + ".${name.charAt(0).toUpperCase() + name.slice(1)}");
+        return item;
+    }
+`;
+        });
+
+        classCode += `}`;
+
+        document.getElementById('generatedCode').textContent = classCode;
+    });
+</script>
+
+</body>
+</html>

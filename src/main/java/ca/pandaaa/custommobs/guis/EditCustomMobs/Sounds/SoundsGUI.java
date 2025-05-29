@@ -110,7 +110,7 @@ public class SoundsGUI extends CustomMobsGUI {
             lore.add(Utils.applyFormat("&7&o(( Left-Click to edit this sound ))"));
             lore.add(Utils.applyFormat("&7&o(( Right-Click to remove this sound ))"));
             itemMeta.setLore(lore);
-            itemMeta.setItemName(Utils.applyFormat("&6&l" + Utils.getSentenceCase(sound.getSoundType().name())));
+            itemMeta.setItemName(Utils.applyFormat("&6&l" + Utils.getStartCase(sound.getSoundType().getKey().getKey())));
             musicDisc.setItemMeta(itemMeta);
             items.add(getMenuItem(musicDisc, false));
         }
@@ -191,7 +191,7 @@ public class SoundsGUI extends CustomMobsGUI {
         lore.add(Utils.applyFormat("&c&l[!] &cThis will permanently delete this sound."));
         itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
-        return item;
+        return getMenuItem(item, true);
     }
 
 }

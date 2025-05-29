@@ -20,26 +20,39 @@ public class Explosion extends CustomMobCustomEffect {
     /**
      * Determines the strength (size) of the explosion created by the CustomMob upon trigger of this
      * custom effect.
+     * @minimum 1
+     * @maximum 100
      */
     private static final String EXPLOSION_STRENGTH = "custom-effects.explosion.explosion-strength";
     private int explosionStrength;
 
+    /**
+     * Determines whether the custom effect's explosion should damage the CustomMob or not.
+     */
+    private static final String DAMAGE_SELF = "custom-effects.explosion.damage-self";
+    private boolean damageSelf;
+
+    /**
+     * Determines whether the custom effect's explosion should break blocks or not.
+     */
+    private static final String BREAK_BLOCKS = "custom-effects.explosion.break-blocks";
+    private boolean breakBlocks;
+
     public Explosion(CustomMobConfiguration mobConfiguration) {
-        super(mobConfiguration);
-        this.enabled = getCustomEffectStatus(this.getClass().getSimpleName());
+        super(mobConfiguration, CustomEffectType.COOLDOWN);
         this.explosionStrength = getCustomEffectOption(EXPLOSION_STRENGTH, Integer.class, 5);
-        this.customEffectType = CustomEffectType.COOLDOWN;
+        this.damageSelf = getCustomEffectOption(DAMAGE_SELF, Boolean.class, false);
+        this.breakBlocks = getCustomEffectOption(BREAK_BLOCKS, Boolean.class, false);
     }
 
     public void triggerCustomEffect(Entity entity) {
-        entity.getWorld().createExplosion(entity.getLocation(), explosionStrength);
-    }
+        boolean invulnerable = entity.isInvulnerable();
 
-    public ItemStack modifyStatus(CustomMob customMob) {
-        setCustomEffectStatus(this.getClass().getSimpleName());
-        if(this.enabled)
-            explosionStrength = 5;
-        return getCustomEffectItem();
+        if(!damageSelf)
+            entity.setInvulnerable(true);
+
+        entity.getWorld().createExplosion(entity.getLocation().add(0, 0.5, 0), explosionStrength, false, breakBlocks);
+        entity.setInvulnerable(invulnerable);
     }
 
     public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {
@@ -57,8 +70,19 @@ public class Explosion extends CustomMobCustomEffect {
                 }
                 return getCustomEffectOptionItemStack(getExplosionStrengthItem(), true);
             }
+            case "damageself": {
+                this.damageSelf = !this.damageSelf;
+                setCustomEffectOption(DAMAGE_SELF, this.damageSelf);
+                return getCustomEffectOptionItemStack(getDamageSelfItem(), false);
+            }
+            case "breakblocks": {
+                this.breakBlocks = !this.breakBlocks;
+                setCustomEffectOption(BREAK_BLOCKS, this.breakBlocks);
+                return getCustomEffectOptionItemStack(getBreakBlocksItem(), false);
+            }
+            default:
+                return handleMessageOption(clicker, customMob, option, clickType);
         }
-        return null;
     }
 
     public ItemStack getCustomEffectItem() {
@@ -75,6 +99,9 @@ public class Explosion extends CustomMobCustomEffect {
     public List<ItemStack> getOptionsItems() {
         List<ItemStack> items = new ArrayList<>();
         items.add(getCustomEffectOptionItemStack(getExplosionStrengthItem(), true));
+        items.add(getCustomEffectOptionItemStack(getDamageSelfItem(), false));
+        items.add(getCustomEffectOptionItemStack(getBreakBlocksItem(), false));
+        items.add(getMessageItem());
         return items;
     }
 
@@ -86,5 +113,19 @@ public class Explosion extends CustomMobCustomEffect {
         return item;
     }
 
+    private CustomMobsItem getDamageSelfItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.NETHER_STAR);
+        item.setName("&b&lDamage self");
+        item.addLore("&eDamage itself from explosion: &f" + (this.damageSelf ? "&a&lOn" : "&c&lOff"));
+        item.setCustomEffectPersistentDataContainer(this.getClass().getSimpleName() + ".DamageSelf");
+        return item;
+    }
 
+    private CustomMobsItem getBreakBlocksItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.DIAMOND_PICKAXE);
+        item.setName("&2&lBreak blocks");
+        item.addLore("&eBreak blocks: &f" + (this.breakBlocks ? "&a&lOn" : "&c&lOff"));
+        item.setCustomEffectPersistentDataContainer(this.getClass().getSimpleName() + ".BreakBlocks");
+        return item;
+    }
 }

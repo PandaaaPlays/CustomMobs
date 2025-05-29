@@ -3,7 +3,6 @@ package ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects;
 import ca.pandaaa.custommobs.custommobs.CustomEffects.CustomMobCustomEffect;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
-import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -26,11 +25,9 @@ public class CustomEffectOptionsGUI extends CustomMobsGUI {
         super(27, "&8CustomMobs &8&l» &8" + customMobCustomEffect.getClass().getSimpleName());
 
         this.customMob = customMob;
-        this.optionItems = optionItems;
+        this.optionItems = optionItems.stream().map(item -> getMenuItem(item, true)).toList();
         if(this.optionItems == null)
             this.optionItems = new ArrayList<>();
-
-        this.optionItems.add(getMessageItemStack());
     }
 
     public void openInventory(Player player) {
@@ -49,6 +46,25 @@ public class CustomEffectOptionsGUI extends CustomMobsGUI {
             case 3:
                 for(int i = 0; i < optionItems.size(); i++) {
                     inventory.setItem(i + 12, optionItems.get(i));
+                }
+                break;
+            case 4:
+                inventory.setItem(11, optionItems.get(0));
+                inventory.setItem(12, optionItems.get(1));
+                inventory.setItem(14, optionItems.get(2));
+                inventory.setItem(15, optionItems.get(3));
+                break;
+            case 5:
+                for(int i = 0; i < optionItems.size(); i++) {
+                    inventory.setItem(i + 11, optionItems.get(i));
+                }
+                break;
+            case 6:
+                for(int i = 0; i < optionItems.size() / 2; i++) {
+                    inventory.setItem(i + 10, optionItems.get(i));
+                }
+                for(int i = optionItems.size() / 2; i < optionItems.size(); i++) {
+                    inventory.setItem(i + 14, optionItems.get(i));
                 }
                 break;
             default:
@@ -87,20 +103,12 @@ public class CustomEffectOptionsGUI extends CustomMobsGUI {
                     String keyString = key.getKey();
                     if(keyString.contains("custommobs.customeffect")) {
                         String[] value = itemMeta.getPersistentDataContainer().get(key, PersistentDataType.STRING).split("\\.");
+                        // TODO Tech debt ? SetCurrentItem is useless when triggering a new gui cause we reopen it anyway...
                         event.setCurrentItem(getMenuItem(customMob.getCustomMobCustomEffect(value[0]).modifyOption(clicker, customMob, value[1], event.getClick()), true));
                     }
                 }
                 break;
 
         }
-    }
-
-    private ItemStack getMessageItemStack() {
-        CustomMobsItem messageItem = new CustomMobsItem(Material.SPRUCE_HANGING_SIGN);
-        messageItem.setName("&6&lMessage");
-        // TODO String explosion = this.enabled ? "&a&lOn" : "&c&lOff";
-        messageItem.addLore("&eMessage on occurence: &f");
-        messageItem.addLore("", "&7&o(( Click to edit this option ))");
-        return messageItem;
     }
 }

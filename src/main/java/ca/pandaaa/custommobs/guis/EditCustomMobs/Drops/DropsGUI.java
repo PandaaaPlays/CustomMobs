@@ -197,6 +197,6 @@ public class DropsGUI extends CustomMobsGUI {
         lore.add(Utils.applyFormat("&c&l[!] &cThis will permanently delete this drop."));
         itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
-        return item;
+        return getMenuItem(item, true);
     }
 }

@@ -181,7 +181,7 @@ public class MessagesGUI extends CustomMobsGUI {
             lore.add(Utils.applyFormat("&7&o(( Shift-Right-Click to edit this message's radius ))"));
             meta.setLore(lore);
             item.setItemMeta(meta);
-            messageItems.add(item);
+            messageItems.add(getMenuItem(item, true));
         }
         return messageItems;
     }
@@ -198,7 +198,7 @@ public class MessagesGUI extends CustomMobsGUI {
         lore.add(Utils.applyFormat("&c&l[!] &cThis will permanently delete this message."));
         itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
-        return item;
+        return getMenuItem(item, true);
     }
 
 }

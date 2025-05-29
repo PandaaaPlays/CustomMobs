@@ -56,7 +56,7 @@ public class Utils {
     }
 
     public static String getStartCase(String string) {
-        String[] words = string.toLowerCase().split("[_\\s]+");
+        String[] words = string.replaceAll("\\.", " ").toLowerCase().split("[_\\s]+");
         StringBuilder startCaseString = new StringBuilder();
 
         for (String word : words) {

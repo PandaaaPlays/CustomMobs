@@ -9,6 +9,10 @@
 # The messages displayed to the players nearby when a CustomMob uses a Custom effect.
 # Use %name% to display the name of the mob.
 vanish: "%name% &7&l>> &b&lVanish"
-
+explosion: "%name% &7&l>> &c&lExplosion"
+charge: "%name% &7&l>> &6&lCharge"
+gravitypull: "%name% &7&l>> &3&lGravity pull"
+mobspawner: "%name% &7&l>> &c&lMob spawner"
+trampoline: "%name% &7&l>> &2&lTrampoline"
 
 

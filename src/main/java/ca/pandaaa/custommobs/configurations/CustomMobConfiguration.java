@@ -79,20 +79,7 @@ public class CustomMobConfiguration {
             dateTime = LocalDateTime.now();
         }
 
-        CustomMob customMob = new CustomMob(
-                dateTime,
-                type,
-                fileName,
-                getItem(ITEM),
-                getItem(SPAWNER_ITEM),
-                getEquipment(),
-                getSpawner(),
-                getPotionEffects(),
-                getDrops(),
-                getName(),
-                getSounds(),
-                getMessages(),
-                this);
+        CustomMob customMob = new CustomMob(dateTime, type, this);
 
         setCustomMobConfigurations(customMob, type);
 
@@ -285,7 +272,19 @@ public class CustomMobConfiguration {
         saveConfigurationFile();
     }
 
-    // Others
+    private static final String CUSTOM_EFFECTS_COOLDOWN_DURATION = "custom-effects.cooldown";
+    public int getCustomEffectsCooldownDuration() {
+        if(!mobConfiguration.contains(CUSTOM_EFFECTS_COOLDOWN_DURATION, true))
+            return 5;
+
+        return mobConfiguration.getInt(CUSTOM_EFFECTS_COOLDOWN_DURATION);
+    }
+
+    public void setCustomEffectsCooldownDuration(int duration) {
+        mobConfiguration.set(CUSTOM_EFFECTS_COOLDOWN_DURATION, duration);
+        saveConfigurationFile();
+    }
+
     public void setItemStack(String configurationPath, ItemStack itemStack) {
         mobConfiguration.set(configurationPath, itemStack);
         saveConfigurationFile();

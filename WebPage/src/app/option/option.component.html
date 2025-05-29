@@ -7,7 +7,7 @@
         <input
           [ngClass]="{ 'open': searchResults.length > 0 || (searchResults.length == 0 && this.searchTerm != '' && searching)}"
           type="text"
-          placeholder="Search your CustomMob's type..."
+          placeholder="Search your CustomMob's type's option(s)..."
           [(ngModel)]="searchTerm"
           (input)="onSearchChange()"
           (focus)="onSearchFocus()"
@@ -21,7 +21,7 @@
           <div class="entity-options">
             Options:
             <ng-container *ngFor="let option of result.options; let last = last">
-              <a class="option-link" [routerLink]="['/option', option]">{{option}}</a><span *ngIf="!last">, </span>
+              <a class="option-link" [routerLink]="['/options', option]">{{option}}</a><span *ngIf="!last">, </span>
             </ng-container>
           </div>
         </div>

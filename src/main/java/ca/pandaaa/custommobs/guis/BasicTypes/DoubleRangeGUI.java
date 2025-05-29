@@ -156,7 +156,7 @@ public class DoubleRangeGUI extends CustomMobsGUI implements Listener {
         itemLore.add(Utils.applyFormat("&7&o(( Click to confirm! ))"));
         meta.setLore(itemLore);
         item.setItemMeta(meta);
-        return item;
+        return getMenuItem(item, true);
     }
 
     private ItemStack getMinusItem(ItemStack item, boolean big, String type) {
@@ -178,7 +178,7 @@ public class DoubleRangeGUI extends CustomMobsGUI implements Listener {
         }
         meta.setLore(itemLore);
         item.setItemMeta(meta);
-        return item;
+        return getMenuItem(item, true);
     }
 
     private ItemStack getPlusItem(ItemStack item, boolean big, String type) {
@@ -200,6 +200,6 @@ public class DoubleRangeGUI extends CustomMobsGUI implements Listener {
         }
         meta.setLore(itemLore);
         item.setItemMeta(meta);
-        return item;
+        return getMenuItem(item, true);
     }
 }

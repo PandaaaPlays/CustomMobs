@@ -1,7 +1,6 @@
 package ca.pandaaa.custommobs.guis.BasicTypes;
 
 import ca.pandaaa.custommobs.CustomMobs;
-import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
@@ -30,8 +29,10 @@ public class IntegerGUI extends CustomMobsGUI implements Listener {
     private final boolean small;
     private final int maximum;
     private final int minimum;
-    public IntegerGUI(String option, boolean small, int minValue, int maxValue, Consumer<Integer> consumer) {
-        super(9, "&8Parameter &8&l» &8" + option);
+    private boolean timeDisplay = false;
+
+    public IntegerGUI(String name, boolean small, int minValue, int maxValue, Consumer<Integer> consumer) {
+        super(9, "&8Parameter &8&l» &8" + name);
         this.consumer = consumer;
         this.small = small;
         this.maximum = maxValue;
@@ -106,18 +107,23 @@ public class IntegerGUI extends CustomMobsGUI implements Listener {
         }
     }
 
+    public IntegerGUI setTimeGUI() {
+        timeDisplay = true;
+        return this;
+    }
+
     private ItemStack getConfirmItem(ItemStack item, Integer value) {
         ItemMeta meta = item.getItemMeta();
         NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Integer");
         meta.getPersistentDataContainer().set(key, PersistentDataType.INTEGER, value);
         meta.setDisplayName(Utils.applyFormat("&a&l[+] Confirm"));
         List<String> itemLore = new ArrayList<>();
-        itemLore.add(Utils.applyFormat("&eCurrent value: &f" + value));
+        itemLore.add(Utils.applyFormat("&eCurrent value: &f" + (timeDisplay ? Utils.getFormattedTime(value, true, false) : value)));
         itemLore.add("");
         itemLore.add(Utils.applyFormat("&7&o(( Click to confirm! ))"));
         meta.setLore(itemLore);
         item.setItemMeta(meta);
-        return item;
+        return getMenuItem(item, true);
     }
 
     private ItemStack getMinusItem(ItemStack item, boolean big) {
@@ -137,7 +143,7 @@ public class IntegerGUI extends CustomMobsGUI implements Listener {
         }
         meta.setLore(itemLore);
         item.setItemMeta(meta);
-        return item;
+        return getMenuItem(item, true);
     }
 
     private ItemStack getPlusItem(ItemStack item, boolean big) {
@@ -157,6 +163,6 @@ public class IntegerGUI extends CustomMobsGUI implements Listener {
         }
         meta.setLore(itemLore);
         item.setItemMeta(meta);
-        return item;
+        return getMenuItem(item, true);
     }
 }

@@ -27,7 +27,8 @@ export class NavbarMenu {
   }
 
   navigateTo(path: string) {
-    this.router.navigate(['/option', path]);
+    console.log('/' + this.menuName.replaceAll(" ", "-"));
+    this.router.navigate(['/' + this.menuName.replaceAll(" ", "-").toLowerCase(), path]);
   }
 
   formatMenuItem(name: string): string {
