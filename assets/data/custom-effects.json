@@ -1,0 +1,109 @@
+{
+    "MobSpawner":  {
+                       "effectType":  "COOLDOWN",
+                       "fields":  [
+                                      {
+                                          "minimum":  null,
+                                          "description":  "Specifies the CustomMob that should be used to create the entities spawned around the CustomMob.",
+                                          "type":  "Custommob",
+                                          "key":  "CUSTOMMOB",
+                                          "maximum":  null
+                                      },
+                                      {
+                                          "minimum":  "1",
+                                          "description":  "Specifies how many CustomMob(s) will be spawned around the CustomMob when this custom effect triggers.",
+                                          "type":  "Integer",
+                                          "key":  "SPAWNED_AMOUNT",
+                                          "maximum":  "25"
+                                      }
+                                  ]
+                   },
+    "Explosion":  {
+                      "effectType":  "COOLDOWN",
+                      "fields":  [
+                                     {
+                                         "minimum":  "1",
+                                         "description":  "Determines the strength (size) of the explosion created by the CustomMob upon trigger of this custom effect.",
+                                         "type":  "Integer",
+                                         "key":  "EXPLOSION_STRENGTH",
+                                         "maximum":  "100"
+                                     },
+                                     {
+                                         "minimum":  null,
+                                         "description":  "Determines whether the custom effect\u0027s explosion should damage the CustomMob or not.",
+                                         "type":  "On / Off",
+                                         "key":  "DAMAGE_SELF",
+                                         "maximum":  null
+                                     },
+                                     {
+                                         "minimum":  null,
+                                         "description":  "Determines whether the custom effect\u0027s explosion should break blocks or not.",
+                                         "type":  "On / Off",
+                                         "key":  "BREAK_BLOCKS",
+                                         "maximum":  null
+                                     }
+                                 ]
+                  },
+    "Trampoline":  {
+                       "effectType":  "COOLDOWN",
+                       "fields":  [
+                                      {
+                                          "minimum":  "1",
+                                          "description":  "Determines the height (in block(s)) to which the players should be sent in the air.",
+                                          "type":  "Integer",
+                                          "key":  "HEIGHT",
+                                          "maximum":  "50"
+                                      },
+                                      {
+                                          "minimum":  "1",
+                                          "description":  "Determines the radius (in block(s)) around the CustomMob where the effect should affect player(s).",
+                                          "type":  "Integer",
+                                          "key":  "RADIUS",
+                                          "maximum":  "100"
+                                      }
+                                  ]
+                   },
+    "Vanish":  {
+                   "effectType":  "COOLDOWN",
+                   "fields":  [
+                                  {
+                                      "minimum":  "1",
+                                      "description":  "Determines the time (in second(s)) that the invisibility effect is applied on the CustomMob. To set the time to be infinite, set the time to -1 (anything under 0).",
+                                      "type":  "Integer",
+                                      "key":  "VANISH_TIME",
+                                      "maximum":  "Infinite"
+                                  }
+                              ]
+               },
+    "Charge":  {
+                   "effectType":  "ON_IMPACT",
+                   "fields":  [
+                                  {
+                                      "minimum":  "0.5",
+                                      "description":  "Determines the strength of the \"charge\" effect, which indicates how far the players will be pushed back upon impact with the CustomMob.",
+                                      "type":  "Decimal",
+                                      "key":  "KNOCKBACK_STRENGTH",
+                                      "maximum":  "3"
+                                  }
+                              ]
+               },
+    "GravityPull":  {
+                        "effectType":  "COOLDOWN",
+                        "fields":  [
+                                       {
+                                           "minimum":  "0.5",
+                                           "description":  "Determines the strength of the \"pulling\" effect, which indicates how fast (and \"strongly\") the players will be pulled towards the CustomMob.",
+                                           "type":  "Decimal",
+                                           "key":  "GRAVITY_STRENGTH",
+                                           "maximum":  "5"
+                                       },
+                                       {
+                                           "minimum":  "1",
+                                           "description":  "Determines the radius (in block(s)) around the CustomMob where the effect should affect player(s).",
+                                           "type":  "Integer",
+                                           "key":  "PULL_RADIUS",
+                                           "maximum":  "100"
+                                       }
+                                   ]
+                    }
+}
