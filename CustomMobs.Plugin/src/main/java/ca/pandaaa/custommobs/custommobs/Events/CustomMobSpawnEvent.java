@@ -1,6 +1,5 @@
 package ca.pandaaa.custommobs.custommobs.Events;
 
-import ca.pandaaa.custommobs.custommobs.CustomMob;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

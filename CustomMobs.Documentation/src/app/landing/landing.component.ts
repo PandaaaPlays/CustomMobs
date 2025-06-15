@@ -1,13 +1,12 @@
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
-import {Component, ElementRef, HostListener, Input, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {Option, OptionsService} from '../services/options.service';
 import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'custommobs-option',
   standalone: true,
-  imports: [NgForOf, NgIf, FormsModule, NgClass, RouterLink],
+  imports: [FormsModule],
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.css'
 })

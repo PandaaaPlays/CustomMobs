@@ -1,6 +1,5 @@
 package ca.pandaaa.custommobs.custommobs;
 
-import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;

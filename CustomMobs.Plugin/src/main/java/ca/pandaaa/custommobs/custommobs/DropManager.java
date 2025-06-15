@@ -174,7 +174,7 @@ public class DropManager {
             List<Drop> groupDrops = dropsByGroup.get(group);
             // Only 1 drop of the specified group.
             if(groupDrops.size() == 1)
-                filteredDrops.add(groupDrops.get(0));
+                filteredDrops.add(groupDrops.getFirst());
             // Multiple drops of the specified group.
             else {
                 double totalChance = 0;
