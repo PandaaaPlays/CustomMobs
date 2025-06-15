@@ -25,6 +25,7 @@ public class DropMessage extends Message implements ConfigurationSerializable {
         else {
             if (getRadius() > 0) {
                 List<Entity> entities = dropper.getNearbyEntities(getRadius(), getRadius(), getRadius());
+                dropper.sendMessage(Utils.applyFormat(getMessage().replaceAll("%player%", dropper.getName())));
                 for (Entity entity : entities) {
                     if (entity instanceof Player) {
                         entity.sendMessage(Utils.applyFormat(getMessage().replaceAll("%player%", dropper.getName())));

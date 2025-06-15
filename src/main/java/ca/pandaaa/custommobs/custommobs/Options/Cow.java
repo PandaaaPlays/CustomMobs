@@ -11,7 +11,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,10 +28,11 @@ public class Cow extends CustomMobOption {
     }
 
     public void applyOptions(Entity customMob) {
-        if(!(customMob instanceof org.bukkit.entity.Cow))
+        if (!(customMob instanceof org.bukkit.entity.Cow))
             return;
-        if(cowVariant != null)
+        if (cowVariant != null) {
             ((org.bukkit.entity.Cow) customMob).setVariant(cowVariant);
+        }
     }
 
     @Override

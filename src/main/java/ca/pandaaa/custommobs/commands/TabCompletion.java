@@ -20,6 +20,12 @@ public class TabCompletion implements TabCompleter {
         if (sender.hasPermission("custommobs.config")) {
             if(args.length == 1) {
                 completionList.add("reload");
+                completionList.add("help");
+            }
+        }
+
+        if (sender.hasPermission("custommobs.admin")) {
+            if(args.length == 1) {
                 completionList.add("summon");
                 completionList.add("give");
                 completionList.add("silk-spawner");
@@ -45,6 +51,7 @@ public class TabCompletion implements TabCompleter {
                 completionList.add("spawner");
             }
         }
+
         return completionList;
     }
 }

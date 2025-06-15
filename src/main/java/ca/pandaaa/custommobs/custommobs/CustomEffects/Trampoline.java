@@ -31,7 +31,7 @@ public class Trampoline extends CustomMobCustomEffect {
      * Determines the radius (in block(s)) around the CustomMob where the effect should affect player(s).
      *
      * @minimum 1
-     * @maximum 100
+     * @maximum 32
      */
     private static final String RADIUS = "custom-effects.trampoline.radius";
     private int radius;
@@ -72,7 +72,7 @@ public class Trampoline extends CustomMobCustomEffect {
                     radius = 25;
                     setCustomEffectOption(RADIUS, this.radius);
                 } else {
-                    new IntegerGUI("Radius", false, 1, 100, (value) -> {
+                    new IntegerGUI("Radius", false, 1, 32, (value) -> {
                         this.radius = value;
                         setCustomEffectOption(RADIUS, this.radius);
                         new CustomEffectOptionsGUI(customMob, this, getOptionsItems()).openInventory(clicker);

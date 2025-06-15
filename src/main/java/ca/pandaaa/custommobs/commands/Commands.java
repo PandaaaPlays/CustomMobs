@@ -4,6 +4,7 @@ import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.configurations.ConfigurationManager;
 import ca.pandaaa.custommobs.custommobs.Manager;
 import ca.pandaaa.custommobs.guis.MainGUI;
+import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -39,7 +40,7 @@ public class Commands implements CommandExecutor {
             }
 
             switch (args[0].toLowerCase()) {
-                case "test":
+                case "generateentitytypesjsonforwebsite":
                     if(sender.getName().equalsIgnoreCase("PandaaaPlays"))
                         CustomMobs.getPlugin().generateEntityTypesJson();
                     else
@@ -56,6 +57,9 @@ public class Commands implements CommandExecutor {
                     break;
                 case "silk-spawner":
                     silkSpawnerCommand(sender, args);
+                    break;
+                case "help":
+                    helpCommand(sender);
                     break;
                 default:
                     sendUnknownCommandMessage(sender);
@@ -76,6 +80,7 @@ public class Commands implements CommandExecutor {
             return;
         }
 
+        // TODO Accept ~ coords
         if (args.length == 2 && !(sender instanceof Player)) {
             sendConsoleUnknownCommandMessage(sender, "Please use : /custommobs summon [name] [x] [y] [z]");
             return;
@@ -185,6 +190,15 @@ public class Commands implements CommandExecutor {
         }
 
         CustomMobs.getPlugin().reloadConfig(sender);
+    }
+
+    private void helpCommand(CommandSender sender) {
+        if (!sender.hasPermission("custommobs.config")) {
+            sendNoPermissionMessage(sender);
+            return;
+        }
+
+        sender.sendMessage(Utils.applyFormat("&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &eFor help, tutorials and examples of the plugin, visit : https://pandaaaplays.github.io/CustomMobs/"));
     }
 
     private void openCustomMobsGUI(Player player) {

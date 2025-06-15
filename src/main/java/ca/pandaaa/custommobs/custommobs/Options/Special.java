@@ -134,7 +134,7 @@ public class Special extends CustomMobOption {
         this.gravity = getOption(GRAVITY, Boolean.class, true);
         this.persistent = getOption(PERSISTENT, Boolean.class, false);
         this.intelligent = getOption(INTELLIGENT, Boolean.class, true);
-        this.followRange = getOption(SIZE, Double.class, 32.0);
+        this.followRange = getOption(FOLLOW_RANGE, Double.class, 32.0);
         this.size = getOption(SIZE, Double.class, 1.0);
         this.naturalDrops = getOption(NATURAL_DROPS, Boolean.class, true);
     }
@@ -158,10 +158,6 @@ public class Special extends CustomMobOption {
             customMob.getPersistentDataContainer().set(new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.MaxDamage"), PersistentDataType.DOUBLE, damageRange.getMaximimDamage());
         }
 
-        if(customMob instanceof Animals && aggressive) {
-            addAggressivity(customMob);
-        }
-
         customMob.setGlowing(glowing);
 
         if(customMob instanceof org.bukkit.entity.LivingEntity) {
@@ -173,6 +169,10 @@ public class Special extends CustomMobOption {
         customMob.setSilent(silent);
         customMob.setGravity(gravity);
         customMob.setPersistent(persistent);
+
+        if(customMob instanceof Animals && aggressive) {
+            addAggressivity(customMob);
+        }
     }
 
     public void resetOptions() {

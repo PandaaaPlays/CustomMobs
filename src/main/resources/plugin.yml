@@ -2,7 +2,7 @@ name: CustomMobs
 version: 1.0.0
 author: Pandaaa
 main: ca.pandaaa.custommobs.CustomMobs
-api-version: 1.16
+api-version: 1.21
 commands:
   custommobs:
     aliases: [cm, mobs, custommobs]
@@ -10,4 +10,6 @@ commands:
 
 permissions:
   custommobs.config:
+    default: op
+  custommobs.admin:
     default: op

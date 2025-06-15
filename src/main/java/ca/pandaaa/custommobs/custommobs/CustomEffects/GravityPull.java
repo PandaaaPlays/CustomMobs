@@ -30,7 +30,7 @@ public class GravityPull extends CustomMobCustomEffect {
     /**
      * Determines the radius (in block(s)) around the CustomMob where the effect should affect player(s).
      * @minimum 1
-     * @maximum 100
+     * @maximum 32
      */
     private static final String PULL_RADIUS = "custom-effects.gravitypull.pull-radius";
     private int pullRadius;
@@ -70,7 +70,7 @@ public class GravityPull extends CustomMobCustomEffect {
                     pullRadius = 20;
                     setCustomEffectOption(PULL_RADIUS, this.pullRadius);
                 } else {
-                    new IntegerGUI("Pull radius", false, 1, 100, (value) -> {
+                    new IntegerGUI("Pull radius", false, 1, 32, (value) -> {
                         this.pullRadius = value;
                         setCustomEffectOption(PULL_RADIUS, this.pullRadius);
                         new CustomEffectOptionsGUI(customMob, this, getOptionsItems()).openInventory(clicker);

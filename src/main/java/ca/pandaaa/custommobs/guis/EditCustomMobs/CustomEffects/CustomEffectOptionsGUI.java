@@ -22,7 +22,7 @@ public class CustomEffectOptionsGUI extends CustomMobsGUI {
     private List<ItemStack> optionItems;
 
     public CustomEffectOptionsGUI(CustomMob customMob, CustomMobCustomEffect customMobCustomEffect, List<ItemStack> optionItems) {
-        super(27, "&8CustomMobs &8&l» &8" + customMobCustomEffect.getClass().getSimpleName());
+        super(27, "&8CustomMobs &8&l» &8" + formatClassName(customMobCustomEffect.getClass().getSimpleName()));
 
         this.customMob = customMob;
         this.optionItems = optionItems.stream().map(item -> getMenuItem(item, true)).toList();
@@ -110,5 +110,11 @@ public class CustomEffectOptionsGUI extends CustomMobsGUI {
                 break;
 
         }
+    }
+
+    private static String formatClassName(String className) {
+        String spaced = className.replaceAll("([a-z])([A-Z])", "$1 $2")
+                .replaceAll("([A-Z])([A-Z][a-z])", "$1 $2");
+        return spaced.substring(0, 1).toUpperCase() + spaced.substring(1).toLowerCase();
     }
 }
