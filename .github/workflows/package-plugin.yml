@@ -24,10 +24,9 @@ jobs:
         run: mvn clean package
         working-directory: CustomMobs.Plugin
 
-
-      - name: Upload built package
+      - name: Upload CustomMobs JAR
         uses: actions/upload-artifact@v4
         with:
-          name: custommobs-package
+          name: CustomMobs
           path: |
-            **/target/CustomMobs-*.jar
+            $(find . -path "*/target/CustomMobs-*.jar" ! -name "*remapped*" | head -n 1)
