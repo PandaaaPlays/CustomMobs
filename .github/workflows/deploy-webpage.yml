@@ -20,11 +20,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: WebPage
+        working-directory: CustomMobs.Documentation
 
       - name: Build Angular app
         run: npx ng build --configuration production
-        working-directory: WebPage
+        working-directory: CustomMobs.Documentation
 
       - name: Set git user info
         run: |
