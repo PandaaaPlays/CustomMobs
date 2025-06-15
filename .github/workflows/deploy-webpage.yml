@@ -36,4 +36,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           npx angular-cli-ghpages --dir=dist/custommobs/browser --no-silent --repo=https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-        working-directory: WebPage
+        working-directory: CustomMobs.Documentation
