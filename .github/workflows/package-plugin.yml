@@ -1,4 +1,4 @@
-name: Maven CI
+name: Package plugin to java archive (JAR)
 
 on:
   push:
@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -23,6 +22,7 @@ jobs:
 
       - name: Clean and package with Maven
         run: mvn clean package
+        working-directory: CustomMobs.Plugin
 
       - name: Cache Maven packages
         uses: actions/cache@v3
