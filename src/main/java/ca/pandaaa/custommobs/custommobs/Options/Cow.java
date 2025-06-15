@@ -16,7 +16,7 @@ import java.util.List;
 
 public class Cow extends CustomMobOption {
     /**
-     * Specifies the variant of the cow CustomMob, such as normal or a biome-specific type. When this value is
+     * TestSpecifies the variant of the cow CustomMob, such as normal or a biome-specific type. When this value is
      * not set, the variant will be based on the biome it is spawned in (like it would by spawning a normal cow).
      */
     private static final String COW_VARIANT = "mob.cow-variant";
