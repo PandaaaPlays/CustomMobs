@@ -24,9 +24,15 @@ jobs:
         run: mvn clean package
         working-directory: CustomMobs.Plugin
 
+      - name: Find CustomMobs jar (non-remapped)
+        id: find_jar
+        run: |
+          JAR_PATH=$(find . -path "*/target/CustomMobs-*.jar" ! -name "*remapped*" | head -n 1)
+          echo "Found jar: $JAR_PATH"
+          echo "jar_path=$JAR_PATH" >> $GITHUB_OUTPUT
+
       - name: Upload CustomMobs JAR
         uses: actions/upload-artifact@v4
         with:
           name: CustomMobs
-          path: |
-            $(find . -path "*/target/CustomMobs-*.jar" ! -name "*remapped*" | head -n 1)
+          path: ${{ steps.find_jar.outputs.jar_path }}
