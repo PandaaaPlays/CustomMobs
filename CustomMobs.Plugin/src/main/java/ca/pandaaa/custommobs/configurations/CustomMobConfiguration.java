@@ -246,7 +246,7 @@ public class CustomMobConfiguration {
     }
 
     private static final String TYPE = "mob.type";
-    private EntityType getType() {
+    public EntityType getType() {
         try {
             return EntityType.valueOf(mobConfiguration.getString(TYPE));
         } catch(Exception exception) {

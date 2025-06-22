@@ -102,6 +102,10 @@ public class CustomMobs extends JavaPlugin {
         return plugin;
     }
 
+    public static void setPlugin(CustomMobs customMobs) {
+        plugin = customMobs;
+    }
+
     public Manager getCustomMobsManager() {
         return customMobsManager;
     }
