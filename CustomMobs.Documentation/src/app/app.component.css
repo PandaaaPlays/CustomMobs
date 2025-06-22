@@ -15,6 +15,7 @@
   transition: scrollbar-color 0.4s;
   scrollbar-color: transparent transparent;
   scrollbar-gutter: stable;
+  transform: scale(100%);
 }
 
 .content:hover {

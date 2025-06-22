@@ -1,6 +1,7 @@
 .landing {
   display: inline-block;
   min-width: 100%;
+  overflow-x: auto;
 }
 
 .header {
@@ -51,14 +52,20 @@
 }
 
 .left {
+  height: 100%;
   padding-right: 15px;
   width: 60%;
 }
 
-.gui {
-  margin-left: auto;
-  height: 100%;
+.right {
   width: 40%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.gui {
+  height: 100%;
   border-radius: 10px;
 }
 
@@ -73,7 +80,7 @@
 
 .description {
   font-family: 'Poppins', sans-serif;
-  font-size: 1vb;
+  font-size: 15px;
   color: #4d4033;
   text-align: justify;
   display: flex;

@@ -1,7 +1,7 @@
 .custommobs-navbar {
   display: flex;
   flex-direction: column;
-  width: 300px;
+  width: min(300px, 45vh);
   height: 100%;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
   background: #141B30;

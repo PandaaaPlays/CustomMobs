@@ -1,10 +1,10 @@
 <div class="navbar-menu">
-  <div class="header" (click)="toggleSelected()">
+  <div class="header" (click)="menuItems.length > 0 ? toggleSelected() : navigateTo(menuName)" [ngClass]="{ 'selected': isItemSelected(menuName) }">
     <div class="menu-left">
       <i class="{{iconClass}} icon"></i>
       <div class="text">{{ menuName }}</div>
     </div>
-    <div class="menu-right">
+    <div class="menu-right" *ngIf="menuItems.length > 0">
       <i class="fa-solid fa-angle-right arrow" *ngIf="!selected"></i>
       <i class="fa-solid fa-angle-down arrow" *ngIf="selected"></i>
     </div>

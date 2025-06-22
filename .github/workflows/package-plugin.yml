@@ -22,7 +22,7 @@ jobs:
 
       - name: Clean and package with Maven
         run: mvn clean package
-        working-directory: CustomMobs.Plugin
+        working-directory: Plugin
 
       - name: Find CustomMobs jar (non-remapped)
         id: find_jar
