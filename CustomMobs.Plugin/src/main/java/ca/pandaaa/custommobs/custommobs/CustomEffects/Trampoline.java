@@ -100,7 +100,7 @@ public class Trampoline extends CustomMobCustomEffect {
         List<ItemStack> items = new ArrayList<>();
         items.add(getCustomEffectOptionItemStack(getHeightItem(), true));
         items.add(getCustomEffectOptionItemStack(getRadiusItem(), true));
-        items.add(getMessageItem());
+        items.add(getMessageItem().getItem());
         return items;
     }
 

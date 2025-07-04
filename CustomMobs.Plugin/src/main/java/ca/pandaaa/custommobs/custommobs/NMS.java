@@ -58,10 +58,14 @@ public class NMS {
                         .forName(String.format("%s.%s.%s.%s", PACKAGE_BASE, VERSION, MIDDLE_PACKAGE, CRAFT_LIVING_ENTITY_CLASS_NAME));
                 getHandleMethod = craftLivingEntityClass.getMethod("getHandle");
                 // To find the fields corresponding to the version, see : https://minidigger.github.io/MiniMappingViewer/#/mojang/client/1.XX.XX/LivingEntity
-                if(Bukkit.getBukkitVersion().contains("1.21.5")) {
-                    attributeMap = LivingEntity.class.getDeclaredField("bF");  // Field 'attributes' in NMS LivingEntity class
+                if(Bukkit.getBukkitVersion().contains("1.21.6")) {
+                    attributeMap = LivingEntity.class.getDeclaredField("cc");  // Field 'attributes' in NMS LivingEntity class
                     attributes = AttributeMap.class.getDeclaredField("a");     // Field 'attributes' in NMS AttributeMap class
-                    targetSelectorField = Mob.class.getDeclaredField("bG");    // Field 'targetSelector' in NMS Mob class
+                    targetSelectorField = Mob.class.getDeclaredField("ci");    // Field 'targetSelector' in NMS entity.Mob class
+                } else if(Bukkit.getBukkitVersion().contains("1.21.6")) {
+                    attributeMap = LivingEntity.class.getDeclaredField("bF");
+                    attributes = AttributeMap.class.getDeclaredField("a");
+                    targetSelectorField = Mob.class.getDeclaredField("bG");
                 } else if(Bukkit.getBukkitVersion().contains("1.21.4")) {
                     attributeMap = LivingEntity.class.getDeclaredField("bR");
                     attributes = AttributeMap.class.getDeclaredField("b");
@@ -94,8 +98,10 @@ public class NMS {
             try {
                 Object goalSelector = targetSelectorField.get(mob);
                 Method addGoalMethod = null;
-                if(Bukkit.getBukkitVersion().contains("1.21.5")) {
+                if (Bukkit.getBukkitVersion().contains("1.21.6")) {
                     addGoalMethod = goalSelector.getClass().getDeclaredMethod("a", int.class, Goal.class); // Method 'addGoal' in NMS GoalSelector class
+                } else if(Bukkit.getBukkitVersion().contains("1.21.5")) {
+                    addGoalMethod = goalSelector.getClass().getDeclaredMethod("a", int.class, Goal.class);
                 } else if(Bukkit.getBukkitVersion().contains("1.21.4")) {
                     addGoalMethod = goalSelector.getClass().getDeclaredMethod("a", int.class, Goal.class);
                 } else if(Bukkit.getBukkitVersion().contains("1.21.3")) {

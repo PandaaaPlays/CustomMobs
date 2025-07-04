@@ -92,8 +92,8 @@ public class CustomMobsGUI implements Listener {
         return menuItem;
     }
 
-    protected CustomMobsItem getMenuItem(CustomMobsItem customMobsItem, boolean hideItemFlags) {
-        return (CustomMobsItem) getMenuItem((ItemStack) customMobsItem, hideItemFlags);
+    protected ItemStack getMenuItem(CustomMobsItem customMobsItem, boolean hideItemFlags) {
+        return getMenuItem(customMobsItem.getItem(), hideItemFlags);
     }
 
     protected ItemStack getPreviousItem() {

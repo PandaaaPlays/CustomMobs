@@ -41,7 +41,7 @@ public abstract class CustomMobOption {
             item.addLore("", "&7&o(( Click to cycle this option ))");
         else
             item.addLore("", "&7&o(( Click to edit this option ))");
-        return item;
+        return item.getItem();
     }
 
     protected void saveConfigurationFile() {

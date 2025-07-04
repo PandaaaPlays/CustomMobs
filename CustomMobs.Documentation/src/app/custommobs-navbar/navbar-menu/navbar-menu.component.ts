@@ -27,8 +27,11 @@ export class NavbarMenu {
   }
 
   navigateTo(path: string) {
-    console.log('/' + this.menuName.replaceAll(" ", "-"));
-    this.router.navigate(['/' + this.menuName.replaceAll(" ", "-").toLowerCase(), path]);
+    if(this.menuItems.length === 0) {
+      this.router.navigate(['/', path]);
+    } else {
+      this.router.navigate(['/' + this.menuName.replaceAll(" ", "-").toLowerCase(), path]);
+    }
   }
 
   formatMenuItem(name: string): string {
@@ -36,6 +39,16 @@ export class NavbarMenu {
   }
 
   isItemSelected(name: string): boolean {
+    if(name == "About" && window.location.pathname.split('/')[2] == "") {
+      return true;
+    }
+    if(name == "Tutorial" && window.location.pathname.split('/')[2] == "Tutorial") {
+      return true;
+    }
+    if(name == "Examples" && window.location.pathname.split('/')[2] == "Examples") {
+      return true;
+    }
+
     return window.location.pathname.split('/')[3] != ""
       && window.location.pathname.split('/')[3] == name;
   }

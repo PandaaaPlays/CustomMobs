@@ -192,7 +192,9 @@ public class CustomMobs extends JavaPlugin {
             Bukkit.getBukkitVersion().startsWith("1.21.2") ||
             Bukkit.getBukkitVersion().startsWith("1.21.3") ||
             Bukkit.getBukkitVersion().startsWith("1.21.4") ||
-            Bukkit.getBukkitVersion().startsWith("1.21.5")) {
+            Bukkit.getBukkitVersion().startsWith("1.21.5") ||
+            Bukkit.getBukkitVersion().startsWith("1.21.6") ||
+            Bukkit.getBukkitVersion().startsWith("1.21.7")) { // TODO A Between versions Util?
             return;
         } else {
             Registry.SOUNDS.iterator().forEachRemaining(sounds::add);

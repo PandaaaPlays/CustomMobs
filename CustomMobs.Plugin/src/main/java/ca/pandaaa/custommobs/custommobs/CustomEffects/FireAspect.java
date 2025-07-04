@@ -71,7 +71,7 @@ public class FireAspect extends CustomMobCustomEffect {
     public List<ItemStack> getOptionsItems() {
         List<ItemStack> items = new ArrayList<>();
         items.add(getCustomEffectOptionItemStack(getFireDurationItem(), true));
-        items.add(getMessageItem());
+        items.add(getMessageItem().getItem());
         return items;
     }
 

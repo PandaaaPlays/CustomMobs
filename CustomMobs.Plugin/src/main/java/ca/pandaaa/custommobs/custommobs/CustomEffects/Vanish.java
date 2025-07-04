@@ -71,7 +71,7 @@ public class Vanish extends CustomMobCustomEffect {
     public List<ItemStack> getOptionsItems() {
         List<ItemStack> items = new ArrayList<>();
         items.add(getCustomEffectOptionItemStack(getVanishTimeItem(), true));
-        items.add(getMessageItem());
+        items.add(getMessageItem().getItem());
         return items;
     }
 

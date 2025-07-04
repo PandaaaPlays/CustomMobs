@@ -20,11 +20,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: CustomMobs.Documentation
+        working-directory: Documentation
 
       - name: Build Angular app
         run: npx ng build --configuration production
-        working-directory: CustomMobs.Documentation
+        working-directory: Documentation
 
       - name: Set git user info
         run: |
@@ -36,4 +36,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           npx angular-cli-ghpages --dir=dist/custommobs/browser --no-silent --repo=https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-        working-directory: CustomMobs.Documentation
+        working-directory: Documentation

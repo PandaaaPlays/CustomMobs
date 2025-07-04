@@ -3,6 +3,9 @@
     <img src="assets/images/logo.png" alt="Logo" class="logo" />
   </a>
   <div class="body">
+    <navbar-menu [menuName]="'About'" [iconClass]="'fa-solid fa-house'"></navbar-menu>
+    <navbar-menu [menuName]="'Tutorial'" [iconClass]="'fa-solid fa-book'"></navbar-menu>
+    <navbar-menu [menuName]="'Examples'" [iconClass]="'fa-solid fa-lightbulb'"></navbar-menu>
     <navbar-menu [menuName]="'Options'" [iconClass]="'fa-solid fa-wand-magic-sparkles'" [menuItems]="optionNames"></navbar-menu>
     <navbar-menu [menuName]="'Custom effects'" [iconClass]="'fa-solid fa-hurricane'" [menuItems]="customEffectNames"></navbar-menu>
   </div>

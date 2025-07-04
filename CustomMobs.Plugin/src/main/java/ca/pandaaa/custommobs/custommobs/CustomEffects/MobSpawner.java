@@ -106,7 +106,7 @@ public class MobSpawner extends CustomMobCustomEffect {
         List<ItemStack> items = new ArrayList<>();
         items.add(getCustomEffectOptionItemStack(getCustomMobItem(), true));
         items.add(getCustomEffectOptionItemStack(getSpawnedAmountItem(), true));
-        items.add(getMessageItem());
+        items.add(getMessageItem().getItem());
         return items;
     }
 

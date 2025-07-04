@@ -93,7 +93,7 @@ public abstract class CustomMobCustomEffect {
                 this.message = !this.message;
                 setCustomEffectOption("custom-effects." + this.getClass().getSimpleName().toLowerCase() + ".message", this.message);
             }
-            return getMessageItem();
+            return getMessageItem().getItem();
         }
         return null;
     }
@@ -102,7 +102,7 @@ public abstract class CustomMobCustomEffect {
         item.addLore("", "&7&o(( Left-Click to edit this CustomMob's " + customEffectName + " ))", "&7&o(( Right-Click to toggle this custom effect ))");
         if(this.enabled)
             item.addEnchantment(Enchantment.MENDING, 1, false);
-        return item;
+        return item.getItem();
     }
 
     protected ItemStack getCustomEffectOptionItemStack(CustomMobsItem item, boolean hasTwoClicks) {
@@ -110,7 +110,7 @@ public abstract class CustomMobCustomEffect {
             item.addLore("", "&7&o(( Click to edit this option ))", "&7&o(( Right-Click to reset this option ))");
         else
             item.addLore("", "&7&o(( Click to edit this option ))");
-        return item;
+        return item.getItem();
     }
 
     protected CustomMobsItem getMessageItem() {
