@@ -297,7 +297,8 @@ public class CustomMob implements Listener {
         this.entityType = entityType;
 
         for(int i = 0; i < getDrops().size(); i++) {
-            if(getDrops().get(i).getCustomType().equalsIgnoreCase("Saddle")) {
+            if(getDrops().get(i).getCustomType().equalsIgnoreCase("Saddle")
+                    || getDrops().get(i).getCustomType().equalsIgnoreCase("Harness")) {
                 removeDropItem(i);
                 break;
             }

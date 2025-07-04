@@ -117,7 +117,11 @@ public class CustomMobConfiguration {
             }
         } catch (IOException | ClassNotFoundException | InvocationTargetException
                 | NoSuchMethodException | InstantiationException | IllegalAccessException exception) {
-            CustomMobs.getPlugin().getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&c[!] Something went wrong while loading a CustomMob's custom effect : " + exception));
+            CustomMobs.getPlugin().getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&c[!] Something went wrong while loading a CustomMob's option or custom effect : " + exception));
+            if (exception instanceof InvocationTargetException) {
+                Throwable cause = ((InvocationTargetException) exception).getCause();
+                CustomMobs.getPlugin().getServer().getConsoleSender().sendMessage(ChatColor.RED + "Cause: " + cause);
+            }
         }
     }
 

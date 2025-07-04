@@ -98,7 +98,7 @@ public class GravityPull extends CustomMobCustomEffect {
         List<ItemStack> items = new ArrayList<>();
         items.add(getCustomEffectOptionItemStack(getGravityStrengthItem(), true));
         items.add(getCustomEffectOptionItemStack(getPullRadiusItem(), true));
-        items.add(getMessageItem());
+        items.add(getMessageItem().getItem());
         return items;
     }
 

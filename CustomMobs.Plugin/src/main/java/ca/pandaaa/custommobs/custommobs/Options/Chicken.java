@@ -71,7 +71,8 @@ public class Chicken extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return Utils.isVersionAtLeast("1.21.5") && org.bukkit.entity.Chicken.class.isAssignableFrom(entityType.getEntityClass());
+        return false;
+        //return Utils.isVersionAtLeast("1.21.5") && org.bukkit.entity.Chicken.class.isAssignableFrom(entityType.getEntityClass());
     }
 
     public CustomMobsItem getChickenVariantItem() {

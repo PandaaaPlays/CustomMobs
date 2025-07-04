@@ -6,7 +6,7 @@
 
     <groupId>ca.pandaaa</groupId>
     <artifactId>CustomMobs</artifactId>
-    <version>1.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>CustomMobs</name>
@@ -28,7 +28,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <used.spigot.version>1.21.5-R0.1-SNAPSHOT</used.spigot.version>
+        <used.spigot.version>1.21.7-R0.1-SNAPSHOT</used.spigot.version>
     </properties>
 
     <dependencies>
@@ -42,6 +42,12 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
             <!-- Maven Compiler Plugin -->
             <plugin>
@@ -83,6 +89,12 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <build>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <filtering>true</filtering>
+                    </resource>
+                </resources>
                 <plugins>
                     <plugin>
                         <groupId>net.md-5</groupId>

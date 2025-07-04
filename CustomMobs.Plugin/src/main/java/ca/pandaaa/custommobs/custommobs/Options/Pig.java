@@ -71,7 +71,8 @@ public class Pig extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return Utils.isVersionAtLeast("1.21.5") && org.bukkit.entity.Pig.class.isAssignableFrom(entityType.getEntityClass());
+        return false;
+        //return Utils.isVersionAtLeast("1.21.5") && org.bukkit.entity.Pig.class.isAssignableFrom(entityType.getEntityClass());
     }
 
     public CustomMobsItem getPigVariantItem() {

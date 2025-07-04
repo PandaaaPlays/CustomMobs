@@ -128,7 +128,7 @@ public class LightningStrike extends CustomMobCustomEffect {
         items.add(getCustomEffectOptionItemStack(getOnPlayersItem(), false));
         items.add(getCustomEffectOptionItemStack(getRadiusItem(), true));
         items.add(getCustomEffectOptionItemStack(getAmountItem(), true));
-        items.add(getMessageItem());
+        items.add(getMessageItem().getItem());
         return items;
     }
 

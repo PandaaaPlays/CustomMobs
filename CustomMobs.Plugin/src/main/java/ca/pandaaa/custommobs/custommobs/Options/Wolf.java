@@ -12,6 +12,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -61,8 +62,8 @@ public class Wolf extends CustomMobOption {
         ((org.bukkit.entity.Wolf) customMob).setAngry(angry);
         if(wolfVariant != null)
             ((org.bukkit.entity.Wolf) customMob).setVariant(wolfVariant);
-        // No current way to add the armor to the wolf using the API.
-        // ((org.bukkit.entity.Wolf) customMob)
+        if(wolfArmor)
+            ((org.bukkit.entity.Wolf) customMob).getEquipment().setItem(EquipmentSlot.BODY, new ItemStack(Material.WOLF_ARMOR));
     }
 
     @Override

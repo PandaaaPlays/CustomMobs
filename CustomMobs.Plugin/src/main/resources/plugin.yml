@@ -1,5 +1,5 @@
 name: CustomMobs
-version: 1.0.0
+version: ${project.version}
 author: Pandaaa
 main: ca.pandaaa.custommobs.CustomMobs
 api-version: 1.21

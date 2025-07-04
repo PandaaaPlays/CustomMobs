@@ -73,7 +73,7 @@ public class Charge extends CustomMobCustomEffect {
     public List<ItemStack> getOptionsItems() {
         List<ItemStack> items = new ArrayList<>();
         items.add(getCustomEffectOptionItemStack(getKnockbackStrengthItem(), true));
-        items.add(getMessageItem());
+        items.add(getMessageItem().getItem());
         return items;
     }
 

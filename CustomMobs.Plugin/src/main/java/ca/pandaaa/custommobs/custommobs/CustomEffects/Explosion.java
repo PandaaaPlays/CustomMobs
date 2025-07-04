@@ -101,7 +101,7 @@ public class Explosion extends CustomMobCustomEffect {
         items.add(getCustomEffectOptionItemStack(getExplosionStrengthItem(), true));
         items.add(getCustomEffectOptionItemStack(getDamageSelfItem(), false));
         items.add(getCustomEffectOptionItemStack(getBreakBlocksItem(), false));
-        items.add(getMessageItem());
+        items.add(getMessageItem().getItem());
         return items;
     }
 
