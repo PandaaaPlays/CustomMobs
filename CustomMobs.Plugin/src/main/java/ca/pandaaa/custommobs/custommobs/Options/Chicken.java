@@ -5,7 +5,6 @@ import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
-import org.bukkit.Registry;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -13,6 +12,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Chicken extends CustomMobOption {
@@ -23,9 +23,12 @@ public class Chicken extends CustomMobOption {
     private static final String CHICKEN_VARIANT = "mob.chicken-variant";
     private org.bukkit.entity.Chicken.Variant chickenVariant;
 
+    org.bukkit.entity.Chicken.Variant[] variants =
+            { org.bukkit.entity.Chicken.Variant.COLD, org.bukkit.entity.Chicken.Variant.TEMPERATE, org.bukkit.entity.Chicken.Variant.WARM};
+
     public Chicken(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
-        this.chickenVariant = getOption(CHICKEN_VARIANT, Registry.CHICKEN_VARIANT);
+        this.chickenVariant = getChickenVariantOption(CHICKEN_VARIANT, variants);
     }
 
     public void applyOptions(Entity customMob) {
@@ -54,16 +57,12 @@ public class Chicken extends CustomMobOption {
                 if (clickType.isRightClick()) {
                     this.chickenVariant = null;
                 } else {
-                    List<org.bukkit.entity.Chicken.Variant> chickenVariants = Registry.CHICKEN_VARIANT.stream().toList();
-                    if(chickenVariants.isEmpty())
-                        return null;
-
-                    if (chickenVariants.indexOf(chickenVariant) == chickenVariants.size() - 1)
-                        this.chickenVariant = chickenVariants.get(0);
+                    if (Arrays.asList(variants).indexOf(chickenVariant) == variants.length - 1)
+                        this.chickenVariant = variants[0];
                     else
-                        this.chickenVariant = chickenVariants.get(chickenVariants.indexOf(chickenVariant) + 1);
+                        this.chickenVariant = variants[Arrays.asList(variants).indexOf(chickenVariant) + 1];
                 }
-                setOption(CHICKEN_VARIANT, chickenVariant != null ? chickenVariant.getKeyOrNull().getKey() : null);
+                setOption(CHICKEN_VARIANT, chickenVariant != null ? getVariantName(chickenVariant) : null);
                 return getOptionItemStack(getChickenVariantItem(), true, true);
             }
         }
@@ -71,16 +70,44 @@ public class Chicken extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return false;
-        //return Utils.isVersionAtLeast("1.21.5") && org.bukkit.entity.Chicken.class.isAssignableFrom(entityType.getEntityClass());
+        return Utils.isVersionAtLeast("1.21.5") && org.bukkit.entity.Chicken.class.isAssignableFrom(entityType.getEntityClass());
     }
 
     public CustomMobsItem getChickenVariantItem() {
         CustomMobsItem item = new CustomMobsItem(Material.CHICKEN_SPAWN_EGG);
         item.setName("&b&lChicken variant");
-        String variant = chickenVariant == null ? "&fBiome based" : "&f" + Utils.getSentenceCase(chickenVariant.getKeyOrNull().getKey());
+        String variant = chickenVariant == null ? "&fBiome based" : "&f" + Utils.getSentenceCase(getVariantName(chickenVariant));
         item.addLore("&eVariant: &f" + variant);
         item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "ChickenVariant");
         return item;
+    }
+
+    private org.bukkit.entity.Chicken.Variant getChickenVariantOption(String configurationPath, org.bukkit.entity.Chicken.Variant[] variants) {
+        if (!mobConfiguration.getFileConfiguration().contains(configurationPath, true))
+            return null;
+
+        String keyValue = mobConfiguration.getFileConfiguration().getString(configurationPath);
+        switch (keyValue.toLowerCase()) {
+            case "cold":
+                return org.bukkit.entity.Chicken.Variant.COLD;
+            case "temperate":
+                return org.bukkit.entity.Chicken.Variant.TEMPERATE;
+            case "warm":
+                return org.bukkit.entity.Chicken.Variant.WARM;
+            default:
+                return null;
+        }
+    }
+
+    private String getVariantName(org.bukkit.entity.Chicken.Variant variant) {
+        if (variant.equals(org.bukkit.entity.Chicken.Variant.COLD)) {
+            return "COLD";
+        } else if (variant.equals(org.bukkit.entity.Chicken.Variant.WARM)) {
+            return "WARM";
+        } else if (variant.equals(org.bukkit.entity.Chicken.Variant.TEMPERATE)) {
+            return "TEMPERATE";
+        } else {
+            return null;
+        }
     }
 }

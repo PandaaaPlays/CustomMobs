@@ -80,7 +80,6 @@ public class Commands implements CommandExecutor {
             return;
         }
 
-        // TODO Accept ~ coords
         if (args.length == 2 && !(sender instanceof Player)) {
             sendConsoleUnknownCommandMessage(sender, "Please use : /custommobs summon [name] [x] [y] [z]");
             return;
@@ -95,10 +94,11 @@ public class Commands implements CommandExecutor {
             customMobsManager.getCustomMob(args[1]).spawnCustomMob(((Player) sender).getLocation());
         if (args.length == 5) {
             try {
-                double x = Double.parseDouble(args[2]);
-                double y = Double.parseDouble(args[3]);
-                double z = Double.parseDouble(args[4]);
-                customMobsManager.getCustomMob(args[1]).spawnCustomMob(new Location(Bukkit.getWorld("world"), x, y, z));
+                double x = args[2].equals("~") && sender instanceof Player ? ((Player) sender).getLocation().getX() : Double.parseDouble(args[2]);
+                double y = args[3].equals("~") && sender instanceof Player ? ((Player) sender).getLocation().getY() : Double.parseDouble(args[3]);
+                double z = args[4].equals("~") && sender instanceof Player ? ((Player) sender).getLocation().getZ() : Double.parseDouble(args[4]);
+                customMobsManager.getCustomMob(args[1]).spawnCustomMob(
+                        new Location(sender instanceof Player ? ((Player) sender).getLocation().getWorld() : Bukkit.getWorld("world"), x, y, z));
             } catch (Exception exception) {
                 sendIncorrectCoordinatesMessage(sender);
             }

@@ -5,7 +5,6 @@ import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
-import org.bukkit.Registry;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -13,6 +12,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Pig extends CustomMobOption {
@@ -23,9 +23,12 @@ public class Pig extends CustomMobOption {
     private static final String PIG_VARIANT = "mob.pig-variant";
     private org.bukkit.entity.Pig.Variant pigVariant;
 
+    org.bukkit.entity.Pig.Variant[] variants =
+            { org.bukkit.entity.Pig.Variant.COLD, org.bukkit.entity.Pig.Variant.TEMPERATE, org.bukkit.entity.Pig.Variant.WARM};
+
     public Pig(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
-        this.pigVariant = getOption(PIG_VARIANT, Registry.PIG_VARIANT);
+        this.pigVariant = getPigVariantOption(PIG_VARIANT, variants);
     }
 
     public void applyOptions(Entity customMob) {
@@ -54,16 +57,12 @@ public class Pig extends CustomMobOption {
                 if (clickType.isRightClick()) {
                     this.pigVariant = null;
                 } else {
-                    List<org.bukkit.entity.Pig.Variant> pigVariants = Registry.PIG_VARIANT.stream().toList();
-                    if(pigVariants.isEmpty())
-                        return null;
-
-                    if (pigVariants.indexOf(pigVariant) == pigVariants.size() - 1)
-                        this.pigVariant = pigVariants.get(0);
+                    if (Arrays.asList(variants).indexOf(pigVariant) == variants.length - 1)
+                        this.pigVariant = variants[0];
                     else
-                        this.pigVariant = pigVariants.get(pigVariants.indexOf(pigVariant) + 1);
+                        this.pigVariant = variants[Arrays.asList(variants).indexOf(pigVariant) + 1];
                 }
-                setOption(PIG_VARIANT, pigVariant != null ? pigVariant.getKeyOrNull().getKey() : null);
+                setOption(PIG_VARIANT, pigVariant != null ? getVariantName(pigVariant) : null);
                 return getOptionItemStack(getPigVariantItem(), true, true);
             }
         }
@@ -71,16 +70,44 @@ public class Pig extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return false;
-        //return Utils.isVersionAtLeast("1.21.5") && org.bukkit.entity.Pig.class.isAssignableFrom(entityType.getEntityClass());
+        return Utils.isVersionAtLeast("1.21.5") && org.bukkit.entity.Pig.class.isAssignableFrom(entityType.getEntityClass());
     }
 
     public CustomMobsItem getPigVariantItem() {
         CustomMobsItem item = new CustomMobsItem(Material.PIG_SPAWN_EGG);
         item.setName("&b&lPig variant");
-        String variant = pigVariant == null ? "&fBiome based" : "&f" + Utils.getSentenceCase(pigVariant.getKeyOrNull().getKey());
+        String variant = pigVariant == null ? "&fBiome based" : "&f" + Utils.getSentenceCase(getVariantName(pigVariant));
         item.addLore("&eVariant: &f" + variant);
         item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "PigVariant");
         return item;
+    }
+
+    private org.bukkit.entity.Pig.Variant getPigVariantOption(String configurationPath, org.bukkit.entity.Pig.Variant[] variants) {
+        if (!mobConfiguration.getFileConfiguration().contains(configurationPath, true))
+            return null;
+
+        String keyValue = mobConfiguration.getFileConfiguration().getString(configurationPath);
+        switch (keyValue.toLowerCase()) {
+            case "cold":
+                return org.bukkit.entity.Pig.Variant.COLD;
+            case "temperate":
+                return org.bukkit.entity.Pig.Variant.TEMPERATE;
+            case "warm":
+                return org.bukkit.entity.Pig.Variant.WARM;
+            default:
+                return null;
+        }
+    }
+
+    private String getVariantName(org.bukkit.entity.Pig.Variant variant) {
+        if (variant.equals(org.bukkit.entity.Pig.Variant.COLD)) {
+            return "COLD";
+        } else if (variant.equals(org.bukkit.entity.Pig.Variant.WARM)) {
+            return "WARM";
+        } else if (variant.equals(org.bukkit.entity.Pig.Variant.TEMPERATE)) {
+            return "TEMPERATE";
+        } else {
+            return null;
+        }
     }
 }

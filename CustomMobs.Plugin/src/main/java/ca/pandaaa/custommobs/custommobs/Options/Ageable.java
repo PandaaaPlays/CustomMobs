@@ -76,7 +76,7 @@ public class Ageable extends CustomMobOption {
         CustomMobsItem item = new CustomMobsItem(Material.EGG);
         String age;
         if (this.isBaby == null)
-            age = "&fRandom";
+            age = "&fDefault behavior";
         else
             age = this.isBaby ? "&bBaby" : "&2Adult";
         item.setName("&b&lAge");

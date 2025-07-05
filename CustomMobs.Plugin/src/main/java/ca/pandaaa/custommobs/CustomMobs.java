@@ -188,13 +188,7 @@ public class CustomMobs extends JavaPlugin {
         List<org.bukkit.Sound> sounds = new ArrayList<>();
         List<String> newSounds = new ArrayList<>();
 
-        if (Bukkit.getBukkitVersion().startsWith("1.21.1") ||
-            Bukkit.getBukkitVersion().startsWith("1.21.2") ||
-            Bukkit.getBukkitVersion().startsWith("1.21.3") ||
-            Bukkit.getBukkitVersion().startsWith("1.21.4") ||
-            Bukkit.getBukkitVersion().startsWith("1.21.5") ||
-            Bukkit.getBukkitVersion().startsWith("1.21.6") ||
-            Bukkit.getBukkitVersion().startsWith("1.21.7")) { // TODO A Between versions Util?
+        if (Utils.isVersionBeforeOrEqual("1.21.7")) {
             return;
         } else {
             Registry.SOUNDS.iterator().forEachRemaining(sounds::add);
