@@ -2,7 +2,7 @@ name: CustomMobs
 version: ${project.version}
 author: Pandaaa
 main: ca.pandaaa.custommobs.CustomMobs
-api-version: 1.21
+api-version: 1.21.5
 commands:
   custommobs:
     aliases: [cm, mobs, custommobs]

@@ -5,13 +5,14 @@ import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
-import org.bukkit.Registry;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Cow extends CustomMobOption {
@@ -22,17 +23,21 @@ public class Cow extends CustomMobOption {
     private static final String COW_VARIANT = "mob.cow-variant";
     private org.bukkit.entity.Cow.Variant cowVariant;
 
+    org.bukkit.entity.Cow.Variant[] variants =
+            { org.bukkit.entity.Cow.Variant.COLD, org.bukkit.entity.Cow.Variant.TEMPERATE, org.bukkit.entity.Cow.Variant.WARM};
+
+
     public Cow(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
-        this.cowVariant = getOption(COW_VARIANT, Registry.COW_VARIANT);
+        this.cowVariant = getCowVariantOption(COW_VARIANT, variants);
     }
 
     public void applyOptions(Entity customMob) {
         if (!(customMob instanceof org.bukkit.entity.Cow))
             return;
-        if (cowVariant != null) {
+
+        if(cowVariant != null)
             ((org.bukkit.entity.Cow) customMob).setVariant(cowVariant);
-        }
     }
 
     @Override
@@ -54,16 +59,12 @@ public class Cow extends CustomMobOption {
                 if (clickType.isRightClick()) {
                     this.cowVariant = null;
                 } else {
-                    List<org.bukkit.entity.Cow.Variant> cowVariants = Registry.COW_VARIANT.stream().toList();
-                    if(cowVariants.isEmpty())
-                        return null;
-
-                    if (cowVariants.indexOf(cowVariant) == cowVariants.size() - 1)
-                        this.cowVariant = cowVariants.get(0);
+                    if (Arrays.asList(variants).indexOf(cowVariant) == variants.length - 1)
+                        this.cowVariant = variants[0];
                     else
-                        this.cowVariant = cowVariants.get(cowVariants.indexOf(cowVariant) + 1);
+                        this.cowVariant = variants[Arrays.asList(variants).indexOf(cowVariant) + 1];
                 }
-                setOption(COW_VARIANT, cowVariant != null ? cowVariant.getKeyOrNull().getKey() : null);
+                setOption(COW_VARIANT, cowVariant != null ? getVariantName(cowVariant) : null);
                 return getOptionItemStack(getCowVariantItem(), true, true);
             }
         }
@@ -71,16 +72,44 @@ public class Cow extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return false;
-        //return Utils.isVersionAtLeast("1.21.5") && org.bukkit.entity.Cow.class.isAssignableFrom(entityType.getEntityClass());
+        return Utils.isVersionAtLeast("1.21.5") && org.bukkit.entity.Cow.class.isAssignableFrom(entityType.getEntityClass());
     }
 
     public CustomMobsItem getCowVariantItem() {
         CustomMobsItem item = new CustomMobsItem(Material.COW_SPAWN_EGG);
         item.setName("&b&lCow variant");
-        String variant = cowVariant == null ? "&fBiome based" : "&f" + Utils.getSentenceCase(cowVariant.getKeyOrNull().getKey());
+        String variant = cowVariant == null ? "&fBiome based" : "&f" + Utils.getSentenceCase(getVariantName(cowVariant));
         item.addLore("&eVariant: &f" + variant);
         item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "CowVariant");
         return item;
+    }
+
+    private org.bukkit.entity.Cow.Variant getCowVariantOption(String configurationPath, org.bukkit.entity.Cow.Variant[] variants) {
+        if (!mobConfiguration.getFileConfiguration().contains(configurationPath, true))
+            return null;
+
+        String keyValue = mobConfiguration.getFileConfiguration().getString(configurationPath);
+        switch (keyValue.toLowerCase()) {
+            case "cold":
+                return org.bukkit.entity.Cow.Variant.COLD;
+            case "temperate":
+                return org.bukkit.entity.Cow.Variant.TEMPERATE;
+            case "warm":
+                return org.bukkit.entity.Cow.Variant.WARM;
+            default:
+                return null;
+        }
+    }
+
+    private String getVariantName(org.bukkit.entity.Cow.Variant variant) {
+        if (variant.equals(org.bukkit.entity.Cow.Variant.COLD)) {
+            return "COLD";
+        } else if (variant.equals(org.bukkit.entity.Cow.Variant.WARM)) {
+            return "WARM";
+        } else if (variant.equals(org.bukkit.entity.Cow.Variant.TEMPERATE)) {
+            return "TEMPERATE";
+        } else {
+            return null;
+        }
     }
 }
