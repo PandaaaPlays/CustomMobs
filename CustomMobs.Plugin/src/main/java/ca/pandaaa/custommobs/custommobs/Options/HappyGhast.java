@@ -91,6 +91,4 @@ public class HappyGhast extends CustomMobOption {
         item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "Harness");
         return item;
     }
-
-    // TODO Happy ghast ageable cannot be baby... Maybe its the same for other mobs.
 }

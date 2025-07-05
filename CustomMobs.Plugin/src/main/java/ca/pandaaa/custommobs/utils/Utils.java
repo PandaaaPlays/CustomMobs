@@ -163,4 +163,19 @@ public class Utils {
             return true;
         return version.equals(serverVersion);
     }
+
+    public static boolean isVersionBeforeOrEqual(String version) {
+        String serverVersion = Bukkit.getBukkitVersion().split("-")[0];
+        String[] versionParts = version.split("\\.");
+        String[] serverVersionParts = serverVersion.split("\\.");
+
+        if(Integer.parseInt(serverVersionParts[0]) > Integer.parseInt(versionParts[0]))
+            return false;
+        if(Integer.parseInt(serverVersionParts[1]) > Integer.parseInt(versionParts[1]))
+            return false;
+        if(Integer.parseInt(serverVersionParts[2]) > Integer.parseInt(versionParts[2]))
+            return false;
+
+        return true;
+    }
 }
