@@ -188,7 +188,7 @@ public class CustomMobs extends JavaPlugin {
         List<org.bukkit.Sound> sounds = new ArrayList<>();
         List<String> newSounds = new ArrayList<>();
 
-        if (Utils.isVersionBeforeOrEqual("1.21.7")) {
+        if (Utils.isVersionBeforeOrEqual("1.21.8")) {
             return;
         } else {
             Registry.SOUNDS.iterator().forEachRemaining(sounds::add);

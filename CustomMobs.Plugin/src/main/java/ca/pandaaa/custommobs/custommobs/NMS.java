@@ -1,6 +1,7 @@
 package ca.pandaaa.custommobs.custommobs;
 
 import ca.pandaaa.custommobs.CustomMobs;
+import ca.pandaaa.custommobs.utils.Utils;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -71,14 +72,10 @@ public class NMS {
 
                 getHandleMethod = craftLivingEntityClass.getMethod("getHandle");
                 // To find the fields corresponding to the version, see : https://minidigger.github.io/MiniMappingViewer/#/mojang/client/1.XX.XX/LivingEntity
-                if(Bukkit.getBukkitVersion().contains("1.21.7")) {
+                if(Utils.isVersionAtLeast("1.21.6") && Utils.isVersionBeforeOrEqual("1.21.8")) {
                     attributeMap = LivingEntity.class.getDeclaredField("cc");  // Field 'attributes' in NMS LivingEntity class
                     attributes = AttributeMap.class.getDeclaredField("a");     // Field 'attributes' in NMS AttributeMap class
                     targetSelectorField = Mob.class.getDeclaredField("ci");    // Field 'targetSelector' in NMS entity.Mob class
-                } else if(Bukkit.getBukkitVersion().contains("1.21.6")) {
-                    attributeMap = LivingEntity.class.getDeclaredField("cc");
-                    attributes = AttributeMap.class.getDeclaredField("a");
-                    targetSelectorField = Mob.class.getDeclaredField("ci");
                 } else if(Bukkit.getBukkitVersion().contains("1.21.5")) {
                     attributeMap = LivingEntity.class.getDeclaredField("bF");
                     attributes = AttributeMap.class.getDeclaredField("a");
@@ -107,12 +104,8 @@ public class NMS {
             try {
                 Object goalSelector = targetSelectorField.get(mob);
                 Method addGoalMethod = null;
-                if (Bukkit.getBukkitVersion().contains("1.21.7")) {
+                if(Utils.isVersionAtLeast("1.21.5") && Utils.isVersionBeforeOrEqual("1.21.8")) {
                     addGoalMethod = goalSelector.getClass().getDeclaredMethod("a", int.class, Goal.class); // Method 'addGoal' in NMS GoalSelector class
-                } else if (Bukkit.getBukkitVersion().contains("1.21.6")) {
-                    addGoalMethod = goalSelector.getClass().getDeclaredMethod("a", int.class, Goal.class);
-                } else if(Bukkit.getBukkitVersion().contains("1.21.5")) {
-                    addGoalMethod = goalSelector.getClass().getDeclaredMethod("a", int.class, Goal.class);
                 } else {
                     throw new Exception("This server version does not support aggressive animals. Please contact the developper if you believe this is an issue.");
                 }
