@@ -9,3 +9,4 @@ custom-effects:
     enabled: true
     vanish-time: 2
     message: false
+exclude-from-metrics: true

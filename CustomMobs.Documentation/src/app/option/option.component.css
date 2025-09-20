@@ -84,7 +84,7 @@
   height: 20px;
   width: 500px;
   min-width: 350px;
-  margin-left: 20px;
+  margin-left: auto;
   display: flex;
   align-items: center;
   box-sizing: border-box;

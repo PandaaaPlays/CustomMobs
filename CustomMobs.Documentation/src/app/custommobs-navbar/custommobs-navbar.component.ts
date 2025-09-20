@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {RouterLink} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {NavbarMenu} from './navbar-menu/navbar-menu.component';
 import {OptionsService} from '../services/options.service';
-import {CustomEffectComponent} from '../custom-effect/custom-effect.component';
 import {CustomEffectsService} from '../services/custom-effects.service';
 
 interface Option {
@@ -24,18 +23,20 @@ interface CustomEffect {
   standalone: true,
   imports: [
     RouterLink,
-    NavbarMenu
+    NavbarMenu,
   ]
 })
 
 export class CustomMobsNavbar implements OnInit {
   constructor(
     private optionsService: OptionsService,
-    private customEffectsService: CustomEffectsService
+    private customEffectsService: CustomEffectsService,
+    public router: Router
   ) {}
 
   optionNames: string[] = [];
   customEffectNames: string[] = [];
+
 
   ngOnInit(): void {
     this.optionsService.options$.subscribe(data => {

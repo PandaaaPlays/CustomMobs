@@ -92,6 +92,13 @@ public class Manager {
                 .collect(Collectors.toList());
     }
 
+    public List<CustomMob> getMetricsCustomMobs() {
+        return customMobs.values().stream()
+                .filter(cm -> !cm.getCustomMobConfiguration().isExcludedFromMetrics())
+                .sorted(Comparator.comparing(CustomMob::getCreationDate))
+                .collect(Collectors.toList());
+    }
+
     public ConfigurationManager getConfigManager() {
         return configManager;
     }

@@ -21,6 +21,8 @@
 }
 
 .body {
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
   transition: scrollbar-color 0.4s;
   scrollbar-color: transparent transparent;

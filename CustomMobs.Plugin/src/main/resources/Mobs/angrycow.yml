@@ -5,3 +5,4 @@ special:
   gravity: true
   aggressive: true
   replace-natural: 10.0
+exclude-from-metrics: true

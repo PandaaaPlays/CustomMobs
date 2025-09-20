@@ -21,7 +21,7 @@
           <div class="entity-options">
             Options:
             <ng-container *ngFor="let option of result.options; let last = last">
-              <a class="option-link" [routerLink]="['/options', option]">{{option}}</a><span *ngIf="!last">, </span>
+              <a class="option-link" [routerLink]="['/Options', option]">{{option}}</a><span *ngIf="!last">, </span>
             </ng-container>
           </div>
         </div>

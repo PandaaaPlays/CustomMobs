@@ -137,3 +137,4 @@ custom-effects:
     spawned-amount: 2
     message: false
   cooldown: 10
+exclude-from-metrics: true

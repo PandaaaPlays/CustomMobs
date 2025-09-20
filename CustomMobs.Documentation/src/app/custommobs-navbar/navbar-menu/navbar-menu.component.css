@@ -17,6 +17,7 @@
   align-items: center;
   height: 30px;
   border-radius: 7px;
+  margin-bottom: 3px;
   z-index: 2;
 }
 
@@ -26,7 +27,8 @@
 }
 
 .options {
-  display: block;
+  display: flex;
+  flex-direction: column;
   max-height: 0;
   opacity: 0;
   overflow: hidden;
@@ -36,6 +38,7 @@
     opacity 0.15s ease,
     transform 0.15s ease;
   border-radius: 7px;
+  gap: 2px;
 }
 
 .options.selected {

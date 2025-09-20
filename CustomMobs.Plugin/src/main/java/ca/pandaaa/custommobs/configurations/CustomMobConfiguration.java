@@ -321,6 +321,15 @@ public class CustomMobConfiguration {
         }
     }
 
+    private static final String EXCLUDE_FROM_METRICS = "exclude-from-metrics";
+
+    public boolean isExcludedFromMetrics() {
+        if(!mobConfiguration.contains(EXCLUDE_FROM_METRICS, true))
+            return false;
+
+        return true;
+    }
+
     private static final String DELETED = "delete-on";
 
     public boolean isDeleted() {
