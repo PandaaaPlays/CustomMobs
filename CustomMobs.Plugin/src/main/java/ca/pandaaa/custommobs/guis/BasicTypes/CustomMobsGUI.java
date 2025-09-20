@@ -3,6 +3,7 @@ package ca.pandaaa.custommobs.guis.BasicTypes;
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.utils.Utils;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -118,7 +119,10 @@ public class CustomMobsGUI extends ca.pandaaa.custommobs.guis.CustomMobsGUI impl
             ItemStack item = new ItemStack(customMob.getItem().getType());
 
             ItemMeta itemMeta = item.getItemMeta();
-            itemMeta.setDisplayName(Utils.applyFormat(customMob.getName()));
+            if(ChatColor.stripColor(Utils.applyFormat(customMob.getName())).equals(""))
+                itemMeta.setDisplayName(customMob.getCustomMobFileName().replaceAll(".yml", ""));
+            else
+                itemMeta.setDisplayName(Utils.applyFormat(customMob.getName()));
             List<String> lore = new ArrayList<>();
             lore.add("");
             lore.add(Utils.applyFormat("&7&o(( Click to select this CustomMob ))"));

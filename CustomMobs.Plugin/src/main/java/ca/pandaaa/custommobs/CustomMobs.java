@@ -134,6 +134,13 @@ public class CustomMobs extends JavaPlugin {
         if (!mobFolder.exists())
             mobFolder.mkdirs();
 
+        if (mobFolder.listFiles() == null || mobFolder.listFiles().length == 0) {
+            saveResource("Mobs/angrycow.yml", false);
+            saveResource("Mobs/fastskeleton.yml", false);
+            saveResource("Mobs/megazombie.yml", false);
+            saveResource("Mobs/zombie.yml", false);
+        }
+
         File customEffectsMessagesFile = new File(getDataFolder(), "custom-effects-messages.yml");
         if (!customEffectsMessagesFile.exists())
             saveResource("custom-effects-messages.yml", false);

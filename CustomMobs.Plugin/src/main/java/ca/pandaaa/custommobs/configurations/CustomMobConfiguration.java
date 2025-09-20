@@ -81,12 +81,12 @@ public class CustomMobConfiguration {
 
         CustomMob customMob = new CustomMob(dateTime, type, this);
 
-        setCustomMobConfigurations(customMob, type);
+        setCustomMobOptions(customMob, type);
 
         return customMob;
     }
 
-    public void setCustomMobConfigurations(CustomMob customMob, EntityType type) {
+    public void setCustomMobOptions(CustomMob customMob, EntityType type) {
         try {
             ClassPath path = ClassPath.from(this.getClass().getClassLoader());
             List<ClassPath.ClassInfo> classInfos = new ArrayList<>(path.getTopLevelClassesRecursive("ca.pandaaa.custommobs.custommobs.Options"));
@@ -106,8 +106,20 @@ public class CustomMobConfiguration {
                     customMob.addCustomMobType((CustomMobOption) clazz.getDeclaredConstructor(CustomMobConfiguration.class).newInstance(this));
                 }
             }
+        } catch (IOException | ClassNotFoundException | InvocationTargetException
+                | NoSuchMethodException | InstantiationException | IllegalAccessException exception) {
+            CustomMobs.getPlugin().getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&c[!] Something went wrong while loading a CustomMob's option : " + exception));
+            if (exception instanceof InvocationTargetException) {
+                Throwable cause = ((InvocationTargetException) exception).getCause();
+                CustomMobs.getPlugin().getServer().getConsoleSender().sendMessage(ChatColor.RED + "Cause: " + cause);
+            }
+        }
+    }
 
-            classInfos = new ArrayList<>(path.getTopLevelClassesRecursive("ca.pandaaa.custommobs.custommobs.CustomEffects"));
+    public void setCustomMobCustomEffects(CustomMob customMob) {
+        try {
+            ClassPath path = ClassPath.from(this.getClass().getClassLoader());
+            List<ClassPath.ClassInfo> classInfos = new ArrayList<>(path.getTopLevelClassesRecursive("ca.pandaaa.custommobs.custommobs.CustomEffects"));
 
             for (ClassPath.ClassInfo info : classInfos) {
                 Class clazz = Class.forName(info.getName(), true, this.getClass().getClassLoader());
@@ -116,8 +128,8 @@ public class CustomMobConfiguration {
                 customMob.addCustomMobCustomEffect((CustomMobCustomEffect) clazz.getDeclaredConstructor(CustomMobConfiguration.class).newInstance(this));
             }
         } catch (IOException | ClassNotFoundException | InvocationTargetException
-                | NoSuchMethodException | InstantiationException | IllegalAccessException exception) {
-            CustomMobs.getPlugin().getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&c[!] Something went wrong while loading a CustomMob's option or custom effect : " + exception));
+                 | NoSuchMethodException | InstantiationException | IllegalAccessException exception) {
+            CustomMobs.getPlugin().getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&c[!] Something went wrong while loading a CustomMob's custom effect : " + exception));
             if (exception instanceof InvocationTargetException) {
                 Throwable cause = ((InvocationTargetException) exception).getCause();
                 CustomMobs.getPlugin().getServer().getConsoleSender().sendMessage(ChatColor.RED + "Cause: " + cause);

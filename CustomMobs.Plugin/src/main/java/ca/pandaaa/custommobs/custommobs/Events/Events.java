@@ -16,9 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.SpawnerSpawnEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -277,6 +275,55 @@ public class Events implements Listener {
 
             ItemStack spawnerItem = manager.getCustomMobItem(manager.getCustomMob(container.get(key, PersistentDataType.STRING)), "spawner", 1);
             block.getLocation().getWorld().dropItem(block.getLocation(), spawnerItem);
+        }
+    }
+
+    @EventHandler
+    public void onEntitySpawn(CreatureSpawnEvent event) {
+        CreatureSpawnEvent.SpawnReason reason = event.getSpawnReason();
+        switch (reason) {
+            case CHUNK_GEN:
+            case TRIAL_SPAWNER:
+            case BUCKET:
+            case SHEARED:
+            case COMMAND:
+            case SPAWNER_EGG:
+            case CUSTOM:
+                return;
+        }
+
+        Map<CustomMob, Double> customMobReplacePercentages = new HashMap<>();
+        double totalPercentage = 0;
+        for(CustomMob customMob : CustomMobs.getPlugin().getCustomMobsManager().getCustomMobs()) {
+            if(customMob.getType() != event.getEntityType())
+                continue;
+            if (customMob.getCustomMobOption("Special") != null && ((Special) customMob.getCustomMobOption("Special")).getReplaceNaturalPercentage() != 0.0) {
+                double percentage = ((Special) customMob.getCustomMobOption("Special")).getReplaceNaturalPercentage();
+                customMobReplacePercentages.put(customMob, percentage);
+                totalPercentage += percentage;
+            }
+        }
+
+        if(customMobReplacePercentages.isEmpty())
+            return;
+
+        double roll = Math.random() * 100;
+        if (roll > totalPercentage) return;
+
+        double random = Math.random() * totalPercentage;
+        double cumulative = 0;
+        CustomMob chosen = null;
+        for (Map.Entry<CustomMob, Double> entry : customMobReplacePercentages.entrySet()) {
+            cumulative += entry.getValue();
+            if (random <= cumulative) {
+                chosen = entry.getKey();
+                break;
+            }
+        }
+
+        if (chosen != null) {
+            event.setCancelled(true);
+            chosen.spawnCustomMob(event.getLocation());
         }
     }
 }

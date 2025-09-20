@@ -26,9 +26,10 @@ import java.util.Objects;
 public class Special extends CustomMobOption {
     /**
      *  Toggles the visibility of the entity's name tag, even when not directly looking at it.
+     *  If not set, the name of the CustomMob will be shown when looking at the mob (default behavior).
      */
     private static final String VISIBLE_NAME = "special.visible-name";
-    private boolean isNameVisible;
+    private Boolean isNameVisible;
     /**
      * Sets the entity's health (in half heart(s)). A health of 20 means that the CustomMob has 10 hearts of health.
      * @minimum 0
@@ -118,10 +119,20 @@ public class Special extends CustomMobOption {
      */
     private static final String NATURAL_DROPS = "special.natural-drops";
     private boolean naturalDrops;
+    /**
+     * Replaces a percentage of the naturally spawned mobs of the CustomMob's type. For example,
+     * if this value is set to 25% and the CustomMob's type is a Cow, 1/4 of the naturally spawned
+     * cows will be replaced by this CustomMob.
+     * <li>Multiple CustomMobs of the same type with this option enabled will increase the percentage accordingly.
+     * @minimum 0
+     * @maximum 100
+     */
+    private static final String REPLACE_NATURAL = "special.replace-natural";
+    private double replaceNaturalPercentage;
 
     public Special(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
-        this.isNameVisible = getOption(VISIBLE_NAME, Boolean.class, false);
+        this.isNameVisible = getOption(VISIBLE_NAME, Boolean.class);
         this.health = getOption(HEALTH, Double.class);
         this.aggressive = getOption(AGGRESSIVE, Boolean.class, false);
         this.glowing = getOption(GLOWING, Boolean.class, false);
@@ -137,10 +148,14 @@ public class Special extends CustomMobOption {
         this.followRange = getOption(FOLLOW_RANGE, Double.class, 32.0);
         this.size = getOption(SIZE, Double.class, 1.0);
         this.naturalDrops = getOption(NATURAL_DROPS, Boolean.class, true);
+        this.replaceNaturalPercentage = getOption(REPLACE_NATURAL, Double.class, 0.0);
     }
 
     public void applyOptions(Entity customMob) {
-        customMob.setCustomNameVisible(isNameVisible);
+        if(isNameVisible != null && !isNameVisible)
+            customMob.setCustomName(null);
+        if(isNameVisible != null && isNameVisible)
+            customMob.setCustomNameVisible(true);
 
         if(customMob instanceof Attributable) {
             if (health != null) {
@@ -176,7 +191,7 @@ public class Special extends CustomMobOption {
     }
 
     public void resetOptions() {
-        // default options do not need to be reset as they are applicable for all entity types.
+        // Special options do not need to be reset as they are applicable for all entity types.
     }
 
     private void addAggressivity(Entity customMob) {
@@ -186,9 +201,17 @@ public class Special extends CustomMobOption {
     public ItemStack modifyOption(org.bukkit.entity.Player clicker, CustomMob customMob, String option, ClickType clickType) {
         switch(option.toLowerCase()) {
             case "visible": {
-                this.isNameVisible = !isNameVisible;
+                if(clickType.isRightClick()) {
+                    this.isNameVisible = null;
                     setOption(VISIBLE_NAME, isNameVisible);
-                return getOptionItemStack(getVisibleNameItem(), false, false);
+                } else {
+                    if(this.isNameVisible == null)
+                        this.isNameVisible = true;
+                    else
+                        this.isNameVisible = !isNameVisible;
+                    setOption(VISIBLE_NAME, isNameVisible);
+                }
+                return getOptionItemStack(getVisibleNameItem(), true, false);
             }
 
             case "health": {
@@ -330,6 +353,20 @@ public class Special extends CustomMobOption {
                 setOption(NATURAL_DROPS, naturalDrops);
                 return getOptionItemStack(getNaturalDropsItem(), false, false);
             }
+
+            case "replacenatural": {
+                if(clickType.isRightClick()) {
+                    this.replaceNaturalPercentage = 0.0;
+                    setOption(REPLACE_NATURAL, replaceNaturalPercentage);
+                } else {
+                    new DoubleGUI("Replace percentage", false, 0, 100, (value) -> {
+                        this.replaceNaturalPercentage = value;
+                        setOption(REPLACE_NATURAL, replaceNaturalPercentage);
+                        new OptionsGUI(customMob).openInventory((Player) clicker, 1);
+                    }).openInventory(clicker, replaceNaturalPercentage);
+                }
+                return getOptionItemStack(getSizeItem(), true, false);
+            }
         }
         return null;
     }
@@ -342,10 +379,14 @@ public class Special extends CustomMobOption {
         return naturalDrops;
     }
 
+    public double getReplaceNaturalPercentage() {
+        return replaceNaturalPercentage;
+    }
+
     public List<ItemStack> getOptionItems() {
         List<ItemStack> items = new ArrayList<>();
 
-        items.add(getOptionItemStack(getVisibleNameItem(), false, false));
+        items.add(getOptionItemStack(getVisibleNameItem(), true, false));
         items.add(getOptionItemStack(getHealthItem(), true, false));
         items.add(getOptionItemStack(getAggressiveItem(), false, false));
         items.add(getOptionItemStack(getGlowingItem(), false, false));
@@ -361,15 +402,16 @@ public class Special extends CustomMobOption {
         items.add(getOptionItemStack(getFollowRangeItem(), true, false));
         items.add(getOptionItemStack(getSizeItem(), true, false));
         items.add(getOptionItemStack(getNaturalDropsItem(), false, false));
+        items.add(getOptionItemStack(getReplaceNaturalItem(), true, false));
 
         return items;
     }
 
     public CustomMobsItem getVisibleNameItem() {
         CustomMobsItem item = new CustomMobsItem(Material.GLOW_INK_SAC);
-        String visible = this.isNameVisible ? "&a&lOn" : "&c&lOff";
+        String visible = this.isNameVisible == null ? "&fOn hover" : this.isNameVisible == true ? "&fAlways" : "&fHidden";
         item.setName("&6&lName always visible");
-        item.addLore("&eVisible: " + visible);
+        item.addLore("&eVisibility: " + visible);
         item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "Visible");
         return item;
     }
@@ -511,6 +553,14 @@ public class Special extends CustomMobOption {
         String naturalDrops = this.naturalDrops ? "&a&lOn" : "&c&lOff";
         item.addLore("&eNatural mob drops: &f" + naturalDrops);
         item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "NaturalDrops");
+        return item;
+    }
+
+    public CustomMobsItem getReplaceNaturalItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.WHEAT_SEEDS);
+        item.setName("&9&lReplace natural spawn");
+        item.addLore("&eChance of replacing natural: &f" + this.replaceNaturalPercentage + "%");
+        item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "ReplaceNatural");
         return item;
     }
 }

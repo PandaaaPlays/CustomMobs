@@ -1,0 +1,7 @@
+mob:
+  type: COW
+  name: '&b'
+special:
+  gravity: true
+  aggressive: true
+  replace-natural: 10.0

@@ -305,7 +305,8 @@ public class CustomMob implements Listener {
         }
 
         customMobOptions = new HashMap<>();
-        mobConfiguration.setCustomMobConfigurations(this, entityType);
+        mobConfiguration.setCustomMobOptions(this, entityType);
+        mobConfiguration.setCustomMobCustomEffects(this);
     }
 
     /* === OPTIONS === */

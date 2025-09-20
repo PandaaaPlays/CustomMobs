@@ -1,0 +1,11 @@
+mob:
+  type: SKELETON
+  name: "&a"
+special:
+  speed: 0.5
+  replace-natural: 2.0
+custom-effects:
+  vanish:
+    enabled: true
+    vanish-time: 2
+    message: false

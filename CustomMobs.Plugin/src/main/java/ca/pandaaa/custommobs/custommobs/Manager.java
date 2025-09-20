@@ -3,6 +3,7 @@ package ca.pandaaa.custommobs.custommobs;
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.configurations.ConfigurationManager;
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
@@ -29,6 +30,10 @@ public class Manager {
             CustomMob customMob = mobConfiguration.loadCustomMob();
             if (customMob != null)
                 customMobs.put(mobConfiguration.getFileName().toLowerCase().replace(".yml", ""), customMob);
+        }
+        // Apply the effects on a second pass, as the mobs need to be created for some effects.
+        for (CustomMob customMob : customMobs.values()) {
+            customMob.getCustomMobConfiguration().setCustomMobCustomEffects(customMob);
         }
     }
 
