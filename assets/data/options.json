@@ -129,6 +129,15 @@
                     "maximum":  null
                 }
             ],
+    "HappyGhast":  [
+                       {
+                           "minimum":  null,
+                           "description":  "Represents the harness equipped on the happy ghast CustomMob.",
+                           "type":  "Item",
+                           "key":  "HARNESS",
+                           "maximum":  null
+                       }
+                   ],
     "SkeletonHorse":  [
                           {
                               "minimum":  null,
@@ -193,7 +202,7 @@
     "Special":  [
                     {
                         "minimum":  null,
-                        "description":  "Toggles the visibility of the entity\u0027s name tag, even when not directly looking at it.",
+                        "description":  "Toggles the visibility of the entity\u0027s name tag, even when not directly looking at it. If not set, the name of the CustomMob will be shown when looking at the mob (default behavior).",
                         "type":  "On / Off",
                         "key":  "VISIBLE_NAME",
                         "maximum":  null
@@ -291,7 +300,7 @@
                     },
                     {
                         "minimum":  "0.06",
-                        "description":  "Adjusts the entity’s physical size. The default value is 1. .06",
+                        "description":  "Adjusts the entity’s physical size. The default value is 1.",
                         "type":  "Decimal",
                         "key":  "SIZE",
                         "maximum":  "16"
@@ -302,6 +311,13 @@
                         "type":  "On / Off",
                         "key":  "NATURAL_DROPS",
                         "maximum":  null
+                    },
+                    {
+                        "minimum":  "0",
+                        "description":  "Replaces a percentage of the naturally spawned mobs of the CustomMob\u0027s type. For example, if this value is set to 25% and the CustomMob\u0027s type is a Cow, 1/4 of the naturally spawned cows will be replaced by this CustomMob. \u003cli\u003eMultiple CustomMobs of the same type with this option enabled will increase the percentage accordingly.",
+                        "type":  "Decimal",
+                        "key":  "REPLACE_NATURAL",
+                        "maximum":  "100"
                     }
                 ],
     "Frog":  [
