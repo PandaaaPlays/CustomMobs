@@ -129,6 +129,9 @@ foreach ($file in $JavaFiles)
                 "UUID" {
                     $type = "Unique user ID"
                 }
+                "PotionEffectType" {
+                    $type = "Potion effect"
+                }
                 default {
                     $type = $type -replace "org.bukkit.entity.", ""
                     $type = $type -replace '\.', ''

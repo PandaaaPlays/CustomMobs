@@ -107,7 +107,7 @@
                                      {
                                          "minimum":  null,
                                          "description":  "Determines the effect applied on the player hurt by the CustomMob.",
-                                         "type":  "Potioneffect type",
+                                         "type":  "Potion effect",
                                          "key":  "INFECTION_EFFECT",
                                          "maximum":  null
                                      }
