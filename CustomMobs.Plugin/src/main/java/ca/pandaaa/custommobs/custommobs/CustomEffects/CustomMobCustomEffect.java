@@ -7,14 +7,13 @@ import ca.pandaaa.custommobs.guis.BasicTypes.DoubleGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects.CustomEffectOptionsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 
 import java.io.IOException;
 import java.util.List;
@@ -118,7 +117,7 @@ public abstract class CustomMobCustomEffect {
         item.setName("&6&lEffect message");
         String messageStatus = this.message ? "&a&lOn" : "&c&lOff";
         item.addLore("&eDisplay message: &f" + messageStatus);
-        if(customEffectType != CustomEffectType.ON_IMPACT) {
+        if(customEffectType != CustomEffectType.ON_IMPACT && customEffectType != CustomEffectType.ON_DAMAGE_ON_PLAYER) {
             item.addLore("&bMessage radius: &f" + (messageRadius > 0 ? messageRadius : "Everyone"));
             item.addLore("", "&7&o(( Left-Click to edit this option ))", "&7&o(( Right-Click to change the radius of the message ))");
         } else {
@@ -169,6 +168,8 @@ public abstract class CustomMobCustomEffect {
                 return type.cast(mobConfiguration.getFileConfiguration().getDouble(configurationPath));
             if (type == CustomMob.class)
                 return type.cast(CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(mobConfiguration.getFileConfiguration().getString(configurationPath)));
+            if (type == PotionEffectType.class)
+                return type.cast(Registry.EFFECT.get(NamespacedKey.minecraft(mobConfiguration.getFileConfiguration().getString(configurationPath))));
             return type.cast(mobConfiguration.getFileConfiguration().get(configurationPath));
         } catch (Exception exception) {
             CustomMobs.getPlugin().getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&c[!] The type of the option " + configurationPath + " is not supported."));

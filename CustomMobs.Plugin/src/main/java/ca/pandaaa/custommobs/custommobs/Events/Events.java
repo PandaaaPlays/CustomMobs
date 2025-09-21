@@ -1,6 +1,8 @@
 package ca.pandaaa.custommobs.custommobs.Events;
 
 import ca.pandaaa.custommobs.CustomMobs;
+import ca.pandaaa.custommobs.custommobs.CustomEffects.CustomEffectType;
+import ca.pandaaa.custommobs.custommobs.CustomEffects.CustomMobCustomEffect;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.custommobs.DropManager;
 import ca.pandaaa.custommobs.custommobs.Manager;
@@ -49,6 +51,20 @@ public class Events implements Listener {
             Random rand = new Random();
             double randomValue = minDamage + (maxDamage - minDamage) * rand.nextDouble();
             event.setDamage(randomValue);
+        }
+
+        if (!(event.getEntity() instanceof Player))
+            return;
+
+        NamespacedKey nameKey = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Name");
+        if (keys.contains(nameKey)) {
+            CustomMob customMob = CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(entity.getPersistentDataContainer().get(nameKey, PersistentDataType.STRING));
+            customMob.getCustomMobCustomEffects().stream()
+                    .filter(effect -> CustomEffectType.ON_DAMAGE_ON_PLAYER.equals(effect.getCustomEffectType()))
+                    .filter(CustomMobCustomEffect::isEnabled)
+                    .forEach(effect ->  {
+                        effect.triggerCustomEffect(event.getEntity());
+                    });
         }
     }
 

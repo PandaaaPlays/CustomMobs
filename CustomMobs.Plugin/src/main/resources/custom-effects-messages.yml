@@ -14,5 +14,6 @@ charge: "%name% &7&l>> &6&lCharge"
 gravitypull: "%name% &7&l>> &3&lGravity pull"
 mobspawner: "%name% &7&l>> &c&lMob spawner"
 trampoline: "%name% &7&l>> &2&lTrampoline"
+infection: "%name% &7&l>> &4&lInfection"
 
 
