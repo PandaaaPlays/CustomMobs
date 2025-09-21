@@ -1,0 +1,17 @@
+mob:
+  type: ZOMBIE
+  name: '&a'
+item:
+  ==: org.bukkit.inventory.ItemStack
+  v: 4440
+  type: ZOMBIE_SPAWN_EGG
+  meta:
+    ==: ItemMeta
+    meta-type: SPAWN_EGG
+    display-name: '{"text":"","extra":["zombie Spawn Egg"]}'
+    PublicBukkitValues: |-
+      {
+          "custommobs:custommobs.filename": "zombie",
+          "custommobs:custommobs.itemtype": "item"
+      }
+exclude-from-metrics: true

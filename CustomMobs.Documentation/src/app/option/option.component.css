@@ -10,6 +10,7 @@
   width: auto;
   min-width: 100%;
   background: #FAFBE6;
+  margin-right: 20px;
 }
 
 .header .text {
@@ -84,7 +85,7 @@
   height: 20px;
   width: 500px;
   min-width: 350px;
-  margin-left: 20px;
+  margin-left: auto;
   display: flex;
   align-items: center;
   box-sizing: border-box;

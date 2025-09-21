@@ -94,8 +94,4 @@ export class OptionComponent implements OnInit {
   formatClassName(name: string): string {
     return (name ?? '').replace(/([a-z])([A-Z])/g, '$1 $2');
   }
-
-  formatOptions(options: string[]): string {
-    return `Options: ${options.join(', ')}`;
-  }
 }

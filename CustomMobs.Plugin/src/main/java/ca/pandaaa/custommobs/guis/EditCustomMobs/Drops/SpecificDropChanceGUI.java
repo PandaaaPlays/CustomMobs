@@ -113,7 +113,7 @@ public class SpecificDropChanceGUI extends CustomMobsGUI {
                 new SpecificDropGUI(customMob, dropItem, dropIndex).openInventory((Player) event.getWhoClicked());
                 break;
             case 5:
-                if((!shifting && current + 0.001 >= minimum) || (shifting && current + 0.005 >= maximum))
+                if((!shifting && current + 0.001 >= maximum) || (shifting && current + 0.005 >= maximum))
                     inventory.setItem(4, getConfirmItem(inventory.getItem(4), maximum));
                 else if ((!shifting && current <= maximum - 0.001) || (shifting && current <= maximum - 0.005))
                     inventory.setItem(4, getConfirmItem(inventory.getItem(4), shifting ? current + 0.005 : current + 0.001));

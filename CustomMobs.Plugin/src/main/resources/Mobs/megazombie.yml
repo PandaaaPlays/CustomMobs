@@ -1,0 +1,140 @@
+mob:
+  type: ZOMBIE
+  name: '&6&lMega Zombie'
+  can-break-doors: false
+special:
+  size: 1.5
+  visible-name: true
+  health: 30.0
+  glowing: false
+  speed: 0.4
+  damage:
+    ==: ca.pandaaa.custommobs.utils.DamageRange
+    maximum-damage: 5.0
+    minimum-damage: 5.0
+  replace-natural: 2.0
+potions:
+- ==: ca.pandaaa.custommobs.custommobs.PotionEffect
+  duration: -1
+  is-ambient: true
+  potion-effect-type: fire_resistance
+  amplifier: 1
+  has-particles: true
+drops:
+- ==: ca.pandaaa.custommobs.custommobs.Drop
+  item:
+    ==: org.bukkit.inventory.ItemStack
+    v: 4440
+    type: STONE_SWORD
+  probability: 0.0
+  affected-by-looting: false
+  deletable: false
+  messages: []
+  custom-type: MainHand
+  priority: 2
+  drop-condition: DROP
+- ==: ca.pandaaa.custommobs.custommobs.Drop
+  item:
+    ==: org.bukkit.inventory.ItemStack
+    v: 4440
+    type: TURTLE_HELMET
+  probability: 0.0
+  affected-by-looting: false
+  deletable: false
+  messages: []
+  custom-type: Helmet
+  priority: 4
+  drop-condition: DROP
+- ==: ca.pandaaa.custommobs.custommobs.Drop
+  item:
+    ==: org.bukkit.inventory.ItemStack
+    v: 4440
+    type: GOLDEN_CHESTPLATE
+  probability: 0.0
+  affected-by-looting: false
+  deletable: false
+  messages: []
+  custom-type: Chestplate
+  priority: 5
+  drop-condition: DROP
+- ==: ca.pandaaa.custommobs.custommobs.Drop
+  item:
+    ==: org.bukkit.inventory.ItemStack
+    v: 4440
+    type: DIAMOND_LEGGINGS
+  probability: 0.0
+  affected-by-looting: false
+  deletable: false
+  messages: []
+  custom-type: Leggings
+  priority: 6
+  drop-condition: DROP
+- ==: ca.pandaaa.custommobs.custommobs.Drop
+  item:
+    ==: org.bukkit.inventory.ItemStack
+    v: 4440
+    type: LEATHER_BOOTS
+  probability: 0.0
+  affected-by-looting: false
+  deletable: false
+  messages: []
+  custom-type: Boots
+  priority: 7
+  drop-condition: DROP
+- ==: ca.pandaaa.custommobs.custommobs.Drop
+  item:
+    ==: org.bukkit.inventory.ItemStack
+    v: 4440
+    type: EXPERIENCE_BOTTLE
+    amount: 3
+  probability: 25.0
+  affected-by-looting: true
+  deletable: true
+  messages: []
+  custom-type: ''
+  group-color: WHITE
+  priority: 99
+  drop-condition: DROP
+- ==: ca.pandaaa.custommobs.custommobs.Drop
+  item:
+    ==: org.bukkit.inventory.ItemStack
+    v: 4440
+    type: EXPERIENCE_BOTTLE
+    amount: 2
+  probability: 50.0
+  affected-by-looting: true
+  deletable: true
+  messages: []
+  custom-type: ''
+  group-color: WHITE
+  priority: 99
+  drop-condition: DROP
+equipment:
+  main-hand:
+    ==: org.bukkit.inventory.ItemStack
+    v: 4440
+    type: STONE_SWORD
+  helmet:
+    ==: org.bukkit.inventory.ItemStack
+    v: 4440
+    type: TURTLE_HELMET
+  chestplate:
+    ==: org.bukkit.inventory.ItemStack
+    v: 4440
+    type: GOLDEN_CHESTPLATE
+  leggings:
+    ==: org.bukkit.inventory.ItemStack
+    v: 4440
+    type: DIAMOND_LEGGINGS
+  boots:
+    ==: org.bukkit.inventory.ItemStack
+    v: 4440
+    type: LEATHER_BOOTS
+custom-effects:
+  mobspawner:
+    enabled: true
+    custommob: zombie
+    spawned-amount: 2
+    message: false
+  cooldown: 10
+exclude-from-metrics: true

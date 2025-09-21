@@ -36,7 +36,10 @@ export class CustomEffectComponent implements OnInit {
               this.title = "A random enabled 'Cooldown' custom effect(s) will be triggered every x second(s)."
               break;
             case "ON_IMPACT":
-              this.title = "Enabled 'On impact' custom effect(s) will be triggered when a players is in a 1 block radius of the CustomMob."
+              this.title = "Enabled 'On impact' custom effect(s) will be triggered when a player is in a 1 block radius of the CustomMob."
+              break;
+            case "ON_DAMAGE_ON_PLAYER":
+              this.title = "Enabled 'On damage on player' custom effect(s) will be triggered when a player is hurt by the CustomMob."
               break;
             default:
               this.title = "";

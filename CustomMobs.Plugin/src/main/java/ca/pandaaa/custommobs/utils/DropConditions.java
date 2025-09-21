@@ -5,7 +5,6 @@ import java.util.Map;
 
 public enum DropConditions {
     NEARBY,
-
     KILLER,
     DROP,
     MOST_DAMAGE; // Might be hard to do... Might remove

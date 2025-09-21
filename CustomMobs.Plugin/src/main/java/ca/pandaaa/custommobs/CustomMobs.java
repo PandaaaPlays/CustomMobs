@@ -26,6 +26,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.BufferedWriter;
@@ -134,6 +135,13 @@ public class CustomMobs extends JavaPlugin {
         if (!mobFolder.exists())
             mobFolder.mkdirs();
 
+        if (mobFolder.listFiles() == null || mobFolder.listFiles().length == 0) {
+            saveResource("Mobs/angrycow.yml", false);
+            saveResource("Mobs/fastskeleton.yml", false);
+            saveResource("Mobs/megazombie.yml", false);
+            saveResource("Mobs/zombie.yml", false);
+        }
+
         File customEffectsMessagesFile = new File(getDataFolder(), "custom-effects-messages.yml");
         if (!customEffectsMessagesFile.exists())
             saveResource("custom-effects-messages.yml", false);
@@ -158,6 +166,7 @@ public class CustomMobs extends JavaPlugin {
     }
 
     private void getCommandsAndListeners() {
+        HandlerList.unregisterAll(this);
         PluginCommand command = getCommand("CustomMobs");
         if(command == null)
             return;
@@ -170,7 +179,7 @@ public class CustomMobs extends JavaPlugin {
     private void addMetrics(Metrics metrics) {
         metrics.addCustomChart(new Metrics.AdvancedPie("custommobs_entity_types", () -> {
             Map<String, Integer> entityTypeAmount = new HashMap<>();
-            for (CustomMob customMob : customMobsManager.getCustomMobs()) {
+            for (CustomMob customMob : customMobsManager.getMetricsCustomMobs()) {
                 String entityType = Utils.getSentenceCase(customMob.getType().getEntityClass().getSimpleName());
                 if (!entityTypeAmount.containsKey(entityType))
                     entityTypeAmount.put(entityType, 1);
@@ -180,6 +189,7 @@ public class CustomMobs extends JavaPlugin {
             return entityTypeAmount;
         }));
 
+        // Get the CustomMobs (not metrics one) because we also want the 4 defaults in the count.
         metrics.addCustomChart(new Metrics.SingleLineChart("custommobs_amount", () -> customMobsManager.getCustomMobs().size()));
     }
 

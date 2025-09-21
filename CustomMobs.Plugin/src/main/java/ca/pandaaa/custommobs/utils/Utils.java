@@ -145,7 +145,7 @@ public class Utils {
         timeInSecond = timeInSecond % 60;
 
         if (timeInSecond > 0)
-            formattedSize += (minutes ? " & " : "") + timeInSecond + secondsString + (timeInSecond > 1 && !small ? "s" : "");
+            formattedSize += (minutes || hours && !minutes ? " & " : "") + timeInSecond + secondsString + (timeInSecond > 1 && !small ? "s" : "");
 
         return formattedSize;
     }

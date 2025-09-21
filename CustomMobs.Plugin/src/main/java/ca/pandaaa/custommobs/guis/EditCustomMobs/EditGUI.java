@@ -13,6 +13,7 @@ import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -24,13 +25,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 
 public class EditGUI extends CustomMobsGUI {
-
-    private final ItemStack mainHand;
-    private final ItemStack offHand;
-    private final ItemStack helmet;
-    private final ItemStack chestplate;
-    private final ItemStack leggings;
-    private final ItemStack boots;
     private final ItemStack types;
     private final ItemStack options;
     private final ItemStack drops;
@@ -52,12 +46,6 @@ public class EditGUI extends CustomMobsGUI {
         this.customMob = customMob;
         this.player = player;
 
-        this.mainHand = getMenuItem(new ItemStack(Material.NETHERITE_SWORD), true);
-        this.offHand = getMenuItem(new ItemStack(Material.SHIELD), true);
-        this.helmet = getMenuItem(new ItemStack(Material.NETHERITE_HELMET), true);
-        this.chestplate = getMenuItem(new ItemStack(Material.NETHERITE_CHESTPLATE), true);
-        this.leggings = getMenuItem(new ItemStack(Material.NETHERITE_LEGGINGS), true);
-        this.boots = getMenuItem(new ItemStack(Material.NETHERITE_BOOTS), true);
         this.types = getMenuItem(new ItemStack(TypesGUI.getSpawnEggMaterial(customMob.getType())), true);
         this.options = getMenuItem(new ItemStack(Material.END_CRYSTAL), true);
         this.name = getMenuItem(new ItemStack(Material.SPRUCE_HANGING_SIGN), true);
@@ -74,23 +62,13 @@ public class EditGUI extends CustomMobsGUI {
         for(int i = 0; i < 54; i++)
             inventory.setItem(i, filler);
 
-        // Setting the main hand item
-        inventory.setItem(10, getHandItem(mainHand, true));
-
-        // Setting the offhand item
-        inventory.setItem(11, getHandItem(offHand, false));
-
-        // Setting the helmet item
-        inventory.setItem(13, getArmorItem(helmet, "Helmet"));
-
-        // Setting the chestplate item
-        inventory.setItem(14, getArmorItem(chestplate, "Chestplate"));
-
-        // Setting the leggings item
-        inventory.setItem(15, getArmorItem(leggings, "Leggings"));
-
-        // Setting the boots item
-        inventory.setItem(16, getArmorItem(boots, "Boots"));
+        // Setting the equipments
+        updateHandItem(true);
+        updateHandItem(false);
+        updateArmorItem("Helmet");
+        updateArmorItem("Chestplate");
+        updateArmorItem("Leggings");
+        updateArmorItem("Boots");
 
         // Setting the type item
         inventory.setItem(28, getTypesItem(types));
@@ -157,6 +135,7 @@ public class EditGUI extends CustomMobsGUI {
                     clicker.setItemOnCursor(null);
                 } else
                     clicker.setItemOnCursor(equipment.getMainHand());
+                updateHandItem(true);
                 break;
             case 11:
                 if (event.isRightClick()) {
@@ -168,6 +147,7 @@ public class EditGUI extends CustomMobsGUI {
                     clicker.setItemOnCursor(null);
                 } else
                     clicker.setItemOnCursor(equipment.getOffHand());
+                updateHandItem(false);
                 break;
             case 13:
                 if (event.isRightClick()) {
@@ -179,6 +159,7 @@ public class EditGUI extends CustomMobsGUI {
                     clicker.setItemOnCursor(null);
                 } else
                     clicker.setItemOnCursor(equipment.getHelmet());
+                updateArmorItem("Helmet");
                 break;
             case 14:
                 if (event.isRightClick()) {
@@ -190,6 +171,7 @@ public class EditGUI extends CustomMobsGUI {
                     clicker.setItemOnCursor(null);
                 } else
                     clicker.setItemOnCursor(equipment.getChestplate());
+                updateArmorItem("Chestplate");
                 break;
             case 15:
                 if (event.isRightClick()) {
@@ -201,6 +183,7 @@ public class EditGUI extends CustomMobsGUI {
                     clicker.setItemOnCursor(null);
                 } else
                     clicker.setItemOnCursor(equipment.getLeggings());
+                updateArmorItem("Leggings");
                 break;
             case 16:
                 if (event.isRightClick()) {
@@ -212,6 +195,7 @@ public class EditGUI extends CustomMobsGUI {
                     clicker.setItemOnCursor(null);
                 } else
                     clicker.setItemOnCursor(equipment.getBoots());
+                updateArmorItem("Boots");
                 break;
             case 28:
                 new TypesGUI(customMob).openInventory(clicker, 1);
@@ -306,8 +290,66 @@ public class EditGUI extends CustomMobsGUI {
         Bukkit.getScheduler().runTask(CustomMobs.getPlugin(), new EditGUI(customMob, customMobsManager, player)::openInventory);
     }
 
+    private void updateHandItem(boolean main) {
+        int position = main ? 10 : 11;
+
+        if(main) {
+            // Setting the main hand item
+            if (customMob.getEquipment().getMainHand() != null) {
+                inventory.setItem(position, getHandItem(customMob.getEquipment().getMainHand(), true));
+            } else {
+                inventory.setItem(position, getHandItem(new ItemStack(Material.NETHERITE_SWORD), true));
+            }
+        } else {
+            // Setting the offhand item
+            if(customMob.getEquipment().getOffHand() != null) {
+                inventory.setItem(position, getHandItem(customMob.getEquipment().getOffHand(), false));
+            } else {
+                inventory.setItem(position, getHandItem(new ItemStack(Material.SHIELD), false));
+            }
+        }
+    }
+
+    private void updateArmorItem(String armor) {
+        switch (armor) {
+            case "Helmet":
+                // Setting the helmet item
+                if(customMob.getEquipment().getHelmet() != null) {
+                    inventory.setItem(13, getArmorItem(customMob.getEquipment().getHelmet(), "Helmet"));
+                } else {
+                    inventory.setItem(13, getArmorItem(new ItemStack(Material.NETHERITE_HELMET), "Helmet"));
+                }
+                break;
+            case "Chestplate":
+                // Setting the chestplate item
+                if(customMob.getEquipment().getChestplate() != null) {
+                    inventory.setItem(14, getArmorItem(customMob.getEquipment().getChestplate(), "Chestplate"));
+                } else {
+                    inventory.setItem(14, getArmorItem(new ItemStack(Material.NETHERITE_CHESTPLATE), "Chestplate"));
+                }
+                break;
+            case "Leggings":
+                // Setting the leggings item
+                if(customMob.getEquipment().getLeggings() != null) {
+                    inventory.setItem(15, getArmorItem(customMob.getEquipment().getLeggings(), "Leggings"));
+                } else {
+                    inventory.setItem(15, getArmorItem(new ItemStack(Material.NETHERITE_LEGGINGS), "Leggings"));
+                }
+                break;
+            case "Boots":
+                // Setting the boots item
+                if(customMob.getEquipment().getBoots() != null) {
+                    inventory.setItem(16, getArmorItem(customMob.getEquipment().getBoots(), "Boots"));
+                } else {
+                    inventory.setItem(16, getArmorItem(new ItemStack(Material.NETHERITE_BOOTS), "Boots"));
+                }
+                break;
+        }
+    }
+
     private ItemStack getHandItem(ItemStack item, boolean main) {
-        ItemMeta itemMeta = item.getItemMeta();
+        ItemStack clone = item.clone();
+        ItemMeta itemMeta = clone.getItemMeta();
         if(main)
             itemMeta.setDisplayName(Utils.applyFormat("&6&lMain hand Item"));
         else
@@ -318,12 +360,13 @@ public class EditGUI extends CustomMobsGUI {
         lore.add(Utils.applyFormat("&7&o(( Left-Click to get the current item ))"));
         lore.add(Utils.applyFormat("&7&o(( Right-Click to delete (reset) the current item ))"));
         itemMeta.setLore(lore);
-        item.setItemMeta(itemMeta);
-        return getMenuItem(item, true);
+        clone.setItemMeta(itemMeta);
+        return getMenuItem(clone, true);
     }
 
     private ItemStack getArmorItem(ItemStack item, String armor) {
-        ItemMeta itemMeta = item.getItemMeta();
+        ItemStack clone = item.clone();
+        ItemMeta itemMeta = clone.getItemMeta();
         itemMeta.setDisplayName(Utils.applyFormat("&6&l" + armor + " Item"));
         ArrayList<String> lore = new ArrayList<>();
         lore.add("");
@@ -331,8 +374,8 @@ public class EditGUI extends CustomMobsGUI {
         lore.add(Utils.applyFormat("&7&o(( Left-Click to get the current item ))"));
         lore.add(Utils.applyFormat("&7&o(( Right-Click to delete (reset) the current item ))"));
         itemMeta.setLore(lore);
-        item.setItemMeta(itemMeta);
-        return getMenuItem(item, true);
+        clone.setItemMeta(itemMeta);
+        return getMenuItem(clone, true);
     }
 
     private ItemStack getTypesItem(ItemStack item) {

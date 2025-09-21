@@ -8,14 +8,14 @@ Write-Host "===================="
 switch ($UserChoice)
 {
     "1" {
-        $JavaFilesDirectory = ".\src\main\java\ca\pandaaa\custommobs\custommobs\Options"
+        $JavaFilesDirectory = "..\CustomMobs.Plugin\src\main\java\ca\pandaaa\custommobs\custommobs\Options"
         Write-Host "Processing .java files in directory: $JavaFilesDirectory"
-        $OutputJsonFile = ".\WebPage\src\assets\data\options.json"
+        $OutputJsonFile = "..\CustomMobs.Documentation\src\assets\data\options.json"
     }
     "2" {
-        $JavaFilesDirectory = ".\src\main\java\ca\pandaaa\custommobs\custommobs\CustomEffects"
+        $JavaFilesDirectory = "..\CustomMobs.Plugin\src\main\java\ca\pandaaa\custommobs\custommobs\CustomEffects"
         Write-Host "Processing .java files in directory: $JavaFilesDirectory"
-        $OutputJsonFile = ".\WebPage\src\assets\data\custom-effects.json"
+        $OutputJsonFile = "..\CustomMobs.Documentation\src\assets\data\custom-effects.json"
     }
     default {
         Write-Host "Invalid selection."
@@ -128,6 +128,9 @@ foreach ($file in $JavaFiles)
                 }
                 "UUID" {
                     $type = "Unique user ID"
+                }
+                "PotionEffectType" {
+                    $type = "Potion effect"
                 }
                 default {
                     $type = $type -replace "org.bukkit.entity.", ""

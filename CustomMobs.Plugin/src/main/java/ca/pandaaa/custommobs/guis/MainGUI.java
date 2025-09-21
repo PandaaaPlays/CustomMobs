@@ -6,6 +6,7 @@ import ca.pandaaa.custommobs.custommobs.Manager;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.EditGUI;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.EntityType;
@@ -18,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +41,10 @@ public class MainGUI extends CustomMobsGUI {
             ItemStack item = new ItemStack(customMob.getItem().getType());
 
             ItemMeta itemMeta = item.getItemMeta();
-            itemMeta.setDisplayName(Utils.applyFormat(customMob.getName()));
+            if(ChatColor.stripColor(Utils.applyFormat(customMob.getName())).equals(""))
+                itemMeta.setDisplayName(customMob.getCustomMobFileName().replaceAll(".yml", ""));
+            else
+                itemMeta.setDisplayName(Utils.applyFormat(customMob.getName()));
             itemMeta.setLore(getItemLore());
             NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.FileName");
             itemMeta.getPersistentDataContainer().set(key, PersistentDataType.STRING, customMob.getCustomMobFileName().replace(".yml", ""));
@@ -181,12 +186,19 @@ public class MainGUI extends CustomMobsGUI {
         Manager customMobsManager = CustomMobs.getPlugin().getCustomMobsManager();
         String message = event.getMessage().toLowerCase().replaceAll(" ", "_");
         if (!message.equalsIgnoreCase("cancel")) {
-            if(!customMobsManager.getCustomMobNames().contains(message)) {
+            File mobFolder = new File(CustomMobs.getPlugin().getDataFolder(), "Mobs");
+            List<String> mobFileNames = new ArrayList<>();
+            if (mobFolder.exists()) {
+                for(File file : mobFolder.listFiles()) {
+                    mobFileNames.add(file.getName().toLowerCase().replace(".yml", ""));
+                }
+            }
+            if(!customMobsManager.getCustomMobNames().contains(message) && !mobFileNames.contains(message.toLowerCase())) {
                 CustomMob customMob = customMobsManager.addCustomMob(message, EntityType.PIG);
                 waitingForCreation.sendMessage(Utils.applyFormat("&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &eSuccessfully created : &r" + message));
                 Bukkit.getScheduler().runTask(CustomMobs.getPlugin(), new EditGUI(customMob, customMobsManager, event.getPlayer())::openInventory);
             } else {
-                event.getPlayer().sendMessage(Utils.applyFormat("&c&l[!] &cThe name you entered is already in use. Please select another one."));
+                event.getPlayer().sendMessage(Utils.applyFormat("&c&l[!] &cThe name you entered is already in use. Please select another one. Please note that deleted CustomMobs are stored for 2 weeks after deletion (delete the file manually to skip the 2 weeks)."));
                 return;
             }
         }

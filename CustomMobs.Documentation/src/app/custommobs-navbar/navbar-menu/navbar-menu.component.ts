@@ -28,9 +28,9 @@ export class NavbarMenu {
 
   navigateTo(path: string) {
     if(this.menuItems.length === 0) {
-      this.router.navigate(['/', path]);
+      this.menuName === "About" ? this.router.navigate(['/']) : this.router.navigate(['/', path]);
     } else {
-      this.router.navigate(['/' + this.menuName.replaceAll(" ", "-").toLowerCase(), path]);
+      this.router.navigate(['/' + this.menuName.replaceAll(" ", "-"), path]);
     }
   }
 

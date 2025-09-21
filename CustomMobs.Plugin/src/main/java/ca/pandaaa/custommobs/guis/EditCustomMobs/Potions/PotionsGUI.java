@@ -118,7 +118,8 @@ public class PotionsGUI extends CustomMobsGUI {
                 break;
             case 49:
                  new PotionEffectsGUI(customMob, (value) -> {
-                     customMob.addPotionEffect(value);
+                     if(value != null)
+                        customMob.addPotionEffect(value);
                      new PotionsGUI(customMob).openInventory(clicker, currentPage);
                  }).openInventory(clicker, 1);
                 break;

@@ -18,6 +18,18 @@
                                       }
                                   ]
                    },
+    "FireAspect":  {
+                       "effectType":  "ON_IMPACT",
+                       "fields":  [
+                                      {
+                                          "minimum":  "1",
+                                          "description":  "Determines how long (in second(s)) players will stay on fire upon ignition from the CustomMob.",
+                                          "type":  "Integer",
+                                          "key":  "FIRE_DURATION",
+                                          "maximum":  "30"
+                                      }
+                                  ]
+                   },
     "Explosion":  {
                       "effectType":  "COOLDOWN",
                       "fields":  [
@@ -59,7 +71,7 @@
                                           "description":  "Determines the radius (in block(s)) around the CustomMob where the effect should affect player(s).",
                                           "type":  "Integer",
                                           "key":  "RADIUS",
-                                          "maximum":  "100"
+                                          "maximum":  "32"
                                       }
                                   ]
                    },
@@ -75,6 +87,32 @@
                                   }
                               ]
                },
+    "Infection":  {
+                      "effectType":  "ON_DAMAGE_ON_PLAYER",
+                      "fields":  [
+                                     {
+                                         "minimum":  "1",
+                                         "description":  "Determines the time (in second(s)) that the effect is applied on the player hurt by the CustomMob. To set the time to be infinite, set the time to -1 (anything under 0).",
+                                         "type":  "Integer",
+                                         "key":  "INFECTION_TIME",
+                                         "maximum":  "Infinite"
+                                     },
+                                     {
+                                         "minimum":  "1",
+                                         "description":  "Determines the strength of the effect applied on the player hurt by the CustomMob.",
+                                         "type":  "Integer",
+                                         "key":  "INFECTION_AMPLIFIER",
+                                         "maximum":  "255"
+                                     },
+                                     {
+                                         "minimum":  null,
+                                         "description":  "Determines the effect applied on the player hurt by the CustomMob.",
+                                         "type":  "Potion effect",
+                                         "key":  "INFECTION_EFFECT",
+                                         "maximum":  null
+                                     }
+                                 ]
+                  },
     "Charge":  {
                    "effectType":  "ON_IMPACT",
                    "fields":  [
@@ -102,8 +140,34 @@
                                            "description":  "Determines the radius (in block(s)) around the CustomMob where the effect should affect player(s).",
                                            "type":  "Integer",
                                            "key":  "PULL_RADIUS",
-                                           "maximum":  "100"
+                                           "maximum":  "32"
                                        }
                                    ]
-                    }
+                    },
+    "LightningStrike":  {
+                            "effectType":  "COOLDOWN",
+                            "fields":  [
+                                           {
+                                               "minimum":  null,
+                                               "description":  "Determines if the lightning should spawn directly on nearby player(s) or not.",
+                                               "type":  "On / Off",
+                                               "key":  "ON_PLAYERS",
+                                               "maximum":  null
+                                           },
+                                           {
+                                               "minimum":  "1",
+                                               "description":  "Determines the radius (in block(s)) around the CustomMob where the effect should create lightning(s).",
+                                               "type":  "Integer",
+                                               "key":  "RADIUS",
+                                               "maximum":  "32"
+                                           },
+                                           {
+                                               "minimum":  "1",
+                                               "description":  "Determines the amount of lightning that should appear around the CustomMob (will only have an effect if \"On players\" is disabled.",
+                                               "type":  "Integer",
+                                               "key":  "AMOUNT",
+                                               "maximum":  "50"
+                                           }
+                                       ]
+                        }
 }
