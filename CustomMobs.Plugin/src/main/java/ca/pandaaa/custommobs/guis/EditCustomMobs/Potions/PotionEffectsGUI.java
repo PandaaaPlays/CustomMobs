@@ -96,7 +96,7 @@ public class PotionEffectsGUI extends CustomMobsGUI {
         switch (event.getSlot()) {
             case 45:
                 if(!name.contains("("))
-                    new PotionsGUI(customMob).openInventory(clicker, currentPage);
+                    consumer.accept(null);
                 else {
                     int page = Character.getNumericValue(name.charAt(name.indexOf('(') + 1));
                     openInventory(clicker, page);

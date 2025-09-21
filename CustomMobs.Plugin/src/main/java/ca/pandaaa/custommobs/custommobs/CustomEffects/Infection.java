@@ -5,6 +5,7 @@ import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects.CustomEffectOptionsGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.Potions.PotionEffectsGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.Potions.PotionsGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.Potions.SpecificPotionDurationGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
@@ -14,6 +15,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -85,12 +87,14 @@ public class Infection extends CustomMobCustomEffect {
                         new CustomEffectOptionsGUI(customMob, this, getOptionsItems()).openInventory(clicker);
                     }).openInventory(clicker, infectionAmplifier);
                 }
-                return getCustomEffectOptionItemStack(getInfectionTimeItem(), true);
+                return getCustomEffectOptionItemStack(getInfectionAmplifierItem(), true);
             }
             case "infectioneffect": {
                 new PotionEffectsGUI(customMob, (value) -> {
-                    this.infectionEffect = value.getType();
-                    setCustomEffectOption(INFECTION_EFFECT, this.infectionEffect.getKeyOrNull().getKey());
+                    if(value != null) {
+                        this.infectionEffect = value.getType();
+                        setCustomEffectOption(INFECTION_EFFECT, this.infectionEffect.getKeyOrNull().getKey());
+                    }
                     new CustomEffectOptionsGUI(customMob, this, getOptionsItems()).openInventory(clicker);
                 }).openInventory(clicker, 1);
                 return getCustomEffectOptionItemStack(getInfectionEffectItem(), false);
@@ -138,7 +142,16 @@ public class Infection extends CustomMobCustomEffect {
     }
 
     private CustomMobsItem getInfectionEffectItem() {
-        CustomMobsItem item = new CustomMobsItem(Material.BLAZE_POWDER);
+        CustomMobsItem item = new CustomMobsItem(Material.POTION);
+        PotionMeta potionMeta = (PotionMeta) item.getItemMeta();
+        if(potionMeta != null) {
+            if (infectionEffect == PotionEffectType.ABSORPTION) {
+                potionMeta.addCustomEffect(new org.bukkit.potion.PotionEffect(PotionEffectType.STRENGTH, -1, 1), true);
+            } else {
+                potionMeta.addCustomEffect(new org.bukkit.potion.PotionEffect(infectionEffect, -1, 1, true, true), true);
+            }
+        }
+        item.setItemMeta(potionMeta);
         item.setName("&2&lPotion Effect");
         item.addLore("&eEffect: &f" + Utils.getStartCase(this.infectionEffect.getKeyOrNull().getKey()));
         item.setCustomEffectPersistentDataContainer(this.getClass().getSimpleName() + ".InfectionEffect");

@@ -116,8 +116,10 @@ public class SpecificPotionGUI extends CustomMobsGUI {
             // Edit potion
             case 31:
                 new PotionEffectsGUI(customMob, (value) -> {
-                    type = value.getType();
-                    customMob.editPotion(new PotionEffect(type, duration, amplifier, ambient, particles), potionIndex);
+                    if(value != null) {
+                        type = value.getType();
+                        customMob.editPotion(new PotionEffect(type, duration, amplifier, ambient, particles), potionIndex);
+                    }
                     new SpecificPotionGUI(customMob, potionIndex).openInventory((Player) event.getWhoClicked());
                 }).openInventory(clicker, 1);
                 break;
