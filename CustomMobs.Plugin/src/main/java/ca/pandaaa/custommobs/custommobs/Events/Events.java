@@ -87,10 +87,6 @@ public class Events implements Listener {
                 .getCustomMob(event.getEntity().getPersistentDataContainer().get(key, PersistentDataType.STRING))
                 .enableCustomEffects(event.getEntity());
 
-        double healthAfter = Math.max(0, ((LivingEntity)event.getEntity()).getHealth() - event.getFinalDamage());
-        double maxHealth = Objects.requireNonNull(((LivingEntity)event.getEntity()).getAttribute(Registry.ATTRIBUTE.get(NamespacedKey.minecraft("max_health")))).getBaseValue();
-        CustomMobs.getPlugin().getCustomMobsManager().getBossBar().update(event.getEntity().getUniqueId(), healthAfter, maxHealth);
-
         double damage = 0;
         NamespacedKey damageKey = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Damage." + entity.getUniqueId());
         if (event.getEntity().getPersistentDataContainer().getKeys().contains(damageKey)) {
@@ -100,6 +96,15 @@ public class Events implements Listener {
         event.getEntity().getPersistentDataContainer().set(damageKey, PersistentDataType.DOUBLE, damage);
     }
 
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event) {
+        if(!(event.getEntity() instanceof LivingEntity))
+            return;
+
+        double healthAfter = Math.max(0, ((LivingEntity)event.getEntity()).getHealth() - event.getFinalDamage());
+        double maxHealth = Objects.requireNonNull(((LivingEntity)event.getEntity()).getAttribute(Registry.ATTRIBUTE.get(NamespacedKey.minecraft("max_health")))).getBaseValue();
+        CustomMobs.getPlugin().getCustomMobsManager().getBossBar().update(event.getEntity().getUniqueId(), healthAfter, maxHealth);
+    }
 
     private final Map<UUID, Long> playerMoveCooldowns = new HashMap<>();
     @EventHandler
