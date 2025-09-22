@@ -196,7 +196,7 @@ public class Events implements Listener {
             return;
 
         String itemType = container.get(itemTypeKey, PersistentDataType.STRING);
-        Bukkit.broadcastMessage(itemType);
+
         if (itemType.equalsIgnoreCase("Item")) {
             event.setCancelled(true);
             customMob.spawnCustomMob(event.getClickedBlock().getLocation().add(0.5, 2, 0.5));
