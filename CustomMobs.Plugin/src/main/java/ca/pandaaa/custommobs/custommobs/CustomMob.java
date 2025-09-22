@@ -7,6 +7,7 @@ import ca.pandaaa.custommobs.custommobs.CustomEffects.CustomMobCustomEffect;
 import ca.pandaaa.custommobs.custommobs.Events.CustomMobSpawnEvent;
 import ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage;
 import ca.pandaaa.custommobs.custommobs.Options.CustomMobOption;
+import ca.pandaaa.custommobs.custommobs.Options.Special;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.TypesGUI;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.*;
@@ -150,8 +151,8 @@ public class CustomMob implements Listener {
     }
 
     public void setSpawnerItem(ItemStack spawner) {
-        mobConfiguration.setItemStack(CustomMobConfiguration.SPAWNER, spawner);
-        this.spawnerItem = mobConfiguration.getItem(CustomMobConfiguration.SPAWNER);
+        mobConfiguration.setItemStack(CustomMobConfiguration.SPAWNER_ITEM, spawner);
+        this.spawnerItem = mobConfiguration.getItem(CustomMobConfiguration.SPAWNER_ITEM);
     }
 
     public Equipment getEquipment() {
@@ -217,7 +218,7 @@ public class CustomMob implements Listener {
     public void setName(String name) {
         mobConfiguration.setName(name);
         this.item = getCustomMobConfiguration().getItem(CustomMobConfiguration.ITEM);
-        this.spawnerItem = getCustomMobConfiguration().getItem(CustomMobConfiguration.SPAWNER);
+        this.spawnerItem = getCustomMobConfiguration().getItem(CustomMobConfiguration.SPAWNER_ITEM);
         this.name = name;
     }
 
@@ -328,7 +329,7 @@ public class CustomMob implements Listener {
         return customMobOptions.get(optionName.toLowerCase());
     }
 
-    /* === CUSTOM EFFECTS === */
+    /* === CUSTOM EFFECTS (and boss bar) === */
     public void enableCustomEffects(Entity entity) {
         UUID entityId = entity.getUniqueId();
         if (activeCustomEffectRunnables.containsKey(entityId) || entity.isDead())
@@ -338,7 +339,14 @@ public class CustomMob implements Listener {
             @Override
             public void run() {
                 List<Entity> nearbyEntities = entity.getNearbyEntities(32D, 32D, 32D);
+
+                nearbyEntities.stream()
+                        .filter(e -> e instanceof Player)
+                        .forEach(e -> CustomMobs.getPlugin().getCustomMobsManager().getBossBar()
+                                .addPlayerToBossBar((Player) e, entityId));
+
                 if(nearbyEntities.stream().noneMatch(e -> e instanceof Player)) {
+                    CustomMobs.getPlugin().getCustomMobsManager().getBossBar().clearBossBarPlayers(entityId);
                     cancelCustomEffects(entityId);
                     nextCooldownOccurences.put(entityId, null);
                     return;

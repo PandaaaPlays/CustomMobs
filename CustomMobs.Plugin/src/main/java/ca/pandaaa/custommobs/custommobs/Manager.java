@@ -13,16 +13,19 @@ import org.bukkit.inventory.ItemStack;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class Manager {
     private final ConfigurationManager configManager;
     private final List<CustomMobConfiguration> mobsConfigurations;
     private final Map<String, CustomMob> customMobs = new HashMap<>();
+    private final BossBar bossBar;
 
     public Manager(ConfigurationManager configManager, List<CustomMobConfiguration> mobsConfigurations) {
         this.configManager = configManager;
         this.mobsConfigurations = mobsConfigurations;
+        this.bossBar = new BossBar();
     }
 
     public void loadCustomMobs() {
@@ -101,5 +104,9 @@ public class Manager {
 
     public ConfigurationManager getConfigManager() {
         return configManager;
+    }
+
+    public BossBar getBossBar() {
+        return bossBar;
     }
 }

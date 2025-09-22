@@ -20,7 +20,6 @@ public class Trampoline extends CustomMobCustomEffect {
 
     /**
      * Determines the height (in block(s)) to which the players should be sent in the air.
-     *
      * @minimum 1
      * @maximum 50
      */
@@ -29,7 +28,6 @@ public class Trampoline extends CustomMobCustomEffect {
 
     /**
      * Determines the radius (in block(s)) around the CustomMob where the effect should affect player(s).
-     *
      * @minimum 1
      * @maximum 32
      */

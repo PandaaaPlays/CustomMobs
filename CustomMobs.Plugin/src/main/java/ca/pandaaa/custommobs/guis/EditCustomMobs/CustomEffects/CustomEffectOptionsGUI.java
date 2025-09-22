@@ -64,7 +64,12 @@ public class CustomEffectOptionsGUI extends CustomMobsGUI {
                     inventory.setItem(i + 10, optionItems.get(i));
                 }
                 for(int i = optionItems.size() / 2; i < optionItems.size(); i++) {
-                    inventory.setItem(i + 14, optionItems.get(i));
+                    inventory.setItem(i + 11, optionItems.get(i));
+                }
+                break;
+            case 7:
+                for(int i = 0; i < optionItems.size(); i++) {
+                    inventory.setItem(i + 10, optionItems.get(i));
                 }
                 break;
             default:
