@@ -318,6 +318,20 @@
                         "type":  "Decimal",
                         "key":  "REPLACE_NATURAL",
                         "maximum":  "100"
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "Adds a boss bar, similar to the one shown when fighting the ender dragon or the wither. The style will indicate whether the bar should be split or not (leave at none for no boss bar).",
+                        "type":  "Bar style",
+                        "key":  "BOSS_BAR_STYLE",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "Sets the boss bar color (must be enabled to show, see boss bar).",
+                        "type":  "Bar color",
+                        "key":  "BOSS_BAR_COLOR",
+                        "maximum":  null
                     }
                 ],
     "Frog":  [

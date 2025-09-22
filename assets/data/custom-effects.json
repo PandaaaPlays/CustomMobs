@@ -1,4 +1,23 @@
 {
+    "Trampoline":  {
+                       "effectType":  "COOLDOWN",
+                       "fields":  [
+                                      {
+                                          "minimum":  "1",
+                                          "description":  "Determines the height (in block(s)) to which the players should be sent in the air.",
+                                          "type":  "Integer",
+                                          "key":  "HEIGHT",
+                                          "maximum":  "50"
+                                      },
+                                      {
+                                          "minimum":  "1",
+                                          "description":  "Determines the radius (in block(s)) around the CustomMob where the effect should affect player(s).",
+                                          "type":  "Integer",
+                                          "key":  "RADIUS",
+                                          "maximum":  "32"
+                                      }
+                                  ]
+                   },
     "MobSpawner":  {
                        "effectType":  "COOLDOWN",
                        "fields":  [
@@ -56,25 +75,46 @@
                                      }
                                  ]
                   },
-    "Trampoline":  {
-                       "effectType":  "COOLDOWN",
-                       "fields":  [
-                                      {
-                                          "minimum":  "1",
-                                          "description":  "Determines the height (in block(s)) to which the players should be sent in the air.",
-                                          "type":  "Integer",
-                                          "key":  "HEIGHT",
-                                          "maximum":  "50"
-                                      },
-                                      {
-                                          "minimum":  "1",
-                                          "description":  "Determines the radius (in block(s)) around the CustomMob where the effect should affect player(s).",
-                                          "type":  "Integer",
-                                          "key":  "RADIUS",
-                                          "maximum":  "32"
-                                      }
-                                  ]
-                   },
+    "Fireball":  {
+                     "effectType":  "COOLDOWN",
+                     "fields":  [
+                                    {
+                                        "minimum":  "1",
+                                        "description":  "Determines the strength (size) of the explosion created by the CustomMob\u0027s fireball upon trigger of this custom effect.",
+                                        "type":  "Integer",
+                                        "key":  "EXPLOSION_STRENGTH",
+                                        "maximum":  "100"
+                                    },
+                                    {
+                                        "minimum":  null,
+                                        "description":  "Sends a purple fireball (like the vanilla Dragon) instead of the Ghast one. This fireball will leave a dragon\u0027s breath potion effect on the ground.",
+                                        "type":  "On / Off",
+                                        "key":  "DRAGON_FIREBALL",
+                                        "maximum":  null
+                                    },
+                                    {
+                                        "minimum":  null,
+                                        "description":  "When enabled, a fireball is sent to one of the random nearby player(s) (in radius range). Otherwise, a fireball is sent to every nearby player(s).",
+                                        "type":  "On / Off",
+                                        "key":  "SHOOT_ONLY_ONE_PLAYER",
+                                        "maximum":  null
+                                    },
+                                    {
+                                        "minimum":  null,
+                                        "description":  "Determines whether the custom effect\u0027s fireball explosion should break blocks or not. The dragon fireball cannot break blocks.",
+                                        "type":  "On / Off",
+                                        "key":  "BREAK_BLOCKS",
+                                        "maximum":  null
+                                    },
+                                    {
+                                        "minimum":  "1",
+                                        "description":  "Determines the radius (in block(s)) around the CustomMob where the player(s) could receive fireball(s).",
+                                        "type":  "Integer",
+                                        "key":  "RADIUS",
+                                        "maximum":  "32"
+                                    }
+                                ]
+                 },
     "Vanish":  {
                    "effectType":  "COOLDOWN",
                    "fields":  [
