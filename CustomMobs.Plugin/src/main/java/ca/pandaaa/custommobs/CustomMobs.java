@@ -132,10 +132,8 @@ public class CustomMobs extends JavaPlugin {
         this.saveDefaultConfig();
 
         mobFolder = new File(getDataFolder(), "Mobs");
-        if (!mobFolder.exists())
+        if (!mobFolder.exists()) {
             mobFolder.mkdirs();
-
-        if (mobFolder.listFiles() == null || mobFolder.listFiles().length == 0) {
             saveResource("Mobs/angrycow.yml", false);
             saveResource("Mobs/fastskeleton.yml", false);
             saveResource("Mobs/megazombie.yml", false);

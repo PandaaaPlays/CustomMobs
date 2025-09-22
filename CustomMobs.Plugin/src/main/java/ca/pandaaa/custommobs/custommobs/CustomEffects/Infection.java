@@ -93,7 +93,7 @@ public class Infection extends CustomMobCustomEffect {
                 new PotionEffectsGUI(customMob, (value) -> {
                     if(value != null) {
                         this.infectionEffect = value.getType();
-                        setCustomEffectOption(INFECTION_EFFECT, this.infectionEffect.getKeyOrNull().getKey());
+                        setCustomEffectOption(INFECTION_EFFECT, this.infectionEffect.getKey().getKey());
                     }
                     new CustomEffectOptionsGUI(customMob, this, getOptionsItems()).openInventory(clicker);
                 }).openInventory(clicker, 1);
@@ -153,7 +153,7 @@ public class Infection extends CustomMobCustomEffect {
         }
         item.setItemMeta(potionMeta);
         item.setName("&2&lPotion Effect");
-        item.addLore("&eEffect: &f" + Utils.getStartCase(this.infectionEffect.getKeyOrNull().getKey()));
+        item.addLore("&eEffect: &f" + Utils.getStartCase(this.infectionEffect.getKey().getKey()));
         item.setCustomEffectPersistentDataContainer(this.getClass().getSimpleName() + ".InfectionEffect");
         return item;
     }

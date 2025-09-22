@@ -14,6 +14,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.ArrayList;
 
 public class SpawnerGUI extends CustomMobsGUI {
     private final CustomMob customMob;
@@ -155,26 +158,30 @@ public class SpawnerGUI extends CustomMobsGUI {
                 break;
 
             case 31:
-                if (cursorItem.getType() != Material.AIR) {
-                    ItemStack spawner = item.clone();
+                if (event.isRightClick()) {
+                    customMob.setSpawnerItem(null);
+                    event.getInventory().setItem(31, getMenuItem(getSpawnerItem(), false));
+                } else if (cursorItem.getType() != Material.AIR) {
+                    ItemStack spawner = cursorItem.clone();
                     spawner.setAmount(1);
                     customMob.setSpawnerItem(spawner);
-                    event.getInventory().setItem(50, getMenuItem(getSpawnerItem(), false));
+                    event.getInventory().setItem(31, getMenuItem(getSpawnerItem(), false));
                     clicker.setItemOnCursor(null);
                 } else {
                     clicker.setItemOnCursor(customMobsManager.getCustomMobItem(customMob, "spawner", event.isShiftClick() ? 64 : 1));
                 }
                 break;
         }
-
     }
 
     private ItemStack getSpawnerItem() {
-        CustomMobsItem item = new CustomMobsItem(customMob.getSpawnerItem().getType());
+        CustomMobsItem item = new CustomMobsItem(customMob.getSpawnerItem());
         item.setName(Utils.applyFormat("&6&l" + Utils.getSentenceCase(customMob.getType() + " spawner")));
         item.addLore("");
-        item.addLore(Utils.applyFormat("&7&o(( Left-Click to get the current item ))"));
-        item.addLore(Utils.applyFormat("&7&o(( Shift-Left-Click to get the current item (x64) ))"));
+        item.addLore("&7&o(( Drag & drop an item to change this item ))");
+        item.addLore("&7&o(( Left-Click to get the current item ))");
+        item.addLore("&7&o(( Shift-Left-Click to get the current item (x64) ))");
+        item.addLore("&7&o(( Right-Click to delete (reset) the current item ))");
         return getMenuItem(item, true);
     }
 

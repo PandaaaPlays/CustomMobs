@@ -46,13 +46,7 @@ public class Explosion extends CustomMobCustomEffect {
     }
 
     public void triggerCustomEffect(Entity entity) {
-        boolean invulnerable = entity.isInvulnerable();
-
-        if(!damageSelf)
-            entity.setInvulnerable(true);
-
-        entity.getWorld().createExplosion(entity.getLocation().add(0, 0.5, 0), explosionStrength, false, breakBlocks);
-        entity.setInvulnerable(invulnerable);
+        entity.getWorld().createExplosion(entity.getLocation().add(0, 0.5, 0), explosionStrength, false, breakBlocks, damageSelf ? null : entity);
     }
 
     public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {

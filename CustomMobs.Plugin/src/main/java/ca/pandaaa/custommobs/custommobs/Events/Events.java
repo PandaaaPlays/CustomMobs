@@ -96,6 +96,15 @@ public class Events implements Listener {
         event.getEntity().getPersistentDataContainer().set(damageKey, PersistentDataType.DOUBLE, damage);
     }
 
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event) {
+        if(!(event.getEntity() instanceof LivingEntity))
+            return;
+
+        double healthAfter = Math.max(0, ((LivingEntity)event.getEntity()).getHealth() - event.getFinalDamage());
+        double maxHealth = Objects.requireNonNull(((LivingEntity)event.getEntity()).getAttribute(Registry.ATTRIBUTE.get(NamespacedKey.minecraft("max_health")))).getBaseValue();
+        CustomMobs.getPlugin().getCustomMobsManager().getBossBar().update(event.getEntity().getUniqueId(), healthAfter, maxHealth);
+    }
 
     private final Map<UUID, Long> playerMoveCooldowns = new HashMap<>();
     @EventHandler
@@ -136,6 +145,8 @@ public class Events implements Listener {
         CustomMob customMob = CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(name);
         if (customMob == null)
             return;
+
+        CustomMobs.getPlugin().getCustomMobsManager().getBossBar().deleteBossBar(event.getEntity().getUniqueId());
 
         // Cancel the custom effects of the CustomMob.
         customMob.cancelCustomEffects(event.getEntity().getUniqueId());
@@ -190,6 +201,7 @@ public class Events implements Listener {
             return;
 
         String itemType = container.get(itemTypeKey, PersistentDataType.STRING);
+
         if (itemType.equalsIgnoreCase("Item")) {
             event.setCancelled(true);
             customMob.spawnCustomMob(event.getClickedBlock().getLocation().add(0.5, 2, 0.5));
@@ -288,7 +300,6 @@ public class Events implements Listener {
         NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Spawner");
 
         if (itemStack.containsEnchantment(Enchantment.SILK_TOUCH) && container.has(key, PersistentDataType.STRING)) {
-
             ItemStack spawnerItem = manager.getCustomMobItem(manager.getCustomMob(container.get(key, PersistentDataType.STRING)), "spawner", 1);
             block.getLocation().getWorld().dropItem(block.getLocation(), spawnerItem);
         }

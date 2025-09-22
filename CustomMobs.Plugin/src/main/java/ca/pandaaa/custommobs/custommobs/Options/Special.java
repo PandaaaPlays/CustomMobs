@@ -2,6 +2,7 @@ package ca.pandaaa.custommobs.custommobs.Options;
 
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
+import ca.pandaaa.custommobs.custommobs.BossBar;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.custommobs.NMS;
 import ca.pandaaa.custommobs.guis.BasicTypes.DoubleGUI;
@@ -9,19 +10,22 @@ import ca.pandaaa.custommobs.guis.BasicTypes.DoubleRangeGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.OptionsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.DamageRange;
+import ca.pandaaa.custommobs.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.attribute.Attributable;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Special extends CustomMobOption {
     /**
@@ -130,6 +134,19 @@ public class Special extends CustomMobOption {
     private static final String REPLACE_NATURAL = "special.replace-natural";
     private double replaceNaturalPercentage;
 
+    /**
+     * Adds a boss bar, similar to the one shown when fighting the ender dragon or the wither.
+     * The style will indicate whether the bar should be split or not (leave at none for no boss bar).
+     */
+    private static final String BOSS_BAR_STYLE = "special.boss-bar";
+    private BarStyle bossBar;
+
+    /**
+     * Sets the boss bar color (must be enabled to show, see boss bar).
+     */
+    private static final String BOSS_BAR_COLOR = "special.boss-bar-color";
+    private BarColor bossBarColor;
+
     public Special(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
         this.isNameVisible = getOption(VISIBLE_NAME, Boolean.class);
@@ -149,6 +166,8 @@ public class Special extends CustomMobOption {
         this.size = getOption(SIZE, Double.class, 1.0);
         this.naturalDrops = getOption(NATURAL_DROPS, Boolean.class, true);
         this.replaceNaturalPercentage = getOption(REPLACE_NATURAL, Double.class, 0.0);
+        this.bossBar = getOption(BOSS_BAR_STYLE, BarStyle.class);
+        this.bossBarColor = getOption(BOSS_BAR_COLOR, BarColor.class, BarColor.PINK);
     }
 
     public void applyOptions(Entity customMob) {
@@ -178,6 +197,23 @@ public class Special extends CustomMobOption {
         if(customMob instanceof org.bukkit.entity.LivingEntity) {
             ((org.bukkit.entity.LivingEntity) customMob).setCanPickupItems(canPickupLoot);
             ((org.bukkit.entity.LivingEntity) customMob).setAI(intelligent);
+
+            if(bossBar != null) {
+                BossBar bossBars = CustomMobs.getPlugin().getCustomMobsManager().getBossBar();
+                org.bukkit.boss.BossBar mobBossBar = bossBars.getBossBar(customMob.getUniqueId());
+                if (mobBossBar == null) {
+                    mobBossBar = Bukkit.createBossBar(
+                            customMob.getCustomName() != null ? customMob.getCustomName() : customMob.getName(),
+                            this.bossBarColor,
+                            this.bossBar
+                    );
+                    mobBossBar.setProgress(((LivingEntity) customMob).getHealth() / ((LivingEntity) customMob)
+                            .getAttribute(Registry.ATTRIBUTE.get(NamespacedKey.minecraft("max_health"))).getBaseValue());
+                    mobBossBar.setVisible(true);
+
+                    bossBars.createBossBar(customMob.getUniqueId(), mobBossBar);
+                }
+            }
         }
 
         customMob.setInvulnerable(invincible);
@@ -367,6 +403,25 @@ public class Special extends CustomMobOption {
                 }
                 return getOptionItemStack(getSizeItem(), true, false);
             }
+
+            case "bossbar": {
+                if(clickType.isRightClick()) {
+                    List<BarColor> colors = Arrays.asList(BarColor.values());
+                    if (colors.indexOf(bossBarColor) == colors.size() - 1)
+                        this.bossBarColor = colors.get(0);
+                    else
+                        this.bossBarColor = colors.get(colors.indexOf(bossBarColor) + 1);
+                    setOption(BOSS_BAR_COLOR, bossBarColor != null ? bossBarColor.name() : null);
+                } else {
+                    List<BarStyle> styles = Arrays.asList(BarStyle.values());
+                    if (styles.indexOf(bossBar) == styles.size() - 1)
+                        this.bossBar = null;
+                    else
+                        this.bossBar = styles.get(styles.indexOf(bossBar) + 1);
+                    setOption(BOSS_BAR_STYLE, bossBar != null ? bossBar.name() : null);
+                }
+                return getBossBarOptionItemStack(getBossBarItem());
+            }
         }
         return null;
     }
@@ -403,6 +458,7 @@ public class Special extends CustomMobOption {
         items.add(getOptionItemStack(getSizeItem(), true, false));
         items.add(getOptionItemStack(getNaturalDropsItem(), false, false));
         items.add(getOptionItemStack(getReplaceNaturalItem(), true, false));
+        items.add(getOptionItemStack(getBossBarItem(), false, false));
 
         return items;
     }
@@ -562,5 +618,19 @@ public class Special extends CustomMobOption {
         item.addLore("&eChance of replacing natural: &f" + this.replaceNaturalPercentage + "%");
         item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "ReplaceNatural");
         return item;
+    }
+
+    public CustomMobsItem getBossBarItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.DRAGON_EGG);
+        item.setName("&b&lBoss bar");
+        item.addLore("&eStyle: &f" + (bossBar == null ? "None" : Utils.getStartCase(bossBar.name())));
+        item.addLore("&eColor: &f" + Utils.getChatColorOfColor(bossBarColor.name()) + Utils.getStartCase(bossBarColor.name()));
+        item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "BossBar");
+        return item;
+    }
+
+    private ItemStack getBossBarOptionItemStack(CustomMobsItem item) {
+        item.addLore("", "&7&o(( Left-Click to cycle the boss-bar style ))", "&7&o(( Right-Click to cycle the boss-bar color ))");
+        return item.getItem();
     }
 }
