@@ -7,7 +7,7 @@ public enum DropConditions {
     NEARBY,
     KILLER,
     DROP,
-    MOST_DAMAGE; // Might be hard to do... Might remove
+    MOST_DAMAGE;
 
     public static DropConditions getNextCondition(DropConditions currentCondition) {
         Map<DropConditions, DropConditions> next = new HashMap<>();

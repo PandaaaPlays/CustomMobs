@@ -3,11 +3,13 @@ package ca.pandaaa.custommobs.custommobs.Events;
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomEffects.CustomEffectType;
 import ca.pandaaa.custommobs.custommobs.CustomEffects.CustomMobCustomEffect;
+import ca.pandaaa.custommobs.custommobs.CustomEffects.Trail;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.custommobs.DropManager;
 import ca.pandaaa.custommobs.custommobs.Manager;
 import ca.pandaaa.custommobs.custommobs.Messages.Message;
 import ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage;
+import ca.pandaaa.custommobs.custommobs.NamespacedKeys;
 import ca.pandaaa.custommobs.custommobs.Options.Special;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -32,33 +34,33 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.*;
 
 public class Events implements Listener {
+    private static final Random RANDOM = new Random();
+
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
         Entity entity = event.getDamager();
 
-        if (entity instanceof Projectile)
-            entity = (LivingEntity) ((Projectile) entity).getShooter();
+        if (entity instanceof Projectile projectile) {
+            if (projectile.getShooter() instanceof LivingEntity)
+                entity = (LivingEntity) projectile.getShooter();
+        }
 
         if (entity == null)
             return;
 
         Set<NamespacedKey> keys = entity.getPersistentDataContainer().getKeys();
-        NamespacedKey minDamageKey = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.MinDamage");
-        NamespacedKey maxDamageKey = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.MaxDamage");
-        if (keys.contains(minDamageKey) && keys.contains(maxDamageKey)) {
-            double minDamage = entity.getPersistentDataContainer().get(minDamageKey, PersistentDataType.DOUBLE);
-            double maxDamage = entity.getPersistentDataContainer().get(maxDamageKey, PersistentDataType.DOUBLE);
-            Random rand = new Random();
-            double randomValue = minDamage + (maxDamage - minDamage) * rand.nextDouble();
+        if (keys.contains(NamespacedKeys.KEY_MIN_DAMAGE) && keys.contains(NamespacedKeys.KEY_MAX_DAMAGE)) {
+            double minDamage = entity.getPersistentDataContainer().get(NamespacedKeys.KEY_MIN_DAMAGE, PersistentDataType.DOUBLE);
+            double maxDamage = entity.getPersistentDataContainer().get(NamespacedKeys.KEY_MAX_DAMAGE, PersistentDataType.DOUBLE);
+            double randomValue = minDamage + (maxDamage - minDamage) * RANDOM.nextDouble();
             event.setDamage(randomValue);
         }
 
         if (!(event.getEntity() instanceof Player))
             return;
 
-        NamespacedKey nameKey = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Name");
-        if (keys.contains(nameKey)) {
-            CustomMob customMob = CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(entity.getPersistentDataContainer().get(nameKey, PersistentDataType.STRING));
+        if (isCustomMob(entity)) {
+            CustomMob customMob = CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(entity.getPersistentDataContainer().get(NamespacedKeys.KEY_NAME, PersistentDataType.STRING));
             customMob.getCustomMobCustomEffects().stream()
                     .filter(effect -> CustomEffectType.ON_DAMAGE_ON_PLAYER.equals(effect.getCustomEffectType()))
                     .filter(CustomMobCustomEffect::isEnabled)
@@ -78,13 +80,12 @@ public class Events implements Listener {
         if (!(entity instanceof Player))
             return;
 
-        NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Name");
-        if (!event.getEntity().getPersistentDataContainer().getKeys().contains(key))
+        if (!isCustomMob(entity))
             return;
 
         // Enable the custom effects of the CustomMob.
         CustomMobs.getPlugin().getCustomMobsManager()
-                .getCustomMob(event.getEntity().getPersistentDataContainer().get(key, PersistentDataType.STRING))
+                .getCustomMob(event.getEntity().getPersistentDataContainer().get(NamespacedKeys.KEY_NAME, PersistentDataType.STRING))
                 .enableCustomEffects(event.getEntity());
 
         double damage = 0;
@@ -99,6 +100,9 @@ public class Events implements Listener {
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
         if(!(event.getEntity() instanceof LivingEntity))
+            return;
+
+        if (!isCustomMob(event.getEntity()))
             return;
 
         double healthAfter = Math.max(0, ((LivingEntity)event.getEntity()).getHealth() - event.getFinalDamage());
@@ -125,23 +129,29 @@ public class Events implements Listener {
 
         List<Entity> entities = event.getPlayer().getNearbyEntities(10, 5, 10);
         for(Entity entity : entities) {
-            NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Name");
-            if (!entity.getPersistentDataContainer().getKeys().contains(key))
+            if (!isCustomMob(entity))
                 continue;
 
-            CustomMobs.getPlugin().getCustomMobsManager()
-                    .getCustomMob(entity.getPersistentDataContainer().get(key, PersistentDataType.STRING))
-                    .enableCustomEffects(entity);
+            CustomMob customMob = CustomMobs.getPlugin().getCustomMobsManager()
+                    .getCustomMob(entity.getPersistentDataContainer().get(NamespacedKeys.KEY_NAME, PersistentDataType.STRING));
+
+            CustomMobCustomEffect trailEffect = customMob.getCustomMobCustomEffects().stream().filter(
+                            x -> x.isEnabled()
+                                    && x.getClass().getSimpleName().equalsIgnoreCase("Trail"))
+                    .findFirst().orElse(null);
+            if(trailEffect != null && !Trail.activeTrails.containsKey(entity.getUniqueId()))
+                Trail.activeTrails.put(entity.getUniqueId(), (Trail) trailEffect);
+
+            customMob.enableCustomEffects(entity);
         }
     }
 
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
-        NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Name");
-        if (!event.getEntity().getPersistentDataContainer().getKeys().contains(key))
+        if (!isCustomMob(event.getEntity()))
             return;
 
-        String name = event.getEntity().getPersistentDataContainer().get(key, PersistentDataType.STRING);
+        String name = event.getEntity().getPersistentDataContainer().get(NamespacedKeys.KEY_NAME, PersistentDataType.STRING);
         CustomMob customMob = CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(name);
         if (customMob == null)
             return;
@@ -183,24 +193,23 @@ public class Events implements Listener {
 
         ItemMeta itemMeta = item.getItemMeta();
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-        if (container.getKeys().contains(new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.MenuItem"))) {
+        if (container.getKeys().contains(NamespacedKeys.KEY_MENU_ITEM)) {
             player.getInventory().remove(item);
             CustomMobs.getPlugin().getServer().getConsoleSender().sendMessage(
                     ChatColor.translateAlternateColorCodes('&', "&c[!] CustomMobs : " + player.getName() + " tried to use a CustomMob menu item and it was deleted. Please report this incident."));
         }
 
-        NamespacedKey itemTypeKey = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.ItemType");
-        if (!container.getKeys().contains(itemTypeKey))
+        if (!container.getKeys().contains(NamespacedKeys.KEY_ITEM_TYPE))
             return;
 
         if (player.getGameMode() != GameMode.CREATIVE)
             item.setAmount(item.getAmount() - 1);
-        CustomMob customMob = CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(container.get(new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.FileName"), PersistentDataType.STRING));
+        CustomMob customMob = CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(container.get(NamespacedKeys.KEY_FILE_NAME, PersistentDataType.STRING));
 
         if (customMob == null)
             return;
 
-        String itemType = container.get(itemTypeKey, PersistentDataType.STRING);
+        String itemType = container.get(NamespacedKeys.KEY_ITEM_TYPE, PersistentDataType.STRING);
 
         if (itemType.equalsIgnoreCase("Item")) {
             event.setCancelled(true);
@@ -225,7 +234,7 @@ public class Events implements Listener {
             return;
 
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-        if (container.getKeys().contains(new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.MenuItem"))) {
+        if (container.getKeys().contains(NamespacedKeys.KEY_MENU_ITEM)) {
             event.setCancelled(true);
             event.getClickedInventory().removeItem(item);
             CustomMobs.getPlugin().getServer().getConsoleSender().sendMessage(
@@ -239,9 +248,8 @@ public class Events implements Listener {
         PersistentDataContainer container = event.getSpawner().getPersistentDataContainer();
         Location location = event.getEntity().getLocation();
 
-        NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Spawner");
-        if (container.has(key, PersistentDataType.STRING)) {
-            String mobName = container.get(key, PersistentDataType.STRING);
+        if (container.has(NamespacedKeys.KEY_SPAWNER, PersistentDataType.STRING)) {
+            String mobName = container.get(NamespacedKeys.KEY_SPAWNER, PersistentDataType.STRING);
             CustomMob customMob = CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(mobName);
             if (customMob == null || customMob.getSpawner() == null)
                 return;
@@ -255,10 +263,10 @@ public class Events implements Listener {
             event.getEntity().remove();
             if (nearbyCustomMobs < customMob.getSpawner().getMaxNearbyCount()) {
                 int availableSpawnCount = customMob.getSpawner().getMaxNearbyCount() - nearbyCustomMobs;
-                int random = new Random().nextInt(Math.min(customMob.getSpawner().getSpawnCount(), availableSpawnCount)) + 1;
+                int random = RANDOM.nextInt(Math.min(customMob.getSpawner().getSpawnCount(), availableSpawnCount)) + 1;
                 for (int i = 0; i < random; i++) {
-                    double offsetX = (new Random().nextDouble() * 2 - 1) * range;
-                    double offsetZ = (new Random().nextDouble() * 2 - 1) * range;
+                    double offsetX = (RANDOM.nextDouble() * 2 - 1) * range;
+                    double offsetZ = (RANDOM.nextDouble() * 2 - 1) * range;
 
                     Location spawnLocation = location.clone().add(offsetX, 0, offsetZ);
                     spawnLocation.setY(getNearestY(location.getWorld(), location.getX() + offsetX, location.getY(), location.getZ() + offsetZ));
@@ -297,10 +305,9 @@ public class Events implements Listener {
 
         CreatureSpawner spawnerBlock = (CreatureSpawner) block.getState();
         PersistentDataContainer container = spawnerBlock.getPersistentDataContainer();
-        NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Spawner");
 
-        if (itemStack.containsEnchantment(Enchantment.SILK_TOUCH) && container.has(key, PersistentDataType.STRING)) {
-            ItemStack spawnerItem = manager.getCustomMobItem(manager.getCustomMob(container.get(key, PersistentDataType.STRING)), "spawner", 1);
+        if (itemStack.containsEnchantment(Enchantment.SILK_TOUCH) && container.has(NamespacedKeys.KEY_SPAWNER, PersistentDataType.STRING)) {
+            ItemStack spawnerItem = manager.getCustomMobItem(manager.getCustomMob(container.get(NamespacedKeys.KEY_SPAWNER, PersistentDataType.STRING)), "spawner", 1);
             block.getLocation().getWorld().dropItem(block.getLocation(), spawnerItem);
         }
     }
@@ -352,6 +359,18 @@ public class Events implements Listener {
             event.setCancelled(true);
             chosen.spawnCustomMob(event.getLocation());
         }
+    }
+
+    @EventHandler
+    public void onZombieConvert(EntityTransformEvent event) {
+        if (!(event.getEntity() instanceof org.bukkit.entity.Zombie)) return;
+        if (event.getTransformReason() != EntityTransformEvent.TransformReason.DROWNED) return;
+        if (!isCustomMob(event.getEntity())) return;
+        event.setCancelled(true);
+    }
+
+    private boolean isCustomMob(Entity entity) {
+        return entity.getPersistentDataContainer().has(NamespacedKeys.KEY_NAME, PersistentDataType.STRING);
     }
 }
 

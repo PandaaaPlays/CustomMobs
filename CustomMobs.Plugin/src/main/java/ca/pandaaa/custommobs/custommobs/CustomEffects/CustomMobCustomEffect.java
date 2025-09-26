@@ -97,6 +97,13 @@ public abstract class CustomMobCustomEffect {
         return null;
     }
 
+    protected ItemStack getNoLeftClickCustomEffectItemStack(CustomMobsItem item) {
+        item.addLore("", "&7&o(( Right-Click to toggle this custom effect ))");
+        if(this.enabled)
+            item.addEnchantment(Enchantment.MENDING, 1, false);
+        return item.getItem();
+    }
+
     protected ItemStack getCustomEffectItemStack(CustomMobsItem item, String customEffectName) {
         item.addLore("", "&7&o(( Left-Click to edit this CustomMob's " + customEffectName + " ))", "&7&o(( Right-Click to toggle this custom effect ))");
         if(this.enabled)

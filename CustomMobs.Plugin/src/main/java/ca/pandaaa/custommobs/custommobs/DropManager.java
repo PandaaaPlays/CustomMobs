@@ -63,7 +63,10 @@ public class DropManager {
         // Send the drops (only one per group max.)
         for (Player player : filteredDropsPerPlayer.keySet()) {
             for (Drop drop : filterDropPerGroup(filteredDropsPerPlayer.get(player))) {
-                player.getInventory().addItem(drop.getItemStack());
+                if(player.getInventory().firstEmpty() == -1)
+                    player.getLocation().getWorld().dropItemNaturally(player.getLocation(), drop.getItemStack());
+                else
+                    player.getInventory().addItem(drop.getItemStack());
                 for(Message message : drop.getMessages()) {
                     ((DropMessage) message).sendMessage(player);
                 }
@@ -102,7 +105,10 @@ public class DropManager {
                 case KILLER:
                     Player killer = entity.getKiller();
                     if (killer instanceof Player) {
-                        entity.getKiller().getInventory().addItem(successfulDrop.getItemStack());
+                        if(killer.getInventory().firstEmpty() == -1)
+                            killer.getLocation().getWorld().dropItemNaturally(killer.getLocation(), successfulDrop.getItemStack());
+                        else
+                            entity.getKiller().getInventory().addItem(successfulDrop.getItemStack());
                         for(Message message : successfulDrop.getMessages()) {
                             ((DropMessage) message).sendMessage(killer);
                         }
@@ -128,10 +134,14 @@ public class DropManager {
                         }
                     }
                     if(player != null) {
-                        player.getInventory().addItem(successfulDrop.getItemStack());
+                        if(player.getInventory().firstEmpty() == -1)
+                            player.getLocation().getWorld().dropItemNaturally(player.getLocation(), successfulDrop.getItemStack());
+                        else
+                            player.getInventory().addItem(successfulDrop.getItemStack());
                         for(Message message : successfulDrop.getMessages()) {
                             ((DropMessage) message).sendMessage(player);
                         }
+
                     }
                     break;
             }

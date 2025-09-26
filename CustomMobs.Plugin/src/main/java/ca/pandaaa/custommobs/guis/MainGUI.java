@@ -25,9 +25,7 @@ import java.util.List;
 
 public class MainGUI extends CustomMobsGUI {
     private final List<ItemStack> items;
-    private final ItemStack previous;
     private final ItemStack addCustomMob;
-    private final ItemStack next;
     private int currentPage = 1;
     private Player waitingForCreation;
 
@@ -53,19 +51,18 @@ public class MainGUI extends CustomMobsGUI {
             items.add(getMenuItem(item, true));
         }
 
-        previous = getMenuItem(Utils.createHead("a2f0425d64fdc8992928d608109810c1251fe243d60d175bed427c651cbe"), true);
-        next = getMenuItem(Utils.createHead("6d865aae2746a9b8e9a4fe629fb08d18d0a9251e5ccbe5fa7051f53eab9b94"), true);
-
         addCustomMob = getMenuItem(new ItemStack(Material.END_CRYSTAL), true);
     }
 
     public void openInventory(Player player, int page) {
         this.currentPage = page;
+        ItemStack previous = getPreviousItem().clone();
         ItemMeta previousItemMeta = previous.getItemMeta();
         if(previousItemMeta != null)
             previousItemMeta.setDisplayName(Utils.applyFormat("&e&lPrevious (" + (page - 1) + ")"));
         previous.setItemMeta(previousItemMeta);
 
+        ItemStack next = getNextItem().clone();
         ItemMeta nextItemMeta = next.getItemMeta();
         if(nextItemMeta != null)
             nextItemMeta.setDisplayName(Utils.applyFormat("&e&lNext (" + (page + 1) + ")"));

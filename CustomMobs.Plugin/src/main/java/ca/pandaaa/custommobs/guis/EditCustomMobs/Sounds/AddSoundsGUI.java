@@ -97,7 +97,7 @@ public class AddSoundsGUI extends CustomMobsGUI {
                     if(event.isRightClick()) {
                         clicker.playSound(clicker.getLocation(), sound, 1.0F, 1.0F);
                     } else {
-                        Sound customMobSound = new Sound(sound, 1, SoundCategory.MASTER, 1, 1, event.getCurrentItem().getType(), true);
+                        Sound customMobSound = new Sound(sound, 16, SoundCategory.MASTER, 1, 1, event.getCurrentItem().getType(), true);
                         consumer.accept(customMobSound);
                     }
                 }

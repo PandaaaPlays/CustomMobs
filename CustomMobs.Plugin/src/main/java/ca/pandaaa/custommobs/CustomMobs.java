@@ -5,6 +5,7 @@ import ca.pandaaa.custommobs.commands.TabCompletion;
 import ca.pandaaa.custommobs.configurations.ConfigurationManager;
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.*;
+import ca.pandaaa.custommobs.custommobs.CustomEffects.Trail;
 import ca.pandaaa.custommobs.custommobs.Events.Events;
 import ca.pandaaa.custommobs.custommobs.Messages.DropMessage;
 import ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage;

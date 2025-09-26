@@ -106,7 +106,7 @@ public class SpecificPotionDurationGUI extends CustomMobsGUI {
     private ItemStack getConfirmItem(ItemStack item, int value) {
         ItemMeta meta = item.getItemMeta();
         if(value < 0)
-            value = 0;
+            value = -1;
         NamespacedKey key = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Potion.Duration");
         meta.getPersistentDataContainer().set(key, PersistentDataType.INTEGER, value);
         meta.setDisplayName(Utils.applyFormat("&a&l[+] Confirm"));

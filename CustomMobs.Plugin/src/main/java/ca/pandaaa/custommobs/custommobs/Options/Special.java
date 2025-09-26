@@ -142,7 +142,7 @@ public class Special extends CustomMobOption {
     private BarStyle bossBar;
 
     /**
-     * Sets the boss bar color (must be enabled to show, see boss bar).
+     * Sets the boss bar color (must be enabled to show, see boss bar style).
      */
     private static final String BOSS_BAR_COLOR = "special.boss-bar-color";
     private BarColor bossBarColor;
@@ -231,7 +231,7 @@ public class Special extends CustomMobOption {
     }
 
     private void addAggressivity(Entity customMob) {
-        new NMS().setCustomMobAggressivity((Mob) customMob);
+        new NMS().setCustomMobAggressivity((Mob) customMob, followRange);
     }
 
     public ItemStack modifyOption(org.bukkit.entity.Player clicker, CustomMob customMob, String option, ClickType clickType) {
