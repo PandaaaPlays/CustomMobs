@@ -328,7 +328,7 @@
                     },
                     {
                         "minimum":  null,
-                        "description":  "Sets the boss bar color (must be enabled to show, see boss bar).",
+                        "description":  "Sets the boss bar color (must be enabled to show, see boss bar style).",
                         "type":  "Bar color",
                         "key":  "BOSS_BAR_COLOR",
                         "maximum":  null
