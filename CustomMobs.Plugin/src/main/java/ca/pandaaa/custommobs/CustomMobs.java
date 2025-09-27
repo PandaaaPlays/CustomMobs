@@ -137,7 +137,7 @@ public class CustomMobs extends JavaPlugin {
             mobFolder.mkdirs();
             saveResource("Mobs/angrycow.yml", false);
             saveResource("Mobs/fastskeleton.yml", false);
-            saveResource("Mobs/megazombie.yml", false);
+            saveResource("Mobs/shark.yml", false);
             saveResource("Mobs/zombie.yml", false);
         }
 

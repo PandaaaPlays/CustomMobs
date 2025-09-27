@@ -50,6 +50,7 @@ public class Manager {
         mobConfiguration.setType(mobType);
         mobsConfigurations.add(mobConfiguration);
         CustomMob customMob = mobConfiguration.loadCustomMob();
+        customMob.getCustomMobConfiguration().setCustomMobCustomEffects(customMob);
         customMobs.put(customMobName, customMob);
         return customMob;
     }

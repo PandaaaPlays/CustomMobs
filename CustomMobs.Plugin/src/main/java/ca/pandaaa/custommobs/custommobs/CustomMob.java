@@ -114,7 +114,7 @@ public class CustomMob implements Listener {
 
         if(this.spawner.areRequirementsDisabled())
             // Set this to be an invisible "entity" that spawns regardless of conditions.
-            spawnerBlock.setSpawnedType(EntityType.AREA_EFFECT_CLOUD);
+            spawnerBlock.setSpawnedType(EntityType.TEXT_DISPLAY);
         else
             spawnerBlock.setSpawnedType(entityType);
 

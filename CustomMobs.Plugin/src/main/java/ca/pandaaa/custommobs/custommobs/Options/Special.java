@@ -221,7 +221,10 @@ public class Special extends CustomMobOption {
         customMob.setGravity(gravity);
         customMob.setPersistent(persistent);
 
-        if(customMob instanceof Animals && aggressive) {
+        if(customMob instanceof Animals
+                || customMob instanceof WaterMob
+                || customMob instanceof Ambient
+                && aggressive) {
             addAggressivity(customMob);
         }
     }
@@ -231,7 +234,7 @@ public class Special extends CustomMobOption {
     }
 
     private void addAggressivity(Entity customMob) {
-        new NMS().setCustomMobAggressivity((Mob) customMob, followRange);
+        new NMS().setCustomMobAggressivity((Mob) customMob);
     }
 
     public ItemStack modifyOption(org.bukkit.entity.Player clicker, CustomMob customMob, String option, ClickType clickType) {
@@ -466,7 +469,7 @@ public class Special extends CustomMobOption {
     public CustomMobsItem getVisibleNameItem() {
         CustomMobsItem item = new CustomMobsItem(Material.GLOW_INK_SAC);
         String visible = this.isNameVisible == null ? "&fOn hover" : this.isNameVisible == true ? "&fAlways" : "&fHidden";
-        item.setName("&6&lName always visible");
+        item.setName("&6&lName visibility");
         item.addLore("&eVisibility: " + visible);
         item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "Visible");
         return item;

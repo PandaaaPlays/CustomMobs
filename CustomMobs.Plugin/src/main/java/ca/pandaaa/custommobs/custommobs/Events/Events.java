@@ -135,6 +135,11 @@ public class Events implements Listener {
             CustomMob customMob = CustomMobs.getPlugin().getCustomMobsManager()
                     .getCustomMob(entity.getPersistentDataContainer().get(NamespacedKeys.KEY_NAME, PersistentDataType.STRING));
 
+            if(customMob == null) {
+                entity.getPersistentDataContainer().remove(NamespacedKeys.KEY_NAME);
+                continue;
+            }
+
             CustomMobCustomEffect trailEffect = customMob.getCustomMobCustomEffects().stream().filter(
                             x -> x.isEnabled()
                                     && x.getClass().getSimpleName().equalsIgnoreCase("Trail"))

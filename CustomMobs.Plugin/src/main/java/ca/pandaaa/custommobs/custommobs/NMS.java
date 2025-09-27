@@ -32,7 +32,7 @@ public class NMS {
 
     private static final NMSResolver NMS_RESOLVER = new NMSResolver();
 
-    public void setCustomMobAggressivity(org.bukkit.entity.Mob entity, double followRange) {
+    public void setCustomMobAggressivity(org.bukkit.entity.Mob entity) {
         Mob mob = NMS_RESOLVER.getNMSEntity(entity);
 
         AttributeInstance attackDamageAttribute = mob.getAttribute(Attributes.ATTACK_DAMAGE);
@@ -40,9 +40,9 @@ public class NMS {
             NMS_RESOLVER.setAttribute(mob, new AttributeInstance(Attributes.ATTACK_DAMAGE, attribute -> attribute.setBaseValue(1D)));
 
         NMS_RESOLVER.addGoal(mob, 2, new MeleeAttackGoal((PathfinderMob) mob, 1D, false));
-        NMS_RESOLVER.addGoal(mob, 8, new RandomLookAroundGoal(mob));
+        NMS_RESOLVER.addGoal(mob, 3, new RandomLookAroundGoal(mob));
         NMS_RESOLVER.addGoal(mob, 1, new HurtByTargetGoal((PathfinderMob) mob));
-        NMS_RESOLVER.addGoal(mob, 2, new NearestAttackableTargetGoal<Player>(mob, Player.class, true));
+        NMS_RESOLVER.addGoal(mob, 0, new NearestAttackableTargetGoal<Player>(mob, Player.class, true));
     }
 
     private static final class NMSResolver {
