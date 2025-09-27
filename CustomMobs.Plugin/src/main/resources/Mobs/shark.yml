@@ -1,0 +1,38 @@
+mob:
+  type: COD
+  name: '&b&lShark'
+special:
+  persistent: true
+  aggressive: true
+  health: 50.0
+  can-pickup-loot: false
+  knockback-resistance: 0.1
+  damage:
+    ==: ca.pandaaa.custommobs.utils.DamageRange
+    maximum-damage: 10.0
+    minimum-damage: 8.0
+  follow-range: 64.0
+  natural-drops: false
+  replace-natural: 10.0
+  size: 4.0
+  speed: 10
+custom-effects:
+  gravitypull:
+    enabled: false
+  infection:
+    enabled: true
+    effect: weakness
+    amplifier: 1
+    time: 5
+  mobspawner:
+    enabled: false
+    custommob: fish
+    message: false
+  cooldown: 30
+potions:
+- ==: ca.pandaaa.custommobs.custommobs.PotionEffect
+  duration: -1
+  is-ambient: true
+  potion-effect-type: dolphins_grace
+  amplifier: 10
+  has-particles: true

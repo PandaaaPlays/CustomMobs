@@ -178,7 +178,7 @@ public class SpecificSoundGUI  extends CustomMobsGUI {
 
     private ItemStack getSoundItem() {
         CustomMobsItem item = new CustomMobsItem(sound.getMaterial());
-        item.setName(Utils.applyFormat("&6&l" + Utils.getSentenceCase(sound.getSoundType().name())));
+        item.setName(Utils.applyFormat("&6&l" + Utils.getStartCase(sound.getSoundType().getKey().getKey())));
         item.addLore("", "&7&o(( Click to change the current sound ))", "&7&o(( Right-Click to play this sound ))");
         return getMenuItem(item, true);
     }

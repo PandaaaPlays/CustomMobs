@@ -86,7 +86,7 @@ public class SpecificPotionGUI extends CustomMobsGUI {
             // Duration
             case 12:
                 if (event.getClick().isRightClick()) {
-                    duration = 0;
+                    duration = -1;
                     event.getView().setItem(event.getSlot(), getDurationItem());
                     customMob.editPotion(new PotionEffect(type, duration, amplifier, ambient, particles), potionIndex);
                 } else {

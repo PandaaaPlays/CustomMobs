@@ -4,6 +4,7 @@ import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.CustomEffects.CustomEffectType;
 import ca.pandaaa.custommobs.custommobs.CustomEffects.CustomMobCustomEffect;
+import ca.pandaaa.custommobs.custommobs.CustomEffects.Trail;
 import ca.pandaaa.custommobs.custommobs.Events.CustomMobSpawnEvent;
 import ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage;
 import ca.pandaaa.custommobs.custommobs.Options.CustomMobOption;
@@ -113,7 +114,7 @@ public class CustomMob implements Listener {
 
         if(this.spawner.areRequirementsDisabled())
             // Set this to be an invisible "entity" that spawns regardless of conditions.
-            spawnerBlock.setSpawnedType(EntityType.AREA_EFFECT_CLOUD);
+            spawnerBlock.setSpawnedType(EntityType.TEXT_DISPLAY);
         else
             spawnerBlock.setSpawnedType(entityType);
 
@@ -338,6 +339,9 @@ public class CustomMob implements Listener {
         BukkitTask task = new BukkitRunnable() {
             @Override
             public void run() {
+                if(Trail.activeTrails != null && !Trail.activeTrails.isEmpty() && Trail.activeTrails.containsKey(entityId)) {
+                    Trail.activeTrails.get(entityId).triggerCustomEffect(entity);
+                }
                 List<Entity> nearbyEntities = entity.getNearbyEntities(32D, 32D, 32D);
 
                 nearbyEntities.stream()

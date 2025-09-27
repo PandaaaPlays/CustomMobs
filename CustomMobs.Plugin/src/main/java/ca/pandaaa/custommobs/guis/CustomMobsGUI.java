@@ -67,11 +67,11 @@ public class CustomMobsGUI implements Listener {
         }
     }
 
-    private boolean debugMenuItem = false;
-    protected ItemStack getMenuItem(ItemStack item, boolean hideItemFlags) {
+    private static boolean DEBUG_MENU_ITEM = false;
+    protected static ItemStack getMenuItem(ItemStack item, boolean hideItemFlags) {
         ItemStack menuItem = item.clone();
         ItemMeta itemMeta = menuItem.getItemMeta();
-        if(debugMenuItem) {
+        if(DEBUG_MENU_ITEM) {
             List<String> lore = itemMeta.getLore() != null ? itemMeta.getLore() : new ArrayList<>();
             lore.add(Utils.applyFormat("&c&lMENU_ITEM"));
             itemMeta.setLore(lore);
@@ -92,14 +92,22 @@ public class CustomMobsGUI implements Listener {
         return menuItem;
     }
 
-    protected ItemStack getMenuItem(CustomMobsItem customMobsItem, boolean hideItemFlags) {
+    protected static ItemStack getMenuItem(CustomMobsItem customMobsItem, boolean hideItemFlags) {
         return getMenuItem(customMobsItem.getItem(), hideItemFlags);
     }
 
-    protected ItemStack getPreviousItem() {
+    protected static ItemStack getPreviousItem() {
         ItemStack item = Utils.createHead("a2f0425d64fdc8992928d608109810c1251fe243d60d175bed427c651cbe");
         ItemMeta itemMeta = item.getItemMeta();
         itemMeta.setDisplayName(Utils.applyFormat("&e&lPrevious"));
+        item.setItemMeta(itemMeta);
+        return getMenuItem(item, true);
+    }
+
+    protected static ItemStack getNextItem() {
+        ItemStack item = Utils.createHead("6d865aae2746a9b8e9a4fe629fb08d18d0a9251e5ccbe5fa7051f53eab9b94");
+        ItemMeta itemMeta = item.getItemMeta();
+        itemMeta.setDisplayName(Utils.applyFormat("&e&lNext"));
         item.setItemMeta(itemMeta);
         return getMenuItem(item, true);
     }

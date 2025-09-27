@@ -1,6 +1,7 @@
 package ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects;
 
 import ca.pandaaa.custommobs.CustomMobs;
+import ca.pandaaa.custommobs.custommobs.CustomEffects.CustomEffectType;
 import ca.pandaaa.custommobs.custommobs.CustomEffects.CustomMobCustomEffect;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
@@ -140,7 +141,7 @@ public class CustomEffectsGUI extends CustomMobsGUI {
                             event.setCurrentItem(getMenuItem(customMobCustomEffect.modifyStatus(), true));
                         } else {
                             List<ItemStack> optionItems = customMobCustomEffect.getOptionsItems();
-                            if (optionItems != null && !optionItems.isEmpty())
+                            if (optionItems != null && !optionItems.isEmpty() && customMobCustomEffect.getCustomEffectType() != CustomEffectType.EVERY_SECOND)
                                 new CustomEffectOptionsGUI(customMob, customMobCustomEffect, customMobCustomEffect.getOptionsItems()).openInventory(clicker);
                         }
                     }

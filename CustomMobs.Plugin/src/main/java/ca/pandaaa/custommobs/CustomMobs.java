@@ -5,6 +5,7 @@ import ca.pandaaa.custommobs.commands.TabCompletion;
 import ca.pandaaa.custommobs.configurations.ConfigurationManager;
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.*;
+import ca.pandaaa.custommobs.custommobs.CustomEffects.Trail;
 import ca.pandaaa.custommobs.custommobs.Events.Events;
 import ca.pandaaa.custommobs.custommobs.Messages.DropMessage;
 import ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage;
@@ -136,7 +137,7 @@ public class CustomMobs extends JavaPlugin {
             mobFolder.mkdirs();
             saveResource("Mobs/angrycow.yml", false);
             saveResource("Mobs/fastskeleton.yml", false);
-            saveResource("Mobs/megazombie.yml", false);
+            saveResource("Mobs/shark.yml", false);
             saveResource("Mobs/zombie.yml", false);
         }
 

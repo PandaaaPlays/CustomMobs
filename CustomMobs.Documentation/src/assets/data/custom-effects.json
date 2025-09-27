@@ -209,5 +209,11 @@
                                                "maximum":  "50"
                                            }
                                        ]
-                        }
+                        },
+    "Trail":  {
+                  "effectType":  "EVERY_SECOND",
+                  "fields":  [
+
+                             ]
+              }
 }

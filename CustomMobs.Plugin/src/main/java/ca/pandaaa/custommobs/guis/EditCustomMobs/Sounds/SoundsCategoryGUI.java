@@ -115,7 +115,7 @@ public class SoundsCategoryGUI extends CustomMobsGUI {
                     if(event.isRightClick()) {
                         clicker.playSound(clicker.getLocation(), soundEnum.getSound(), 1.0F, 1.0F);
                     } else {
-                        ca.pandaaa.custommobs.custommobs.Sound customMobSound = new ca.pandaaa.custommobs.custommobs.Sound(soundEnum.getSound(), 1, SoundCategory.MASTER, 1, 1, soundEnum.getMaterial(), true);
+                        ca.pandaaa.custommobs.custommobs.Sound customMobSound = new ca.pandaaa.custommobs.custommobs.Sound(soundEnum.getSound(), 16, SoundCategory.MASTER, 1, 1, soundEnum.getMaterial(), true);
                         consumer.accept(customMobSound);
                     }
                 }
