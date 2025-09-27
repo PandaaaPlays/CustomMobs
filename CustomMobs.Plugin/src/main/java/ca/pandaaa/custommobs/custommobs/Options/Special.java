@@ -194,9 +194,9 @@ public class Special extends CustomMobOption {
 
         customMob.setGlowing(glowing);
 
-        if(customMob instanceof org.bukkit.entity.LivingEntity) {
-            ((org.bukkit.entity.LivingEntity) customMob).setCanPickupItems(canPickupLoot);
-            ((org.bukkit.entity.LivingEntity) customMob).setAI(intelligent);
+        if(customMob instanceof org.bukkit.entity.LivingEntity livingCustomMob) {
+            livingCustomMob.setCanPickupItems(canPickupLoot);
+            livingCustomMob.setAI(intelligent);
 
             if(bossBar != null) {
                 BossBar bossBars = CustomMobs.getPlugin().getCustomMobsManager().getBossBar();

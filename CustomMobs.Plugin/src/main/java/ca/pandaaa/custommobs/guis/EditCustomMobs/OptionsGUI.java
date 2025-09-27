@@ -1,19 +1,29 @@
 package ca.pandaaa.custommobs.guis.EditCustomMobs;
 
 import ca.pandaaa.custommobs.CustomMobs;
+import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.custommobs.Options.CustomMobOption;
+import ca.pandaaa.custommobs.custommobs.Options.Mannequin;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 import ca.pandaaa.custommobs.utils.Utils;
+import com.google.common.reflect.ClassPath;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.*;
 
 public class OptionsGUI extends CustomMobsGUI {
@@ -22,6 +32,7 @@ public class OptionsGUI extends CustomMobsGUI {
     private final CustomMob customMob;
     private final ItemStack previous;
     private final ItemStack next;
+    private Player player;
 
     public OptionsGUI(CustomMob customMob) {
         super(54, "&8CustomMobs &8&l» &8Options");
@@ -39,6 +50,7 @@ public class OptionsGUI extends CustomMobsGUI {
     }
 
     public void openInventory(Player player, int page) {
+        this.player = player;
         ItemMeta nextItemMeta = next.getItemMeta();
         if(nextItemMeta != null)
             nextItemMeta.setDisplayName(Utils.applyFormat("&e&lNext (" + (page + 1) + ")"));
@@ -120,10 +132,55 @@ public class OptionsGUI extends CustomMobsGUI {
                     String keyString = key.getKey();
                     if(keyString.contains("custommobs.option")) {
                         String[] value = itemMeta.getPersistentDataContainer().get(key, PersistentDataType.STRING).split("\\.");
-                        event.setCurrentItem(getMenuItem(customMob.getCustomMobOption(value[0]).modifyOption(clicker, customMob, value[1], event.getClick()), true));
+                        ItemStack modifiedOptionItem = customMob.getCustomMobOption(value[0]).modifyOption(clicker, customMob, value[1], event.getClick());
+                        if(modifiedOptionItem != null) {
+                            event.setCurrentItem(getMenuItem(modifiedOptionItem, true));
+                        }
                     }
                 }
                 break;
         }
+    }
+
+    @EventHandler
+    public void onPlayerChat(AsyncPlayerChatEvent event) {
+        if (event.getPlayer() != player)
+            return;
+        if (!Utils.isVersionAtLeast("1.21.9"))
+            return;
+        if (customMob.getType() != EntityType.MANNEQUIN)
+            return;
+
+        try {
+            Class<?> clazz = Class.forName(
+                    "ca.pandaaa.custommobs.custommobs.Options.Mannequin",
+                    true,
+                    this.getClass().getClassLoader()
+            );
+
+            if(!(boolean) clazz.getMethod("isApplicable", EntityType.class).invoke(null, customMob.getType()))
+                return;
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException | ClassNotFoundException e) {
+            return;
+        }
+
+        Mannequin mannequin = ((Mannequin) customMob.getCustomMobOption("Mannequin"));
+        String editing = mannequin.getEditing();
+
+        if(editing.equalsIgnoreCase(""))
+            return;
+
+        event.setCancelled(true);
+
+        String message = event.getMessage();
+        if (!message.equalsIgnoreCase("cancel")) {
+            mannequin.changeTextEditingOptionValue(message);
+            String value = editing.equalsIgnoreCase("Description") ? "description" : "texture";
+            player.sendMessage(Utils.applyFormat("&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &eSuccessfully changed the " + value + " to : &r" + message));
+        } else {
+            mannequin.changeTextEditingOptionValue("");
+        }
+
+        Bukkit.getScheduler().runTask(CustomMobs.getPlugin(), () -> new OptionsGUI(customMob).openInventory(player, 1));
     }
 }
