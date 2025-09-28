@@ -29,7 +29,6 @@ public class SpecificPotionGUI extends CustomMobsGUI {
     private int duration;
     private int amplifier;
 
-
     public SpecificPotionGUI(CustomMob customMob, int potionIndex) {
         super(36, "&8CustomMobs &8&l» &8Potion configuration");
         this.potionIndex = potionIndex;

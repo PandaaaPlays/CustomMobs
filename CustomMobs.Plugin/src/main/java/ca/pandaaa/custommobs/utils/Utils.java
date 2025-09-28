@@ -178,4 +178,8 @@ public class Utils {
 
         return true;
     }
+
+    public static boolean isVersionExactly(String version) {
+        return isVersionAtLeast(version) && isVersionBeforeOrEqual(version);
+    }
 }

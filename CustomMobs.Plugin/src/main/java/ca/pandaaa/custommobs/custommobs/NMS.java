@@ -76,10 +76,14 @@ public class NMS {
 
                 getHandleMethod = craftLivingEntityClass.getMethod("getHandle");
                 // To find the fields corresponding to the version, see : https://minidigger.github.io/MiniMappingViewer/#/mojang/client/1.XX.XX/LivingEntity
-                if(Utils.isVersionAtLeast("1.21.6") && Utils.isVersionBeforeOrEqual("1.21.8")) {
-                    attributeMap = LivingEntity.class.getDeclaredField("cc");  // Field 'attributes' in NMS LivingEntity class
-                    attributes = AttributeMap.class.getDeclaredField("a");     // Field 'attributes' in NMS AttributeMap class
-                    targetSelectorField = Mob.class.getDeclaredField("ci");    // Field 'targetSelector' in NMS entity.Mob class
+                if(Utils.isVersionExactly("1.21.9")) {
+                    attributeMap = LivingEntity.class.getDeclaredField("");  // Field 'attributes' in NMS LivingEntity class
+                    attributes = AttributeMap.class.getDeclaredField("");    // Field 'attributes' in NMS AttributeMap class
+                    targetSelectorField = Mob.class.getDeclaredField("");    // Field 'targetSelector' in NMS entity.Mob class
+                } else if(Utils.isVersionAtLeast("1.21.6") && Utils.isVersionBeforeOrEqual("1.21.8")) {
+                    attributeMap = LivingEntity.class.getDeclaredField("cc");
+                    attributes = AttributeMap.class.getDeclaredField("a");
+                    targetSelectorField = Mob.class.getDeclaredField("ci");
                 } else if(Bukkit.getBukkitVersion().contains("1.21.5")) {
                     attributeMap = LivingEntity.class.getDeclaredField("bF");
                     attributes = AttributeMap.class.getDeclaredField("a");
@@ -108,7 +112,7 @@ public class NMS {
             try {
                 Object goalSelector = targetSelectorField.get(mob);
                 Method addGoalMethod = null;
-                if(Utils.isVersionAtLeast("1.21.5") && Utils.isVersionBeforeOrEqual("1.21.8")) {
+                if(Utils.isVersionAtLeast("1.21.5") && Utils.isVersionBeforeOrEqual("1.21.9")) {
                     addGoalMethod = goalSelector.getClass().getDeclaredMethod("a", int.class, Goal.class); // Method 'addGoal' in NMS GoalSelector class
                 } else {
                     throw new Exception("This server version does not support aggressive animals. Please contact the developper if you believe this is an issue.");
