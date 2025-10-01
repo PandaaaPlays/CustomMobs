@@ -174,6 +174,22 @@
                           "maximum":  null
                       }
                   ],
+    "CopperGolem":  [
+                        {
+                            "minimum":  null,
+                            "description":  "Specifies the state of oxidation of the copper golem on apparition.",
+                            "type":  "Copper weather state",
+                            "key":  "OXIDATION",
+                            "maximum":  null
+                        },
+                        {
+                            "minimum":  null,
+                            "description":  "Determines if the copper golem CustomMob can oxidize normally or if it is waxed.",
+                            "type":  "On / Off",
+                            "key":  "OXIDIZE",
+                            "maximum":  null
+                        }
+                    ],
     "Panda":  [
                   {
                       "minimum":  null,
@@ -462,5 +478,56 @@
                          "key":  "SITTING",
                          "maximum":  null
                      }
-                 ]
+                 ],
+    "Mannequin":  [
+                      {
+                          "minimum":  null,
+                          "description":  "Represents the texture of the mannequin, which will change it\u0027s skin.",
+                          "type":  "String",
+                          "key":  "TEXTURE",
+                          "maximum":  null
+                      },
+                      {
+                          "minimum":  null,
+                          "description":  "Represents the mannequin\u0027s cape\u0027s texture.",
+                          "type":  "String",
+                          "key":  "CAPE",
+                          "maximum":  null
+                      },
+                      {
+                          "minimum":  null,
+                          "description":  "Represents the mannequin\u0027s skin size. Typically, Alex uses the slim size and Steve uses the wide size.",
+                          "type":  "On / Off",
+                          "key":  "WIDE",
+                          "maximum":  null
+                      },
+                      {
+                          "minimum":  null,
+                          "description":  "Determines which hand the mannequin uses as it\u0027s main.",
+                          "type":  "On / Off",
+                          "key":  "RIGHT_HANDED",
+                          "maximum":  null
+                      },
+                      {
+                          "minimum":  null,
+                          "description":  "Determines which pose the mannequin is in.",
+                          "type":  "Pose",
+                          "key":  "POSE",
+                          "maximum":  null
+                      },
+                      {
+                          "minimum":  null,
+                          "description":  "When disabled, the mannequin cannot be pushed by a player (such as an NPC).",
+                          "type":  "On / Off",
+                          "key":  "MOVABLE",
+                          "maximum":  null
+                      },
+                      {
+                          "minimum":  null,
+                          "description":  "Adds a description under the name of the mannequin.",
+                          "type":  "String",
+                          "key":  "DESCRIPTION",
+                          "maximum":  null
+                      }
+                  ]
 }
