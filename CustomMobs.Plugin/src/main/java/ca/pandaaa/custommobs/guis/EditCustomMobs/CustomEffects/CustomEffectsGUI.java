@@ -141,7 +141,7 @@ public class CustomEffectsGUI extends CustomMobsGUI {
                             event.setCurrentItem(getMenuItem(customMobCustomEffect.modifyStatus(), true));
                         } else {
                             List<ItemStack> optionItems = customMobCustomEffect.getOptionsItems();
-                            if (optionItems != null && !optionItems.isEmpty() && customMobCustomEffect.getCustomEffectType() != CustomEffectType.EVERY_SECOND)
+                            if (optionItems != null && !optionItems.isEmpty() && optionItems.size() != 1)
                                 new CustomEffectOptionsGUI(customMob, customMobCustomEffect, customMobCustomEffect.getOptionsItems()).openInventory(clicker);
                         }
                     }

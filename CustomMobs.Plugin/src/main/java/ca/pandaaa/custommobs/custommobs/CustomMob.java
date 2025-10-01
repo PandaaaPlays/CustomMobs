@@ -4,6 +4,7 @@ import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.CustomEffects.CustomEffectType;
 import ca.pandaaa.custommobs.custommobs.CustomEffects.CustomMobCustomEffect;
+import ca.pandaaa.custommobs.custommobs.CustomEffects.Miner;
 import ca.pandaaa.custommobs.custommobs.CustomEffects.Trail;
 import ca.pandaaa.custommobs.custommobs.Events.CustomMobSpawnEvent;
 import ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage;
@@ -333,16 +334,15 @@ public class CustomMob implements Listener {
     /* === CUSTOM EFFECTS (and boss bar) === */
     public void enableCustomEffects(Entity entity) {
         UUID entityId = entity.getUniqueId();
+
+        // Prevents the same entity to have multiple runnable for the CustomEffects
         if (activeCustomEffectRunnables.containsKey(entityId) || entity.isDead())
             return;
 
         BukkitTask task = new BukkitRunnable() {
             @Override
             public void run() {
-                if(Trail.activeTrails != null && !Trail.activeTrails.isEmpty() && Trail.activeTrails.containsKey(entityId)) {
-                    Trail.activeTrails.get(entityId).triggerCustomEffect(entity);
-                }
-                List<Entity> nearbyEntities = entity.getNearbyEntities(32D, 32D, 32D);
+                List<Entity> nearbyEntities = entity.getNearbyEntities(20D, 20D, 20D);
 
                 nearbyEntities.stream()
                         .filter(e -> e instanceof Player)
@@ -354,6 +354,13 @@ public class CustomMob implements Listener {
                     cancelCustomEffects(entityId);
                     nextCooldownOccurences.put(entityId, null);
                     return;
+                }
+
+                if(Trail.activeTrails != null && !Trail.activeTrails.isEmpty() && Trail.activeTrails.containsKey(entityId)) {
+                    Trail.activeTrails.get(entityId).triggerCustomEffect(entity);
+                }
+                if(Miner.activeMiners != null && !Miner.activeMiners.isEmpty() && Miner.activeMiners.containsKey(entityId)) {
+                    Miner.activeMiners.get(entityId).triggerCustomEffect(entity);
                 }
 
                 List<Entity> impactEntities = entity.getNearbyEntities(1D, 1D, 1D);
