@@ -199,6 +199,9 @@ public class Events implements Listener {
         if (!Objects.equals(event.getHand(), EquipmentSlot.HAND))
             return;
 
+        if (event.getClickedBlock() == null)
+            return;
+
         Player player = event.getPlayer();
         ItemStack item = player.getInventory().getItemInMainHand();
         if (item.getType().equals(Material.AIR))

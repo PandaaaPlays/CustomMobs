@@ -227,7 +227,7 @@ public class Special extends CustomMobOption {
         if(customMob instanceof Animals
                 || customMob instanceof WaterMob
                 || customMob instanceof Ambient
-                || customMob instanceof CopperGolem
+                || (Utils.isVersionAtLeast("1.21.9") && customMob instanceof CopperGolem)
                 && aggressive) {
             addAggressivity(customMob);
         }

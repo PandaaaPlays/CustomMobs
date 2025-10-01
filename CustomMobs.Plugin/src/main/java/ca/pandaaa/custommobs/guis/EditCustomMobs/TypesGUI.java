@@ -153,7 +153,7 @@ public class TypesGUI extends CustomMobsGUI {
                 return Material.SPECTRAL_ARROW;
             if(type == EntityType.GIANT)
                 return Material.ZOMBIE_HEAD;
-            if(type == EntityType.MANNEQUIN)
+            if(Utils.isVersionAtLeast("1.21.9") && type == EntityType.MANNEQUIN)
                 return Material.PLAYER_HEAD;
 
             String eggName = type.name() + "_SPAWN_EGG";
