@@ -3,6 +3,7 @@ package ca.pandaaa.custommobs.custommobs.Events;
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomEffects.CustomEffectType;
 import ca.pandaaa.custommobs.custommobs.CustomEffects.CustomMobCustomEffect;
+import ca.pandaaa.custommobs.custommobs.CustomEffects.Miner;
 import ca.pandaaa.custommobs.custommobs.CustomEffects.Trail;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.custommobs.DropManager;
@@ -147,6 +148,13 @@ public class Events implements Listener {
             if(trailEffect != null && !Trail.activeTrails.containsKey(entity.getUniqueId()))
                 Trail.activeTrails.put(entity.getUniqueId(), (Trail) trailEffect);
 
+            CustomMobCustomEffect minerEffect = customMob.getCustomMobCustomEffects().stream().filter(
+                            x -> x.isEnabled()
+                                    && x.getClass().getSimpleName().equalsIgnoreCase("Miner"))
+                    .findFirst().orElse(null);
+            if(minerEffect != null && !Miner.activeMiners.containsKey(entity.getUniqueId()))
+                Miner.activeMiners.put(entity.getUniqueId(), (Miner) minerEffect);
+
             customMob.enableCustomEffects(entity);
         }
     }
@@ -185,7 +193,7 @@ public class Events implements Listener {
     @EventHandler
     public void onClickEvent(PlayerInteractEvent event) {
         Action action = event.getAction();
-        if (!action.equals(Action.RIGHT_CLICK_BLOCK))
+        if (!action.equals(Action.RIGHT_CLICK_BLOCK) && !action.equals(Action.RIGHT_CLICK_AIR))
             return;
 
         if (!Objects.equals(event.getHand(), EquipmentSlot.HAND))

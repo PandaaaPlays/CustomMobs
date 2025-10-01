@@ -1,13 +1,9 @@
 package ca.pandaaa.custommobs.custommobs.CustomEffects;
 
-import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
-import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
-import ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects.CustomEffectOptionsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -22,7 +18,7 @@ public class Trail extends CustomMobCustomEffect {
     public final static Map<UUID, Trail> activeTrails = new HashMap<>();
 
     public Trail(CustomMobConfiguration mobConfiguration) {
-        super(mobConfiguration, CustomEffectType.EVERY_SECOND);
+        super(mobConfiguration, CustomEffectType.ALWAYS);
     }
 
     public void triggerCustomEffect(Entity entity) {
