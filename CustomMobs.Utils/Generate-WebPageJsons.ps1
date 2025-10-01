@@ -141,6 +141,7 @@ foreach ($file in $JavaFiles)
                     $type = $type -replace 'Style', ' style'
                     $type = $type -replace 'Profession', ' profession'
                     $type = $type -replace 'Color', ' color'
+                    $type = $type -replace 'Coppergolemcopperweatherstate', 'Copper weather state'
                     $type = $type.Substring(0, 1).ToUpper() + $type.Substring(1).ToLower();
                 }
             }

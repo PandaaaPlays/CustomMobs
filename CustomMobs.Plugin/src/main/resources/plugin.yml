@@ -3,6 +3,8 @@ version: ${project.version}
 author: Pandaaa
 main: ca.pandaaa.custommobs.CustomMobs
 api-version: 1.21.5
+softdepend:
+  - WorldGuard
 commands:
   custommobs:
     aliases: [cm, mobs, custommobs]

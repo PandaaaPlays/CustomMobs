@@ -7,10 +7,7 @@ import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.SoundEnum;
 import ca.pandaaa.custommobs.utils.Utils;
 import ca.pandaaa.custommobs.custommobs.Sound;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Registry;
-import org.bukkit.SoundCategory;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -96,6 +93,9 @@ public class AddSoundsGUI extends CustomMobsGUI {
                     org.bukkit.Sound sound = Registry.SOUNDS.get(NamespacedKey.minecraft(itemMeta.getPersistentDataContainer().get(keyFavorite, PersistentDataType.STRING)));
                     if(event.isRightClick()) {
                         clicker.playSound(clicker.getLocation(), sound, 1.0F, 1.0F);
+                        Bukkit.getScheduler().runTaskLater(CustomMobs.getPlugin(), () -> {
+                            clicker.stopSound(sound, SoundCategory.MASTER);
+                        }, 20L * 5);
                     } else {
                         Sound customMobSound = new Sound(sound, 16, SoundCategory.MASTER, 1, 1, event.getCurrentItem().getType(), true);
                         consumer.accept(customMobSound);

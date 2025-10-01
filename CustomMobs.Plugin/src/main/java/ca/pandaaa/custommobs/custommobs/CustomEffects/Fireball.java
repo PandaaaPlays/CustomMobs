@@ -94,7 +94,7 @@ public class Fireball extends CustomMobCustomEffect {
         } else {
             org.bukkit.entity.Fireball fireball = shooter.getWorld().spawn(shooter.getLocation().add(0, 1, 0), org.bukkit.entity.Fireball.class);
             fireball.setDirection(direction);
-            fireball.setYield(explosionStrength);
+            fireball.setYield(breakBlocks ? explosionStrength : 0F);
             fireball.setIsIncendiary(false);
             fireball.setShooter((ProjectileSource) shooter);
         }

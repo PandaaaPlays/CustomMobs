@@ -6,7 +6,7 @@
 
     <groupId>ca.pandaaa</groupId>
     <artifactId>CustomMobs</artifactId>
-    <version>1.4.0</version>
+    <version>1.5.0</version>
     <packaging>jar</packaging>
 
     <name>CustomMobs</name>
@@ -21,6 +21,10 @@
             <id>nms-repo</id>
             <url>https://repo.codemc.io/repository/nms/</url>
         </repository>
+        <repository>
+            <id>sk89q-repo</id>
+            <url>https://maven.enginehub.org/repo/</url>
+        </repository>
     </repositories>
 
     <properties>
@@ -28,7 +32,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <used.spigot.version>1.21.7-R0.1-SNAPSHOT</used.spigot.version>
+        <used.spigot.version>1.21.9-R0.1-SNAPSHOT</used.spigot.version>
     </properties>
 
     <dependencies>
@@ -38,6 +42,18 @@
             <version>${used.spigot.version}</version>
             <classifier>remapped-mojang</classifier>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sk89q.worldguard</groupId>
+            <artifactId>worldguard-bukkit</artifactId>
+            <version>7.0.4</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.bstats</groupId>
+                    <artifactId>bstats-bukkit</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

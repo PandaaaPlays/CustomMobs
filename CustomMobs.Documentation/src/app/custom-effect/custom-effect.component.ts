@@ -41,6 +41,9 @@ export class CustomEffectComponent implements OnInit {
             case "ON_DAMAGE_ON_PLAYER":
               this.title = "Enabled 'On damage on player' custom effect(s) will be triggered when a player is hurt by the CustomMob."
               break;
+            case "EVERY_SECOND":
+              this.title = "Enabled 'Every second' custom effect(s) will be triggered every 5 ticks (1/4 of a second) in the game when a player is nearby."
+              break;
             default:
               this.title = "";
               break;

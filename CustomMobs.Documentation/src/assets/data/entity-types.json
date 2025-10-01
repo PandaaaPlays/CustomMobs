@@ -1,7 +1,6 @@
 {
   "MOOSHROOM": [
     "Ageable",
-    "Cow",
     "Special"
   ],
   "SILVERFISH": [
@@ -198,6 +197,11 @@
   "WITCH": [
     "Special"
   ],
+  "HAPPY_GHAST": [
+    "Ageable",
+    "HappyGhast",
+    "Special"
+  ],
   "TROPICAL_FISH": [
     "Special"
   ],
@@ -209,6 +213,10 @@
   ],
   "ARMADILLO": [
     "Ageable",
+    "Special"
+  ],
+  "MANNEQUIN": [
+    "Mannequin",
     "Special"
   ],
   "WITHER_SKELETON": [
@@ -299,6 +307,10 @@
     "Tameable"
   ],
   "BLAZE": [
+    "Special"
+  ],
+  "COPPER_GOLEM": [
+    "CopperGolem",
     "Special"
   ],
   "COW": [

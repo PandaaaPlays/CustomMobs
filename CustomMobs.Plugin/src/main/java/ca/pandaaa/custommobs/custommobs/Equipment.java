@@ -1,6 +1,7 @@
 package ca.pandaaa.custommobs.custommobs;
 
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
+import org.bukkit.entity.CopperGolem;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
@@ -80,19 +81,19 @@ public class Equipment {
     }
 
     public void giveEquipments(Entity customMob) {
-        if(customMob instanceof LivingEntity) {
-            ((LivingEntity) customMob).getEquipment().setItemInMainHand(mainHand, true);
-            ((LivingEntity) customMob).getEquipment().setItemInMainHandDropChance(0f);
-            ((LivingEntity) customMob).getEquipment().setItemInOffHand(offHand, true);
-            ((LivingEntity) customMob).getEquipment().setItemInOffHandDropChance(0f);
-            ((LivingEntity) customMob).getEquipment().setHelmet(helmet, true);
-            ((LivingEntity) customMob).getEquipment().setHelmetDropChance(0f);
-            ((LivingEntity) customMob).getEquipment().setChestplate(chestplate, true);
-            ((LivingEntity) customMob).getEquipment().setChestplateDropChance(0f);
-            ((LivingEntity) customMob).getEquipment().setLeggings(leggings, true);
-            ((LivingEntity) customMob).getEquipment().setLeggingsDropChance(0f);
-            ((LivingEntity) customMob).getEquipment().setBoots(boots, true);
-            ((LivingEntity) customMob).getEquipment().setBootsDropChance(0f);
+        if(customMob instanceof LivingEntity livingEntity && livingEntity.getEquipment() != null) {
+            livingEntity.getEquipment().setItemInMainHand(mainHand, true);
+            livingEntity.getEquipment().setItemInMainHandDropChance(0f);
+            livingEntity.getEquipment().setItemInOffHand(offHand, true);
+            livingEntity.getEquipment().setItemInOffHandDropChance(0f);
+            livingEntity.getEquipment().setHelmet(helmet, true);
+            livingEntity.getEquipment().setHelmetDropChance(0f);
+            livingEntity.getEquipment().setChestplate(chestplate, true);
+            livingEntity.getEquipment().setChestplateDropChance(0f);
+            livingEntity.getEquipment().setLeggings(leggings, true);
+            livingEntity.getEquipment().setLeggingsDropChance(0f);
+            livingEntity.getEquipment().setBoots(boots, true);
+            livingEntity.getEquipment().setBootsDropChance(0f);
         }
     }
 }

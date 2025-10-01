@@ -207,7 +207,7 @@ public class SpawnerGUI extends CustomMobsGUI {
     }
 
     private ItemStack getSpawnDelayItem() {
-        CustomMobsItem item = new CustomMobsItem(Material.CHAIN);
+        CustomMobsItem item = new CustomMobsItem(Material.SPRUCE_FENCE);
         item.setName("&6&lInitial spawn delay");
         String delay = spawner.getSpawnDelay() > 20 ? "(" + Utils.getFormattedTime(spawner.getSpawnDelay() / 20, true, false) + ")" : "";
         item.addLore("&eFirst spawn delay:&f " + spawner.getSpawnDelay() + " tick(s) " + delay, " ", "&7&o(( Click to edit this option ))", "&7&o(( Right-Click to reset this option ))");
