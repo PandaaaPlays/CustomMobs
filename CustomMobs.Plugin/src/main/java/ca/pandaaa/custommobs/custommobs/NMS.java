@@ -77,9 +77,9 @@ public class NMS {
                 getHandleMethod = craftLivingEntityClass.getMethod("getHandle");
                 // To find the fields corresponding to the version, see : https://minidigger.github.io/MiniMappingViewer/#/mojang/client/1.XX.XX/LivingEntity
                 if(Utils.isVersionExactly("1.21.9")) {
-                    attributeMap = LivingEntity.class.getDeclaredField("");  // Field 'attributes' in NMS LivingEntity class
-                    attributes = AttributeMap.class.getDeclaredField("");    // Field 'attributes' in NMS AttributeMap class
-                    targetSelectorField = Mob.class.getDeclaredField("");    // Field 'targetSelector' in NMS entity.Mob class
+                    attributeMap = LivingEntity.class.getDeclaredField("cj");  // Field 'attributes' in NMS LivingEntity class
+                    attributes = AttributeMap.class.getDeclaredField("a");    // Field 'attributes' in NMS AttributeMap class
+                    targetSelectorField = Mob.class.getDeclaredField("cr");    // Field 'targetSelector' in NMS entity.Mob class
                 } else if(Utils.isVersionAtLeast("1.21.6") && Utils.isVersionBeforeOrEqual("1.21.8")) {
                     attributeMap = LivingEntity.class.getDeclaredField("cc");
                     attributes = AttributeMap.class.getDeclaredField("a");

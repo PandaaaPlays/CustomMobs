@@ -5,9 +5,7 @@ import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
@@ -20,7 +18,7 @@ public class CopperGolem extends CustomMobOption {
      * Specifies the state of oxidation of the copper golem on apparition.
      */
     private static final String OXIDATION = "mob.oxidation";
-    private Oxidation oxidation;
+    private org.bukkit.entity.CopperGolem.CopperWeatherState oxidation;
 
     /**
      * Determines if the copper golem CustomMob can oxidize normally or if it is waxed.
@@ -30,14 +28,19 @@ public class CopperGolem extends CustomMobOption {
 
     public CopperGolem(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
-        this.oxidation = getOption(OXIDATION, Oxidation);
+        this.oxidation = getOption(OXIDATION, org.bukkit.entity.CopperGolem.CopperWeatherState.class);
         this.oxidize = getOption(OXIDATION, Boolean.class, true);
     }
 
     public void applyOptions(Entity customMob) {
-        if(!(customMob instanceof org.bukkit.entity.CopperGolem))
+        if(!(customMob instanceof org.bukkit.entity.CopperGolem copperGolem))
             return;
-        // TODO
+
+        if(oxidation != null)
+            copperGolem.setWeatherState(oxidation);
+
+        if(!oxidize)
+            copperGolem.setNextWeatheringTick(-1);
     }
 
     @Override
@@ -59,19 +62,21 @@ public class CopperGolem extends CustomMobOption {
         switch(option.toLowerCase()) {
             case "oxidation": {
                 if (clickType.isRightClick()) {
-                    this.pigVariant = null;
+                    this.oxidation = null;
                 } else {
-                    if (Arrays.asList(variants).indexOf(pigVariant) == variants.length - 1)
-                        this.pigVariant = variants[0];
+                    List<org.bukkit.entity.CopperGolem.CopperWeatherState> oxidationLevels = Arrays.asList(org.bukkit.entity.CopperGolem.CopperWeatherState.values());
+
+                    if (oxidationLevels.indexOf(oxidation) == oxidationLevels.size() - 1)
+                        this.oxidation = oxidationLevels.get(0);
                     else
-                        this.pigVariant = variants[Arrays.asList(variants).indexOf(pigVariant) + 1];
+                        this.oxidation = oxidationLevels.get(oxidationLevels.indexOf(oxidation) + 1);
                 }
-                setOption(PIG_VARIANT, pigVariant != null ? getVariantName(pigVariant) : null);
+                setOption(OXIDATION, oxidation != null ? oxidation.name() : null);
                 return getOptionItemStack(getOxidationItem(), true, true);
             }
             case "oxidize": {
                 this.oxidize = !oxidize;
-                setOption(OXIDIZE, oxidation);
+                setOption(OXIDIZE, oxidize);
                 return getOptionItemStack(getOxidizeItem(), false, false);
             }
         }
@@ -85,7 +90,7 @@ public class CopperGolem extends CustomMobOption {
     public CustomMobsItem getOxidationItem() {
         CustomMobsItem item = new CustomMobsItem(Material.WEATHERED_COPPER_BULB);
         item.setName("&3&lOxidation");
-        String oxidation = oxidation == null ? "&fDefault" : "&f" + Utils.getSentenceCase(getVariantName(pigVariant));
+        String oxidation = this.oxidation == null ? "&fDefault" : "&f" + Utils.getSentenceCase(this.oxidation.name());
         item.addLore("&eCopper golem oxidation: &f" + oxidation);
         item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "Oxidation");
         return item;

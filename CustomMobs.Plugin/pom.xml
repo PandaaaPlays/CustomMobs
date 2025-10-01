@@ -6,7 +6,7 @@
 
     <groupId>ca.pandaaa</groupId>
     <artifactId>CustomMobs</artifactId>
-    <version>1.4.0</version>
+    <version>1.5.0</version>
     <packaging>jar</packaging>
 
     <name>CustomMobs</name>
@@ -28,7 +28,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <used.spigot.version>1.21.7-R0.1-SNAPSHOT</used.spigot.version>
+        <used.spigot.version>1.21.9-R0.1-SNAPSHOT</used.spigot.version>
     </properties>
 
     <dependencies>

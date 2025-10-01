@@ -34,20 +34,25 @@ public class Utils {
 
     public static ItemStack createHead(String url) {
         ItemStack head = new ItemStack(Material.PLAYER_HEAD);
-        if (!url.isEmpty()) {
-            SkullMeta headMeta = (SkullMeta)head.getItemMeta();
+
+        if (url != null && !url.isEmpty()) {
+            SkullMeta headMeta = (SkullMeta) head.getItemMeta();
             headMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+
             try {
-                PlayerProfile playerProfile = Bukkit.createPlayerProfile(UUID.randomUUID());
+                PlayerProfile playerProfile = Bukkit.createPlayerProfile(UUID.randomUUID(), "CustomHead");
+
                 PlayerTextures playerTextures = playerProfile.getTextures();
                 playerTextures.setSkin(new URL("https://textures.minecraft.net/texture/" + url));
                 playerProfile.setTextures(playerTextures);
+
                 headMeta.setOwnerProfile(playerProfile);
+                head.setItemMeta(headMeta);
             } catch (MalformedURLException exception) {
-                return head;
+                exception.printStackTrace();
             }
-            head.setItemMeta(headMeta);
         }
+
         return head;
     }
 

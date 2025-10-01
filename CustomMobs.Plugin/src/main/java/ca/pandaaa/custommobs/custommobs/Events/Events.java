@@ -218,7 +218,7 @@ public class Events implements Listener {
 
         if (itemType.equalsIgnoreCase("Item")) {
             event.setCancelled(true);
-            customMob.spawnCustomMob(event.getClickedBlock().getLocation().add(0.5, 2, 0.5));
+            customMob.spawnCustomMob(event.getClickedBlock().getLocation().add(0.5, 1, 0.5));
         } else if (itemType.equalsIgnoreCase("Spawner-Item")) {
             event.setCancelled(true);
             customMob.placeCustomMobSpawner(event.getClickedBlock().getRelative(event.getBlockFace()).getLocation());

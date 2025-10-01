@@ -16,10 +16,12 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.attribute.Attributable;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
+import org.bukkit.entity.CopperGolem;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -176,15 +178,16 @@ public class Special extends CustomMobOption {
         if(isNameVisible != null && isNameVisible)
             customMob.setCustomNameVisible(true);
 
-        if(customMob instanceof Attributable) {
+        if (customMob instanceof Attributable attributable) {
             if (health != null) {
-                Objects.requireNonNull(((Attributable) customMob).getAttribute(Registry.ATTRIBUTE.get(NamespacedKey.minecraft("max_health")))).setBaseValue(health);
+                setAttribute(attributable, "max_health", health);
                 ((LivingEntity) customMob).setHealth(health);
             }
-            Objects.requireNonNull(((Attributable) customMob).getAttribute(Registry.ATTRIBUTE.get(NamespacedKey.minecraft("knockback_resistance")))).setBaseValue(knockbackResistance);
-            Objects.requireNonNull(((Attributable) customMob).getAttribute(Registry.ATTRIBUTE.get(NamespacedKey.minecraft("movement_speed")))).setBaseValue(speed);
-            Objects.requireNonNull(((Attributable) customMob).getAttribute(Registry.ATTRIBUTE.get(NamespacedKey.minecraft("follow_range")))).setBaseValue(followRange);
-            Objects.requireNonNull(((Attributable) customMob).getAttribute(Registry.ATTRIBUTE.get(NamespacedKey.minecraft("scale")))).setBaseValue(size);
+
+            setAttribute(attributable, "knockback_resistance", knockbackResistance);
+            setAttribute(attributable, "movement_speed", speed);
+            setAttribute(attributable, "follow_range", followRange);
+            setAttribute(attributable, "scale", size);
         }
 
         if(damageRange != null) {
@@ -224,6 +227,7 @@ public class Special extends CustomMobOption {
         if(customMob instanceof Animals
                 || customMob instanceof WaterMob
                 || customMob instanceof Ambient
+                || customMob instanceof CopperGolem
                 && aggressive) {
             addAggressivity(customMob);
         }
@@ -635,5 +639,15 @@ public class Special extends CustomMobOption {
     private ItemStack getBossBarOptionItemStack(CustomMobsItem item) {
         item.addLore("", "&7&o(( Left-Click to cycle the boss-bar style ))", "&7&o(( Right-Click to cycle the boss-bar color ))");
         return item.getItem();
+    }
+
+    private static void setAttribute(Attributable entity, String key, double value) {
+        var attribute = Registry.ATTRIBUTE.get(NamespacedKey.minecraft(key));
+        if (attribute == null) return;
+
+        var instance = entity.getAttribute(attribute);
+        if (instance != null) {
+            instance.setBaseValue(value);
+        }
     }
 }
