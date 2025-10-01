@@ -153,6 +153,18 @@
                                      }
                                  ]
                   },
+    "Miner":  {
+                  "effectType":  "ALWAYS",
+                  "fields":  [
+                                 {
+                                     "minimum":  "1",
+                                     "description":  "Determines the radius (in block(s)) around the CustomMob where it should detect player(s).",
+                                     "type":  "Integer",
+                                     "key":  "RADIUS",
+                                     "maximum":  "32"
+                                 }
+                             ]
+              },
     "Charge":  {
                    "effectType":  "ON_IMPACT",
                    "fields":  [
@@ -211,7 +223,7 @@
                                        ]
                         },
     "Trail":  {
-                  "effectType":  "EVERY_SECOND",
+                  "effectType":  "ALWAYS",
                   "fields":  [
 
                              ]
