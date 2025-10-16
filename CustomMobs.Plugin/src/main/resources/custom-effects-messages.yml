@@ -15,6 +15,7 @@ gravitypull: "%name% &7&l>> &3&lGravity pull"
 mobspawner: "%name% &7&l>> &c&lMob spawner"
 trampoline: "%name% &7&l>> &2&lTrampoline"
 infection: "%name% &7&l>> &4&lInfection"
+fireaspect: "%name% &7&l>> &6&lFire aspect"
 fireball: "%name% &7&l>> &6&lFireball"
-
+lightningstrike: "%name% &7&l>> &6&lLightning strike"
 

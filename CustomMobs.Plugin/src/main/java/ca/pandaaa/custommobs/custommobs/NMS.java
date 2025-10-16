@@ -7,6 +7,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
@@ -17,7 +18,9 @@ import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.sensing.NearestLivingEntitySensor;
+import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.bukkit.Bukkit;
@@ -42,7 +45,23 @@ public class NMS {
         NMS_RESOLVER.addGoal(mob, 2, new MeleeAttackGoal((PathfinderMob) mob, 1D, false));
         NMS_RESOLVER.addGoal(mob, 3, new RandomLookAroundGoal(mob));
         NMS_RESOLVER.addGoal(mob, 1, new HurtByTargetGoal((PathfinderMob) mob));
-        NMS_RESOLVER.addGoal(mob, 0, new NearestAttackableTargetGoal<Player>(mob, Player.class, true));
+        NMS_RESOLVER.addGoal(mob, 0, new NearestAttackableTargetGoal<Player>(mob, Player.class, 16, true, false, null));
+
+        if (mob instanceof net.minecraft.world.entity.animal.axolotl.Axolotl axolotl) {
+            Bukkit.getScheduler().runTaskTimer(CustomMobs.getPlugin(), () -> {
+                if (!entity.isValid() || entity.isDead() || axolotl.isPlayingDead()) return;
+
+                Player nearest = axolotl.level().getNearestPlayer(axolotl, 16);
+                Brain<?> brain = axolotl.getBrain();
+
+                if (nearest != null) {
+                    brain.setMemory(MemoryModuleType.ATTACK_TARGET, nearest);
+                } else {
+                    brain.eraseMemory(MemoryModuleType.ATTACK_TARGET);
+                }
+
+            }, 1L, 1L);
+        }
     }
 
     private static final class NMSResolver {

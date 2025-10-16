@@ -13,6 +13,7 @@ import {FormsModule} from '@angular/forms';
 })
 export class OptionComponent implements OnInit {
   className: string = '';
+  classDescription: string = '';
   options: Option[] = [];
   searchTerm: string = '';
   filteredOptions: any[] = [];
@@ -35,6 +36,19 @@ export class OptionComponent implements OnInit {
         } else {
           this.router.navigate(['/']);
         }
+      });
+
+      this.optionsService.entityTypes$.subscribe(entityMap => {
+        const applicableEntities = Object.entries(entityMap)
+          .filter(([entityType, entities]) =>
+            entities.some(name => name.toLowerCase() === this.className.toLowerCase())
+          )
+          .map(([entityType]) => this.formatEntityName(entityType));
+
+        if(applicableEntities.length == 1)
+          this.classDescription = `Only the following mob is an instance of <b>${this.className}</b> : ${applicableEntities[0]}`;
+        else
+          this.classDescription = `All of the following mobs are instances of <b>${this.className}</b> : ${applicableEntities.join(', ')}`;
       });
     });
     this.filteredOptions = this.options;
@@ -74,6 +88,7 @@ export class OptionComponent implements OnInit {
 
       let filtered = [];
 
+      // Search for anywhere in the text if under 7 results, otherwise only the start!
       filtered = entries.filter(entry => entry.formattedType.includes(term));
       if (filtered.length > 7) {
         filtered = entries.filter(entry => entry.formattedType.startsWith(term));
@@ -93,5 +108,13 @@ export class OptionComponent implements OnInit {
 
   formatClassName(name: string): string {
     return (name ?? '').replace(/([a-z])([A-Z])/g, '$1 $2');
+  }
+
+  formatEntityName(name: string): string {
+    if (!name) return '';
+    return name
+      .toLowerCase()
+      .replace(/_/g, ' ')
+      .replace(/\b\w/g, c => c.toUpperCase());
   }
 }

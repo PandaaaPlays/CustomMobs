@@ -3,6 +3,7 @@ package ca.pandaaa.custommobs.custommobs.CustomEffects;
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.custommobs.Events.CustomMobCustomEffectEvent;
 import ca.pandaaa.custommobs.guis.BasicTypes.DoubleGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects.CustomEffectOptionsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
@@ -25,7 +26,14 @@ public abstract class CustomMobCustomEffect {
     protected CustomMobConfiguration mobConfiguration;
     protected CustomEffectType customEffectType;
     protected double messageRadius;
-    public abstract void triggerCustomEffect(Entity entity);
+
+    /**
+     * Trigger the effect. Should return the following to do specific messages action :
+     * - Message no one : Return null.
+     * - Message selected players : Return the list of players.
+     * - Message players in radius (or broadcast) : Return empty list.
+     */
+    public abstract List<Player> triggerCustomEffect(Entity entity);
     public abstract ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType);
     public abstract List<ItemStack> getOptionsItems();
     public abstract ItemStack getCustomEffectItem();
@@ -196,4 +204,11 @@ public abstract class CustomMobCustomEffect {
             throw new RuntimeException(e);
         }
     }
+
+    protected boolean triggerCustomEffectCancelled(Entity entity, Player target, CustomMobCustomEffect effect) {
+        CustomMobCustomEffectEvent event = new CustomMobCustomEffectEvent(entity, target, effect);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        return event.isCancelled();
+    }
+
 }

@@ -2,10 +2,13 @@ package ca.pandaaa.custommobs.custommobs.CustomEffects;
 
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.custommobs.Events.CustomMobCustomEffectEvent;
+import ca.pandaaa.custommobs.custommobs.Events.CustomMobDeathEvent;
 import ca.pandaaa.custommobs.guis.BasicTypes.DoubleGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects.CustomEffectOptionsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -16,6 +19,9 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Pushes the players back (and in the air) when they enter in collision with the CustomMob.
+ */
 public class Charge extends CustomMobCustomEffect {
 
     /**
@@ -32,11 +38,16 @@ public class Charge extends CustomMobCustomEffect {
         this.knockbackStrength = getCustomEffectOption(KNOCKBACK_STRENGTH, Double.class, 1D);
     }
 
-    public void triggerCustomEffect(Entity entity) {
+    public List<Player> triggerCustomEffect(Entity entity) {
         List<Entity> playersAround = entity.getNearbyEntities(1D, 1D, 1D).stream().filter(e -> e instanceof Player).toList();
+
+        List<Player> affectedPlayers = new ArrayList<>();
         for(Entity player : playersAround) {
+            if(triggerCustomEffectCancelled(entity, (Player) player, this)) continue;
             player.setVelocity(player.getLocation().getDirection().multiply(knockbackStrength * -1).setY(knockbackStrength));
+            affectedPlayers.add((Player) player);
         }
+        return affectedPlayers;
     }
 
     public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {

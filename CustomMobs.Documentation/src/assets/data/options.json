@@ -348,6 +348,13 @@
                         "type":  "Bar color",
                         "key":  "BOSS_BAR_COLOR",
                         "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "Allows player to ride the CustomMob.",
+                        "type":  "On / Off",
+                        "key":  "RIDEABLE",
+                        "maximum":  null
                     }
                 ],
     "Frog":  [

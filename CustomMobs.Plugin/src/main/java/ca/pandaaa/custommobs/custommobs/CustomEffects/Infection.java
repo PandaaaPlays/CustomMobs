@@ -22,6 +22,9 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Upon damage to players, the CustomMobs gives a customizable potion effect.
+ */
 public class Infection extends CustomMobCustomEffect {
 
     /**
@@ -54,11 +57,13 @@ public class Infection extends CustomMobCustomEffect {
         this.infectionEffect = getCustomEffectOption(INFECTION_EFFECT, PotionEffectType.class, PotionEffectType.BLINDNESS);
     }
 
-    public void triggerCustomEffect(Entity entity) {
+    public List<Player> triggerCustomEffect(Entity entity) {
+        if(triggerCustomEffectCancelled(entity, (Player) entity, this)) return null;
         if(!((LivingEntity) entity).hasPotionEffect(infectionEffect)) {
-            trySendCustomEffectMessage((Player) entity);
             ((LivingEntity) entity).addPotionEffect(new PotionEffect(infectionEffect, infectionTime * 20, infectionAmplifier));
+            return new ArrayList<>();
         }
+        return null;
     }
 
     public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {

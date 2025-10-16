@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Randomly spawns selected CustomMobs as support around the CustomMob.
+ */
 public class MobSpawner extends CustomMobCustomEffect {
 
     /**
@@ -41,7 +44,8 @@ public class MobSpawner extends CustomMobCustomEffect {
         spawnedAmount = getCustomEffectOption(SPAWNED_AMOUNT, Integer.class, 3);
     }
 
-    public void triggerCustomEffect(Entity entity) {
+    public List<Player> triggerCustomEffect(Entity entity) {
+        if(triggerCustomEffectCancelled(entity, null, this)) return null;
         for(int i = 0; i < spawnedAmount; i++) {
             Random random = new Random();
             double angle = 2 * Math.PI * random.nextDouble();
@@ -54,6 +58,7 @@ public class MobSpawner extends CustomMobCustomEffect {
                     entity.getLocation().getY(),
                     entity.getLocation().getZ() + offsetZ));
         }
+        return new ArrayList<>();
     }
 
     public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {

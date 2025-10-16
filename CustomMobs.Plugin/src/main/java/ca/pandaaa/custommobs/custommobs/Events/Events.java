@@ -24,6 +24,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -31,6 +32,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.util.*;
 
@@ -66,7 +69,8 @@ public class Events implements Listener {
                     .filter(effect -> CustomEffectType.ON_DAMAGE_ON_PLAYER.equals(effect.getCustomEffectType()))
                     .filter(CustomMobCustomEffect::isEnabled)
                     .forEach(effect ->  {
-                        effect.triggerCustomEffect(event.getEntity());
+                        if(effect.triggerCustomEffect(event.getEntity()) != null)
+                            effect.trySendCustomEffectMessage((Player) event.getEntity());
                     });
         }
     }
@@ -332,7 +336,6 @@ public class Events implements Listener {
     public void onEntitySpawn(CreatureSpawnEvent event) {
         CreatureSpawnEvent.SpawnReason reason = event.getSpawnReason();
         switch (reason) {
-            case CHUNK_GEN:
             case TRIAL_SPAWNER:
             case BUCKET:
             case SHEARED:
@@ -372,8 +375,7 @@ public class Events implements Listener {
         }
 
         if (chosen != null) {
-            event.setCancelled(true);
-            chosen.spawnCustomMob(event.getLocation());
+            chosen.spawnCustomMob(event.getEntity());
         }
     }
 
@@ -383,6 +385,19 @@ public class Events implements Listener {
         if (event.getTransformReason() != EntityTransformEvent.TransformReason.DROWNED) return;
         if (!isCustomMob(event.getEntity())) return;
         event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onRightClickEntity(PlayerInteractEntityEvent event) {
+        Entity entity = event.getRightClicked();
+        Player player = event.getPlayer();
+        if(event.getHand() == EquipmentSlot.OFF_HAND) return;
+
+        if (isCustomMob(entity) && entity.getPersistentDataContainer().has(NamespacedKeys.KEY_RIDEABLE, PersistentDataType.BOOLEAN)) {
+            event.setCancelled(true);
+            entity.addPassenger(player);
+            // TODO Make the mobs rideable with AWSD
+        }
     }
 
     private boolean isCustomMob(Entity entity) {

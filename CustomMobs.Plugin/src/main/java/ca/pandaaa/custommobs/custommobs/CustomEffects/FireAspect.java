@@ -2,19 +2,26 @@ package ca.pandaaa.custommobs.custommobs.CustomEffects;
 
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.custommobs.Events.CustomMobCustomEffectEvent;
 import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects.CustomEffectOptionsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The CustomMobs sets players on fire when damaging them.
+ */
 public class FireAspect extends CustomMobCustomEffect {
 
     /**
@@ -26,15 +33,14 @@ public class FireAspect extends CustomMobCustomEffect {
     private int fireDuration;
 
     public FireAspect(CustomMobConfiguration mobConfiguration) {
-        super(mobConfiguration, CustomEffectType.ON_IMPACT);
+        super(mobConfiguration, CustomEffectType.ON_DAMAGE_ON_PLAYER);
         fireDuration = getCustomEffectOption(FIRE_DURATION, Integer.class, 5);
     }
 
-    public void triggerCustomEffect(Entity entity) {
-        List<Entity> playersAround = entity.getNearbyEntities(1D, 1D, 1D).stream().filter(e -> e instanceof Player).toList();
-        for(Entity player : playersAround) {
-            player.setFireTicks(fireDuration * 20);
-        }
+    public List<Player> triggerCustomEffect(Entity entity) {
+        if(triggerCustomEffectCancelled(entity, (Player) entity, this)) return null;
+        entity.setFireTicks(fireDuration * 20);
+        return new ArrayList<>();
     }
 
     public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {

@@ -21,6 +21,10 @@ import org.bukkit.util.Vector;
 
 import java.util.*;
 
+/**
+ * Allows the mob to see players threw blocks (within a defined radius) and to break blocks to reach
+ * the nearby players.
+ */
 public class Miner extends CustomMobCustomEffect {
     public final static Map<UUID, Miner> activeMiners = new HashMap<>();
 
@@ -37,17 +41,20 @@ public class Miner extends CustomMobCustomEffect {
         radius = getCustomEffectOption(RADIUS, Integer.class, 25);
     }
 
-    public void triggerCustomEffect(Entity entity) {
-        if (!(entity instanceof org.bukkit.entity.Mob mob)) return;
+    public List<Player> triggerCustomEffect(Entity entity) {
+        if (!(entity instanceof org.bukkit.entity.Mob mob)) return null;
 
         Player target = getNearestPlayer(mob, radius);
-        if (target == null) return;
+        if (target == null) return null;
+
+        if(triggerCustomEffectCancelled(entity, target, this)) return null;
 
         mob.setTarget(target);
 
         if (!hasClearPath(mob, target)) {
             digTowardsTarget(mob, target);
         }
+        return null; // Miner does not have a message.
     }
 
     public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {

@@ -14,6 +14,9 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
+/**
+ * Leaves a trail of fire behind the CustomMob. Do not forget to give the mob fire resistance or it will burn!
+ */
 public class Trail extends CustomMobCustomEffect {
     public final static Map<UUID, Trail> activeTrails = new HashMap<>();
 
@@ -21,7 +24,8 @@ public class Trail extends CustomMobCustomEffect {
         super(mobConfiguration, CustomEffectType.ALWAYS);
     }
 
-    public void triggerCustomEffect(Entity entity) {
+    public List<Player> triggerCustomEffect(Entity entity) {
+        if(triggerCustomEffectCancelled(entity, null, this)) return null;
         Location location = entity.getLocation();
         Block block = location.getBlock();
 
@@ -29,6 +33,7 @@ public class Trail extends CustomMobCustomEffect {
         if (type.isAir() || type.isBurnable()) {
             block.setType(Material.FIRE);
         }
+        return null; // Trails do not have message
     }
 
     public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {

@@ -2,10 +2,13 @@ package ca.pandaaa.custommobs.custommobs.CustomEffects;
 
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.custommobs.Events.CustomMobCustomEffectEvent;
 import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects.CustomEffectOptionsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.DragonFireball;
 import org.bukkit.entity.Entity;
@@ -19,6 +22,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * The CustomMobs randomly shoots customizable fireball at player(s). The strength and type of
+ * fireball can be edited, along with its behavior regarding block breaking.
+ */
 public class Fireball extends CustomMobCustomEffect {
     /**
      * Determines the strength (size) of the explosion created by the CustomMob's fireball upon trigger of this
@@ -68,21 +75,39 @@ public class Fireball extends CustomMobCustomEffect {
         this.radius = getCustomEffectOption(RADIUS, Integer.class, 25);
     }
 
-    public void triggerCustomEffect(Entity entity) {
-        List<Entity> playersAround = entity.getNearbyEntities(radius, radius, radius).stream().filter(e -> e instanceof Player).toList();
+    public List<Player> triggerCustomEffect(Entity entity) {
+        List<Entity> playersAround = entity.getNearbyEntities(radius, radius, radius).stream()
+                .filter(e -> e instanceof Player player &&
+                        player.getGameMode() != GameMode.CREATIVE &&
+                        player.getGameMode() != GameMode.SPECTATOR)
+                .toList();
+
+        List<Player> affectedPlayers = new ArrayList<>();
         if (!playersAround.isEmpty()) {
             if (shootOnlyOnePlayer) {
                 Player target = (Player) playersAround.get(new Random().nextInt(playersAround.size()));
+                if(triggerCustomEffectCancelled(entity, target, this)) return null;
                 shootFireball(entity, target);
+                affectedPlayers.add(target);
             } else {
                 for (Entity target : playersAround) {
+                    if(triggerCustomEffectCancelled(entity, (Player) target, this)) return null;
                     shootFireball(entity, (Player) target);
+                    affectedPlayers.add((Player) target);
                 }
             }
+        }
+
+        if(affectedPlayers.isEmpty()) {
+            return null;
+        } else {
+            return affectedPlayers;
         }
     }
 
     private void shootFireball(Entity shooter, Player target) {
+        if(triggerCustomEffectCancelled(shooter, target, this)) return;
+
         Vector direction = target.getLocation().toVector()
                 .subtract(shooter.getLocation().toVector())
                 .normalize();

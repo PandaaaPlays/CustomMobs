@@ -42,6 +42,21 @@ foreach ($file in $JavaFiles)
 
     $lines = Get-Content $file.FullName
 
+    $topComment = ""
+    $inCommentBlock = $false
+    $commentBuffer = @()
+
+    foreach ($line in (Get-Content $file.FullName)) {
+        $trim = $line.Trim()
+        if ($trim -eq '/**') { $inCommentBlock = $true; continue }
+        if ($trim -eq '*/') { $inCommentBlock = $false; continue }
+        if ($inCommentBlock) { $commentBuffer += ($trim -replace '^\s*\* ?', '') }
+        if ($trim -match 'public\s+class\s+') {
+            $topComment = ($commentBuffer -join ' ')
+            break
+        }
+    }
+
     for ($i = 0; $i -lt $lines.Count; $i++) {
         $line = $lines[$i].Trim()
 
@@ -156,6 +171,7 @@ foreach ($file in $JavaFiles)
         $mobsData[$mobName] = $fields
     } else {
         $mobsData[$mobName] = @{
+            description = $topComment
             effectType = $customEffectType
             fields = $fields
         }

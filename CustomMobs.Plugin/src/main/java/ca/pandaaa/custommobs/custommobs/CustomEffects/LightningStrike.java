@@ -6,6 +6,7 @@ import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects.CustomEffectOptionsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -19,6 +20,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
+/**
+ * Randomly strikes lightning around the CustomMob or directly on the nearby player(s) within a determined radius.
+ * The amount of lightning can be customized when sending them directly around the mob.
+ */
 public class LightningStrike extends CustomMobCustomEffect {
 
     /**
@@ -38,7 +43,7 @@ public class LightningStrike extends CustomMobCustomEffect {
 
     /**
      * Determines the amount of lightning that should appear around the CustomMob (will only have an
-     * effect if "On players" is disabled.
+     * effect if "On players" is disabled).
      * @minimum 1
      * @maximum 50
      */
@@ -52,12 +57,22 @@ public class LightningStrike extends CustomMobCustomEffect {
         amount = getCustomEffectOption(AMOUNT, Integer.class, 15);
     }
 
-    public void triggerCustomEffect(Entity entity) {
+    public List<Player> triggerCustomEffect(Entity entity) {
+        if(triggerCustomEffectCancelled(entity, null, this)) return null;
+        List<Player> affectedPlayers = new ArrayList<>();
         if(onPlayers) {
-            List<Entity> playersAround = entity.getNearbyEntities(radius, radius, radius).stream().filter(e -> e instanceof Player).toList();
+            List<Entity> playersAround = entity.getNearbyEntities(radius, radius, radius).stream()
+                    .filter(e -> e instanceof Player player &&
+                            player.getGameMode() != GameMode.CREATIVE &&
+                            player.getGameMode() != GameMode.SPECTATOR)
+                    .toList();
             for(Entity player : playersAround) {
+                if(triggerCustomEffectCancelled(entity, (Player) player, this)) continue;
                 Objects.requireNonNull(player.getLocation().getWorld()).spawnEntity(player.getLocation(), EntityType.LIGHTNING_BOLT);
+                affectedPlayers.add((Player) player);
             }
+            if(affectedPlayers.isEmpty()) return null;
+            return affectedPlayers;
         } else {
             Random random = new Random();
             for (int i = 0; i < amount; i++) {
@@ -69,6 +84,7 @@ public class LightningStrike extends CustomMobCustomEffect {
                 Objects.requireNonNull(entity.getLocation().getWorld())
                         .spawnEntity(location, EntityType.LIGHTNING_BOLT);
             }
+            return new ArrayList<>();
         }
     }
 

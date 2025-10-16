@@ -33,6 +33,7 @@
     <div class="splitter"></div>
   </div>
   <div class="body">
+    <div class="class-description" [innerHTML]="classDescription"></div>
     <div class="option" *ngFor="let option of options">
       <div class="title">
         {{ option.key.replaceAll('_', ' ') }}

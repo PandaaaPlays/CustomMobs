@@ -1,6 +1,7 @@
 {
     "Trampoline":  {
                        "effectType":  "COOLDOWN",
+                       "description":  "Randomly sends the nearby (within a defined radius) players flying in the air.",
                        "fields":  [
                                       {
                                           "minimum":  "1",
@@ -20,6 +21,7 @@
                    },
     "MobSpawner":  {
                        "effectType":  "COOLDOWN",
+                       "description":  "Randomly spawns selected CustomMobs as support around the CustomMob.",
                        "fields":  [
                                       {
                                           "minimum":  null,
@@ -38,7 +40,8 @@
                                   ]
                    },
     "FireAspect":  {
-                       "effectType":  "ON_IMPACT",
+                       "effectType":  "ON_DAMAGE_ON_PLAYER",
+                       "description":  "The CustomMobs sets players on fire when damaging them.",
                        "fields":  [
                                       {
                                           "minimum":  "1",
@@ -51,6 +54,7 @@
                    },
     "Explosion":  {
                       "effectType":  "COOLDOWN",
+                      "description":  "Creates a customizable explosion that can break blocks or not where the CustomMob currently is.",
                       "fields":  [
                                      {
                                          "minimum":  "1",
@@ -77,6 +81,7 @@
                   },
     "Fireball":  {
                      "effectType":  "COOLDOWN",
+                     "description":  "The CustomMobs randomly shoots customizable fireball at player(s). The strength and type of fireball can be edited, along with its behavior regarding block breaking.",
                      "fields":  [
                                     {
                                         "minimum":  "1",
@@ -117,6 +122,7 @@
                  },
     "Vanish":  {
                    "effectType":  "COOLDOWN",
+                   "description":  "The CustomMob randomly becomes invisible for a determined amount of time.",
                    "fields":  [
                                   {
                                       "minimum":  "1",
@@ -129,6 +135,7 @@
                },
     "Infection":  {
                       "effectType":  "ON_DAMAGE_ON_PLAYER",
+                      "description":  "Upon damage to players, the CustomMobs gives a customizable potion effect.",
                       "fields":  [
                                      {
                                          "minimum":  "1",
@@ -155,6 +162,7 @@
                   },
     "Miner":  {
                   "effectType":  "ALWAYS",
+                  "description":  "Allows the mob to see players threw blocks (within a defined radius) and to break blocks to reach the nearby players.",
                   "fields":  [
                                  {
                                      "minimum":  "1",
@@ -167,6 +175,7 @@
               },
     "Charge":  {
                    "effectType":  "ON_IMPACT",
+                   "description":  "Pushes the players back (and in the air) when they enter in collision with the CustomMob.",
                    "fields":  [
                                   {
                                       "minimum":  "0.5",
@@ -179,6 +188,7 @@
                },
     "GravityPull":  {
                         "effectType":  "COOLDOWN",
+                        "description":  "Randomly pulls nearby (in a defined radius) players toward the CustomMob.",
                         "fields":  [
                                        {
                                            "minimum":  "0.5",
@@ -198,6 +208,7 @@
                     },
     "LightningStrike":  {
                             "effectType":  "COOLDOWN",
+                            "description":  "Randomly strikes lightning around the CustomMob or directly on the nearby player(s) within a determined radius. The amount of lightning can be customized when sending them directly around the mob.",
                             "fields":  [
                                            {
                                                "minimum":  null,
@@ -215,7 +226,7 @@
                                            },
                                            {
                                                "minimum":  "1",
-                                               "description":  "Determines the amount of lightning that should appear around the CustomMob (will only have an effect if \"On players\" is disabled.",
+                                               "description":  "Determines the amount of lightning that should appear around the CustomMob (will only have an effect if \"On players\" is disabled).",
                                                "type":  "Integer",
                                                "key":  "AMOUNT",
                                                "maximum":  "50"
@@ -224,6 +235,7 @@
                         },
     "Trail":  {
                   "effectType":  "ALWAYS",
+                  "description":  "Leaves a trail of fire behind the CustomMob. Do not forget to give the mob fire resistance or it will burn!",
                   "fields":  [
 
                              ]

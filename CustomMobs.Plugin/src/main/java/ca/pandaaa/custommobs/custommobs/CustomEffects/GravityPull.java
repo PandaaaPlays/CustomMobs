@@ -6,6 +6,7 @@ import ca.pandaaa.custommobs.guis.BasicTypes.*;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects.CustomEffectOptionsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -16,6 +17,9 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Randomly pulls nearby (in a defined radius) players toward the CustomMob.
+ */
 public class GravityPull extends CustomMobCustomEffect {
 
     /**
@@ -41,13 +45,23 @@ public class GravityPull extends CustomMobCustomEffect {
         pullRadius = getCustomEffectOption(PULL_RADIUS, Integer.class, 20);
     }
 
-    public void triggerCustomEffect(Entity entity) {
-        List<Entity> playersAround = entity.getNearbyEntities(pullRadius, pullRadius, pullRadius).stream().filter(e -> e instanceof Player).toList();
+    public List<Player> triggerCustomEffect(Entity entity) {
+        if(triggerCustomEffectCancelled(entity, null, this)) return null;
+        List<Entity> playersAround = entity.getNearbyEntities(pullRadius, pullRadius, pullRadius).stream()
+                .filter(e -> e instanceof Player player &&
+                        player.getGameMode() != GameMode.CREATIVE &&
+                        player.getGameMode() != GameMode.SPECTATOR)
+                .toList();
+        List<Player> affectedPlayers = new ArrayList<>();
         for(Entity player : playersAround) {
+            if(triggerCustomEffectCancelled(entity, (Player) player, this)) continue;
             Vector pullDirection = entity.getLocation().toVector().subtract(player.getLocation().toVector()).normalize();
             Vector pullVelocity = pullDirection.multiply(gravityStrength);
             player.setVelocity(pullVelocity);
+            affectedPlayers.add((Player) player);
         }
+        if(affectedPlayers.isEmpty()) return null;
+        return affectedPlayers;
     }
 
     public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {

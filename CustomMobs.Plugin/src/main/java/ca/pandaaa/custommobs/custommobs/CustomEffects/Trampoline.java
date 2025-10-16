@@ -6,6 +6,7 @@ import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects.CustomEffectOptionsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -16,6 +17,9 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Randomly sends the nearby (within a defined radius) players flying in the air.
+ */
 public class Trampoline extends CustomMobCustomEffect {
 
     /**
@@ -40,14 +44,23 @@ public class Trampoline extends CustomMobCustomEffect {
         radius = getCustomEffectOption(RADIUS, Integer.class, 25);
     }
 
-    public void triggerCustomEffect(Entity entity) {
-        List<Entity> playersAround = entity.getNearbyEntities(radius, radius, radius).stream().filter(e -> e instanceof Player).toList();
+    public List<Player> triggerCustomEffect(Entity entity) {
+        List<Entity> playersAround = entity.getNearbyEntities(radius, radius, radius).stream()
+                .filter(e -> e instanceof Player player &&
+                        player.getGameMode() != GameMode.CREATIVE &&
+                        player.getGameMode() != GameMode.SPECTATOR)
+                .toList();
+        List<Player> affectedPlayers = new ArrayList<>();
         for(Entity player : playersAround) {
+            if(triggerCustomEffectCancelled(entity, (Player) player, this)) return null;
             Vector velocity = player.getVelocity();
             final double gravity = 0.08;
             velocity.setY(Math.sqrt(2 * gravity * height));
             player.setVelocity(velocity);
+            affectedPlayers.add((Player) player);
         }
+        if(affectedPlayers.isEmpty()) return null;
+        return affectedPlayers;
     }
 
     public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {

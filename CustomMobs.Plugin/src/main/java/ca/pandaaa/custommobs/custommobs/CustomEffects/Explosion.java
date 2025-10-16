@@ -2,10 +2,12 @@ package ca.pandaaa.custommobs.custommobs.CustomEffects;
 
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.custommobs.Events.CustomMobCustomEffectEvent;
 import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects.CustomEffectOptionsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -15,6 +17,9 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Creates a customizable explosion that can break blocks or not where the CustomMob currently is.
+ */
 public class Explosion extends CustomMobCustomEffect {
 
     /**
@@ -45,8 +50,10 @@ public class Explosion extends CustomMobCustomEffect {
         this.breakBlocks = getCustomEffectOption(BREAK_BLOCKS, Boolean.class, false);
     }
 
-    public void triggerCustomEffect(Entity entity) {
+    public List<Player> triggerCustomEffect(Entity entity) {
+        if(triggerCustomEffectCancelled(entity, null, this)) return null;
         entity.getWorld().createExplosion(entity.getLocation().add(0, 0.5, 0), explosionStrength, false, breakBlocks, damageSelf ? null : entity);
+        return new ArrayList<>();
     }
 
     public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {

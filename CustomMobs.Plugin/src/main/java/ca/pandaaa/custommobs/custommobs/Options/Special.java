@@ -149,6 +149,12 @@ public class Special extends CustomMobOption {
     private static final String BOSS_BAR_COLOR = "special.boss-bar-color";
     private BarColor bossBarColor;
 
+    /**
+     * Allows player to ride the CustomMob.
+     */
+    private static final String RIDEABLE = "special.rideable";
+    private boolean rideable;
+
     public Special(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
         this.isNameVisible = getOption(VISIBLE_NAME, Boolean.class);
@@ -231,6 +237,9 @@ public class Special extends CustomMobOption {
                 && aggressive) {
             addAggressivity(customMob);
         }
+
+        if(rideable)
+            customMob.getPersistentDataContainer().set(new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Rideable"), PersistentDataType.BOOLEAN, rideable);
     }
 
     public void resetOptions() {
@@ -429,6 +438,12 @@ public class Special extends CustomMobOption {
                 }
                 return getBossBarOptionItemStack(getBossBarItem());
             }
+
+            case "rideable": {
+                this.rideable = !rideable;
+                setOption(RIDEABLE, rideable);
+                return getOptionItemStack(getRideableItem(), false, false);
+            }
         }
         return null;
     }
@@ -466,6 +481,7 @@ public class Special extends CustomMobOption {
         items.add(getOptionItemStack(getNaturalDropsItem(), false, false));
         items.add(getOptionItemStack(getReplaceNaturalItem(), true, false));
         items.add(getOptionItemStack(getBossBarItem(), false, false));
+        items.add(getOptionItemStack(getRideableItem(), false, false));
 
         return items;
     }
@@ -639,6 +655,15 @@ public class Special extends CustomMobOption {
     private ItemStack getBossBarOptionItemStack(CustomMobsItem item) {
         item.addLore("", "&7&o(( Left-Click to cycle the boss-bar style ))", "&7&o(( Right-Click to cycle the boss-bar color ))");
         return item.getItem();
+    }
+
+    public CustomMobsItem getRideableItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.SADDLE);
+        item.setName("&6&lRideable");
+        String rideable = this.rideable ? "&a&lOn" : "&c&lOff";
+        item.addLore("&eMake the mob rideable: &f" + rideable);
+        item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "Rideable");
+        return item;
     }
 
     private static void setAttribute(Attributable entity, String key, double value) {
