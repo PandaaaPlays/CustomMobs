@@ -10,6 +10,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -18,7 +19,8 @@ import java.util.List;
 
 public class Steerable extends CustomMobOption {
     /**
-     * Indicates if the entity (like a pig or strider) has a saddle and can be ridden.
+     * Indicates if the entity (like a pig or strider) has a saddle and can be
+     * ridden.
      */
     private static final String SADDLE = "mob.saddle";
     private boolean saddle;
@@ -29,10 +31,16 @@ public class Steerable extends CustomMobOption {
     }
 
     public void applyOptions(Entity customMob) {
-        if(!(customMob instanceof org.bukkit.entity.Steerable))
-            return;
 
-        ((org.bukkit.entity.Steerable) customMob).setSaddle(saddle);
+        if (customMob instanceof org.bukkit.entity.Nautilus && saddle)
+            ((org.bukkit.entity.Nautilus) customMob).getEquipment().setItem(EquipmentSlot.SADDLE, new ItemStack(Material.SADDLE));
+
+        if (customMob instanceof org.bukkit.entity.ZombieNautilus && saddle)
+            ((org.bukkit.entity.ZombieNautilus) customMob).getEquipment().setItem(EquipmentSlot.SADDLE, new ItemStack(Material.SADDLE));
+
+        if (customMob instanceof org.bukkit.entity.Steerable)
+            ((org.bukkit.entity.Steerable) customMob).setSaddle(saddle);
+
     }
 
     public void resetOptions() {
@@ -52,13 +60,13 @@ public class Steerable extends CustomMobOption {
     }
 
     public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {
-        switch(option.toLowerCase()) {
+        switch (option.toLowerCase()) {
 
             case "saddle": {
                 this.saddle = !this.saddle;
                 setOption(SADDLE, saddle);
 
-                if(saddle) {
+                if (saddle) {
                     customMob.addDrop(new Drop(new ItemStack(Material.SADDLE), 1, "Saddle"));
                 } else {
                     customMob.removeDropItem("Saddle");
@@ -71,7 +79,9 @@ public class Steerable extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return org.bukkit.entity.Steerable.class.isAssignableFrom(entityType.getEntityClass());
+        return org.bukkit.entity.Steerable.class.isAssignableFrom(entityType.getEntityClass())
+                || (Utils.isVersionAtLeast("1.21.11") && org.bukkit.entity.Nautilus.class.isAssignableFrom(entityType.getEntityClass()))
+                || (Utils.isVersionAtLeast("1.21.11") && org.bukkit.entity.ZombieNautilus.class.isAssignableFrom(entityType.getEntityClass()));
     }
 
     public CustomMobsItem getSaddleItem() {

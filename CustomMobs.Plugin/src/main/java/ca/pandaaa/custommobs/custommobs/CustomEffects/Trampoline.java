@@ -45,6 +45,7 @@ public class Trampoline extends CustomMobCustomEffect {
     }
 
     public List<Player> triggerCustomEffect(Entity entity) {
+        if(triggerCustomEffectCancelled(entity, null, this)) return null;
         List<Entity> playersAround = entity.getNearbyEntities(radius, radius, radius).stream()
                 .filter(e -> e instanceof Player player &&
                         player.getGameMode() != GameMode.CREATIVE &&
@@ -129,5 +130,13 @@ public class Trampoline extends CustomMobCustomEffect {
         item.addLore("&eTrigger radius: &f" + radius + " block(s)");
         item.setCustomEffectPersistentDataContainer(this.getClass().getSimpleName() + ".Radius");
         return item;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getRadius() {
+        return radius;
     }
 }

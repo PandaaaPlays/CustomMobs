@@ -6,7 +6,7 @@
 
     <groupId>ca.pandaaa</groupId>
     <artifactId>CustomMobs</artifactId>
-    <version>1.5.0</version>
+    <version>1.6.0</version>
     <packaging>jar</packaging>
 
     <name>CustomMobs</name>
@@ -25,6 +25,10 @@
             <id>sk89q-repo</id>
             <url>https://maven.enginehub.org/repo/</url>
         </repository>
+        <repository>
+            <id>dmulloy2-repo</id>
+            <url>https://repo.dmulloy2.net/repository/public/</url>
+        </repository>
     </repositories>
 
     <properties>
@@ -32,7 +36,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <used.spigot.version>1.21.9-R0.1-SNAPSHOT</used.spigot.version>
+        <used.spigot.version>1.21.11-R0.1-SNAPSHOT</used.spigot.version>
     </properties>
 
     <dependencies>
@@ -54,6 +58,12 @@
                     <artifactId>bstats-bukkit</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.comphenix.protocol</groupId>
+            <artifactId>ProtocolLib</artifactId>
+            <version>5.3.0</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

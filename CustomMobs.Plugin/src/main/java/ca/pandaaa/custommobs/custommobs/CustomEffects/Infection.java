@@ -162,4 +162,16 @@ public class Infection extends CustomMobCustomEffect {
         item.setCustomEffectPersistentDataContainer(this.getClass().getSimpleName() + ".InfectionEffect");
         return item;
     }
+
+    public int getInfectionTime() {
+        return infectionTime;
+    }
+
+    public int getInfectionAmplifier() {
+        return infectionAmplifier;
+    }
+
+    public PotionEffectType getInfectionEffect() {
+        return infectionEffect;
+    }
 }

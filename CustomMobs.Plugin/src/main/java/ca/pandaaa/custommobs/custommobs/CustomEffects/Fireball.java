@@ -235,4 +235,24 @@ public class Fireball extends CustomMobCustomEffect {
         item.setCustomEffectPersistentDataContainer(this.getClass().getSimpleName() + ".Radius");
         return item;
     }
+
+    public int getExplosionStrength() {
+        return explosionStrength;
+    }
+
+    public boolean isDragonFireball() {
+        return dragonFireball;
+    }
+
+    public boolean isShootOnlyOnePlayer() {
+        return shootOnlyOnePlayer;
+    }
+
+    public boolean isBreakBlocks() {
+        return breakBlocks;
+    }
+
+    public int getRadius() {
+        return radius;
+    }
 }

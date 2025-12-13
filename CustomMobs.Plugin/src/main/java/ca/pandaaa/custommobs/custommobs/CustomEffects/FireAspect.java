@@ -88,4 +88,8 @@ public class FireAspect extends CustomMobCustomEffect {
         item.setCustomEffectPersistentDataContainer(this.getClass().getSimpleName() + ".FireDuration");
         return item;
     }
+
+    public int getFireDuration() {
+        return fireDuration;
+    }
 }

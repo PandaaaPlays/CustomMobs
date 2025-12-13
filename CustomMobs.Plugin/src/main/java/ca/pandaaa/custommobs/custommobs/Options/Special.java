@@ -176,6 +176,7 @@ public class Special extends CustomMobOption {
         this.replaceNaturalPercentage = getOption(REPLACE_NATURAL, Double.class, 0.0);
         this.bossBar = getOption(BOSS_BAR_STYLE, BarStyle.class);
         this.bossBarColor = getOption(BOSS_BAR_COLOR, BarColor.class, BarColor.PINK);
+        this.rideable = getOption(RIDEABLE, Boolean.class, false);
     }
 
     public void applyOptions(Entity customMob) {
@@ -235,19 +236,15 @@ public class Special extends CustomMobOption {
                 || customMob instanceof Ambient
                 || (Utils.isVersionAtLeast("1.21.9") && customMob instanceof CopperGolem)
                 && aggressive) {
-            addAggressivity(customMob);
+            new NMS().setCustomMobAggressivity((Mob) customMob, followRange);
         }
 
-        if(rideable)
-            customMob.getPersistentDataContainer().set(new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Rideable"), PersistentDataType.BOOLEAN, rideable);
+        /*if(rideable)
+            customMob.getPersistentDataContainer().set(new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Rideable"), PersistentDataType.BOOLEAN, rideable);*/
     }
 
     public void resetOptions() {
         // Special options do not need to be reset as they are applicable for all entity types.
-    }
-
-    private void addAggressivity(Entity customMob) {
-        new NMS().setCustomMobAggressivity((Mob) customMob);
     }
 
     public ItemStack modifyOption(org.bukkit.entity.Player clicker, CustomMob customMob, String option, ClickType clickType) {
@@ -481,7 +478,7 @@ public class Special extends CustomMobOption {
         items.add(getOptionItemStack(getNaturalDropsItem(), false, false));
         items.add(getOptionItemStack(getReplaceNaturalItem(), true, false));
         items.add(getOptionItemStack(getBossBarItem(), false, false));
-        items.add(getOptionItemStack(getRideableItem(), false, false));
+        //items.add(getOptionItemStack(getRideableItem(), false, false));
 
         return items;
     }

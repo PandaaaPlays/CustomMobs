@@ -4,7 +4,8 @@ target/
 !**/src/main/**/out/
 !**/src/test/**/out/
 .idea
-/CustomMobs.iml
+/CustomMobs.iml'
+.txt
 
 ### VS Code ###
 .vscode/

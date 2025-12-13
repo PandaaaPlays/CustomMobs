@@ -96,4 +96,8 @@ public class Charge extends CustomMobCustomEffect {
         item.setCustomEffectPersistentDataContainer(this.getClass().getSimpleName() + ".KnockbackStrength");
         return item;
     }
+
+    public double getKnockbackStrength() {
+        return knockbackStrength;
+    }
 }

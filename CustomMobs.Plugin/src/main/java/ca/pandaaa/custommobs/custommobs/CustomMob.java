@@ -393,6 +393,7 @@ public class CustomMob implements Listener {
                     int randomIndex = new Random().nextInt(cooldownCustomEffects.size());
                     List<Player> affectedPlayers = cooldownCustomEffects.get(randomIndex).triggerCustomEffect(entity);
                     if(affectedPlayers == null) {
+                        nextCooldownOccurences.put(entityId, LocalDateTime.now().plusSeconds(customEffectsCooldownDuration));
                         return;
                     } else if (affectedPlayers.isEmpty()) {
                         double radius = cooldownCustomEffects.get(randomIndex).getMessageRadius();

@@ -130,4 +130,12 @@ public class MobSpawner extends CustomMobCustomEffect {
         item.setCustomEffectPersistentDataContainer(this.getClass().getSimpleName() + ".SpawnedAmount");
         return item;
     }
+
+    public CustomMob getSpawnedCustomMob() {
+        return spawnedCustomMob;
+    }
+
+    public int getSpawnedAmount() {
+        return spawnedAmount;
+    }
 }

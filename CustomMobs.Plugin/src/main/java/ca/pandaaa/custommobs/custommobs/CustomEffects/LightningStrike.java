@@ -171,4 +171,16 @@ public class LightningStrike extends CustomMobCustomEffect {
         item.setCustomEffectPersistentDataContainer(this.getClass().getSimpleName() + ".Amount");
         return item;
     }
+
+    public boolean isOnPlayers() {
+        return onPlayers;
+    }
+
+    public int getRadius() {
+        return radius;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
 }

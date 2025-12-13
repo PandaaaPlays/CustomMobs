@@ -88,4 +88,8 @@ public class Vanish extends CustomMobCustomEffect {
         item.setCustomEffectPersistentDataContainer(this.getClass().getSimpleName() + ".VanishTime");
         return item;
     }
+
+    public int getVanishTime() {
+        return vanishTime;
+    }
 }

@@ -129,4 +129,16 @@ public class Explosion extends CustomMobCustomEffect {
         item.setCustomEffectPersistentDataContainer(this.getClass().getSimpleName() + ".BreakBlocks");
         return item;
     }
+
+    public int getExplosionStrength() {
+        return explosionStrength;
+    }
+
+    public boolean isDamageSelf() {
+        return damageSelf;
+    }
+
+    public boolean isBreakBlocks() {
+        return breakBlocks;
+    }
 }

@@ -131,4 +131,12 @@ public class GravityPull extends CustomMobCustomEffect {
         item.setCustomEffectPersistentDataContainer(this.getClass().getSimpleName() + ".PullRadius");
         return item;
     }
+
+    public double getGravityStrength() {
+        return gravityStrength;
+    }
+
+    public int getPullRadius() {
+        return pullRadius;
+    }
 }

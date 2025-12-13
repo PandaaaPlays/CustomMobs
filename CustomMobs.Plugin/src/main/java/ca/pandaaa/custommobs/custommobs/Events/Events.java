@@ -1,16 +1,10 @@
 package ca.pandaaa.custommobs.custommobs.Events;
 
 import ca.pandaaa.custommobs.CustomMobs;
-import ca.pandaaa.custommobs.custommobs.CustomEffects.CustomEffectType;
-import ca.pandaaa.custommobs.custommobs.CustomEffects.CustomMobCustomEffect;
-import ca.pandaaa.custommobs.custommobs.CustomEffects.Miner;
-import ca.pandaaa.custommobs.custommobs.CustomEffects.Trail;
-import ca.pandaaa.custommobs.custommobs.CustomMob;
-import ca.pandaaa.custommobs.custommobs.DropManager;
-import ca.pandaaa.custommobs.custommobs.Manager;
+import ca.pandaaa.custommobs.custommobs.*;
+import ca.pandaaa.custommobs.custommobs.CustomEffects.*;
 import ca.pandaaa.custommobs.custommobs.Messages.Message;
 import ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage;
-import ca.pandaaa.custommobs.custommobs.NamespacedKeys;
 import ca.pandaaa.custommobs.custommobs.Options.Special;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -24,7 +18,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -32,8 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
+import org.bukkit.util.RayTraceResult;
 
 import java.util.*;
 
@@ -54,8 +46,10 @@ public class Events implements Listener {
 
         Set<NamespacedKey> keys = entity.getPersistentDataContainer().getKeys();
         if (keys.contains(NamespacedKeys.KEY_MIN_DAMAGE) && keys.contains(NamespacedKeys.KEY_MAX_DAMAGE)) {
-            double minDamage = entity.getPersistentDataContainer().get(NamespacedKeys.KEY_MIN_DAMAGE, PersistentDataType.DOUBLE);
-            double maxDamage = entity.getPersistentDataContainer().get(NamespacedKeys.KEY_MAX_DAMAGE, PersistentDataType.DOUBLE);
+            double minDamage = entity.getPersistentDataContainer().get(NamespacedKeys.KEY_MIN_DAMAGE,
+                    PersistentDataType.DOUBLE);
+            double maxDamage = entity.getPersistentDataContainer().get(NamespacedKeys.KEY_MAX_DAMAGE,
+                    PersistentDataType.DOUBLE);
             double randomValue = minDamage + (maxDamage - minDamage) * RANDOM.nextDouble();
             event.setDamage(randomValue);
         }
@@ -64,12 +58,13 @@ public class Events implements Listener {
             return;
 
         if (isCustomMob(entity)) {
-            CustomMob customMob = CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(entity.getPersistentDataContainer().get(NamespacedKeys.KEY_NAME, PersistentDataType.STRING));
+            CustomMob customMob = CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(
+                    entity.getPersistentDataContainer().get(NamespacedKeys.KEY_NAME, PersistentDataType.STRING));
             customMob.getCustomMobCustomEffects().stream()
                     .filter(effect -> CustomEffectType.ON_DAMAGE_ON_PLAYER.equals(effect.getCustomEffectType()))
                     .filter(CustomMobCustomEffect::isEnabled)
-                    .forEach(effect ->  {
-                        if(effect.triggerCustomEffect(event.getEntity()) != null)
+                    .forEach(effect -> {
+                        if (effect.triggerCustomEffect(event.getEntity()) != null)
                             effect.trySendCustomEffectMessage((Player) event.getEntity());
                     });
         }
@@ -90,11 +85,13 @@ public class Events implements Listener {
 
         // Enable the custom effects of the CustomMob.
         CustomMobs.getPlugin().getCustomMobsManager()
-                .getCustomMob(event.getEntity().getPersistentDataContainer().get(NamespacedKeys.KEY_NAME, PersistentDataType.STRING))
+                .getCustomMob(event.getEntity().getPersistentDataContainer().get(NamespacedKeys.KEY_NAME,
+                        PersistentDataType.STRING))
                 .enableCustomEffects(event.getEntity());
 
         double damage = 0;
-        NamespacedKey damageKey = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Damage." + entity.getUniqueId());
+        NamespacedKey damageKey = new NamespacedKey(CustomMobs.getPlugin(),
+                "CustomMobs.Damage." + entity.getUniqueId());
         if (event.getEntity().getPersistentDataContainer().getKeys().contains(damageKey)) {
             damage = event.getEntity().getPersistentDataContainer().get(damageKey, PersistentDataType.DOUBLE);
         }
@@ -104,18 +101,21 @@ public class Events implements Listener {
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
-        if(!(event.getEntity() instanceof LivingEntity))
+        if (!(event.getEntity() instanceof LivingEntity))
             return;
 
         if (!isCustomMob(event.getEntity()))
             return;
 
-        double healthAfter = Math.max(0, ((LivingEntity)event.getEntity()).getHealth() - event.getFinalDamage());
-        double maxHealth = Objects.requireNonNull(((LivingEntity)event.getEntity()).getAttribute(Registry.ATTRIBUTE.get(NamespacedKey.minecraft("max_health")))).getBaseValue();
-        CustomMobs.getPlugin().getCustomMobsManager().getBossBar().update(event.getEntity().getUniqueId(), healthAfter, maxHealth);
+        double healthAfter = Math.max(0, ((LivingEntity) event.getEntity()).getHealth() - event.getFinalDamage());
+        double maxHealth = Objects.requireNonNull(((LivingEntity) event.getEntity())
+                .getAttribute(Registry.ATTRIBUTE.get(NamespacedKey.minecraft("max_health")))).getBaseValue();
+        CustomMobs.getPlugin().getCustomMobsManager().getBossBar().update(event.getEntity().getUniqueId(), healthAfter,
+                maxHealth);
     }
 
     private final Map<UUID, Long> playerMoveCooldowns = new HashMap<>();
+
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         // Only trigger on meaningful movements (not only mouse)
@@ -128,35 +128,37 @@ public class Events implements Listener {
         // Check every 3 seconds, not more often
         Player player = event.getPlayer();
         long now = System.currentTimeMillis();
-        if (playerMoveCooldowns.containsKey(player.getUniqueId()) && now - playerMoveCooldowns.get(player.getUniqueId()) < 3000)
+        if (playerMoveCooldowns.containsKey(player.getUniqueId())
+                && now - playerMoveCooldowns.get(player.getUniqueId()) < 3000)
             return;
         playerMoveCooldowns.put(player.getUniqueId(), now);
 
         List<Entity> entities = event.getPlayer().getNearbyEntities(10, 5, 10);
-        for(Entity entity : entities) {
+        for (Entity entity : entities) {
             if (!isCustomMob(entity))
                 continue;
 
             CustomMob customMob = CustomMobs.getPlugin().getCustomMobsManager()
-                    .getCustomMob(entity.getPersistentDataContainer().get(NamespacedKeys.KEY_NAME, PersistentDataType.STRING));
+                    .getCustomMob(entity.getPersistentDataContainer().get(NamespacedKeys.KEY_NAME,
+                            PersistentDataType.STRING));
 
-            if(customMob == null) {
+            if (customMob == null) {
                 entity.getPersistentDataContainer().remove(NamespacedKeys.KEY_NAME);
                 continue;
             }
 
             CustomMobCustomEffect trailEffect = customMob.getCustomMobCustomEffects().stream().filter(
-                            x -> x.isEnabled()
-                                    && x.getClass().getSimpleName().equalsIgnoreCase("Trail"))
+                    x -> x.isEnabled()
+                            && x.getClass().getSimpleName().equalsIgnoreCase("Trail"))
                     .findFirst().orElse(null);
-            if(trailEffect != null && !Trail.activeTrails.containsKey(entity.getUniqueId()))
+            if (trailEffect != null && !Trail.activeTrails.containsKey(entity.getUniqueId()))
                 Trail.activeTrails.put(entity.getUniqueId(), (Trail) trailEffect);
 
             CustomMobCustomEffect minerEffect = customMob.getCustomMobCustomEffects().stream().filter(
-                            x -> x.isEnabled()
-                                    && x.getClass().getSimpleName().equalsIgnoreCase("Miner"))
+                    x -> x.isEnabled()
+                            && x.getClass().getSimpleName().equalsIgnoreCase("Miner"))
                     .findFirst().orElse(null);
-            if(minerEffect != null && !Miner.activeMiners.containsKey(entity.getUniqueId()))
+            if (minerEffect != null && !Miner.activeMiners.containsKey(entity.getUniqueId()))
                 Miner.activeMiners.put(entity.getUniqueId(), (Miner) minerEffect);
 
             customMob.enableCustomEffects(entity);
@@ -168,7 +170,8 @@ public class Events implements Listener {
         if (!isCustomMob(event.getEntity()))
             return;
 
-        String name = event.getEntity().getPersistentDataContainer().get(NamespacedKeys.KEY_NAME, PersistentDataType.STRING);
+        String name = event.getEntity().getPersistentDataContainer().get(NamespacedKeys.KEY_NAME,
+                PersistentDataType.STRING);
         CustomMob customMob = CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(name);
         if (customMob == null)
             return;
@@ -186,7 +189,8 @@ public class Events implements Listener {
                 message.sendMessage(event.getEntity());
         }
 
-        if (customMob.getCustomMobOption("Special") != null && !((Special) customMob.getCustomMobOption("Special")).getNaturalDrops())
+        if (customMob.getCustomMobOption("Special") != null
+                && !((Special) customMob.getCustomMobOption("Special")).getNaturalDrops())
             event.getDrops().clear();
 
         if (!customMob.getDrops().isEmpty())
@@ -203,7 +207,8 @@ public class Events implements Listener {
         if (!Objects.equals(event.getHand(), EquipmentSlot.HAND))
             return;
 
-        if (event.getClickedBlock() == null)
+        RayTraceResult rayTraceResult = event.getPlayer().rayTraceBlocks(5, FluidCollisionMode.SOURCE_ONLY);
+        if (event.getClickedBlock() == null && (rayTraceResult == null || rayTraceResult.getHitBlock() == null))
             return;
 
         Player player = event.getPlayer();
@@ -216,7 +221,8 @@ public class Events implements Listener {
         if (container.getKeys().contains(NamespacedKeys.KEY_MENU_ITEM)) {
             player.getInventory().remove(item);
             CustomMobs.getPlugin().getServer().getConsoleSender().sendMessage(
-                    ChatColor.translateAlternateColorCodes('&', "&c[!] CustomMobs : " + player.getName() + " tried to use a CustomMob menu item and it was deleted. Please report this incident."));
+                    ChatColor.translateAlternateColorCodes('&', "&c[!] CustomMobs : " + player.getName()
+                            + " tried to use a CustomMob menu item and it was deleted. Please report this incident."));
         }
 
         if (!container.getKeys().contains(NamespacedKeys.KEY_ITEM_TYPE))
@@ -224,18 +230,25 @@ public class Events implements Listener {
 
         if (player.getGameMode() != GameMode.CREATIVE)
             item.setAmount(item.getAmount() - 1);
-        CustomMob customMob = CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(container.get(NamespacedKeys.KEY_FILE_NAME, PersistentDataType.STRING));
+        CustomMob customMob = CustomMobs.getPlugin().getCustomMobsManager()
+                .getCustomMob(container.get(NamespacedKeys.KEY_FILE_NAME, PersistentDataType.STRING));
 
         if (customMob == null)
             return;
 
         String itemType = container.get(NamespacedKeys.KEY_ITEM_TYPE, PersistentDataType.STRING);
+        Location blockLocation = event.getClickedBlock() != null ?
+                event.getClickedBlock().getLocation()
+                : rayTraceResult.getHitBlock().getLocation();
+
 
         if (itemType.equalsIgnoreCase("Item")) {
             event.setCancelled(true);
-            customMob.spawnCustomMob(event.getClickedBlock().getLocation().add(0.5, 1, 0.5));
+            customMob.spawnCustomMob(blockLocation.add(0.5, 1, 0.5));
         } else if (itemType.equalsIgnoreCase("Spawner-Item")) {
             event.setCancelled(true);
+            if(event.getClickedBlock() == null)
+                return;
             customMob.placeCustomMobSpawner(event.getClickedBlock().getRelative(event.getBlockFace()).getLocation());
         }
     }
@@ -258,8 +271,9 @@ public class Events implements Listener {
             event.setCancelled(true);
             event.getClickedInventory().removeItem(item);
             CustomMobs.getPlugin().getServer().getConsoleSender().sendMessage(
-                    ChatColor.translateAlternateColorCodes('&', "&c[!] CustomMobs : " + event.getWhoClicked().getName() +
-                            " had a CustomMob menu item and it was deleted. Please report this incident."));
+                    ChatColor.translateAlternateColorCodes('&',
+                            "&c[!] CustomMobs : " + event.getWhoClicked().getName() +
+                                    " had a CustomMob menu item and it was deleted. Please report this incident."));
         }
     }
 
@@ -275,8 +289,10 @@ public class Events implements Listener {
                 return;
             int range = customMob.getSpawner().getSpawnRange();
 
-            // With this, we find the mobs of the same type. If that is ever a problem, we could filter on the persistent key of the CustomMob.
-            int nearbyCustomMobs = (int) event.getSpawner().getLocation().getWorld().getNearbyEntities(event.getSpawner().getLocation(), range, range, range).stream()
+            // With this, we find the mobs of the same type. If that is ever a problem, we
+            // could filter on the persistent key of the CustomMob.
+            int nearbyCustomMobs = (int) event.getSpawner().getLocation().getWorld()
+                    .getNearbyEntities(event.getSpawner().getLocation(), range, range, range).stream()
                     .filter(entity -> entity.getType() == customMob.getType())
                     .count();
 
@@ -289,7 +305,8 @@ public class Events implements Listener {
                     double offsetZ = (RANDOM.nextDouble() * 2 - 1) * range;
 
                     Location spawnLocation = location.clone().add(offsetX, 0, offsetZ);
-                    spawnLocation.setY(getNearestY(location.getWorld(), location.getX() + offsetX, location.getY(), location.getZ() + offsetZ));
+                    spawnLocation.setY(getNearestY(location.getWorld(), location.getX() + offsetX, location.getY(),
+                            location.getZ() + offsetZ));
 
                     CustomMobs.getPlugin().getCustomMobsManager().getCustomMob(mobName).spawnCustomMob(spawnLocation);
                 }
@@ -319,15 +336,19 @@ public class Events implements Listener {
         ItemStack itemStack = player.getInventory().getItemInMainHand();
         Block block = event.getBlock();
 
-        if (!manager.getConfigManager().getSilkSpawner() || block.getType() != Material.SPAWNER || !itemStack.getType().toString().contains("PICKAXE")) {
+        if (!manager.getConfigManager().getSilkSpawner() || block.getType() != Material.SPAWNER
+                || !itemStack.getType().toString().contains("PICKAXE")) {
             return;
         }
 
         CreatureSpawner spawnerBlock = (CreatureSpawner) block.getState();
         PersistentDataContainer container = spawnerBlock.getPersistentDataContainer();
 
-        if (itemStack.containsEnchantment(Enchantment.SILK_TOUCH) && container.has(NamespacedKeys.KEY_SPAWNER, PersistentDataType.STRING)) {
-            ItemStack spawnerItem = manager.getCustomMobItem(manager.getCustomMob(container.get(NamespacedKeys.KEY_SPAWNER, PersistentDataType.STRING)), "spawner", 1);
+        if (itemStack.containsEnchantment(Enchantment.SILK_TOUCH)
+                && container.has(NamespacedKeys.KEY_SPAWNER, PersistentDataType.STRING)) {
+            ItemStack spawnerItem = manager.getCustomMobItem(
+                    manager.getCustomMob(container.get(NamespacedKeys.KEY_SPAWNER, PersistentDataType.STRING)),
+                    "spawner", 1);
             block.getLocation().getWorld().dropItem(block.getLocation(), spawnerItem);
         }
     }
@@ -347,21 +368,23 @@ public class Events implements Listener {
 
         Map<CustomMob, Double> customMobReplacePercentages = new HashMap<>();
         double totalPercentage = 0;
-        for(CustomMob customMob : CustomMobs.getPlugin().getCustomMobsManager().getCustomMobs()) {
-            if(customMob.getType() != event.getEntityType())
+        for (CustomMob customMob : CustomMobs.getPlugin().getCustomMobsManager().getCustomMobs()) {
+            if (customMob.getType() != event.getEntityType())
                 continue;
-            if (customMob.getCustomMobOption("Special") != null && ((Special) customMob.getCustomMobOption("Special")).getReplaceNaturalPercentage() != 0.0) {
+            if (customMob.getCustomMobOption("Special") != null
+                    && ((Special) customMob.getCustomMobOption("Special")).getReplaceNaturalPercentage() != 0.0) {
                 double percentage = ((Special) customMob.getCustomMobOption("Special")).getReplaceNaturalPercentage();
                 customMobReplacePercentages.put(customMob, percentage);
                 totalPercentage += percentage;
             }
         }
 
-        if(customMobReplacePercentages.isEmpty())
+        if (customMobReplacePercentages.isEmpty())
             return;
 
         double roll = Math.random() * 100;
-        if (roll > totalPercentage) return;
+        if (roll > totalPercentage)
+            return;
 
         double random = Math.random() * totalPercentage;
         double cumulative = 0;
@@ -381,27 +404,33 @@ public class Events implements Listener {
 
     @EventHandler
     public void onZombieConvert(EntityTransformEvent event) {
-        if (!(event.getEntity() instanceof org.bukkit.entity.Zombie)) return;
-        if (event.getTransformReason() != EntityTransformEvent.TransformReason.DROWNED) return;
-        if (!isCustomMob(event.getEntity())) return;
+        if (!(event.getEntity() instanceof org.bukkit.entity.Zombie))
+            return;
+        if (event.getTransformReason() != EntityTransformEvent.TransformReason.DROWNED)
+            return;
+        if (!isCustomMob(event.getEntity()))
+            return;
         event.setCancelled(true);
     }
 
-    @EventHandler
-    public void onRightClickEntity(PlayerInteractEntityEvent event) {
-        Entity entity = event.getRightClicked();
-        Player player = event.getPlayer();
-        if(event.getHand() == EquipmentSlot.OFF_HAND) return;
-
-        if (isCustomMob(entity) && entity.getPersistentDataContainer().has(NamespacedKeys.KEY_RIDEABLE, PersistentDataType.BOOLEAN)) {
-            event.setCancelled(true);
-            entity.addPassenger(player);
-            // TODO Make the mobs rideable with AWSD
-        }
-    }
+    // TODO
+    /*
+     * @EventHandler
+     * public void onRightClickEntity(PlayerInteractEntityEvent event) {
+     * Entity entity = event.getRightClicked();
+     * Player player = event.getPlayer();
+     * if(event.getHand() == EquipmentSlot.OFF_HAND) return;
+     * 
+     * if (isCustomMob(entity) &&
+     * entity.getPersistentDataContainer().has(NamespacedKeys.KEY_RIDEABLE,
+     * PersistentDataType.BOOLEAN)) {
+     * event.setCancelled(true);
+     * new RideSystem().startRiding(player, (LivingEntity) entity);
+     * }
+     * }
+     */
 
     private boolean isCustomMob(Entity entity) {
         return entity.getPersistentDataContainer().has(NamespacedKeys.KEY_NAME, PersistentDataType.STRING);
     }
 }
-

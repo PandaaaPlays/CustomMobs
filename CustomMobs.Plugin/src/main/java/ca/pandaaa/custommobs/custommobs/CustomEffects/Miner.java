@@ -172,4 +172,12 @@ public class Miner extends CustomMobCustomEffect {
             default -> true;
         };
     }
+
+    public int getRadius() {
+        return radius;
+    }
+
+    public Long getCooldown() {
+        return cooldown;
+    }
 }
