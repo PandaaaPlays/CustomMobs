@@ -93,7 +93,7 @@
                                "minimum":  null,
                                "description":  "Represents the variant of the zombie nautilus CustomMob.",
                                "type":  "Zombienautilus variant",
-                               "key":  "VARIANT",
+                               "key":  "ZOMBIE_NAUTILUS_VARIANT",
                                "maximum":  null
                            }
                        ],
