@@ -19,6 +19,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -67,12 +68,7 @@ public class CustomMob implements Listener {
         this.customEffectsCooldownDuration = mobConfiguration.getCustomEffectsCooldownDuration();
     }
 
-    /**
-     * Constructor of the CustomMobs.
-     */
-    public void spawnCustomMob(Location location) {
-        Entity customMob = Objects.requireNonNull(location.getWorld()).spawnEntity(location, entityType);
-
+    public void spawnCustomMob(Entity customMob) {
         // Naming
         if(name != null)
             customMob.setCustomName(Utils.applyFormat(name));
@@ -107,6 +103,14 @@ public class CustomMob implements Listener {
 
         CustomMobSpawnEvent customEvent = new CustomMobSpawnEvent(customMob);
         Bukkit.getServer().getPluginManager().callEvent(customEvent);
+    }
+
+    /**
+     * Constructor of the CustomMobs.
+     */
+    public void spawnCustomMob(Location location) {
+        Entity customMob = Objects.requireNonNull(location.getWorld()).spawnEntity(location, entityType);
+        spawnCustomMob(customMob);
     }
 
     public void placeCustomMobSpawner(Location location) {
@@ -369,9 +373,9 @@ public class CustomMob implements Listener {
                             .filter(effect -> CustomEffectType.ON_IMPACT.equals(effect.getCustomEffectType()))
                             .filter(CustomMobCustomEffect::isEnabled)
                             .forEach(effect ->  {
-                                effect.triggerCustomEffect(entity);
-                                for(Entity player : impactEntities.stream().filter(e -> e instanceof Player).toList()) {
-                                    effect.trySendCustomEffectMessage((Player) player);
+                                List<Player> affectedPlayers = effect.triggerCustomEffect(entity);
+                                if(affectedPlayers != null && !affectedPlayers.isEmpty()) {
+                                    affectedPlayers.forEach(effect::trySendCustomEffectMessage);
                                 }
                             });
                 }
@@ -387,13 +391,20 @@ public class CustomMob implements Listener {
                         .toList();
                 if(!cooldownCustomEffects.isEmpty()) {
                     int randomIndex = new Random().nextInt(cooldownCustomEffects.size());
-                    cooldownCustomEffects.get(randomIndex).triggerCustomEffect(entity);
-                    double radius = cooldownCustomEffects.get(randomIndex).getMessageRadius();
-                    if(radius <= 0)
-                        cooldownCustomEffects.get(randomIndex).tryBroadcastCustomEffectMessage();
-                    else {
-                        for (Entity entity : entity.getNearbyEntities(radius, radius, radius).stream().filter(x -> x instanceof Player).toList())
-                            cooldownCustomEffects.get(randomIndex).trySendCustomEffectMessage((Player) entity);
+                    List<Player> affectedPlayers = cooldownCustomEffects.get(randomIndex).triggerCustomEffect(entity);
+                    if(affectedPlayers == null) {
+                        nextCooldownOccurences.put(entityId, LocalDateTime.now().plusSeconds(customEffectsCooldownDuration));
+                        return;
+                    } else if (affectedPlayers.isEmpty()) {
+                        double radius = cooldownCustomEffects.get(randomIndex).getMessageRadius();
+                        if(radius <= 0)
+                            cooldownCustomEffects.get(randomIndex).tryBroadcastCustomEffectMessage();
+                        else {
+                            for (Entity entity : entity.getNearbyEntities(radius, radius, radius).stream().filter(x -> x instanceof Player).toList())
+                                cooldownCustomEffects.get(randomIndex).trySendCustomEffectMessage((Player) entity);
+                        }
+                    } else {
+                        affectedPlayers.forEach(player -> cooldownCustomEffects.get(randomIndex).trySendCustomEffectMessage(player));
                     }
                     nextCooldownOccurences.put(entityId, LocalDateTime.now().plusSeconds(customEffectsCooldownDuration));
                 }

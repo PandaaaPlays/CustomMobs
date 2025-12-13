@@ -18,6 +18,9 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The CustomMob randomly becomes invisible for a determined amount of time.
+ */
 public class Vanish extends CustomMobCustomEffect {
     /**
      * Determines the time (in second(s)) that the invisibility effect is applied on the CustomMob.
@@ -33,8 +36,10 @@ public class Vanish extends CustomMobCustomEffect {
         this.vanishTime = getCustomEffectOption(VANISH_TIME, Integer.class, 5);
     }
 
-    public void triggerCustomEffect(Entity entity) {
+    public List<Player> triggerCustomEffect(Entity entity) {
+        if(triggerCustomEffectCancelled(entity, null, this)) return null;
         ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, vanishTime * 20, 1));
+        return new ArrayList<>();
     }
 
     public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {
@@ -82,5 +87,9 @@ public class Vanish extends CustomMobCustomEffect {
         item.addLore("&eDuration: &f" + duration);
         item.setCustomEffectPersistentDataContainer(this.getClass().getSimpleName() + ".VanishTime");
         return item;
+    }
+
+    public int getVanishTime() {
+        return vanishTime;
     }
 }

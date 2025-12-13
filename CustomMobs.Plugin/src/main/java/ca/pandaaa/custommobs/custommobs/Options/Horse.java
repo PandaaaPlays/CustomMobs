@@ -109,9 +109,11 @@ public class Horse extends CustomMobOption {
                 } else {
                     List<Material> armors = new ArrayList<>();
                     armors.add(Material.LEATHER_HORSE_ARMOR);
+                    armors.add(Material.COPPER_HORSE_ARMOR);
                     armors.add(Material.IRON_HORSE_ARMOR);
                     armors.add(Material.GOLDEN_HORSE_ARMOR);
                     armors.add(Material.DIAMOND_HORSE_ARMOR);
+                    armors.add(Material.NETHERITE_HORSE_ARMOR);
                     if (armors.indexOf(horseArmor) == armors.size() - 1)
                         this.horseArmor = armors.get(0);
                     else

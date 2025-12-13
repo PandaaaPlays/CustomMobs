@@ -31,10 +31,11 @@ public class TypesGUI extends CustomMobsGUI {
     }
 
     public void openInventory(Player player, int page) {
-        boolean nextPage = true;
+        boolean nextPage = typeItems.size() > page * 45;
 
-        // Make sure we set the extra items to air, so that other page(s) item(s) are not persisted.
-        for(int i = 0; i < 45; i++) {
+        // Make sure we set the extra items to air, so that other page(s) item(s) are
+        // not persisted.
+        for (int i = 0; i < 45; i++) {
             int position = ((page - 1) * 45) + i;
             if (typeItems.size() > position)
                 inventory.setItem(i, typeItems.get(position));
@@ -44,14 +45,14 @@ public class TypesGUI extends CustomMobsGUI {
             }
         }
 
-        if(page > 1) {
+        if (page > 1) {
             ItemMeta previousItemMeta = previous.getItemMeta();
-            if(previousItemMeta != null)
+            if (previousItemMeta != null)
                 previousItemMeta.setDisplayName(Utils.applyFormat("&e&lPrevious (" + (page - 1) + ")"));
             previous.setItemMeta(previousItemMeta);
         } else {
             ItemMeta previousItemMeta = previous.getItemMeta();
-            if(previousItemMeta != null)
+            if (previousItemMeta != null)
                 previousItemMeta.setDisplayName(Utils.applyFormat("&e&lPrevious"));
             previous.setItemMeta(previousItemMeta);
         }
@@ -63,9 +64,9 @@ public class TypesGUI extends CustomMobsGUI {
         inventory.setItem(50, filler);
         inventory.setItem(51, filler);
         inventory.setItem(52, filler);
-        if(nextPage) {
+        if (nextPage) {
             ItemMeta nextItemMeta = next.getItemMeta();
-            if(nextItemMeta != null)
+            if (nextItemMeta != null)
                 nextItemMeta.setDisplayName(Utils.applyFormat("&e&lNext (" + (page + 1) + ")"));
             next.setItemMeta(nextItemMeta);
             inventory.setItem(53, next);
@@ -79,7 +80,7 @@ public class TypesGUI extends CustomMobsGUI {
     public void onInventoryClick(InventoryClickEvent event) {
         if (!isEventRelevant(event.getView().getTopInventory()))
             return;
-        if(event.getClickedInventory() == null || event.getClickedInventory().getType() == InventoryType.PLAYER) {
+        if (event.getClickedInventory() == null || event.getClickedInventory().getType() == InventoryType.PLAYER) {
             event.setCancelled(event.isShiftClick());
             return;
         }
@@ -96,7 +97,7 @@ public class TypesGUI extends CustomMobsGUI {
 
         switch (event.getSlot()) {
             case 45:
-                if(!name.contains("("))
+                if (!name.contains("("))
                     new EditGUI(customMob, CustomMobs.getPlugin().getCustomMobsManager(), clicker).openInventory();
                 else {
                     int page = Character.getNumericValue(name.charAt(name.indexOf('(') + 1));
@@ -104,7 +105,7 @@ public class TypesGUI extends CustomMobsGUI {
                 }
                 break;
             case 53:
-                if(event.getView().getItem(event.getSlot()).getType() == Material.GRAY_STAINED_GLASS_PANE)
+                if (event.getView().getItem(event.getSlot()).getType() == Material.GRAY_STAINED_GLASS_PANE)
                     break;
                 int page = Character.getNumericValue(name.charAt(name.indexOf('(') + 1));
                 openInventory(clicker, page);
@@ -112,7 +113,8 @@ public class TypesGUI extends CustomMobsGUI {
             // Every mob types
             default:
                 if (event.getSlot() < 45) {
-                    customMob.setType(EntityType.valueOf(ChatColor.stripColor(itemMeta.getDisplayName().replace(" ", "_"))));
+                    customMob.setType(
+                            EntityType.valueOf(ChatColor.stripColor(itemMeta.getDisplayName().replace(" ", "_"))));
                     new EditGUI(customMob, CustomMobs.getPlugin().getCustomMobsManager(), clicker).openInventory();
                 }
                 break;
@@ -125,13 +127,13 @@ public class TypesGUI extends CustomMobsGUI {
         List<EntityType> types = Arrays.asList(EntityType.values());
         types.sort(Comparator.comparing(EntityType::name));
 
-        for(EntityType type : types) {
-            if(type != EntityType.PLAYER
+        for (EntityType type : types) {
+            if (type != EntityType.PLAYER
                     && type != EntityType.ARMOR_STAND
                     && type.isAlive()) {
 
                 Material spawnEgg = getSpawnEggMaterial(type);
-                if(spawnEgg != null) {
+                if (spawnEgg != null) {
                     ItemStack item = new ItemStack(spawnEgg);
                     ItemMeta itemMeta = item.getItemMeta();
                     ArrayList<String> lore = new ArrayList<>();
@@ -149,11 +151,11 @@ public class TypesGUI extends CustomMobsGUI {
 
     public static Material getSpawnEggMaterial(EntityType type) {
         try {
-            if(type == EntityType.ILLUSIONER)
+            if (type == EntityType.ILLUSIONER)
                 return Material.SPECTRAL_ARROW;
-            if(type == EntityType.GIANT)
+            if (type == EntityType.GIANT)
                 return Material.ZOMBIE_HEAD;
-            if(Utils.isVersionAtLeast("1.21.9") && type == EntityType.MANNEQUIN)
+            if (Utils.isVersionAtLeast("1.21.9") && type == EntityType.MANNEQUIN)
                 return Material.PLAYER_HEAD;
 
             String eggName = type.name() + "_SPAWN_EGG";

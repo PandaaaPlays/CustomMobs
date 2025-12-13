@@ -12,4 +12,5 @@ public class NamespacedKeys {
     public static final NamespacedKey KEY_FILE_NAME = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.FileName");
     public static final NamespacedKey KEY_SPAWNER = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Spawner");
     public static final NamespacedKey KEY_REMOVE_CONFIRM = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Remove.Confirm");
+    public static final NamespacedKey KEY_RIDEABLE = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Rideable");
 }

@@ -81,22 +81,22 @@
                      "maximum":  null
                  }
              ],
-    "Cat":  [
-                {
-                    "minimum":  null,
-                    "description":  "Determines the breed or appearance of the cat CustomMob (e.g., tabby, siamese, black).",
-                    "type":  "Cat type",
-                    "key":  "CAT_TYPE",
-                    "maximum":  null
-                },
-                {
-                    "minimum":  null,
-                    "description":  "Sets the dye color of the cat CustomMob\u0027s collar. The cat needs to be tamed and have an owner in order to have the collar rendered (see Tameable option).",
-                    "type":  "Dye color",
-                    "key":  "COLLAR_COLOR",
-                    "maximum":  null
-                }
-            ],
+    "ZombieNautilus":  [
+                           {
+                               "minimum":  null,
+                               "description":  "Represents the armor item equipped on the zombie nautilus CustomMob.",
+                               "type":  "Item",
+                               "key":  "NAUTILUS_ARMOR",
+                               "maximum":  null
+                           },
+                           {
+                               "minimum":  null,
+                               "description":  "Represents the variant of the zombie nautilus CustomMob.",
+                               "type":  "Zombienautilus variant",
+                               "key":  "ZOMBIE_NAUTILUS_VARIANT",
+                               "maximum":  null
+                           }
+                       ],
     "Creeper":  [
                     {
                         "minimum":  "0",
@@ -129,6 +129,15 @@
                     "maximum":  null
                 }
             ],
+    "Steerable":  [
+                      {
+                          "minimum":  null,
+                          "description":  "Indicates if the entity (like a pig or strider) has a saddle and can be ridden.",
+                          "type":  "On / Off",
+                          "key":  "SADDLE",
+                          "maximum":  null
+                      }
+                  ],
     "HappyGhast":  [
                        {
                            "minimum":  null,
@@ -165,15 +174,22 @@
                         "maximum":  null
                     }
                 ],
-    "Steerable":  [
-                      {
-                          "minimum":  null,
-                          "description":  "Indicates if the entity (like a pig or strider) has a saddle and can be ridden.",
-                          "type":  "On / Off",
-                          "key":  "SADDLE",
-                          "maximum":  null
-                      }
-                  ],
+    "Cat":  [
+                {
+                    "minimum":  null,
+                    "description":  "Determines the breed or appearance of the cat CustomMob (e.g., tabby, siamese, black).",
+                    "type":  "Cat type",
+                    "key":  "CAT_TYPE",
+                    "maximum":  null
+                },
+                {
+                    "minimum":  null,
+                    "description":  "Sets the dye color of the cat CustomMob\u0027s collar. The cat needs to be tamed and have an owner in order to have the collar rendered (see Tameable option).",
+                    "type":  "Dye color",
+                    "key":  "COLLAR_COLOR",
+                    "maximum":  null
+                }
+            ],
     "CopperGolem":  [
                         {
                             "minimum":  null,
@@ -348,6 +364,13 @@
                         "type":  "Bar color",
                         "key":  "BOSS_BAR_COLOR",
                         "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "Allows player to ride the CustomMob.",
+                        "type":  "On / Off",
+                        "key":  "RIDEABLE",
+                        "maximum":  null
                     }
                 ],
     "Frog":  [
@@ -359,6 +382,15 @@
                      "maximum":  null
                  }
              ],
+    "Nautilus":  [
+                     {
+                         "minimum":  null,
+                         "description":  "Represents the armor item equipped on the nautilus CustomMob.",
+                         "type":  "Item",
+                         "key":  "NAUTILUS_ARMOR",
+                         "maximum":  null
+                     }
+                 ],
     "PigZombie":  [
                       {
                           "minimum":  "0",

@@ -11,6 +11,7 @@ export interface CustomEffectField {
 }
 
 export interface CustomEffect {
+  description: string;
   effectType: string;
   fields: CustomEffectField[];
 }

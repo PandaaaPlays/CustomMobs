@@ -9,6 +9,7 @@
     <div class="splitter"></div>
   </div>
   <div class="body">
+    <div class="custom-effect-description" [innerHTML]="customEffect.description"></div>
     <div class="custom-effect-option" *ngFor="let field of customEffect.fields">
       <div class="title">
         {{ field.key.replaceAll('_', ' ') }}

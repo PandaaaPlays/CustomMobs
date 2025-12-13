@@ -3,23 +3,21 @@ package ca.pandaaa.custommobs.custommobs;
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.utils.Utils;
 import net.minecraft.core.Holder;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.FollowMobGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.ai.sensing.NearestLivingEntitySensor;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
@@ -32,7 +30,7 @@ public class NMS {
 
     private static final NMSResolver NMS_RESOLVER = new NMSResolver();
 
-    public void setCustomMobAggressivity(org.bukkit.entity.Mob entity) {
+    public void setCustomMobAggressivity(org.bukkit.entity.Mob entity, double followRange) {
         Mob mob = NMS_RESOLVER.getNMSEntity(entity);
 
         AttributeInstance attackDamageAttribute = mob.getAttribute(Attributes.ATTACK_DAMAGE);
@@ -42,7 +40,23 @@ public class NMS {
         NMS_RESOLVER.addGoal(mob, 2, new MeleeAttackGoal((PathfinderMob) mob, 1D, false));
         NMS_RESOLVER.addGoal(mob, 3, new RandomLookAroundGoal(mob));
         NMS_RESOLVER.addGoal(mob, 1, new HurtByTargetGoal((PathfinderMob) mob));
-        NMS_RESOLVER.addGoal(mob, 0, new NearestAttackableTargetGoal<Player>(mob, Player.class, true));
+        NMS_RESOLVER.addGoal(mob, 0, new NearestAttackableTargetGoal<Player>(mob, Player.class, (int) followRange, true, false, null));
+
+        if (mob instanceof net.minecraft.world.entity.animal.axolotl.Axolotl axolotl) {
+            Bukkit.getScheduler().runTaskTimer(CustomMobs.getPlugin(), () -> {
+                if (!entity.isValid() || entity.isDead() || axolotl.isPlayingDead()) return;
+
+                Player nearest = axolotl.level().getNearestPlayer(axolotl, followRange);
+                Brain<?> brain = axolotl.getBrain();
+
+                if (nearest != null) {
+                    brain.setMemory(MemoryModuleType.ATTACK_TARGET, nearest);
+                } else {
+                    brain.eraseMemory(MemoryModuleType.ATTACK_TARGET);
+                }
+
+            }, 1L, 1L);
+        }
     }
 
     private static final class NMSResolver {
@@ -76,10 +90,14 @@ public class NMS {
 
                 getHandleMethod = craftLivingEntityClass.getMethod("getHandle");
                 // To find the fields corresponding to the version, see : https://minidigger.github.io/MiniMappingViewer/#/mojang/client/1.XX.XX/LivingEntity
-                if(Utils.isVersionExactly("1.21.9")) {
-                    attributeMap = LivingEntity.class.getDeclaredField("cj");  // Field 'attributes' in NMS LivingEntity class
+                if(Utils.isVersionExactly("1.21.11")) {
+                    attributeMap = LivingEntity.class.getDeclaredField("cm");  // Field 'attributes' in NMS LivingEntity class
                     attributes = AttributeMap.class.getDeclaredField("a");    // Field 'attributes' in NMS AttributeMap class
-                    targetSelectorField = Mob.class.getDeclaredField("cr");    // Field 'targetSelector' in NMS entity.Mob class
+                    targetSelectorField = Mob.class.getDeclaredField("ct");    // Field 'targetSelector' in NMS entity.Mob class
+                } else if(Utils.isVersionAtLeast("1.21.9") && Utils.isVersionBeforeOrEqual("1.21.10")) {
+                    attributeMap = LivingEntity.class.getDeclaredField("cj");
+                    attributes = AttributeMap.class.getDeclaredField("a");
+                    targetSelectorField = Mob.class.getDeclaredField("cr");
                 } else if(Utils.isVersionAtLeast("1.21.6") && Utils.isVersionBeforeOrEqual("1.21.8")) {
                     attributeMap = LivingEntity.class.getDeclaredField("cc");
                     attributes = AttributeMap.class.getDeclaredField("a");
@@ -112,7 +130,7 @@ public class NMS {
             try {
                 Object goalSelector = targetSelectorField.get(mob);
                 Method addGoalMethod = null;
-                if(Utils.isVersionAtLeast("1.21.5") && Utils.isVersionBeforeOrEqual("1.21.9")) {
+                if(Utils.isVersionAtLeast("1.21.5") && Utils.isVersionBeforeOrEqual("1.21.11")) {
                     addGoalMethod = goalSelector.getClass().getDeclaredMethod("a", int.class, Goal.class); // Method 'addGoal' in NMS GoalSelector class
                 } else {
                     throw new Exception("This server version does not support aggressive animals. Please contact the developper if you believe this is an issue.");

@@ -9,15 +9,19 @@ import ca.pandaaa.custommobs.custommobs.CustomEffects.Trail;
 import ca.pandaaa.custommobs.custommobs.Events.Events;
 import ca.pandaaa.custommobs.custommobs.Messages.DropMessage;
 import ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage;
-import ca.pandaaa.custommobs.utils.DamageRange;
-import ca.pandaaa.custommobs.utils.Metrics;
-import ca.pandaaa.custommobs.utils.SoundEnum;
-import ca.pandaaa.custommobs.utils.Utils;
+import ca.pandaaa.custommobs.utils.*;
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.ListenerPriority;
+import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.events.PacketEvent;
 import com.google.common.reflect.ClassPath;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Registry;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
@@ -25,7 +29,9 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -197,7 +203,7 @@ public class CustomMobs extends JavaPlugin {
         List<org.bukkit.Sound> sounds = new ArrayList<>();
         List<String> newSounds = new ArrayList<>();
 
-        if (Utils.isVersionBeforeOrEqual("1.21.9")) {
+        if (Utils.isVersionBeforeOrEqual("1.21.11")) {
             return;
         } else {
             Registry.SOUNDS.iterator().forEachRemaining(sounds::add);
@@ -276,4 +282,48 @@ public class CustomMobs extends JavaPlugin {
             e.printStackTrace();
         }
     }
+
+    private void startProtocolLibPacketManager() {
+        /*ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(plugin, PacketType.Play.Client.STEER_VEHICLE) {
+            @Override
+            public void onPacketReceiving(PacketEvent event) {
+                Player player = event.getPlayer();
+                WrapperPlayClientSteerVehicle packet = new WrapperPlayClientSteerVehicle(event.getPacket());
+
+                float side = packet.getSideways();
+                float forward = packet.getForward();
+                boolean jump = packet.isJump();
+
+                Bukkit.getScheduler().runTask(plugin, () -> handleMountControl(player, side, forward, jump));
+            }
+        });*/
+
+    }
+
+    private void handleMountControl(Player player, float side, float forward, boolean jump) {
+        Entity mount = player.getVehicle();
+        if (mount == null) return;
+
+        // Only control if this is your custom mob (TODO)
+        if (!(mount instanceof LivingEntity)) return;
+
+        // Get player’s direction (yaw) to determine where to move
+        Location loc = mount.getLocation();
+        float yaw = loc.getYaw();
+
+        // Convert strafe/forward input to motion vectors
+        org.bukkit.util.Vector direction = new org.bukkit.util.Vector(-Math.sin(Math.toRadians(yaw)), 0, Math.cos(Math.toRadians(yaw)));
+        org.bukkit.util.Vector strafe = new org.bukkit.util.Vector(-direction.getZ(), 0, direction.getX());
+        org.bukkit.util.Vector velocity = direction.multiply(forward * 0.4).add(strafe.multiply(side * 0.4));
+
+        // Apply velocity
+        mount.setVelocity(velocity);
+
+        // Optional: make it jump
+        if (jump && mount.isOnGround()) {
+            mount.setVelocity(mount.getVelocity().add(new org.bukkit.util.Vector(0, 0.5, 0)));
+        }
+    }
+
+
 }

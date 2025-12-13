@@ -6,10 +6,7 @@ import ca.pandaaa.custommobs.custommobs.Manager;
 import ca.pandaaa.custommobs.guis.MainGUI;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.*;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
 import java.util.Objects;
@@ -26,8 +23,7 @@ public class Commands implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String message, String[] args) {
-        if (!(sender instanceof Player)
-                && !(sender instanceof ConsoleCommandSender))
+        if (!(sender instanceof Player) && !(sender instanceof ConsoleCommandSender) && !(sender instanceof BlockCommandSender))
             return false;
 
         if (command.getName().equalsIgnoreCase("custommobs")) {
@@ -70,7 +66,7 @@ public class Commands implements CommandExecutor {
     }
 
     private void summonCommand(CommandSender sender, String[] args) {
-        if (!sender.hasPermission("custommobs.admin")) {
+        if (sender instanceof Player && !sender.hasPermission("custommobs.admin")) {
             sendNoPermissionMessage(sender);
             return;
         }
@@ -80,7 +76,7 @@ public class Commands implements CommandExecutor {
             return;
         }
 
-        if (args.length == 2 && !(sender instanceof Player)) {
+        if (args.length == 2 && !(sender instanceof Player) && !(sender instanceof ConsoleCommandSender) && !(sender instanceof BlockCommandSender)) {
             sendConsoleUnknownCommandMessage(sender, "Please use : /custommobs summon [name] [x] [y] [z]");
             return;
         }
@@ -90,18 +86,45 @@ public class Commands implements CommandExecutor {
             return;
         }
 
-        if (args.length == 2)
-            customMobsManager.getCustomMob(args[1]).spawnCustomMob(((Player) sender).getLocation());
-        if (args.length == 5) {
-            try {
-                double x = args[2].equals("~") && sender instanceof Player ? ((Player) sender).getLocation().getX() : Double.parseDouble(args[2]);
-                double y = args[3].equals("~") && sender instanceof Player ? ((Player) sender).getLocation().getY() : Double.parseDouble(args[3]);
-                double z = args[4].equals("~") && sender instanceof Player ? ((Player) sender).getLocation().getZ() : Double.parseDouble(args[4]);
-                customMobsManager.getCustomMob(args[1]).spawnCustomMob(
-                        new Location(sender instanceof Player ? ((Player) sender).getLocation().getWorld() : Bukkit.getWorld("world"), x, y, z));
-            } catch (Exception exception) {
-                sendIncorrectCoordinatesMessage(sender);
+        if (args.length == 2) {
+            if (sender instanceof Player player)
+                customMobsManager.getCustomMob(args[1]).spawnCustomMob(player.getLocation());
+            else if (sender instanceof BlockCommandSender blockCommandSender)
+                customMobsManager.getCustomMob(args[1]).spawnCustomMob(blockCommandSender.getBlock().getLocation());
+            return;
+
+        }
+
+        try {
+            double x, y, z;
+            World world;
+
+            if (sender instanceof Player player) {
+                x = args[2].equals("~") ? player.getLocation().getX() : Double.parseDouble(args[2]);
+                y = args[3].equals("~") ? player.getLocation().getY() : Double.parseDouble(args[3]);
+                z = args[4].equals("~") ? player.getLocation().getZ() : Double.parseDouble(args[4]);
+                world = player.getWorld();
+            } else if (sender instanceof BlockCommandSender blockCommandSender) {
+                Location blockLoc = blockCommandSender.getBlock().getLocation();
+                x = args[2].equals("~") ? blockLoc.getX() : Double.parseDouble(args[2]);
+                y = args[3].equals("~") ? blockLoc.getY() : Double.parseDouble(args[3]);
+                z = args[4].equals("~") ? blockLoc.getZ() : Double.parseDouble(args[4]);
+                world = blockLoc.getWorld();
+            } else {
+                x = Double.parseDouble(args[2]);
+                y = Double.parseDouble(args[3]);
+                z = Double.parseDouble(args[4]);
+                world = Bukkit.getWorlds().isEmpty() ? null : Bukkit.getWorlds().get(0);
             }
+
+            if (world == null) {
+                sendUnknownCommandMessage(sender, "World could not be determined.");
+                return;
+            }
+
+            customMobsManager.getCustomMob(args[1]).spawnCustomMob(new Location(world, x, y, z));
+        } catch (Exception exception) {
+            sendIncorrectCoordinatesMessage(sender);
         }
     }
 
