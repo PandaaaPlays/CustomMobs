@@ -71,6 +71,13 @@
     "Special",
     "Tameable"
   ],
+  "ZOMBIE_NAUTILUS": [
+    "Ageable",
+    "Special",
+    "Steerable",
+    "Tameable",
+    "ZombieNautilus"
+  ],
   "SLIME": [
     "Slime",
     "Special"
@@ -172,6 +179,13 @@
     "Ageable",
     "Special"
   ],
+  "CAMEL_HUSK": [
+    "AbstractHorse",
+    "Ageable",
+    "Sittable",
+    "Special",
+    "Tameable"
+  ],
   "ENDERMAN": [
     "Special"
   ],
@@ -182,6 +196,9 @@
     "Ageable",
     "Special",
     "Zombie"
+  ],
+  "PARCHED": [
+    "Special"
   ],
   "LLAMA": [
     "AbstractHorse",
@@ -204,6 +221,13 @@
   ],
   "TROPICAL_FISH": [
     "Special"
+  ],
+  "NAUTILUS": [
+    "Ageable",
+    "Nautilus",
+    "Special",
+    "Steerable",
+    "Tameable"
   ],
   "SPIDER": [
     "Special"
