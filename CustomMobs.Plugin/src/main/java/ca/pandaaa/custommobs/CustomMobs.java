@@ -21,9 +21,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -195,8 +193,7 @@ public class CustomMobs extends JavaPlugin {
             return entityTypeAmount;
         }));
 
-        // Get the CustomMobs (not metrics one) because we also want the 4 defaults in
-        // the count.
+        // Get the CustomMobs (not metrics one) because we also want the 4 defaults in the count.
         metrics.addCustomChart(new Metrics.SingleLineChart("custommobs_amount", () -> customMobsManager.getCustomMobs().size()));
     }
 

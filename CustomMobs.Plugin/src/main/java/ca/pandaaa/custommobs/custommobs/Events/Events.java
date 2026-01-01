@@ -412,7 +412,6 @@ public class Events implements Listener {
         event.setCancelled(true);
     }
 
-    // TODO
     @EventHandler
     public void onRightClickEntity(PlayerInteractEntityEvent event) {
         Entity entity = event.getRightClicked();
