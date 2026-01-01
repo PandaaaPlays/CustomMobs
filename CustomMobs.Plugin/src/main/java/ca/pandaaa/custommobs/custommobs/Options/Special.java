@@ -169,9 +169,8 @@ public class Special extends CustomMobOption {
 
     /**
      * Allows player to ride the CustomMob, even when not rideable normally.
-     * This option will override the default behavior when applicable (for horses,
-     * etc.)
-     * This option will only work when ProtocolLib is installed.
+     * This option will override the default behavior when applicable (for horses, etc.).
+     * <li>This option will only work when ProtocolLib is installed.
      */
     private static final String RIDEABLE = "special.rideable";
     private boolean rideable;

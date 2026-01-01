@@ -58,10 +58,8 @@ public class CustomMobs extends JavaPlugin {
 
         this.sendStartedMessage();
 
-        ConfigurationSerialization.registerClass(DropMessage.class,
-                "ca.pandaaa.custommobs.custommobs.Messages.DropMessage");
-        ConfigurationSerialization.registerClass(SpawnDeathMessage.class,
-                "ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage");
+        ConfigurationSerialization.registerClass(DropMessage.class, "ca.pandaaa.custommobs.custommobs.Messages.DropMessage");
+        ConfigurationSerialization.registerClass(SpawnDeathMessage.class, "ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage");
         ConfigurationSerialization.registerClass(Drop.class, "ca.pandaaa.custommobs.custommobs.Drop");
         ConfigurationSerialization.registerClass(Sound.class, "ca.pandaaa.custommobs.custommobs.Sound");
         ConfigurationSerialization.registerClass(Spawner.class, "ca.pandaaa.custommobs.custommobs.Spawner");
@@ -131,12 +129,9 @@ public class CustomMobs extends JavaPlugin {
 
     private void sendStartedMessage() {
         getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "   &6_____  &e_____"));
-        getServer().getConsoleSender()
-                .sendMessage(ChatColor.translateAlternateColorCodes('&', "  &6|     |&e|     |     &6Custom&eMobs"));
-        getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&',
-                "  &6|   --|&e| | | |    &7Version " + getDescription().getVersion()));
-        getServer().getConsoleSender().sendMessage(
-                ChatColor.translateAlternateColorCodes('&', "  &6|_____|&e|_|_|_|     &7by &8Pa&7nd&5aaa"));
+        getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "  &6|     |&e|     |     &6Custom&eMobs"));
+        getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "  &6|   --|&e| | | |    &7Version " + getDescription().getVersion()));
+        getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "  &6|_____|&e|_|_|_|     &7by &8Pa&7nd&5aaa"));
         getServer().getConsoleSender().sendMessage("");
     }
 
@@ -202,8 +197,7 @@ public class CustomMobs extends JavaPlugin {
 
         // Get the CustomMobs (not metrics one) because we also want the 4 defaults in
         // the count.
-        metrics.addCustomChart(
-                new Metrics.SingleLineChart("custommobs_amount", () -> customMobsManager.getCustomMobs().size()));
+        metrics.addCustomChart(new Metrics.SingleLineChart("custommobs_amount", () -> customMobsManager.getCustomMobs().size()));
     }
 
     private void checkSoundEnum() {
@@ -223,8 +217,7 @@ public class CustomMobs extends JavaPlugin {
         for (org.bukkit.Sound sound : sounds) {
             boolean found = false;
             for (int j = 0; j < soundKeys.size(); j++) {
-                if (sound.toString().equalsIgnoreCase(soundKeys.get(j))
-                        || sound.toString().equalsIgnoreCase(soundKeys.get(j).replaceAll("\\.", "_"))) {
+                if (sound.toString().equalsIgnoreCase(soundKeys.get(j)) || sound.toString().equalsIgnoreCase(soundKeys.get(j).replaceAll("\\.", "_"))) {
                     found = true;
                     break;
                 }
