@@ -16,7 +16,6 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.attribute.Attributable;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.enchantments.Enchantment;
@@ -27,24 +26,28 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class Special extends CustomMobOption {
     /**
-     *  Toggles the visibility of the entity's name tag, even when not directly looking at it.
-     *  If not set, the name of the CustomMob will be shown when looking at the mob (default behavior).
+     * Toggles the visibility of the entity's name tag, even when not directly
+     * looking at it.
+     * If not set, the name of the CustomMob will be shown when looking at the mob
+     * (default behavior).
      */
     private static final String VISIBLE_NAME = "special.visible-name";
     private Boolean isNameVisible;
     /**
-     * Sets the entity's health (in half heart(s)). A health of 20 means that the CustomMob has 10 hearts of health.
+     * Sets the entity's health (in half heart(s)). A health of 20 means that the
+     * CustomMob has 10 hearts of health.
+     * 
      * @minimum 0
      * @maximum 1024
      */
     private static final String HEALTH = "special.health";
     private Double health;
     /**
-     * Indicates whether the entity is in an aggressive state, which means that they will attack any nearby player (even
+     * Indicates whether the entity is in an aggressive state, which means that they
+     * will attack any nearby player (even
      * if the mob is normally passive).
      */
     private static final String AGGRESSIVE = "special.aggressive";
@@ -60,7 +63,9 @@ public class Special extends CustomMobOption {
     private static final String CAN_PICKUP_LOOT = "special.can-pickup-loot";
     private boolean canPickupLoot;
     /**
-     * Indicates how far the entity is knocked back when hit (a high value indicates that the CustomMob should not go far).
+     * Indicates how far the entity is knocked back when hit (a high value indicates
+     * that the CustomMob should not go far).
+     * 
      * @minimum 0
      * @maximum 1
      */
@@ -68,14 +73,17 @@ public class Special extends CustomMobOption {
     private double knockbackResistance;
     /**
      * Controls the movement speed of the entity. The default value is 0,3.
+     * 
      * @minimum 0
      * @maximum 1024
      */
     private static final String SPEED = "special.speed";
     private double speed;
     /**
-     * Defines the range of damage the entity can inflict. For a mob to inflict exactly "x" damage every time, set the
+     * Defines the range of damage the entity can inflict. For a mob to inflict
+     * exactly "x" damage every time, set the
      * lower and higher bounds of the range to the same "x" value.
+     * 
      * @minimum 0
      * @maximum 1024
      */
@@ -102,12 +110,15 @@ public class Special extends CustomMobOption {
     private static final String PERSISTENT = "special.persistent";
     private boolean persistent;
     /**
-     * Specifies whether the entity uses advanced AI behaviors (such as moving around, attacking, etc.).
+     * Specifies whether the entity uses advanced AI behaviors (such as moving
+     * around, attacking, etc.).
      */
     private static final String INTELLIGENT = "special.intelligent";
     private boolean intelligent;
     /**
-     * Sets the range at which the entity can detect and follow targets. The default value is 32.
+     * Sets the range at which the entity can detect and follow targets. The default
+     * value is 32.
+     * 
      * @minimum 0
      * @maximum 2048
      */
@@ -115,6 +126,7 @@ public class Special extends CustomMobOption {
     private double followRange;
     /**
      * Adjusts the entity’s physical size. The default value is 1.
+     * 
      * @minimum 0.06
      * @maximum 16
      */
@@ -126,10 +138,14 @@ public class Special extends CustomMobOption {
     private static final String NATURAL_DROPS = "special.natural-drops";
     private boolean naturalDrops;
     /**
-     * Replaces a percentage of the naturally spawned mobs of the CustomMob's type. For example,
-     * if this value is set to 25% and the CustomMob's type is a Cow, 1/4 of the naturally spawned
+     * Replaces a percentage of the naturally spawned mobs of the CustomMob's type.
+     * For example,
+     * if this value is set to 25% and the CustomMob's type is a Cow, 1/4 of the
+     * naturally spawned
      * cows will be replaced by this CustomMob.
-     * <li>Multiple CustomMobs of the same type with this option enabled will increase the percentage accordingly.
+     * <li>Multiple CustomMobs of the same type with this option enabled will
+     * increase the percentage accordingly.
+     * 
      * @minimum 0
      * @maximum 100
      */
@@ -137,8 +153,10 @@ public class Special extends CustomMobOption {
     private double replaceNaturalPercentage;
 
     /**
-     * Adds a boss bar, similar to the one shown when fighting the ender dragon or the wither.
-     * The style will indicate whether the bar should be split or not (leave at none for no boss bar).
+     * Adds a boss bar, similar to the one shown when fighting the ender dragon or
+     * the wither.
+     * The style will indicate whether the bar should be split or not (leave at none
+     * for no boss bar).
      */
     private static final String BOSS_BAR_STYLE = "special.boss-bar";
     private BarStyle bossBar;
@@ -150,7 +168,10 @@ public class Special extends CustomMobOption {
     private BarColor bossBarColor;
 
     /**
-     * Allows player to ride the CustomMob.
+     * Allows player to ride the CustomMob, even when not rideable normally.
+     * This option will override the default behavior when applicable (for horses,
+     * etc.)
+     * This option will only work when ProtocolLib is installed.
      */
     private static final String RIDEABLE = "special.rideable";
     private boolean rideable;
@@ -180,9 +201,9 @@ public class Special extends CustomMobOption {
     }
 
     public void applyOptions(Entity customMob) {
-        if(isNameVisible != null && !isNameVisible)
+        if (isNameVisible != null && !isNameVisible)
             customMob.setCustomName(null);
-        if(isNameVisible != null && isNameVisible)
+        if (isNameVisible != null && isNameVisible)
             customMob.setCustomNameVisible(true);
 
         if (customMob instanceof Attributable attributable) {
@@ -197,28 +218,32 @@ public class Special extends CustomMobOption {
             setAttribute(attributable, "scale", size);
         }
 
-        if(damageRange != null) {
-            customMob.getPersistentDataContainer().set(new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.MinDamage"), PersistentDataType.DOUBLE, damageRange.getMinimumDamage());
-            customMob.getPersistentDataContainer().set(new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.MaxDamage"), PersistentDataType.DOUBLE, damageRange.getMaximimDamage());
+        if (damageRange != null) {
+            customMob.getPersistentDataContainer().set(
+                    new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.MinDamage"), PersistentDataType.DOUBLE,
+                    damageRange.getMinimumDamage());
+            customMob.getPersistentDataContainer().set(
+                    new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.MaxDamage"), PersistentDataType.DOUBLE,
+                    damageRange.getMaximimDamage());
         }
 
         customMob.setGlowing(glowing);
 
-        if(customMob instanceof org.bukkit.entity.LivingEntity livingCustomMob) {
+        if (customMob instanceof org.bukkit.entity.LivingEntity livingCustomMob) {
             livingCustomMob.setCanPickupItems(canPickupLoot);
             livingCustomMob.setAI(intelligent);
 
-            if(bossBar != null) {
+            if (bossBar != null) {
                 BossBar bossBars = CustomMobs.getPlugin().getCustomMobsManager().getBossBar();
                 org.bukkit.boss.BossBar mobBossBar = bossBars.getBossBar(customMob.getUniqueId());
                 if (mobBossBar == null) {
                     mobBossBar = Bukkit.createBossBar(
                             customMob.getCustomName() != null ? customMob.getCustomName() : customMob.getName(),
                             this.bossBarColor,
-                            this.bossBar
-                    );
+                            this.bossBar);
                     mobBossBar.setProgress(((LivingEntity) customMob).getHealth() / ((LivingEntity) customMob)
-                            .getAttribute(Registry.ATTRIBUTE.get(NamespacedKey.minecraft("max_health"))).getBaseValue());
+                            .getAttribute(Registry.ATTRIBUTE.get(NamespacedKey.minecraft("max_health")))
+                            .getBaseValue());
                     mobBossBar.setVisible(true);
 
                     bossBars.createBossBar(customMob.getUniqueId(), mobBossBar);
@@ -231,30 +256,34 @@ public class Special extends CustomMobOption {
         customMob.setGravity(gravity);
         customMob.setPersistent(persistent);
 
-        if(customMob instanceof Animals
+        if ((customMob instanceof Animals
                 || customMob instanceof WaterMob
                 || customMob instanceof Ambient
-                || (Utils.isVersionAtLeast("1.21.9") && customMob instanceof CopperGolem)
+                || (Utils.isVersionAtLeast("1.21.9") && customMob instanceof CopperGolem))
                 && aggressive) {
             new NMS().setCustomMobAggressivity((Mob) customMob, followRange);
         }
 
-        /*if(rideable)
-            customMob.getPersistentDataContainer().set(new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Rideable"), PersistentDataType.BOOLEAN, rideable);*/
+        if (rideable)
+            customMob.getPersistentDataContainer().set(new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Rideable"),
+                    PersistentDataType.BOOLEAN, rideable);
+
     }
 
     public void resetOptions() {
-        // Special options do not need to be reset as they are applicable for all entity types.
+        // Special options do not need to be reset as they are applicable for all entity
+        // types.
     }
 
-    public ItemStack modifyOption(org.bukkit.entity.Player clicker, CustomMob customMob, String option, ClickType clickType) {
-        switch(option.toLowerCase()) {
+    public ItemStack modifyOption(org.bukkit.entity.Player clicker, CustomMob customMob, String option,
+            ClickType clickType) {
+        switch (option.toLowerCase()) {
             case "visible": {
-                if(clickType.isRightClick()) {
+                if (clickType.isRightClick()) {
                     this.isNameVisible = null;
                     setOption(VISIBLE_NAME, isNameVisible);
                 } else {
-                    if(this.isNameVisible == null)
+                    if (this.isNameVisible == null)
                         this.isNameVisible = true;
                     else
                         this.isNameVisible = !isNameVisible;
@@ -264,7 +293,7 @@ public class Special extends CustomMobOption {
             }
 
             case "health": {
-                if(clickType.isRightClick()) {
+                if (clickType.isRightClick()) {
                     this.health = null;
                     setOption(HEALTH, health);
                 } else {
@@ -277,26 +306,26 @@ public class Special extends CustomMobOption {
                 return getOptionItemStack(getHealthItem(), true, false);
             }
 
-            case "aggressive" : {
+            case "aggressive": {
                 this.aggressive = !aggressive;
                 setOption(AGGRESSIVE, aggressive);
                 return getOptionItemStack(getAggressiveItem(), false, false);
             }
 
-            case "glowing" : {
+            case "glowing": {
                 this.glowing = !glowing;
                 setOption(GLOWING, glowing);
                 return getOptionItemStack(getGlowingItem(), false, false);
             }
 
-            case "canpickuploot" : {
+            case "canpickuploot": {
                 this.canPickupLoot = !canPickupLoot;
                 setOption(CAN_PICKUP_LOOT, canPickupLoot);
                 return getOptionItemStack(getCanPickupLootItem(), false, false);
             }
 
             case "knockbackresistance": {
-                if(clickType.isRightClick()) {
+                if (clickType.isRightClick()) {
                     this.knockbackResistance = 0D;
                     setOption(KNOCKBACK_RESISTANCE, knockbackResistance);
                 } else {
@@ -310,7 +339,7 @@ public class Special extends CustomMobOption {
             }
 
             case "speed": {
-                if(clickType.isRightClick()) {
+                if (clickType.isRightClick()) {
                     this.speed = 0.3D;
                     setOption(SPEED, speed);
                 } else {
@@ -324,7 +353,7 @@ public class Special extends CustomMobOption {
             }
 
             case "damagerange": {
-                if(clickType.isRightClick()) {
+                if (clickType.isRightClick()) {
                     this.damageRange = null;
                     setOption(DAMAGE, damageRange);
                 } else {
@@ -339,38 +368,38 @@ public class Special extends CustomMobOption {
                 return getOptionItemStack(getDamageRangeItem(), true, false);
             }
 
-            case "invincible" : {
+            case "invincible": {
                 this.invincible = !invincible;
                 setOption(INVINCIBLE, invincible);
                 return getOptionItemStack(getInvincibleItem(), false, false);
             }
 
-            case "silent" : {
+            case "silent": {
                 this.silent = !silent;
                 setOption(SILENT, silent);
                 return getOptionItemStack(getSilentItem(), false, false);
             }
 
-            case "gravity" : {
+            case "gravity": {
                 this.gravity = !gravity;
                 setOption(GRAVITY, gravity);
                 return getOptionItemStack(getGravityItem(), false, false);
             }
 
-            case "persistent" : {
+            case "persistent": {
                 this.persistent = !persistent;
                 setOption(PERSISTENT, persistent);
                 return getOptionItemStack(getPersistentItem(), false, false);
             }
 
-            case "intelligent" : {
+            case "intelligent": {
                 this.intelligent = !intelligent;
                 setOption(INTELLIGENT, intelligent);
                 return getOptionItemStack(getIntelligentItem(), false, false);
             }
 
             case "followrange": {
-                if(clickType.isRightClick()) {
+                if (clickType.isRightClick()) {
                     this.followRange = 32D;
                     setOption(FOLLOW_RANGE, followRange);
                 } else {
@@ -384,7 +413,7 @@ public class Special extends CustomMobOption {
             }
 
             case "size": {
-                if(clickType.isRightClick()) {
+                if (clickType.isRightClick()) {
                     this.size = 1;
                     setOption(SIZE, size);
                 } else {
@@ -404,7 +433,7 @@ public class Special extends CustomMobOption {
             }
 
             case "replacenatural": {
-                if(clickType.isRightClick()) {
+                if (clickType.isRightClick()) {
                     this.replaceNaturalPercentage = 0.0;
                     setOption(REPLACE_NATURAL, replaceNaturalPercentage);
                 } else {
@@ -418,7 +447,7 @@ public class Special extends CustomMobOption {
             }
 
             case "bossbar": {
-                if(clickType.isRightClick()) {
+                if (clickType.isRightClick()) {
                     List<BarColor> colors = Arrays.asList(BarColor.values());
                     if (colors.indexOf(bossBarColor) == colors.size() - 1)
                         this.bossBarColor = colors.get(0);
@@ -478,14 +507,16 @@ public class Special extends CustomMobOption {
         items.add(getOptionItemStack(getNaturalDropsItem(), false, false));
         items.add(getOptionItemStack(getReplaceNaturalItem(), true, false));
         items.add(getOptionItemStack(getBossBarItem(), false, false));
-        //items.add(getOptionItemStack(getRideableItem(), false, false));
+        if (CustomMobs.getPlugin().getRideSystem() != null)
+            items.add(getOptionItemStack(getRideableItem(), false, false));
 
         return items;
     }
 
     public CustomMobsItem getVisibleNameItem() {
         CustomMobsItem item = new CustomMobsItem(Material.GLOW_INK_SAC);
-        String visible = this.isNameVisible == null ? "&fOn hover" : this.isNameVisible == true ? "&fAlways" : "&fHidden";
+        String visible = this.isNameVisible == null ? "&fOn hover"
+                : this.isNameVisible == true ? "&fAlways" : "&fHidden";
         item.setName("&6&lName visibility");
         item.addLore("&eVisibility: " + visible);
         item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "Visible");
@@ -551,7 +582,7 @@ public class Special extends CustomMobOption {
     public CustomMobsItem getDamageRangeItem() {
         CustomMobsItem item = new CustomMobsItem(Material.WOODEN_SWORD);
         item.setName("&c&lDamage range");
-        if(damageRange != null) {
+        if (damageRange != null) {
             String min = damageRange.getMinimumDamage() + " (" + damageRange.getMinimumDamage() / 2 + " ❤)";
             String max = damageRange.getMaximimDamage() + " (" + damageRange.getMaximimDamage() / 2 + " ❤)";
             item.addLore("&eRange: &f" + min + " - " + max);
@@ -644,28 +675,31 @@ public class Special extends CustomMobOption {
         CustomMobsItem item = new CustomMobsItem(Material.DRAGON_EGG);
         item.setName("&b&lBoss bar");
         item.addLore("&eStyle: &f" + (bossBar == null ? "None" : Utils.getStartCase(bossBar.name())));
-        item.addLore("&eColor: &f" + Utils.getChatColorOfColor(bossBarColor.name()) + Utils.getStartCase(bossBarColor.name()));
+        item.addLore("&eColor: &f" + Utils.getChatColorOfColor(bossBarColor.name())
+                + Utils.getStartCase(bossBarColor.name()));
         item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "BossBar");
         return item;
     }
 
     private ItemStack getBossBarOptionItemStack(CustomMobsItem item) {
-        item.addLore("", "&7&o(( Left-Click to cycle the boss-bar style ))", "&7&o(( Right-Click to cycle the boss-bar color ))");
+        item.addLore("", "&7&o(( Left-Click to cycle the boss-bar style ))",
+                "&7&o(( Right-Click to cycle the boss-bar color ))");
         return item.getItem();
     }
 
     public CustomMobsItem getRideableItem() {
-        CustomMobsItem item = new CustomMobsItem(Material.SADDLE);
+        CustomMobsItem item = new CustomMobsItem(Material.CARROT_ON_A_STICK);
         item.setName("&6&lRideable");
         String rideable = this.rideable ? "&a&lOn" : "&c&lOff";
-        item.addLore("&eMake the mob rideable: &f" + rideable);
+        item.addLore("&eMake rideable without saddle: &f" + rideable);
         item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "Rideable");
         return item;
     }
 
     private static void setAttribute(Attributable entity, String key, double value) {
         var attribute = Registry.ATTRIBUTE.get(NamespacedKey.minecraft(key));
-        if (attribute == null) return;
+        if (attribute == null)
+            return;
 
         var instance = entity.getAttribute(attribute);
         if (instance != null) {
