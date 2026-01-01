@@ -367,7 +367,7 @@
                     },
                     {
                         "minimum":  null,
-                        "description":  "Allows player to ride the CustomMob.",
+                        "description":  "Allows player to ride the CustomMob, even when not rideable normally. This option will override the default behavior when applicable (for horses, etc.). \u003cli\u003eThis option will only work when ProtocolLib is installed.",
                         "type":  "On / Off",
                         "key":  "RIDEABLE",
                         "maximum":  null
