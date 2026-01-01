@@ -19,6 +19,7 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -237,17 +238,15 @@ public class Events implements Listener {
             return;
 
         String itemType = container.get(NamespacedKeys.KEY_ITEM_TYPE, PersistentDataType.STRING);
-        Location blockLocation = event.getClickedBlock() != null ?
-                event.getClickedBlock().getLocation()
+        Location blockLocation = event.getClickedBlock() != null ? event.getClickedBlock().getLocation()
                 : rayTraceResult.getHitBlock().getLocation();
-
 
         if (itemType.equalsIgnoreCase("Item")) {
             event.setCancelled(true);
             customMob.spawnCustomMob(blockLocation.add(0.5, 1, 0.5));
         } else if (itemType.equalsIgnoreCase("Spawner-Item")) {
             event.setCancelled(true);
-            if(event.getClickedBlock() == null)
+            if (event.getClickedBlock() == null)
                 return;
             customMob.placeCustomMobSpawner(event.getClickedBlock().getRelative(event.getBlockFace()).getLocation());
         }
@@ -413,22 +412,20 @@ public class Events implements Listener {
         event.setCancelled(true);
     }
 
-    // TODO
-    /*
-     * @EventHandler
-     * public void onRightClickEntity(PlayerInteractEntityEvent event) {
-     * Entity entity = event.getRightClicked();
-     * Player player = event.getPlayer();
-     * if(event.getHand() == EquipmentSlot.OFF_HAND) return;
-     * 
-     * if (isCustomMob(entity) &&
-     * entity.getPersistentDataContainer().has(NamespacedKeys.KEY_RIDEABLE,
-     * PersistentDataType.BOOLEAN)) {
-     * event.setCancelled(true);
-     * new RideSystem().startRiding(player, (LivingEntity) entity);
-     * }
-     * }
-     */
+    @EventHandler
+    public void onRightClickEntity(PlayerInteractEntityEvent event) {
+        Entity entity = event.getRightClicked();
+        Player player = event.getPlayer();
+        if (event.getHand() == EquipmentSlot.OFF_HAND)
+            return;
+
+        if (CustomMobs.getPlugin().getRideSystem() != null && isCustomMob(entity) &&
+                entity.getPersistentDataContainer().has(NamespacedKeys.KEY_RIDEABLE,
+                        PersistentDataType.BOOLEAN)) {
+            event.setCancelled(true);
+            CustomMobs.getPlugin().getRideSystem().startRiding(player, (LivingEntity) entity);
+        }
+    }
 
     private boolean isCustomMob(Entity entity) {
         return entity.getPersistentDataContainer().has(NamespacedKeys.KEY_NAME, PersistentDataType.STRING);

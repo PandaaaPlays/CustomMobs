@@ -5,23 +5,15 @@ import ca.pandaaa.custommobs.commands.TabCompletion;
 import ca.pandaaa.custommobs.configurations.ConfigurationManager;
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.*;
-import ca.pandaaa.custommobs.custommobs.CustomEffects.Trail;
 import ca.pandaaa.custommobs.custommobs.Events.Events;
 import ca.pandaaa.custommobs.custommobs.Messages.DropMessage;
 import ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage;
 import ca.pandaaa.custommobs.utils.*;
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.events.ListenerPriority;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.events.PacketEvent;
 import com.google.common.reflect.ClassPath;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Registry;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
@@ -29,9 +21,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -51,6 +41,7 @@ public class CustomMobs extends JavaPlugin {
     private static CustomMobs plugin;
     private ConfigurationManager configManager;
     private Manager customMobsManager;
+    private RideSystem rideSystem;
 
     public API getMobAPI(String customMobName) {
         if (!customMobsManager.getCustomMobNames().contains(customMobName.toLowerCase())) {
@@ -87,6 +78,9 @@ public class CustomMobs extends JavaPlugin {
         customMobsManager = new Manager(configManager, mobConfigurations);
         customMobsManager.loadCustomMobs();
 
+        if (Bukkit.getPluginManager().getPlugin("ProtocolLib") != null)
+            rideSystem = new RideSystem();
+
         getCommandsAndListeners();
 
         checkSoundEnum();
@@ -99,8 +93,8 @@ public class CustomMobs extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        for(Player player : Bukkit.getOnlinePlayers()) {
-            if(player.getOpenInventory().getTitle().contains("CustomMobs")) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (player.getOpenInventory().getTitle().contains("CustomMobs")) {
                 player.closeInventory();
             }
         }
@@ -112,6 +106,10 @@ public class CustomMobs extends JavaPlugin {
 
     public Manager getCustomMobsManager() {
         return customMobsManager;
+    }
+
+    public RideSystem getRideSystem() {
+        return rideSystem;
     }
 
     public void reloadConfig(CommandSender sender) {
@@ -154,7 +152,7 @@ public class CustomMobs extends JavaPlugin {
 
     private void loadAllMobsConfigurations() {
         mobConfigurations = new ArrayList<>();
-        for(File mobFile : Objects.requireNonNull(mobFolder.listFiles())) {
+        for (File mobFile : Objects.requireNonNull(mobFolder.listFiles())) {
             mobConfigurations.add(new CustomMobConfiguration(YamlConfiguration.loadConfiguration(mobFile), mobFile));
         }
     }
@@ -165,7 +163,8 @@ public class CustomMobs extends JavaPlugin {
         try {
             fileConfiguration.load(file);
         } catch (IOException | InvalidConfigurationException exception) {
-            getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&c[!] An error occurred while fetching the values in custom-effects-messages.yml."));
+            getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&',
+                    "&c[!] An error occurred while fetching the values in custom-effects-messages.yml."));
         }
         return fileConfiguration;
     }
@@ -173,7 +172,7 @@ public class CustomMobs extends JavaPlugin {
     private void getCommandsAndListeners() {
         HandlerList.unregisterAll(this);
         PluginCommand command = getCommand("CustomMobs");
-        if(command == null)
+        if (command == null)
             return;
 
         getServer().getPluginManager().registerEvents(new Events(), this);
@@ -226,13 +225,15 @@ public class CustomMobs extends JavaPlugin {
             }
         }
 
-        if(!newSounds.isEmpty()) {
+        if (!newSounds.isEmpty()) {
             try {
-                BufferedWriter writer = new BufferedWriter(new FileWriter(new File(CustomMobs.getPlugin().getDataFolder(), "MissingSounds.txt")));
-                Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&',  "&c[!] SoundEnum is missing some Sound values, please refer to the MissingSounds.txt file."));
+                BufferedWriter writer = new BufferedWriter(
+                        new FileWriter(new File(CustomMobs.getPlugin().getDataFolder(), "MissingSounds.txt")));
+                Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&',
+                        "&c[!] SoundEnum is missing some Sound values, please refer to the MissingSounds.txt file."));
                 writer.write("MISSING SOUND(S): ");
                 writer.newLine();
-                for(String value : newSounds) {
+                for (String value : newSounds) {
                     writer.write(value);
                     writer.newLine();
                 }
@@ -251,19 +252,23 @@ public class CustomMobs extends JavaPlugin {
                 List<Class<?>> optionClasses = new ArrayList<>();
                 try {
                     ClassPath path = ClassPath.from(this.getClassLoader());
-                    for (ClassPath.ClassInfo info : path.getTopLevelClassesRecursive("ca.pandaaa.custommobs.custommobs.Options")) {
+                    for (ClassPath.ClassInfo info : path
+                            .getTopLevelClassesRecursive("ca.pandaaa.custommobs.custommobs.Options")) {
                         Class clazz = Class.forName(info.getName(), true, this.getClass().getClassLoader());
                         if (!Modifier.isAbstract(clazz.getModifiers())) {
                             try {
-                                if((boolean) clazz.getMethod("isApplicable", EntityType.class).invoke(null, type)) {
+                                if ((boolean) clazz.getMethod("isApplicable", EntityType.class).invoke(null, type)) {
                                     optionClasses.add(clazz);
                                 }
-                            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {}
+                            } catch (NoSuchMethodException | IllegalAccessException
+                                    | InvocationTargetException ignored) {
+                            }
                         }
                     }
                     entityTypeOptions.put(type.name(), optionClasses.stream().map(Class::getSimpleName).toList());
                 } catch (IOException | ClassNotFoundException e) {
-                    Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[CustomMobs] Failed to scan option classes.");
+                    Bukkit.getConsoleSender()
+                            .sendMessage(ChatColor.RED + "[CustomMobs] Failed to scan option classes.");
                     e.printStackTrace();
                     return;
                 }
@@ -276,54 +281,12 @@ public class CustomMobs extends JavaPlugin {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(jsonFile))) {
             writer.write(gson.toJson(entityTypeOptions));
-            Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "[CustomMobs] entity-types.json successfully generated.");
+            Bukkit.getConsoleSender()
+                    .sendMessage(ChatColor.GREEN + "[CustomMobs] entity-types.json successfully generated.");
         } catch (IOException e) {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[CustomMobs] Failed to write entity-types.json.");
             e.printStackTrace();
         }
     }
-
-    private void startProtocolLibPacketManager() {
-        /*ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(plugin, PacketType.Play.Client.STEER_VEHICLE) {
-            @Override
-            public void onPacketReceiving(PacketEvent event) {
-                Player player = event.getPlayer();
-                WrapperPlayClientSteerVehicle packet = new WrapperPlayClientSteerVehicle(event.getPacket());
-
-                float side = packet.getSideways();
-                float forward = packet.getForward();
-                boolean jump = packet.isJump();
-
-                Bukkit.getScheduler().runTask(plugin, () -> handleMountControl(player, side, forward, jump));
-            }
-        });*/
-
-    }
-
-    private void handleMountControl(Player player, float side, float forward, boolean jump) {
-        Entity mount = player.getVehicle();
-        if (mount == null) return;
-
-        // Only control if this is your custom mob (TODO)
-        if (!(mount instanceof LivingEntity)) return;
-
-        // Get player’s direction (yaw) to determine where to move
-        Location loc = mount.getLocation();
-        float yaw = loc.getYaw();
-
-        // Convert strafe/forward input to motion vectors
-        org.bukkit.util.Vector direction = new org.bukkit.util.Vector(-Math.sin(Math.toRadians(yaw)), 0, Math.cos(Math.toRadians(yaw)));
-        org.bukkit.util.Vector strafe = new org.bukkit.util.Vector(-direction.getZ(), 0, direction.getX());
-        org.bukkit.util.Vector velocity = direction.multiply(forward * 0.4).add(strafe.multiply(side * 0.4));
-
-        // Apply velocity
-        mount.setVelocity(velocity);
-
-        // Optional: make it jump
-        if (jump && mount.isOnGround()) {
-            mount.setVelocity(mount.getVelocity().add(new org.bukkit.util.Vector(0, 0.5, 0)));
-        }
-    }
-
 
 }

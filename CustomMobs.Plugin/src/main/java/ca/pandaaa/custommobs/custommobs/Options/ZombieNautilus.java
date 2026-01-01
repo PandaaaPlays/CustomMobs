@@ -26,13 +26,13 @@ public class ZombieNautilus extends CustomMobOption {
     /**
      * Represents the variant of the zombie nautilus CustomMob.
      */
-    private static final String VARIANT = "mob.zombie-nautilus-variant";
+    private static final String ZOMBIE_NAUTILUS_VARIANT = "mob.zombie-nautilus-variant";
     private org.bukkit.entity.ZombieNautilus.Variant variant;
 
     public ZombieNautilus(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
         this.nautilusArmor = getOption(NAUTILUS_ARMOR, Material.class);
-        this.variant = getOption(VARIANT, Registry.ZOMBIE_NAUTILUS_VARIANT);
+        this.variant = getOption(ZOMBIE_NAUTILUS_VARIANT, Registry.ZOMBIE_NAUTILUS_VARIANT);
     }
 
     public void applyOptions(Entity customMob) {
@@ -49,7 +49,7 @@ public class ZombieNautilus extends CustomMobOption {
     @Override
     public void resetOptions() {
         setOption(NAUTILUS_ARMOR, null);
-        setOption(VARIANT, null);
+        setOption(ZOMBIE_NAUTILUS_VARIANT, null);
     }
 
     public List<ItemStack> getOptionItems() {
@@ -99,7 +99,7 @@ public class ZombieNautilus extends CustomMobOption {
                     else
                         this.variant = zombieNautilusVariants.get(zombieNautilusVariants.indexOf(variant) + 1);
                 }
-                setOption(VARIANT, variant != null ? variant.getKeyOrNull().getKey() : null);
+                setOption(ZOMBIE_NAUTILUS_VARIANT, variant != null ? variant.getKeyOrNull().getKey() : null);
                 return getOptionItemStack(getVariantItem(), true, true);
             }
         }
