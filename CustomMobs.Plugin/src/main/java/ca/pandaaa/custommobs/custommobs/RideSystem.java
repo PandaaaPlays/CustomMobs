@@ -100,11 +100,11 @@ public class RideSystem {
                             // Possible to see the values by broadcasting the fields.
                             boolean value = field.getBoolean(input);
                             switch (field.getName()) {
-                                case "c" -> forward = value;
-                                case "d" -> backward = value;
-                                case "e" -> left = value;
-                                case "f" -> right = value;
-                                case "g" -> jump = value;
+                                case "c", "forward" -> forward = value;
+                                case "d", "backward" -> backward = value;
+                                case "e", "left" -> left = value;
+                                case "f", "right" -> right = value;
+                                case "g", "jump" -> jump = value;
                             }
                         }
                     }
