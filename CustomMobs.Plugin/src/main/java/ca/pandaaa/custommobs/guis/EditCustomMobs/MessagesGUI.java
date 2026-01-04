@@ -28,8 +28,8 @@ public class MessagesGUI extends CustomMobsGUI {
 
     private Integer waitingForChange;
 
-    public MessagesGUI(CustomMob customMob, String option, Player player) {
-        super(18, "&8Message &8&l» &8" + option);
+    public MessagesGUI(CustomMob customMob, Player player) {
+        super(18, "&8Message &8&l» &8Spawn / Death");
         this.customMob = customMob;
         this.player = player;
 
@@ -158,7 +158,7 @@ public class MessagesGUI extends CustomMobsGUI {
         }
 
         waitingForChange = null;
-        Bukkit.getScheduler().runTask(CustomMobs.getPlugin(), new MessagesGUI(customMob, "Spawn / Death", player)::openInventory);
+        Bukkit.getScheduler().runTask(CustomMobs.getPlugin(), new MessagesGUI(customMob, player)::openInventory);
     }
 
     private List<ItemStack> getMessageItems() {

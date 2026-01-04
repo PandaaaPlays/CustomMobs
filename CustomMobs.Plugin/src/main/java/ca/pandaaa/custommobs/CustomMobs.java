@@ -8,6 +8,7 @@ import ca.pandaaa.custommobs.custommobs.*;
 import ca.pandaaa.custommobs.custommobs.Events.Events;
 import ca.pandaaa.custommobs.custommobs.Messages.DropMessage;
 import ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage;
+import ca.pandaaa.custommobs.custommobs.Particles.CustomMobParticle;
 import ca.pandaaa.custommobs.utils.*;
 import com.google.common.reflect.ClassPath;
 import com.google.gson.Gson;
@@ -58,6 +59,7 @@ public class CustomMobs extends JavaPlugin {
 
         ConfigurationSerialization.registerClass(DropMessage.class, "ca.pandaaa.custommobs.custommobs.Messages.DropMessage");
         ConfigurationSerialization.registerClass(SpawnDeathMessage.class, "ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage");
+        ConfigurationSerialization.registerClass(CustomMobParticle.class, "ca.pandaaa.custommobs.custommobs.Particles.CustomMobParticle");
         ConfigurationSerialization.registerClass(Drop.class, "ca.pandaaa.custommobs.custommobs.Drop");
         ConfigurationSerialization.registerClass(Sound.class, "ca.pandaaa.custommobs.custommobs.Sound");
         ConfigurationSerialization.registerClass(Spawner.class, "ca.pandaaa.custommobs.custommobs.Spawner");

@@ -26,9 +26,10 @@ public class OthersGUI extends CustomMobsGUI {
         for(int i = 0; i < 27; i++)
             inventory.setItem(i, filler);
 
-        inventory.setItem(12, getPotionsItem());
-        inventory.setItem(13, getSoundsItem());
+        inventory.setItem(11, getPotionsItem());
+        inventory.setItem(12, getSoundsItem());
         inventory.setItem(14, getMessageItem());
+        inventory.setItem(15, getParticlesItem());
         inventory.setItem(18, getPreviousItem());
 
         player.openInventory(inventory);
@@ -51,14 +52,17 @@ public class OthersGUI extends CustomMobsGUI {
         Player clicker = (Player) event.getWhoClicked();
 
         switch (event.getSlot()) {
-            case 12:
+            case 11:
                 new PotionsGUI(customMob).openInventory(clicker, 1);
                 break;
-            case 13:
+            case 12:
                 new SoundsGUI(customMob).openInventory(clicker, 1);
                 break;
             case 14:
-                new MessagesGUI(customMob, "Spawn / Death", clicker).openInventory();
+                new MessagesGUI(customMob, clicker).openInventory();
+                break;
+            case 15:
+                new ParticlesGUI(customMob, clicker).openInventory();
                 break;
             case 18:
                 new EditGUI(customMob, CustomMobs.getPlugin().getCustomMobsManager(), clicker).openInventory();
@@ -84,6 +88,13 @@ public class OthersGUI extends CustomMobsGUI {
         CustomMobsItem item = new CustomMobsItem(Material.WRITABLE_BOOK);
         item.setName("&6&lMessages");
         item.addLore("", "&7&o(( Click to edit this CustomMob's message(s) ))");
+        return getMenuItem(item, true);
+    }
+
+    private ItemStack getParticlesItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.BLAZE_POWDER);
+        item.setName("&6&lParticles");
+        item.addLore("", "&7&o(( Click to edit this CustomMob's particle(s) ))");
         return getMenuItem(item, true);
     }
 }

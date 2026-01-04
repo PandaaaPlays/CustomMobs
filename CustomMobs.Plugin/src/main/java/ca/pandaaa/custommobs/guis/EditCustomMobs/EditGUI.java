@@ -7,6 +7,7 @@ import ca.pandaaa.custommobs.custommobs.Equipment;
 import ca.pandaaa.custommobs.custommobs.Manager;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects.CustomEffectsGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.ParticlesGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.Drops.DropsGUI;
 import ca.pandaaa.custommobs.guis.MainGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
@@ -59,7 +60,7 @@ public class EditGUI extends CustomMobsGUI {
     }
 
     public void openInventory() {
-        for(int i = 0; i < 54; i++)
+        for (int i = 0; i < 54; i++)
             inventory.setItem(i, filler);
 
         // Setting the equipments
@@ -102,7 +103,7 @@ public class EditGUI extends CustomMobsGUI {
 
         // Delete item (prompt for confirm)
         ItemMeta deleteItemMeta = delete.getItemMeta();
-        if(deleteItemMeta != null)
+        if (deleteItemMeta != null)
             deleteItemMeta.setDisplayName(Utils.applyFormat("&c&l[-] Delete CustomMob"));
         delete.setItemMeta(deleteItemMeta);
         inventory.setItem(53, getDeleteItem(delete, false));
@@ -114,7 +115,7 @@ public class EditGUI extends CustomMobsGUI {
     public void onInventoryClick(InventoryClickEvent event) {
         if (!isEventRelevant(event.getView().getTopInventory()))
             return;
-        if(event.getClickedInventory() == null || event.getClickedInventory().getType() == InventoryType.PLAYER) {
+        if (event.getClickedInventory() == null || event.getClickedInventory().getType() == InventoryType.PLAYER) {
             event.setCancelled(event.isShiftClick());
             return;
         }
@@ -207,7 +208,8 @@ public class EditGUI extends CustomMobsGUI {
                 clicker.closeInventory();
                 clicker.sendMessage(Utils.applyFormat("&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &eCustomMob renaming"));
                 clicker.sendMessage(Utils.applyFormat(" &6&l- &fEnter the name you want &e&nin the chat&f."));
-                clicker.sendMessage(Utils.applyFormat(" &6&l- &fThe naming supports &4c&co&6l&eo&ar&bs&f ( &* (&ebasic&f) and &#* (&#cbff0fhex&f) )"));
+                clicker.sendMessage(Utils.applyFormat(
+                        " &6&l- &fThe naming supports &4c&co&6l&eo&ar&bs&f ( &* (&ebasic&f) and &#* (&#cbff0fhex&f) )"));
                 clicker.sendMessage(Utils.applyFormat(" &6&l- &fType &ccancel &fin the chat to cancel renaming."));
                 waitingForRename = true;
                 break;
@@ -237,7 +239,8 @@ public class EditGUI extends CustomMobsGUI {
                     event.getInventory().setItem(48, getMenuItem(getGiveItem(customMob.getItem()), false));
                     clicker.setItemOnCursor(null);
                 } else {
-                    clicker.setItemOnCursor(customMobsManager.getCustomMobItem(customMob, "item", event.isShiftClick() ? 64 : 1));
+                    clicker.setItemOnCursor(
+                            customMobsManager.getCustomMobItem(customMob, "item", event.isShiftClick() ? 64 : 1));
                 }
                 break;
             case 50:
@@ -251,7 +254,8 @@ public class EditGUI extends CustomMobsGUI {
                     event.getInventory().setItem(50, getMenuItem(getGiveItem(customMob.getSpawnerItem()), false));
                     clicker.setItemOnCursor(null);
                 } else {
-                    clicker.setItemOnCursor(customMobsManager.getCustomMobItem(customMob, "spawner", event.isShiftClick() ? 64 : 1));
+                    clicker.setItemOnCursor(
+                            customMobsManager.getCustomMobItem(customMob, "spawner", event.isShiftClick() ? 64 : 1));
                 }
                 break;
             case 53:
@@ -262,7 +266,7 @@ public class EditGUI extends CustomMobsGUI {
                 } else {
                     inventory.setItem(53, getDeleteItem(delete, true));
 
-                    for(int i = 0; i < 54; i++) {
+                    for (int i = 0; i < 54; i++) {
                         if (inventory.getItem(i).getType() == Material.GRAY_STAINED_GLASS_PANE)
                             inventory.getItem(i).setType(Material.RED_STAINED_GLASS_PANE);
                     }
@@ -283,17 +287,19 @@ public class EditGUI extends CustomMobsGUI {
         String message = event.getMessage();
         if (!message.equalsIgnoreCase("cancel")) {
             customMob.setName(message);
-            player.sendMessage(Utils.applyFormat("&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &eSuccessfully renamed to : &r" + message));
+            player.sendMessage(
+                    Utils.applyFormat("&6&lCus&e&ltom&8&lMo&7&lbs &7&l>> &eSuccessfully renamed to : &r" + message));
         }
 
         waitingForRename = false;
-        Bukkit.getScheduler().runTask(CustomMobs.getPlugin(), new EditGUI(customMob, customMobsManager, player)::openInventory);
+        Bukkit.getScheduler().runTask(CustomMobs.getPlugin(),
+                new EditGUI(customMob, customMobsManager, player)::openInventory);
     }
 
     private void updateHandItem(boolean main) {
         int position = main ? 10 : 11;
 
-        if(main) {
+        if (main) {
             // Setting the main hand item
             if (customMob.getEquipment().getMainHand() != null) {
                 inventory.setItem(position, getHandItem(customMob.getEquipment().getMainHand(), true));
@@ -302,7 +308,7 @@ public class EditGUI extends CustomMobsGUI {
             }
         } else {
             // Setting the offhand item
-            if(customMob.getEquipment().getOffHand() != null) {
+            if (customMob.getEquipment().getOffHand() != null) {
                 inventory.setItem(position, getHandItem(customMob.getEquipment().getOffHand(), false));
             } else {
                 inventory.setItem(position, getHandItem(new ItemStack(Material.SHIELD), false));
@@ -314,7 +320,7 @@ public class EditGUI extends CustomMobsGUI {
         switch (armor) {
             case "Helmet":
                 // Setting the helmet item
-                if(customMob.getEquipment().getHelmet() != null) {
+                if (customMob.getEquipment().getHelmet() != null) {
                     inventory.setItem(13, getArmorItem(customMob.getEquipment().getHelmet(), "Helmet"));
                 } else {
                     inventory.setItem(13, getArmorItem(new ItemStack(Material.NETHERITE_HELMET), "Helmet"));
@@ -322,7 +328,7 @@ public class EditGUI extends CustomMobsGUI {
                 break;
             case "Chestplate":
                 // Setting the chestplate item
-                if(customMob.getEquipment().getChestplate() != null) {
+                if (customMob.getEquipment().getChestplate() != null) {
                     inventory.setItem(14, getArmorItem(customMob.getEquipment().getChestplate(), "Chestplate"));
                 } else {
                     inventory.setItem(14, getArmorItem(new ItemStack(Material.NETHERITE_CHESTPLATE), "Chestplate"));
@@ -330,7 +336,7 @@ public class EditGUI extends CustomMobsGUI {
                 break;
             case "Leggings":
                 // Setting the leggings item
-                if(customMob.getEquipment().getLeggings() != null) {
+                if (customMob.getEquipment().getLeggings() != null) {
                     inventory.setItem(15, getArmorItem(customMob.getEquipment().getLeggings(), "Leggings"));
                 } else {
                     inventory.setItem(15, getArmorItem(new ItemStack(Material.NETHERITE_LEGGINGS), "Leggings"));
@@ -338,7 +344,7 @@ public class EditGUI extends CustomMobsGUI {
                 break;
             case "Boots":
                 // Setting the boots item
-                if(customMob.getEquipment().getBoots() != null) {
+                if (customMob.getEquipment().getBoots() != null) {
                     inventory.setItem(16, getArmorItem(customMob.getEquipment().getBoots(), "Boots"));
                 } else {
                     inventory.setItem(16, getArmorItem(new ItemStack(Material.NETHERITE_BOOTS), "Boots"));
@@ -350,7 +356,7 @@ public class EditGUI extends CustomMobsGUI {
     private ItemStack getHandItem(ItemStack item, boolean main) {
         ItemStack clone = item.clone();
         ItemMeta itemMeta = clone.getItemMeta();
-        if(main)
+        if (main)
             itemMeta.setDisplayName(Utils.applyFormat("&6&lMain hand Item"));
         else
             itemMeta.setDisplayName(Utils.applyFormat("&6&lOff hand Item"));
@@ -430,7 +436,7 @@ public class EditGUI extends CustomMobsGUI {
         ItemMeta itemMeta = item.getItemMeta();
         ArrayList<String> lore = new ArrayList<>();
         lore.add("");
-        if(confirm) {
+        if (confirm) {
             itemMeta.setDisplayName(Utils.applyFormat("&c&l[-] Confirm CustomMob deletion"));
             lore.add(Utils.applyFormat("&7&o(( Click again to confirm the deletion ))"));
         }
@@ -472,4 +478,3 @@ public class EditGUI extends CustomMobsGUI {
         return getMenuItem(item, true);
     }
 }
-

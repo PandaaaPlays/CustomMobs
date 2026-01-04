@@ -36,7 +36,7 @@ public class Special extends CustomMobOption {
     private Boolean isNameVisible;
     /**
      * Sets the entity's health (in half heart(s)). A health of 20 means that the CustomMob has 10 hearts of health.
-     * 
+     *
      * @minimum 0
      * @maximum 1024
      */
@@ -59,7 +59,7 @@ public class Special extends CustomMobOption {
     private boolean canPickupLoot;
     /**
      * Indicates how far the entity is knocked back when hit (a high value indicates that the CustomMob should not go far).
-     * 
+     *
      * @minimum 0
      * @maximum 1
      */
@@ -67,7 +67,7 @@ public class Special extends CustomMobOption {
     private double knockbackResistance;
     /**
      * Controls the movement speed of the entity. The default value is 0,3.
-     * 
+     *
      * @minimum 0
      * @maximum 1024
      */
@@ -75,7 +75,7 @@ public class Special extends CustomMobOption {
     private double speed;
     /**
      * Defines the range of damage the entity can inflict. For a mob to inflict exactly "x" damage every time, set the lower and higher bounds of the range to the same "x" value.
-     * 
+     *
      * @minimum 0
      * @maximum 1024
      */
@@ -87,7 +87,7 @@ public class Special extends CustomMobOption {
     private static final String INVINCIBLE = "special.invincible";
     private boolean invincible;
     /**
-     * MWhen enabled, mutes all sounds made by the entity.
+     * When enabled, mutes all sounds made by the entity.
      */
     private static final String SILENT = "special.silent";
     private boolean silent;
@@ -108,7 +108,7 @@ public class Special extends CustomMobOption {
     private boolean intelligent;
     /**
      * Sets the range at which the entity can detect and follow targets. The default value is 32.
-     * 
+     *
      * @minimum 0
      * @maximum 2048
      */
@@ -116,7 +116,7 @@ public class Special extends CustomMobOption {
     private double followRange;
     /**
      * Adjusts the entity’s physical size. The default value is 1.
-     * 
+     *
      * @minimum 0.06
      * @maximum 16
      */
@@ -131,7 +131,7 @@ public class Special extends CustomMobOption {
      * Replaces a percentage of the naturally spawned mobs of the CustomMob's type.
      * For example, if this value is set to 25% and the CustomMob's type is a Cow, 1/4 of the naturally spawned cows will be replaced by this CustomMob.
      * <li>Multiple CustomMobs of the same type with this option enabled will increase the percentage accordingly.
-     * 
+     *
      * @minimum 0
      * @maximum 100
      */
