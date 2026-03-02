@@ -7,8 +7,8 @@ import org.bukkit.entity.Entity;
 import java.util.Map;
 
 public class Heart extends CustomMobParticle {
-    public Heart(Map<String, Object> data) {
-        super(data);
+    public Heart(Particle particle) {
+        super(particle);
     }
 
     @Override

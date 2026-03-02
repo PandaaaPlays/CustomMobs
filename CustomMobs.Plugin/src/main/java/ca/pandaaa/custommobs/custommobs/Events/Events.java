@@ -6,6 +6,7 @@ import ca.pandaaa.custommobs.custommobs.CustomEffects.*;
 import ca.pandaaa.custommobs.custommobs.Messages.Message;
 import ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage;
 import ca.pandaaa.custommobs.custommobs.Options.Special;
+import ca.pandaaa.custommobs.custommobs.Particles.CustomMobParticle;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
@@ -188,6 +189,11 @@ public class Events implements Listener {
         for (Message message : customMob.getCustomMobMessages()) {
             if (((SpawnDeathMessage) message).isOnDeath())
                 message.sendMessage(event.getEntity());
+        }
+
+        for (CustomMobParticle particle : customMob.getParticles()) {
+            if (particle.isOnDeath())
+                particle.play(event.getEntity());
         }
 
         if (customMob.getCustomMobOption("Special") != null

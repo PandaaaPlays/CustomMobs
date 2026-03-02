@@ -1,22 +1,17 @@
-package ca.pandaaa.custommobs.guis.EditCustomMobs;
+package ca.pandaaa.custommobs.guis.EditCustomMobs.Particles;
 
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.custommobs.Particles.CustomMobParticle;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
-import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class ParticleSelectionGUI extends CustomMobsGUI {
@@ -26,7 +21,7 @@ public class ParticleSelectionGUI extends CustomMobsGUI {
     private final Map<String, Class<?>> availableParticles;
 
     public ParticleSelectionGUI(CustomMob customMob, Player player) {
-        super(54, "&8Particles &8&l» Selection");
+        super(54, "&8Particles &8&l» &8Selection");
         this.customMob = customMob;
         this.player = player;
         this.availableParticles = customMob.getCustomMobConfiguration().getParticleClasses();

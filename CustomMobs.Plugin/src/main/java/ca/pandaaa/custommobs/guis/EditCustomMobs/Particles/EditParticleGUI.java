@@ -1,13 +1,11 @@
-package ca.pandaaa.custommobs.guis.EditCustomMobs;
+package ca.pandaaa.custommobs.guis.EditCustomMobs.Particles;
 
-import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.custommobs.Particles.CustomMobParticle;
 import ca.pandaaa.custommobs.guis.BasicTypes.DoubleGUI;
 import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
-import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,7 +21,7 @@ public class EditParticleGUI extends CustomMobsGUI {
     private final Player player;
 
     public EditParticleGUI(CustomMob customMob, int particleIndex, Player player) {
-        super(36, "&8Particles &8&l» Edit");
+        super(36, "&8Particles &8&l» &8Edit");
         this.customMob = customMob;
         this.particleIndex = particleIndex;
         this.particle = customMob.getParticles().get(particleIndex);

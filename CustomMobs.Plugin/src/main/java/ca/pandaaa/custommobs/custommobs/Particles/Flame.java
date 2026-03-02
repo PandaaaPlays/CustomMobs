@@ -7,8 +7,8 @@ import org.bukkit.entity.Entity;
 import java.util.Map;
 
 public class Flame extends CustomMobParticle {
-    public Flame(Map<String, Object> data) {
-        super(data);
+    public Flame(Particle particle) {
+        super(particle);
     }
 
     @Override

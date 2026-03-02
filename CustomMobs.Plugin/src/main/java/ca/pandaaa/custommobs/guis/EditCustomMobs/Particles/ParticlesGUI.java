@@ -1,9 +1,10 @@
-package ca.pandaaa.custommobs.guis.EditCustomMobs;
+package ca.pandaaa.custommobs.guis.EditCustomMobs.Particles;
 
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.custommobs.Particles.CustomMobParticle;
 import ca.pandaaa.custommobs.guis.CustomMobsGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.OthersGUI;
 import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
