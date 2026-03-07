@@ -26,8 +26,7 @@ public class Cat extends CustomMobOption {
     private org.bukkit.entity.Cat.Type catType;
     /**
      * Sets the dye color of the cat CustomMob's collar. The cat needs to be tamed
-     * and have an owner
-     * in order to have the collar rendered (see Tameable option).
+     * and have an owner in order to have the collar rendered (see Tameable option).
      */
     private static final String COLLAR_COLOR = "mob.collar-color";
     private DyeColor collarColor;

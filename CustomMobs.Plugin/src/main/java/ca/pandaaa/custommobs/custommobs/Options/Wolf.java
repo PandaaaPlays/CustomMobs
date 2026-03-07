@@ -22,25 +22,23 @@ import java.util.List;
 public class Wolf extends CustomMobOption {
     /**
      * Sets the dye color of the wolf CustomMob's collar. The wolf needs to be tamed
-     * and have an owner
-     * in order to have the collar rendered (see Tameable option).
+     * and have an owner in order to have the collar rendered (see Tameable option).
      */
     private static final String COLLAR_COLOR = "mob.collar-color";
     private DyeColor collarColor;
     /**
      * Indicates whether the wolf is in an aggressive (angry) state. Typically, an
-     * angry wolf will have red eyes
-     * but will not attack the players unless they attack it. If you wish that the
-     * wolf mobs attacks the players by
-     * themselves, see Special > Aggressive.
+     * angry wolf will have red eyes but will not attack the players unless they
+     * attack it. If you wish that the wolf mobs attacks the players by themselves,
+     * see Special > Aggressive.
      */
     private static final String ANGRY_WOLF = "mob.angry-wolf";
     private boolean angry;
     /**
      * Specifies the variant of the wolf CustomMob, such as normal or a
-     * biome-specific type. When this value is
-     * not set, the variant will be based on the biome it is spawned in (like it
-     * would by spawning a normal wolf).
+     * biome-specific type. When this value is not set, the variant will
+     * be based on the biome it is spawned in (like it would by spawning
+     * a normal wolf).
      */
     private static final String WOLF_VARIANT = "mob.wolf-variant";
     private org.bukkit.entity.Wolf.Variant wolfVariant;

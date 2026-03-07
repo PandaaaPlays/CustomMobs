@@ -18,9 +18,9 @@ import java.util.List;
 public class Frog extends CustomMobOption {
     /**
      * Specifies the variant of the frog CustomMob, such as normal or a
-     * biome-specific type. When this value is
-     * not set, the variant will be based on the biome it is spawned in (like it
-     * would by spawning a normal frog).
+     * biome-specific type. When this value is not set, the variant will
+     * be based on the biome it is spawned in (like it would by spawning
+     * a normal frog).
      */
     private static final String FROG_VARIANT = "mob.frog-variant";
     private org.bukkit.entity.Frog.Variant frogVariant;

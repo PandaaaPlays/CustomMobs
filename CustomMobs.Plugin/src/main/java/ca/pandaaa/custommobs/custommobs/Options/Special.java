@@ -95,7 +95,7 @@ public class Special extends CustomMobOption {
     private static final String INVINCIBLE = "special.invincible";
     private boolean invincible;
     /**
-     * MWhen enabled, mutes all sounds made by the entity.
+     * When enabled, mutes all sounds made by the entity.
      */
     private static final String SILENT = "special.silent";
     private boolean silent;

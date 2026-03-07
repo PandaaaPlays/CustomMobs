@@ -24,12 +24,15 @@ import org.bukkit.ChatColor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 public class NMS {
 
     private static final NMSResolver NMS_RESOLVER = new NMSResolver();
-    private static final java.util.Set<java.util.UUID> patchedEntities = new java.util.HashSet<>();
+    private static final Set<UUID> patchedEntities = new HashSet<>();
 
     public void setCustomMobAggressivity(org.bukkit.entity.Mob entity, double followRange) {
         if (patchedEntities.contains(entity.getUniqueId()))
@@ -68,8 +71,7 @@ public class NMS {
                     if (attackCooldown > 0)
                         attackCooldown--;
 
-                    if (mob instanceof net.minecraft.world.entity.animal.axolotl.Axolotl axolotl
-                            && axolotl.isPlayingDead())
+                    if (mob instanceof net.minecraft.world.entity.animal.axolotl.Axolotl axolotl && axolotl.isPlayingDead())
                         return;
 
                     net.minecraft.world.entity.LivingEntity target = mob.getTarget();
@@ -82,15 +84,12 @@ public class NMS {
 
                     Brain<?> brain = mob.getBrain();
                     if (target != null && target.isAlive()
-                            && !((target instanceof net.minecraft.world.entity.player.Player p)
-                                    && (p.isCreative() || p.isSpectator()))) {
+                        && !((target instanceof net.minecraft.world.entity.player.Player p)
+                        && (p.isCreative() || p.isSpectator()))) {
                         brain.setMemory(MemoryModuleType.ATTACK_TARGET, target);
-
                         double distance = mob.distanceToSqr(target);
-                        // Increased range for more reliable hits (3.5 blocks squared = 12.25)
+
                         if (distance <= 13.0D && attackCooldown == 0) {
-                            // Use Bukkit API to deal damage directly, which triggers the plugin's onDamage
-                            // event
                             if (target.getBukkitEntity() instanceof org.bukkit.entity.LivingEntity bent) {
                                 bent.damage(1.0, entity);
                                 mob.swing(net.minecraft.world.InteractionHand.MAIN_HAND);
@@ -100,7 +99,6 @@ public class NMS {
 
                         if (distance > 3.0D && distance < 400.0D
                                 && !(mob instanceof net.minecraft.world.entity.animal.axolotl.Axolotl)) {
-                            // Force movement if the mob is standing still
                             mob.getNavigation().moveTo(target, 1.3D);
                         }
                     } else {
@@ -131,7 +129,7 @@ public class NMS {
 
                         double distance = mob.distanceToSqr(target);
                         if (distance > 3.0D) {
-                            mob.getLookControl().setLookAt(target, 30.0F, 30.0F);
+                            mob.getLookControl().setLookAt(target, (float) followRange, (float) followRange);
                             org.bukkit.util.Vector direction = target.getBukkitEntity().getLocation().toVector()
                                     .subtract(entity.getLocation().toVector()).normalize().multiply(0.3);
                             entity.setVelocity(direction);
@@ -183,13 +181,9 @@ public class NMS {
                 // https://minidigger.github.io/MiniMappingViewer/#/mojang/client/1.XX.XX/LivingEntity
                 if (Utils.isVersionExactly("1.21.11")) {
                     attributeMap = LivingEntity.class.getDeclaredField("cm"); // Field 'attributes' in NMS LivingEntity
-                                                                              // class
                     attributes = AttributeMap.class.getDeclaredField("a"); // Field 'attributes' in NMS AttributeMap
-                                                                           // class
                     goalSelectorField = Mob.class.getDeclaredField("cs"); // Field 'goalSelector' in NMS entity.Mob
-                                                                          // class
                     targetSelectorField = Mob.class.getDeclaredField("ct"); // Field 'targetSelector' in NMS entity.Mob
-                                                                            // class
                 } else if (Utils.isVersionAtLeast("1.21.9") && Utils.isVersionBeforeOrEqual("1.21.10")) {
                     attributeMap = LivingEntity.class.getDeclaredField("cj");
                     attributes = AttributeMap.class.getDeclaredField("a");
@@ -233,11 +227,7 @@ public class NMS {
                 Object selector = target ? targetSelectorField.get(mob) : goalSelectorField.get(mob);
                 Method addGoalMethod = null;
                 if (Utils.isVersionAtLeast("1.21.5") && Utils.isVersionBeforeOrEqual("1.21.11")) {
-                    addGoalMethod = selector.getClass().getDeclaredMethod("a", int.class, Goal.class); // Method
-                                                                                                       // 'addGoal' in
-                                                                                                       // NMS
-                                                                                                       // GoalSelector
-                                                                                                       // class
+                    addGoalMethod = selector.getClass().getDeclaredMethod("a", int.class, Goal.class); // Method 'addGoal' in NMS GoalSelector
                 } else {
                     throw new Exception(
                             "This server version does not support aggressive animals. Please contact the developper if you believe this is an issue.");
