@@ -163,6 +163,11 @@ public class Events implements Listener {
                 Miner.activeMiners.put(entity.getUniqueId(), (Miner) minerEffect);
 
             customMob.enableCustomEffects(entity);
+
+            if (entity instanceof org.bukkit.entity.Mob mob && entity.getPersistentDataContainer()
+                    .has(NamespacedKeys.KEY_AGGRESSIVE, PersistentDataType.BOOLEAN)) {
+                new NMS().setCustomMobAggressivity(mob, 32);
+            }
         }
     }
 

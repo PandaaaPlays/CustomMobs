@@ -17,8 +17,10 @@ import java.util.List;
 
 public class Frog extends CustomMobOption {
     /**
-     * Specifies the variant of the frog CustomMob, such as normal or a biome-specific type. When this value is
-     * not set, the variant will be based on the biome it is spawned in (like it would by spawning a normal frog).
+     * Specifies the variant of the frog CustomMob, such as normal or a
+     * biome-specific type. When this value is
+     * not set, the variant will be based on the biome it is spawned in (like it
+     * would by spawning a normal frog).
      */
     private static final String FROG_VARIANT = "mob.frog-variant";
     private org.bukkit.entity.Frog.Variant frogVariant;
@@ -29,10 +31,10 @@ public class Frog extends CustomMobOption {
     }
 
     public void applyOptions(Entity customMob) {
-        if(!(customMob instanceof org.bukkit.entity.Frog))
+        if (!(customMob instanceof org.bukkit.entity.Frog))
             return;
 
-        if(frogVariant != null)
+        if (frogVariant != null)
             ((org.bukkit.entity.Frog) customMob).setVariant(frogVariant);
     }
 
@@ -50,7 +52,7 @@ public class Frog extends CustomMobOption {
     }
 
     public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {
-        switch(option.toLowerCase()) {
+        switch (option.toLowerCase()) {
             case "frogvariant": {
                 if (clickType.isRightClick()) {
                     this.frogVariant = null;
@@ -62,7 +64,8 @@ public class Frog extends CustomMobOption {
                     else
                         this.frogVariant = frogVariants.get(frogVariants.indexOf(frogVariant) + 1);
                 }
-                setOption(FROG_VARIANT, frogVariant != null ? frogVariant.toString() : null);
+                setOption(FROG_VARIANT,
+                        frogVariant != null ? frogVariant.getKey().getKey() : null);
                 return getOptionItemStack(getFrogVariantItem(), true, true);
             }
         }
@@ -76,7 +79,8 @@ public class Frog extends CustomMobOption {
     public CustomMobsItem getFrogVariantItem() {
         CustomMobsItem item = new CustomMobsItem(Material.FROG_SPAWN_EGG);
         item.setName("&b&lFrog variant");
-        String variant = frogVariant == null ? "&fBiome based" : "&f" + Utils.getSentenceCase(frogVariant.toString());
+        String variant = frogVariant == null ? "&fBiome based"
+                : "&f" + Utils.getSentenceCase(frogVariant.getKey().getKey());
         item.addLore("&eVariant: &f" + variant);
         item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "FrogVariant");
         return item;

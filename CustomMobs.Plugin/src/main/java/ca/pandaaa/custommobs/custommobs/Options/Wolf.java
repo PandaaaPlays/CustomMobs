@@ -21,21 +21,26 @@ import java.util.List;
 
 public class Wolf extends CustomMobOption {
     /**
-     * Sets the dye color of the wolf CustomMob's collar. The wolf needs to be tamed and have an owner
+     * Sets the dye color of the wolf CustomMob's collar. The wolf needs to be tamed
+     * and have an owner
      * in order to have the collar rendered (see Tameable option).
      */
     private static final String COLLAR_COLOR = "mob.collar-color";
     private DyeColor collarColor;
     /**
-     * Indicates whether the wolf is in an aggressive (angry) state. Typically, an angry wolf will have red eyes
-     * but will not attack the players unless they attack it. If you wish that the wolf mobs attacks the players by
+     * Indicates whether the wolf is in an aggressive (angry) state. Typically, an
+     * angry wolf will have red eyes
+     * but will not attack the players unless they attack it. If you wish that the
+     * wolf mobs attacks the players by
      * themselves, see Special > Aggressive.
      */
     private static final String ANGRY_WOLF = "mob.angry-wolf";
     private boolean angry;
     /**
-     * Specifies the variant of the wolf CustomMob, such as normal or a biome-specific type. When this value is
-     * not set, the variant will be based on the biome it is spawned in (like it would by spawning a normal wolf).
+     * Specifies the variant of the wolf CustomMob, such as normal or a
+     * biome-specific type. When this value is
+     * not set, the variant will be based on the biome it is spawned in (like it
+     * would by spawning a normal wolf).
      */
     private static final String WOLF_VARIANT = "mob.wolf-variant";
     private org.bukkit.entity.Wolf.Variant wolfVariant;
@@ -54,16 +59,17 @@ public class Wolf extends CustomMobOption {
     }
 
     public void applyOptions(Entity customMob) {
-        if(!(customMob instanceof org.bukkit.entity.Wolf))
+        if (!(customMob instanceof org.bukkit.entity.Wolf))
             return;
 
-        if(collarColor != null)
+        if (collarColor != null)
             ((org.bukkit.entity.Wolf) customMob).setCollarColor(collarColor);
         ((org.bukkit.entity.Wolf) customMob).setAngry(angry);
-        if(wolfVariant != null)
+        if (wolfVariant != null)
             ((org.bukkit.entity.Wolf) customMob).setVariant(wolfVariant);
-        if(wolfArmor)
-            ((org.bukkit.entity.Wolf) customMob).getEquipment().setItem(EquipmentSlot.BODY, new ItemStack(Material.WOLF_ARMOR));
+        if (wolfArmor)
+            ((org.bukkit.entity.Wolf) customMob).getEquipment().setItem(EquipmentSlot.BODY,
+                    new ItemStack(Material.WOLF_ARMOR));
     }
 
     @Override
@@ -86,9 +92,9 @@ public class Wolf extends CustomMobOption {
     }
 
     public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {
-        switch(option.toLowerCase()) {
+        switch (option.toLowerCase()) {
             case "collarcolor": {
-                if(clickType.isRightClick()) {
+                if (clickType.isRightClick()) {
                     this.collarColor = null;
                 } else {
                     List<DyeColor> colors = Arrays.asList(DyeColor.values());
@@ -119,7 +125,7 @@ public class Wolf extends CustomMobOption {
                     else
                         this.wolfVariant = wolfVariants.get(wolfVariants.indexOf(wolfVariant) + 1);
                 }
-                setOption(WOLF_VARIANT, wolfVariant != null ? wolfVariant.getKeyOrNull().getKey() : null);
+                setOption(WOLF_VARIANT, wolfVariant != null ? wolfVariant.getKey().getKey() : null);
                 return getOptionItemStack(getWolfVariantItem(), true, true);
             }
 
@@ -127,7 +133,7 @@ public class Wolf extends CustomMobOption {
                 this.wolfArmor = !this.wolfArmor;
                 setOption(WOLF_ARMOR, this.wolfArmor);
 
-                if(wolfArmor) {
+                if (wolfArmor) {
                     customMob.addDrop(new Drop(new ItemStack(Material.WOLF_ARMOR), 1, "WolfArmor"));
                 } else {
                     customMob.removeDropItem("WolfArmor");
@@ -146,7 +152,8 @@ public class Wolf extends CustomMobOption {
     public CustomMobsItem getCollarColorItem() {
         CustomMobsItem item = new CustomMobsItem(Material.END_CRYSTAL);
         item.setName("&b&lCollar color");
-        String color = collarColor == null ? "&fDefault" : Utils.getChatColorOfColor(collarColor.name()) + Utils.getSentenceCase(collarColor.name());
+        String color = collarColor == null ? "&fDefault"
+                : Utils.getChatColorOfColor(collarColor.name()) + Utils.getSentenceCase(collarColor.name());
         item.addLore("&eColor: " + color);
         item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "CollarColor");
         return item;
@@ -164,7 +171,8 @@ public class Wolf extends CustomMobOption {
     public CustomMobsItem getWolfVariantItem() {
         CustomMobsItem item = new CustomMobsItem(Material.WOLF_SPAWN_EGG);
         item.setName("&b&lWolf variant");
-        String variant = wolfVariant == null ? "&fBiome based" : "&f" + Utils.getSentenceCase(wolfVariant.getKeyOrNull().getKey());
+        String variant = wolfVariant == null ? "&fBiome based"
+                : "&f" + Utils.getSentenceCase(wolfVariant.getKey().getKey());
         item.addLore("&eVariant: &f" + variant);
         item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "WolfVariant");
         return item;

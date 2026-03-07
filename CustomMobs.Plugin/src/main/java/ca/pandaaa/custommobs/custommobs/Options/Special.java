@@ -5,6 +5,7 @@ import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.BossBar;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.custommobs.NMS;
+import ca.pandaaa.custommobs.custommobs.NamespacedKeys;
 import ca.pandaaa.custommobs.guis.BasicTypes.DoubleGUI;
 import ca.pandaaa.custommobs.guis.BasicTypes.DoubleRangeGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.OptionsGUI;
@@ -29,13 +30,16 @@ import java.util.*;
 
 public class Special extends CustomMobOption {
     /**
-     * Toggles the visibility of the entity's name tag, even when not directly looking at it.
-     * If not set, the name of the CustomMob will be shown when looking at the mob (default behavior).
+     * Toggles the visibility of the entity's name tag, even when not directly
+     * looking at it.
+     * If not set, the name of the CustomMob will be shown when looking at the mob
+     * (default behavior).
      */
     private static final String VISIBLE_NAME = "special.visible-name";
     private Boolean isNameVisible;
     /**
-     * Sets the entity's health (in half heart(s)). A health of 20 means that the CustomMob has 10 hearts of health.
+     * Sets the entity's health (in half heart(s)). A health of 20 means that the
+     * CustomMob has 10 hearts of health.
      * 
      * @minimum 0
      * @maximum 1024
@@ -43,7 +47,8 @@ public class Special extends CustomMobOption {
     private static final String HEALTH = "special.health";
     private Double health;
     /**
-     * Indicates whether the entity is in an aggressive state, which means that they will attack any nearby player (even if the mob is normally passive).
+     * Indicates whether the entity is in an aggressive state, which means that they
+     * will attack any nearby player (even if the mob is normally passive).
      */
     private static final String AGGRESSIVE = "special.aggressive";
     private boolean aggressive;
@@ -58,7 +63,8 @@ public class Special extends CustomMobOption {
     private static final String CAN_PICKUP_LOOT = "special.can-pickup-loot";
     private boolean canPickupLoot;
     /**
-     * Indicates how far the entity is knocked back when hit (a high value indicates that the CustomMob should not go far).
+     * Indicates how far the entity is knocked back when hit (a high value indicates
+     * that the CustomMob should not go far).
      * 
      * @minimum 0
      * @maximum 1
@@ -74,7 +80,9 @@ public class Special extends CustomMobOption {
     private static final String SPEED = "special.speed";
     private double speed;
     /**
-     * Defines the range of damage the entity can inflict. For a mob to inflict exactly "x" damage every time, set the lower and higher bounds of the range to the same "x" value.
+     * Defines the range of damage the entity can inflict. For a mob to inflict
+     * exactly "x" damage every time, set the lower and higher bounds of the range
+     * to the same "x" value.
      * 
      * @minimum 0
      * @maximum 1024
@@ -102,12 +110,14 @@ public class Special extends CustomMobOption {
     private static final String PERSISTENT = "special.persistent";
     private boolean persistent;
     /**
-     * Specifies whether the entity uses advanced AI behaviors (such as moving around, attacking, etc.).
+     * Specifies whether the entity uses advanced AI behaviors (such as moving
+     * around, attacking, etc.).
      */
     private static final String INTELLIGENT = "special.intelligent";
     private boolean intelligent;
     /**
-     * Sets the range at which the entity can detect and follow targets. The default value is 32.
+     * Sets the range at which the entity can detect and follow targets. The default
+     * value is 32.
      * 
      * @minimum 0
      * @maximum 2048
@@ -129,8 +139,10 @@ public class Special extends CustomMobOption {
     private boolean naturalDrops;
     /**
      * Replaces a percentage of the naturally spawned mobs of the CustomMob's type.
-     * For example, if this value is set to 25% and the CustomMob's type is a Cow, 1/4 of the naturally spawned cows will be replaced by this CustomMob.
-     * <li>Multiple CustomMobs of the same type with this option enabled will increase the percentage accordingly.
+     * For example, if this value is set to 25% and the CustomMob's type is a Cow,
+     * 1/4 of the naturally spawned cows will be replaced by this CustomMob.
+     * <li>Multiple CustomMobs of the same type with this option enabled will
+     * increase the percentage accordingly.
      * 
      * @minimum 0
      * @maximum 100
@@ -139,8 +151,10 @@ public class Special extends CustomMobOption {
     private double replaceNaturalPercentage;
 
     /**
-     * Adds a boss bar, similar to the one shown when fighting the ender dragon or the wither.
-     * The style will indicate whether the bar should be split or not (leave at none for no boss bar).
+     * Adds a boss bar, similar to the one shown when fighting the ender dragon or
+     * the wither.
+     * The style will indicate whether the bar should be split or not (leave at none
+     * for no boss bar).
      */
     private static final String BOSS_BAR_STYLE = "special.boss-bar";
     private BarStyle bossBar;
@@ -153,7 +167,8 @@ public class Special extends CustomMobOption {
 
     /**
      * Allows player to ride the CustomMob, even when not rideable normally.
-     * This option will override the default behavior when applicable (for horses, etc.).
+     * This option will override the default behavior when applicable (for horses,
+     * etc.).
      * <li>This option will only work when ProtocolLib is installed.
      */
     private static final String RIDEABLE = "special.rideable";
@@ -239,16 +254,15 @@ public class Special extends CustomMobOption {
         customMob.setGravity(gravity);
         customMob.setPersistent(persistent);
 
-        if ((customMob instanceof Animals
-                || customMob instanceof WaterMob
-                || customMob instanceof Ambient
-                || (Utils.isVersionAtLeast("1.21.9") && customMob instanceof CopperGolem))
-                && aggressive) {
+        if (aggressive) {
+            customMob.getPersistentDataContainer().set(NamespacedKeys.KEY_AGGRESSIVE, PersistentDataType.BOOLEAN, true);
             new NMS().setCustomMobAggressivity((Mob) customMob, followRange);
+        } else {
+            customMob.getPersistentDataContainer().remove(NamespacedKeys.KEY_AGGRESSIVE);
         }
 
         if (rideable)
-            customMob.getPersistentDataContainer().set(new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Rideable"),
+            customMob.getPersistentDataContainer().set(NamespacedKeys.KEY_RIDEABLE,
                     PersistentDataType.BOOLEAN, rideable);
 
     }
@@ -258,7 +272,8 @@ public class Special extends CustomMobOption {
         // types.
     }
 
-    public ItemStack modifyOption(org.bukkit.entity.Player clicker, CustomMob customMob, String option, ClickType clickType) {
+    public ItemStack modifyOption(org.bukkit.entity.Player clicker, CustomMob customMob, String option,
+            ClickType clickType) {
         switch (option.toLowerCase()) {
             case "visible": {
                 if (clickType.isRightClick()) {

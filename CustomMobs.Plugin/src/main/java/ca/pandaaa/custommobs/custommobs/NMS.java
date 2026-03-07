@@ -29,38 +29,125 @@ import java.util.Map;
 public class NMS {
 
     private static final NMSResolver NMS_RESOLVER = new NMSResolver();
+    private static final java.util.Set<java.util.UUID> patchedEntities = new java.util.HashSet<>();
 
     public void setCustomMobAggressivity(org.bukkit.entity.Mob entity, double followRange) {
+        if (patchedEntities.contains(entity.getUniqueId()))
+            return;
+        patchedEntities.add(entity.getUniqueId());
         Mob mob = NMS_RESOLVER.getNMSEntity(entity);
 
         AttributeInstance attackDamageAttribute = mob.getAttribute(Attributes.ATTACK_DAMAGE);
         if (attackDamageAttribute == null)
-            NMS_RESOLVER.setAttribute(mob, new AttributeInstance(Attributes.ATTACK_DAMAGE, attribute -> attribute.setBaseValue(1D)));
+            NMS_RESOLVER.setAttribute(mob,
+                    new AttributeInstance(Attributes.ATTACK_DAMAGE, attribute -> attribute.setBaseValue(1D)));
 
-        NMS_RESOLVER.addGoal(mob, 2, new MeleeAttackGoal((PathfinderMob) mob, 1D, false));
-        NMS_RESOLVER.addGoal(mob, 3, new RandomLookAroundGoal(mob));
-        NMS_RESOLVER.addGoal(mob, 1, new HurtByTargetGoal((PathfinderMob) mob));
-        NMS_RESOLVER.addGoal(mob, 0, new NearestAttackableTargetGoal<Player>(mob, Player.class, (int) followRange, true, false, null));
+        if (mob instanceof PathfinderMob pathfinderMob) {
+            NMS_RESOLVER.addGoal(mob, 2, new MeleeAttackGoal(pathfinderMob, 1D, false), false);
+            NMS_RESOLVER.addGoal(mob, 1, new HurtByTargetGoal(pathfinderMob), true);
+        }
 
-        if (mob instanceof net.minecraft.world.entity.animal.axolotl.Axolotl axolotl) {
-            Bukkit.getScheduler().runTaskTimer(CustomMobs.getPlugin(), () -> {
-                if (!entity.isValid() || entity.isDead() || axolotl.isPlayingDead()) return;
+        NMS_RESOLVER.addGoal(mob, 3, new RandomLookAroundGoal(mob), false);
+        NMS_RESOLVER.addGoal(mob, 0, new NearestAttackableTargetGoal<Player>(mob,
+                net.minecraft.world.entity.player.Player.class, 0, true, false, null), true);
 
-                Player nearest = axolotl.level().getNearestPlayer(axolotl, followRange);
-                Brain<?> brain = axolotl.getBrain();
+        if (mob instanceof net.minecraft.world.entity.animal.axolotl.Axolotl ||
+                mob instanceof net.minecraft.world.entity.animal.goat.Goat ||
+                mob instanceof net.minecraft.world.entity.animal.frog.Frog) {
+            new org.bukkit.scheduler.BukkitRunnable() {
+                private int attackCooldown = 0;
 
-                if (nearest != null) {
-                    brain.setMemory(MemoryModuleType.ATTACK_TARGET, nearest);
-                } else {
-                    brain.eraseMemory(MemoryModuleType.ATTACK_TARGET);
+                @Override
+                public void run() {
+                    if (!entity.isValid() || entity.isDead()) {
+                        patchedEntities.remove(entity.getUniqueId());
+                        this.cancel();
+                        return;
+                    }
+
+                    if (attackCooldown > 0)
+                        attackCooldown--;
+
+                    if (mob instanceof net.minecraft.world.entity.animal.axolotl.Axolotl axolotl
+                            && axolotl.isPlayingDead())
+                        return;
+
+                    net.minecraft.world.entity.LivingEntity target = mob.getTarget();
+                    if (target == null) {
+                        net.minecraft.world.entity.player.Player nearest = mob.level().getNearestPlayer(mob,
+                                followRange);
+                        if (nearest != null && nearest.isAlive())
+                            target = nearest;
+                    }
+
+                    Brain<?> brain = mob.getBrain();
+                    if (target != null && target.isAlive()
+                            && !((target instanceof net.minecraft.world.entity.player.Player p)
+                                    && (p.isCreative() || p.isSpectator()))) {
+                        brain.setMemory(MemoryModuleType.ATTACK_TARGET, target);
+
+                        double distance = mob.distanceToSqr(target);
+                        // Increased range for more reliable hits (3.5 blocks squared = 12.25)
+                        if (distance <= 13.0D && attackCooldown == 0) {
+                            // Use Bukkit API to deal damage directly, which triggers the plugin's onDamage
+                            // event
+                            if (target.getBukkitEntity() instanceof org.bukkit.entity.LivingEntity bent) {
+                                bent.damage(1.0, entity);
+                                mob.swing(net.minecraft.world.InteractionHand.MAIN_HAND);
+                            }
+                            attackCooldown = 20;
+                        }
+
+                        if (distance > 3.0D && distance < 400.0D
+                                && !(mob instanceof net.minecraft.world.entity.animal.axolotl.Axolotl)) {
+                            // Force movement if the mob is standing still
+                            mob.getNavigation().moveTo(target, 1.3D);
+                        }
+                    } else {
+                        brain.eraseMemory(MemoryModuleType.ATTACK_TARGET);
+                    }
                 }
+            }.runTaskTimer(CustomMobs.getPlugin(), 1L, 1L);
+        } else if (!(mob instanceof PathfinderMob)) {
+            new org.bukkit.scheduler.BukkitRunnable() {
+                private int attackCooldown = 0;
 
-            }, 1L, 1L);
+                @Override
+                public void run() {
+                    if (!entity.isValid() || entity.isDead()) {
+                        patchedEntities.remove(entity.getUniqueId());
+                        this.cancel();
+                        return;
+                    }
+
+                    if (attackCooldown > 0)
+                        attackCooldown--;
+
+                    net.minecraft.world.entity.LivingEntity target = mob.getTarget();
+                    if (target != null && target.isAlive()) {
+                        if (mob instanceof net.minecraft.world.entity.ambient.Bat bat) {
+                            bat.setResting(false);
+                        }
+
+                        double distance = mob.distanceToSqr(target);
+                        if (distance > 3.0D) {
+                            mob.getLookControl().setLookAt(target, 30.0F, 30.0F);
+                            org.bukkit.util.Vector direction = target.getBukkitEntity().getLocation().toVector()
+                                    .subtract(entity.getLocation().toVector()).normalize().multiply(0.3);
+                            entity.setVelocity(direction);
+                        } else if (attackCooldown == 0) {
+                            if (target.getBukkitEntity() instanceof org.bukkit.entity.LivingEntity bent) {
+                                bent.damage(1.0, entity);
+                            }
+                            attackCooldown = 20;
+                        }
+                    }
+                }
+            }.runTaskTimer(CustomMobs.getPlugin(), 1L, 1L);
         }
     }
 
     private static final class NMSResolver {
-        private static final int VERSION_PACKAGE_COUNTER = 3;
         private static final String PACKAGE_BASE = "org.bukkit.craftbukkit";
         private static final String VERSION;
         static {
@@ -77,44 +164,59 @@ public class NMS {
         private Method getHandleMethod = null;
         private Field attributeMap = null; // LivingEntity AttributeMap
         private Field attributes = null; // AttributeMap attributes
+        private Field goalSelectorField = null;
         private Field targetSelectorField = null;
 
         private NMSResolver() {
             try {
                 Class<?> craftLivingEntityClass;
-                if(VERSION.isEmpty()) {
-                    craftLivingEntityClass = Class.forName(String.format("%s.%s.%s", PACKAGE_BASE, MIDDLE_PACKAGE, CRAFT_LIVING_ENTITY_CLASS_NAME));
+                if (VERSION.isEmpty()) {
+                    craftLivingEntityClass = Class.forName(
+                            String.format("%s.%s.%s", PACKAGE_BASE, MIDDLE_PACKAGE, CRAFT_LIVING_ENTITY_CLASS_NAME));
                 } else {
-                    craftLivingEntityClass = Class.forName(String.format("%s.%s.%s.%s", PACKAGE_BASE, VERSION, MIDDLE_PACKAGE, CRAFT_LIVING_ENTITY_CLASS_NAME));
+                    craftLivingEntityClass = Class.forName(String.format("%s.%s.%s.%s", PACKAGE_BASE, VERSION,
+                            MIDDLE_PACKAGE, CRAFT_LIVING_ENTITY_CLASS_NAME));
                 }
 
                 getHandleMethod = craftLivingEntityClass.getMethod("getHandle");
-                // To find the fields corresponding to the version, see : https://minidigger.github.io/MiniMappingViewer/#/mojang/client/1.XX.XX/LivingEntity
-                if(Utils.isVersionExactly("1.21.11")) {
-                    attributeMap = LivingEntity.class.getDeclaredField("cm");  // Field 'attributes' in NMS LivingEntity class
-                    attributes = AttributeMap.class.getDeclaredField("a");    // Field 'attributes' in NMS AttributeMap class
-                    targetSelectorField = Mob.class.getDeclaredField("ct");    // Field 'targetSelector' in NMS entity.Mob class
-                } else if(Utils.isVersionAtLeast("1.21.9") && Utils.isVersionBeforeOrEqual("1.21.10")) {
+                // To find the fields corresponding to the version, see :
+                // https://minidigger.github.io/MiniMappingViewer/#/mojang/client/1.XX.XX/LivingEntity
+                if (Utils.isVersionExactly("1.21.11")) {
+                    attributeMap = LivingEntity.class.getDeclaredField("cm"); // Field 'attributes' in NMS LivingEntity
+                                                                              // class
+                    attributes = AttributeMap.class.getDeclaredField("a"); // Field 'attributes' in NMS AttributeMap
+                                                                           // class
+                    goalSelectorField = Mob.class.getDeclaredField("cs"); // Field 'goalSelector' in NMS entity.Mob
+                                                                          // class
+                    targetSelectorField = Mob.class.getDeclaredField("ct"); // Field 'targetSelector' in NMS entity.Mob
+                                                                            // class
+                } else if (Utils.isVersionAtLeast("1.21.9") && Utils.isVersionBeforeOrEqual("1.21.10")) {
                     attributeMap = LivingEntity.class.getDeclaredField("cj");
                     attributes = AttributeMap.class.getDeclaredField("a");
+                    goalSelectorField = Mob.class.getDeclaredField("cq");
                     targetSelectorField = Mob.class.getDeclaredField("cr");
-                } else if(Utils.isVersionAtLeast("1.21.6") && Utils.isVersionBeforeOrEqual("1.21.8")) {
+                } else if (Utils.isVersionAtLeast("1.21.6") && Utils.isVersionBeforeOrEqual("1.21.8")) {
                     attributeMap = LivingEntity.class.getDeclaredField("cc");
                     attributes = AttributeMap.class.getDeclaredField("a");
+                    goalSelectorField = Mob.class.getDeclaredField("ch");
                     targetSelectorField = Mob.class.getDeclaredField("ci");
-                } else if(Bukkit.getBukkitVersion().contains("1.21.5")) {
+                } else if (Bukkit.getBukkitVersion().contains("1.21.5")) {
                     attributeMap = LivingEntity.class.getDeclaredField("bF");
                     attributes = AttributeMap.class.getDeclaredField("a");
+                    goalSelectorField = Mob.class.getDeclaredField("bE");
                     targetSelectorField = Mob.class.getDeclaredField("bG");
                 } else {
-                    throw new Exception("This server version does not support aggressive animals. Please contact the developper if you believe this is an issue.");
+                    throw new Exception(
+                            "This server version does not support aggressive animals. Please contact the developper if you believe this is an issue.");
                 }
 
                 attributeMap.setAccessible(true);
                 attributes.setAccessible(true);
+                goalSelectorField.setAccessible(true);
                 targetSelectorField.setAccessible(true);
             } catch (Exception e) {
-                CustomMobs.getPlugin().getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&c" + e));
+                CustomMobs.getPlugin().getServer().getConsoleSender()
+                        .sendMessage(ChatColor.translateAlternateColorCodes('&', "&c" + e));
             }
         }
 
@@ -126,18 +228,24 @@ public class NMS {
             }
         }
 
-        private void addGoal(Mob mob, int integer, Goal goal) {
+        private void addGoal(Mob mob, int integer, Goal goal, boolean target) {
             try {
-                Object goalSelector = targetSelectorField.get(mob);
+                Object selector = target ? targetSelectorField.get(mob) : goalSelectorField.get(mob);
                 Method addGoalMethod = null;
-                if(Utils.isVersionAtLeast("1.21.5") && Utils.isVersionBeforeOrEqual("1.21.11")) {
-                    addGoalMethod = goalSelector.getClass().getDeclaredMethod("a", int.class, Goal.class); // Method 'addGoal' in NMS GoalSelector class
+                if (Utils.isVersionAtLeast("1.21.5") && Utils.isVersionBeforeOrEqual("1.21.11")) {
+                    addGoalMethod = selector.getClass().getDeclaredMethod("a", int.class, Goal.class); // Method
+                                                                                                       // 'addGoal' in
+                                                                                                       // NMS
+                                                                                                       // GoalSelector
+                                                                                                       // class
                 } else {
-                    throw new Exception("This server version does not support aggressive animals. Please contact the developper if you believe this is an issue.");
+                    throw new Exception(
+                            "This server version does not support aggressive animals. Please contact the developper if you believe this is an issue.");
                 }
-                addGoalMethod.invoke(goalSelector, integer, goal);
+                addGoalMethod.invoke(selector, integer, goal);
             } catch (Exception e) {
-                CustomMobs.getPlugin().getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&c" + e));
+                CustomMobs.getPlugin().getServer().getConsoleSender()
+                        .sendMessage(ChatColor.translateAlternateColorCodes('&', "&c" + e));
             }
         }
 
@@ -145,13 +253,13 @@ public class NMS {
         private void setAttribute(LivingEntity nmsEntity, AttributeInstance attributeInstance) {
             Map<Holder<Attribute>, AttributeInstance> nmsEntityAttributes;
             try {
-                nmsEntityAttributes = (Map<Holder<Attribute>, AttributeInstance>) attributes.get(attributeMap.get(nmsEntity));
+                nmsEntityAttributes = (Map<Holder<Attribute>, AttributeInstance>) attributes
+                        .get(attributeMap.get(nmsEntity));
             } catch (IllegalArgumentException | IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
             nmsEntityAttributes.put(attributeInstance.getAttribute(), attributeInstance);
         }
     }
-
 
 }

@@ -32,7 +32,8 @@ public class ZombieNautilus extends CustomMobOption {
     public ZombieNautilus(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
         this.nautilusArmor = getOption(NAUTILUS_ARMOR, Material.class);
-        this.variant = getOption(ZOMBIE_NAUTILUS_VARIANT, Registry.ZOMBIE_NAUTILUS_VARIANT);
+        Registry<org.bukkit.entity.ZombieNautilus.Variant> registry = getZombieNautilusVariantRegistry();
+        this.variant = registry != null ? getOption(ZOMBIE_NAUTILUS_VARIANT, registry) : null;
     }
 
     public void applyOptions(Entity customMob) {
@@ -92,14 +93,17 @@ public class ZombieNautilus extends CustomMobOption {
                 if (clickType.isRightClick()) {
                     this.variant = null;
                 } else {
-                    List<org.bukkit.entity.ZombieNautilus.Variant> zombieNautilusVariants = Registry.ZOMBIE_NAUTILUS_VARIANT.stream().toList();
+                    Registry<org.bukkit.entity.ZombieNautilus.Variant> registry = getZombieNautilusVariantRegistry();
+                    if (registry == null)
+                        return null;
+                    List<org.bukkit.entity.ZombieNautilus.Variant> zombieNautilusVariants = registry.stream().toList();
 
                     if (zombieNautilusVariants.indexOf(variant) == zombieNautilusVariants.size() - 1)
                         this.variant = zombieNautilusVariants.get(0);
                     else
                         this.variant = zombieNautilusVariants.get(zombieNautilusVariants.indexOf(variant) + 1);
                 }
-                setOption(ZOMBIE_NAUTILUS_VARIANT, variant != null ? variant.getKeyOrNull().getKey() : null);
+                setOption(ZOMBIE_NAUTILUS_VARIANT, variant != null ? variant.getKey().getKey() : null);
                 return getOptionItemStack(getVariantItem(), true, true);
             }
         }
@@ -123,9 +127,18 @@ public class ZombieNautilus extends CustomMobOption {
     public CustomMobsItem getVariantItem() {
         CustomMobsItem item = new CustomMobsItem(Material.ZOMBIE_NAUTILUS_SPAWN_EGG);
         item.setName("&b&lZombie nautilus variant");
-        String var = variant == null ? "&fDefault" : "&f" + Utils.getSentenceCase(variant.getKeyOrNull().getKey());
+        String var = variant == null ? "&fDefault" : "&f" + Utils.getSentenceCase(variant.getKey().getKey());
         item.addLore("&eVariant: &f" + var);
         item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "ZombieNautilusVariant");
         return item;
+    }
+
+    private Registry<org.bukkit.entity.ZombieNautilus.Variant> getZombieNautilusVariantRegistry() {
+        try {
+            return (Registry<org.bukkit.entity.ZombieNautilus.Variant>) Registry.class
+                    .getField("ZOMBIE_NAUTILUS_VARIANT").get(null);
+        } catch (Exception ignored) {
+            return null;
+        }
     }
 }

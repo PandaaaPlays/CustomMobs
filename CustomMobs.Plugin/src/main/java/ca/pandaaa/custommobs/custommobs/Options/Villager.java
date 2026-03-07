@@ -17,12 +17,14 @@ import java.util.List;
 
 public class Villager extends CustomMobOption {
     /**
-     * Indicates the biome-based appearance of the villager CustomMob (e.g., plains, desert, jungle).
+     * Indicates the biome-based appearance of the villager CustomMob (e.g., plains,
+     * desert, jungle).
      */
     private static final String VILLAGER_TYPE = "mob.villager-type";
     private org.bukkit.entity.Villager.Type villagerType;
     /**
-     * Specifies the CustomMob villager’s job or role (e.g., farmer, librarian, blacksmith).
+     * Specifies the CustomMob villager’s job or role (e.g., farmer, librarian,
+     * blacksmith).
      */
     private static final String VILLAGER_PROFESSION = "mob.villager-profession";
     private org.bukkit.entity.Villager.Profession villagerProfession;
@@ -34,12 +36,12 @@ public class Villager extends CustomMobOption {
     }
 
     public void applyOptions(Entity customMob) {
-        if(!(customMob instanceof org.bukkit.entity.Villager))
+        if (!(customMob instanceof org.bukkit.entity.Villager))
             return;
 
-        if(villagerType != null)
+        if (villagerType != null)
             ((org.bukkit.entity.Villager) customMob).setVillagerType(villagerType);
-        if(villagerProfession != null) {
+        if (villagerProfession != null) {
             ((org.bukkit.entity.Villager) customMob).setProfession(villagerProfession);
             ((org.bukkit.entity.Villager) customMob).setVillagerExperience(1);
         }
@@ -61,9 +63,9 @@ public class Villager extends CustomMobOption {
     }
 
     public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {
-        switch(option.toLowerCase()) {
+        switch (option.toLowerCase()) {
             case "villagertype": {
-                if(clickType.isRightClick()) {
+                if (clickType.isRightClick()) {
                     this.villagerType = null;
                 } else {
                     List<org.bukkit.entity.Villager.Type> villagerTypes = Registry.VILLAGER_TYPE.stream().toList();
@@ -73,22 +75,25 @@ public class Villager extends CustomMobOption {
                     else
                         this.villagerType = villagerTypes.get(villagerTypes.indexOf(villagerType) + 1);
                 }
-                setOption(VILLAGER_TYPE, villagerType != null ? villagerType.toString() : null);
+                setOption(VILLAGER_TYPE, villagerType != null ? villagerType.getKey().getKey() : null);
                 return getOptionItemStack(getVillagerTypeItem(), true, true);
             }
 
             case "villagerprofession": {
-                if(clickType.isRightClick()) {
+                if (clickType.isRightClick()) {
                     this.villagerProfession = null;
                 } else {
-                    List<org.bukkit.entity.Villager.Profession> villagerProfessions = Registry.VILLAGER_PROFESSION.stream().toList();
+                    List<org.bukkit.entity.Villager.Profession> villagerProfessions = Registry.VILLAGER_PROFESSION
+                            .stream().toList();
 
                     if (villagerProfessions.indexOf(villagerProfession) == villagerProfessions.size() - 1)
                         this.villagerProfession = villagerProfessions.get(0);
                     else
-                        this.villagerProfession = villagerProfessions.get(villagerProfessions.indexOf(villagerProfession) + 1);
+                        this.villagerProfession = villagerProfessions
+                                .get(villagerProfessions.indexOf(villagerProfession) + 1);
                 }
-                setOption(VILLAGER_PROFESSION, villagerProfession != null ? villagerProfession.toString() : null);
+                setOption(VILLAGER_PROFESSION,
+                        villagerProfession != null ? villagerProfession.getKey().getKey() : null);
                 return getOptionItemStack(getVillagerProfessionItem(), true, true);
             }
         }
@@ -102,7 +107,7 @@ public class Villager extends CustomMobOption {
     public CustomMobsItem getVillagerTypeItem() {
         CustomMobsItem item = new CustomMobsItem(Material.VILLAGER_SPAWN_EGG);
         item.setName("&b&lVillager type");
-        String type = villagerType == null ? "Biome based" : Utils.getSentenceCase(villagerType.toString());
+        String type = villagerType == null ? "Biome based" : Utils.getSentenceCase(villagerType.getKey().getKey());
         item.addLore("&eType: &f" + type);
         item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "VillagerType");
         return item;
@@ -111,7 +116,8 @@ public class Villager extends CustomMobOption {
     public CustomMobsItem getVillagerProfessionItem() {
         CustomMobsItem item = new CustomMobsItem(Material.BOOK);
         item.setName("&b&lVillager profession");
-        String profession = villagerProfession == null ? "&fRandom" : "&f" + Utils.getSentenceCase(villagerProfession.toString());
+        String profession = villagerProfession == null ? "&fRandom"
+                : "&f" + Utils.getSentenceCase(villagerProfession.getKey().getKey());
         item.addLore("&eProfession: &f" + profession);
         item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "VillagerProfession");
         return item;
