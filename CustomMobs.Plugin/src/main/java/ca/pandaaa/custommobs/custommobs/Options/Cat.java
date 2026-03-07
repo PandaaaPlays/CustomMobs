@@ -19,13 +19,14 @@ import java.util.List;
 
 public class Cat extends CustomMobOption {
     /**
-     * Determines the breed or appearance of the cat CustomMob (e.g., tabby, siamese, black).
+     * Determines the breed or appearance of the cat CustomMob (e.g., tabby,
+     * siamese, black).
      */
     private static final String CAT_TYPE = "mob.cat-type";
     private org.bukkit.entity.Cat.Type catType;
     /**
-     * Sets the dye color of the cat CustomMob's collar. The cat needs to be tamed and have an owner
-     * in order to have the collar rendered (see Tameable option).
+     * Sets the dye color of the cat CustomMob's collar. The cat needs to be tamed
+     * and have an owner in order to have the collar rendered (see Tameable option).
      */
     private static final String COLLAR_COLOR = "mob.collar-color";
     private DyeColor collarColor;
@@ -37,12 +38,12 @@ public class Cat extends CustomMobOption {
     }
 
     public void applyOptions(Entity customMob) {
-        if(!(customMob instanceof org.bukkit.entity.Cat))
+        if (!(customMob instanceof org.bukkit.entity.Cat))
             return;
 
-        if(catType != null)
+        if (catType != null)
             ((org.bukkit.entity.Cat) customMob).setCatType(catType);
-        if(collarColor != null)
+        if (collarColor != null)
             ((org.bukkit.entity.Cat) customMob).setCollarColor(collarColor);
     }
 
@@ -61,9 +62,9 @@ public class Cat extends CustomMobOption {
     }
 
     public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {
-        switch(option.toLowerCase()) {
+        switch (option.toLowerCase()) {
             case "collarcolor": {
-                if(clickType.isRightClick()) {
+                if (clickType.isRightClick()) {
                     this.collarColor = null;
                 } else {
                     List<DyeColor> colors = Arrays.asList(DyeColor.values());
@@ -78,7 +79,7 @@ public class Cat extends CustomMobOption {
             }
 
             case "cattype": {
-                if(clickType.isRightClick()) {
+                if (clickType.isRightClick()) {
                     this.catType = null;
                 } else {
                     List<org.bukkit.entity.Cat.Type> catTypes = Registry.CAT_VARIANT.stream().toList();
@@ -88,7 +89,7 @@ public class Cat extends CustomMobOption {
                     else
                         this.catType = catTypes.get(catTypes.indexOf(catType) + 1);
                 }
-                setOption(CAT_TYPE, catType != null ? catType.toString() : null);
+                setOption(CAT_TYPE, catType != null ? catType.getKey().getKey() : null);
                 return getOptionItemStack(getCatTypeItem(), true, true);
             }
         }
@@ -102,7 +103,8 @@ public class Cat extends CustomMobOption {
     public CustomMobsItem getCollarColorItem() {
         CustomMobsItem item = new CustomMobsItem(Material.END_CRYSTAL);
         item.setName("&b&lCollar color");
-        String color = collarColor == null ? "&fNone" : Utils.getChatColorOfColor(collarColor.name()) + Utils.getSentenceCase(collarColor.name());
+        String color = collarColor == null ? "&fNone"
+                : Utils.getChatColorOfColor(collarColor.name()) + Utils.getSentenceCase(collarColor.name());
         item.addLore("&eColor: " + color);
         item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "CollarColor");
         return item;
@@ -111,7 +113,7 @@ public class Cat extends CustomMobOption {
     public CustomMobsItem getCatTypeItem() {
         CustomMobsItem item = new CustomMobsItem(Material.CAT_SPAWN_EGG);
         item.setName("&b&lCat type");
-        String type = catType == null ? "&fRandom" : "&f" + Utils.getSentenceCase(catType.toString());
+        String type = catType == null ? "&fRandom" : "&f" + Utils.getSentenceCase(catType.getKey().getKey());
         item.addLore("&eType: &f" + type);
         item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "CatType");
         return item;
