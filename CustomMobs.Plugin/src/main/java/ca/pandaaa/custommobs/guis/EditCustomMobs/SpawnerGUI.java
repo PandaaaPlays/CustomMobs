@@ -1,22 +1,20 @@
 package ca.pandaaa.custommobs.guis.EditCustomMobs;
 
-import ca.pandaaa.custommobs.custommobs.CustomMob;
-import ca.pandaaa.custommobs.custommobs.Manager;
-import ca.pandaaa.custommobs.custommobs.Spawner;
-import ca.pandaaa.custommobs.guis.BasicTypes.TimeIntegerRangeGUI;
-import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
-import ca.pandaaa.custommobs.guis.CustomMobsGUI;
-import ca.pandaaa.custommobs.utils.CustomMobsItem;
-import ca.pandaaa.custommobs.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
+import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.custommobs.Manager;
+import ca.pandaaa.custommobs.custommobs.Spawner;
+import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
+import ca.pandaaa.custommobs.guis.BasicTypes.TimeIntegerRangeGUI;
+import ca.pandaaa.custommobs.guis.CustomMobsGUI;
+import ca.pandaaa.custommobs.utils.CustomMobsItem;
+import ca.pandaaa.custommobs.utils.Utils;
 
 public class SpawnerGUI extends CustomMobsGUI {
     private final CustomMob customMob;

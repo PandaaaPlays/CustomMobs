@@ -1,12 +1,7 @@
 package ca.pandaaa.custommobs.guis.EditCustomMobs.Sounds;
 
-import ca.pandaaa.custommobs.CustomMobs;
-import ca.pandaaa.custommobs.custommobs.CustomMob;
-import ca.pandaaa.custommobs.guis.CustomMobsGUI;
-import ca.pandaaa.custommobs.utils.CustomMobsItem;
-import ca.pandaaa.custommobs.utils.SoundEnum;
-import ca.pandaaa.custommobs.utils.Utils;
-import ca.pandaaa.custommobs.custommobs.Sound;
+import java.util.function.Consumer;
+
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,7 +11,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.function.Consumer;
+import ca.pandaaa.custommobs.CustomMobs;
+import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.custommobs.Sound;
+import ca.pandaaa.custommobs.guis.CustomMobsGUI;
+import ca.pandaaa.custommobs.utils.CustomMobsItem;
+import ca.pandaaa.custommobs.utils.SoundEnum;
+import ca.pandaaa.custommobs.utils.Utils;
 
 public class AddSoundsGUI extends CustomMobsGUI {
     private final CustomMob customMob;

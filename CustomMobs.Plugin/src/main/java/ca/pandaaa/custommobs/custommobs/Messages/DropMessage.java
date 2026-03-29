@@ -1,15 +1,16 @@
 package ca.pandaaa.custommobs.custommobs.Messages;
 
-import ca.pandaaa.custommobs.CustomMobs;
-import ca.pandaaa.custommobs.utils.Utils;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import ca.pandaaa.custommobs.CustomMobs;
+import ca.pandaaa.custommobs.utils.Utils;
 
 public class DropMessage extends Message implements ConfigurationSerializable {
 

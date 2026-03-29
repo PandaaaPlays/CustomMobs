@@ -1,15 +1,15 @@
 package ca.pandaaa.custommobs.custommobs;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.SoundCategory;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class Sound implements ConfigurationSerializable {
     private org.bukkit.Sound soundType;

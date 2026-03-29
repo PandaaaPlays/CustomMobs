@@ -1,5 +1,11 @@
 package ca.pandaaa.custommobs.utils;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -8,12 +14,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.profile.PlayerProfile;
 import org.bukkit.profile.PlayerTextures;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Utils {
     public static String applyFormat(String message) {
@@ -165,7 +165,7 @@ public class Utils {
         if(Integer.parseInt(serverVersionParts[1]) > Integer.parseInt(versionParts[1]))
             return true;
         if(serverVersionParts.length > 2 && Integer.parseInt(serverVersionParts[2]) > Integer.parseInt(versionParts[2]))
-            return true;
+        return true;
         return version.equals(serverVersion);
     }
 

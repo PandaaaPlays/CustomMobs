@@ -1,9 +1,9 @@
 package ca.pandaaa.custommobs.custommobs;
 
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 public class Spawner implements ConfigurationSerializable {
     private int spawnCount;

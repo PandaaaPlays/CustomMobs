@@ -1,11 +1,8 @@
 package ca.pandaaa.custommobs.custommobs.CustomEffects;
 
-import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
-import ca.pandaaa.custommobs.custommobs.CustomMob;
-import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
-import ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects.CustomEffectOptionsGUI;
-import ca.pandaaa.custommobs.utils.CustomMobsItem;
-import ca.pandaaa.custommobs.utils.Utils;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -14,8 +11,12 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.List;
+import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
+import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects.CustomEffectOptionsGUI;
+import ca.pandaaa.custommobs.utils.CustomMobsItem;
+import ca.pandaaa.custommobs.utils.Utils;
 
 /**
  * Randomly sends the nearby (within a defined radius) players flying in the air.

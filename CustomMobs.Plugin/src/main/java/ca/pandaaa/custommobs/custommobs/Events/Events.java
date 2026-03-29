@@ -1,11 +1,7 @@
 package ca.pandaaa.custommobs.custommobs.Events;
 
-import ca.pandaaa.custommobs.CustomMobs;
-import ca.pandaaa.custommobs.custommobs.*;
-import ca.pandaaa.custommobs.custommobs.CustomEffects.*;
-import ca.pandaaa.custommobs.custommobs.Messages.Message;
-import ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage;
-import ca.pandaaa.custommobs.custommobs.Options.Special;
+import java.util.*;
+
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
@@ -18,8 +14,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -28,7 +24,12 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.RayTraceResult;
 
-import java.util.*;
+import ca.pandaaa.custommobs.CustomMobs;
+import ca.pandaaa.custommobs.custommobs.*;
+import ca.pandaaa.custommobs.custommobs.CustomEffects.*;
+import ca.pandaaa.custommobs.custommobs.Messages.Message;
+import ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage;
+import ca.pandaaa.custommobs.custommobs.Options.Special;
 
 public class Events implements Listener {
     private static final Random RANDOM = new Random();

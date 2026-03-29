@@ -1,21 +1,20 @@
 package ca.pandaaa.custommobs.custommobs.CustomEffects;
 
-import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
-import ca.pandaaa.custommobs.custommobs.CustomMob;
-import ca.pandaaa.custommobs.custommobs.Events.CustomMobCustomEffectEvent;
-import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
-import ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects.CustomEffectOptionsGUI;
-import ca.pandaaa.custommobs.utils.CustomMobsItem;
-import ca.pandaaa.custommobs.utils.Utils;
-import org.bukkit.Bukkit;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
+import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
+import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects.CustomEffectOptionsGUI;
+import ca.pandaaa.custommobs.utils.CustomMobsItem;
+import ca.pandaaa.custommobs.utils.Utils;
 
 /**
  * Creates a customizable explosion that can break blocks or not where the CustomMob currently is.

@@ -1,6 +1,10 @@
 package ca.pandaaa.custommobs.custommobs;
 
-import ca.pandaaa.custommobs.CustomMobs;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
 import net.minecraft.core.Holder;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,10 +24,7 @@ import net.minecraft.world.entity.player.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import ca.pandaaa.custommobs.CustomMobs;
 
 public class NMS {
 

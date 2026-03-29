@@ -1,7 +1,8 @@
 package ca.pandaaa.custommobs.custommobs;
 
-import ca.pandaaa.custommobs.CustomMobs;
 import org.bukkit.NamespacedKey;
+
+import ca.pandaaa.custommobs.CustomMobs;
 
 public class NamespacedKeys {
     public static final NamespacedKey KEY_NAME = new NamespacedKey(CustomMobs.getPlugin(), "CustomMobs.Name");

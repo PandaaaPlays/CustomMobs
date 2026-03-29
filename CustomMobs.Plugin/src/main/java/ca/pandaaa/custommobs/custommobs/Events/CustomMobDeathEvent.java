@@ -1,9 +1,10 @@
 package ca.pandaaa.custommobs.custommobs.Events;
 
-import ca.pandaaa.custommobs.custommobs.CustomMob;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDeathEvent;
+
+import ca.pandaaa.custommobs.custommobs.CustomMob;
 
 public class CustomMobDeathEvent extends Event {
     private static final HandlerList handlers = new HandlerList();

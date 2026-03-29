@@ -1,17 +1,7 @@
 package ca.pandaaa.custommobs.custommobs.Options;
 
-import ca.pandaaa.custommobs.CustomMobs;
-import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
-import ca.pandaaa.custommobs.custommobs.NMS;
-import ca.pandaaa.custommobs.custommobs.BossBar;
-import ca.pandaaa.custommobs.custommobs.CustomMob;
-import ca.pandaaa.custommobs.custommobs.NamespacedKeys;
-import ca.pandaaa.custommobs.guis.BasicTypes.DoubleGUI;
-import ca.pandaaa.custommobs.guis.BasicTypes.DoubleRangeGUI;
-import ca.pandaaa.custommobs.guis.EditCustomMobs.OptionsGUI;
-import ca.pandaaa.custommobs.utils.CustomMobsItem;
-import ca.pandaaa.custommobs.utils.DamageRange;
-import ca.pandaaa.custommobs.utils.Utils;
+import java.util.*;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -21,12 +11,22 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
-import org.bukkit.entity.CopperGolem;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.*;
+import ca.pandaaa.custommobs.CustomMobs;
+import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
+import ca.pandaaa.custommobs.custommobs.BossBar;
+import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.custommobs.NMS;
+import ca.pandaaa.custommobs.custommobs.NamespacedKeys;
+import ca.pandaaa.custommobs.guis.BasicTypes.DoubleGUI;
+import ca.pandaaa.custommobs.guis.BasicTypes.DoubleRangeGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.OptionsGUI;
+import ca.pandaaa.custommobs.utils.CustomMobsItem;
+import ca.pandaaa.custommobs.utils.DamageRange;
+import ca.pandaaa.custommobs.utils.Utils;
 
 public class Special extends CustomMobOption {
     /**

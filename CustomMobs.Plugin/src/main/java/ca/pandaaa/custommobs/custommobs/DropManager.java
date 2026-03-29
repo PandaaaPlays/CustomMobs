@@ -1,8 +1,7 @@
 package ca.pandaaa.custommobs.custommobs;
 
-import ca.pandaaa.custommobs.custommobs.Messages.DropMessage;
-import ca.pandaaa.custommobs.custommobs.Messages.Message;
-import ca.pandaaa.custommobs.utils.DropConditions;
+import java.util.*;
+
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.NamespacedKey;
@@ -13,7 +12,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.*;
+import ca.pandaaa.custommobs.custommobs.Messages.DropMessage;
+import ca.pandaaa.custommobs.custommobs.Messages.Message;
+import ca.pandaaa.custommobs.utils.DropConditions;
 
 public class DropManager {
 

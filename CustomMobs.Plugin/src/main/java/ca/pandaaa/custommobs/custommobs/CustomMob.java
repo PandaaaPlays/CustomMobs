@@ -1,5 +1,21 @@
 package ca.pandaaa.custommobs.custommobs;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
+
+import org.bukkit.*;
+import org.bukkit.block.CreatureSpawner;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
+
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.CustomEffects.CustomEffectType;
@@ -9,25 +25,8 @@ import ca.pandaaa.custommobs.custommobs.CustomEffects.Trail;
 import ca.pandaaa.custommobs.custommobs.Events.CustomMobSpawnEvent;
 import ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage;
 import ca.pandaaa.custommobs.custommobs.Options.CustomMobOption;
-import ca.pandaaa.custommobs.custommobs.Options.Special;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.TypesGUI;
 import ca.pandaaa.custommobs.utils.Utils;
-import org.bukkit.*;
-import org.bukkit.block.CreatureSpawner;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.*;
 
 public class CustomMob implements Listener {
     private final Map<UUID, BukkitTask> activeCustomEffectRunnables = new HashMap<>();

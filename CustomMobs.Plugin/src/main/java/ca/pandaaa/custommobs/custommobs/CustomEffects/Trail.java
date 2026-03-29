@@ -1,9 +1,7 @@
 package ca.pandaaa.custommobs.custommobs.CustomEffects;
 
-import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
-import ca.pandaaa.custommobs.custommobs.CustomMob;
-import ca.pandaaa.custommobs.utils.CustomMobsItem;
-import ca.pandaaa.custommobs.utils.Utils;
+import java.util.*;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -12,7 +10,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
+import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.utils.CustomMobsItem;
+import ca.pandaaa.custommobs.utils.Utils;
 
 /**
  * Leaves a trail of fire behind the CustomMob. Do not forget to give the mob fire resistance or it will burn!

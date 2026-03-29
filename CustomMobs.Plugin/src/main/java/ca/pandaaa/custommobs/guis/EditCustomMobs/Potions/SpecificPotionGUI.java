@@ -1,12 +1,8 @@
 package ca.pandaaa.custommobs.guis.EditCustomMobs.Potions;
 
-import ca.pandaaa.custommobs.custommobs.CustomMob;
-import ca.pandaaa.custommobs.custommobs.PotionEffect;
-import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
-import ca.pandaaa.custommobs.guis.CustomMobsGUI;
-import ca.pandaaa.custommobs.utils.CustomMobsItem;
-import ca.pandaaa.custommobs.utils.Utils;
-import org.bukkit.Bukkit;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,8 +12,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-import java.util.List;
+import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.custommobs.PotionEffect;
+import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
+import ca.pandaaa.custommobs.guis.CustomMobsGUI;
+import ca.pandaaa.custommobs.utils.CustomMobsItem;
+import ca.pandaaa.custommobs.utils.Utils;
 
 public class SpecificPotionGUI extends CustomMobsGUI {
 

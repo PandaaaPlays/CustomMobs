@@ -1,13 +1,7 @@
 package ca.pandaaa.custommobs.custommobs.CustomEffects;
 
-import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
-import ca.pandaaa.custommobs.custommobs.CustomMob;
-import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
-import ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects.CustomEffectOptionsGUI;
-import ca.pandaaa.custommobs.utils.CustomMobsItem;
-import ca.pandaaa.custommobs.utils.Utils;
-import ca.pandaaa.custommobs.utils.WorldGuard;
-import org.bukkit.Bukkit;
+import java.util.*;
+
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -19,7 +13,13 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import java.util.*;
+import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
+import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects.CustomEffectOptionsGUI;
+import ca.pandaaa.custommobs.utils.CustomMobsItem;
+import ca.pandaaa.custommobs.utils.Utils;
+import ca.pandaaa.custommobs.utils.WorldGuard;
 
 /**
  * Allows the mob to see players threw blocks (within a defined radius) and to break blocks to reach

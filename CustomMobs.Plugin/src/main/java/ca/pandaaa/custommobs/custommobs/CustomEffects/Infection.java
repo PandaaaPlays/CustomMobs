@@ -1,14 +1,8 @@
 package ca.pandaaa.custommobs.custommobs.CustomEffects;
 
-import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
-import ca.pandaaa.custommobs.custommobs.CustomMob;
-import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
-import ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects.CustomEffectOptionsGUI;
-import ca.pandaaa.custommobs.guis.EditCustomMobs.Potions.PotionEffectsGUI;
-import ca.pandaaa.custommobs.guis.EditCustomMobs.Potions.PotionsGUI;
-import ca.pandaaa.custommobs.guis.EditCustomMobs.Potions.SpecificPotionDurationGUI;
-import ca.pandaaa.custommobs.utils.CustomMobsItem;
-import ca.pandaaa.custommobs.utils.Utils;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -19,8 +13,14 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-import java.util.List;
+import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
+import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects.CustomEffectOptionsGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.Potions.PotionEffectsGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.Potions.SpecificPotionDurationGUI;
+import ca.pandaaa.custommobs.utils.CustomMobsItem;
+import ca.pandaaa.custommobs.utils.Utils;
 
 /**
  * Upon damage to players, the CustomMobs gives a customizable potion effect.

@@ -1,9 +1,9 @@
 package ca.pandaaa.custommobs.custommobs.Options;
 
-import ca.pandaaa.custommobs.CustomMobs;
-import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
-import ca.pandaaa.custommobs.custommobs.CustomMob;
-import ca.pandaaa.custommobs.utils.CustomMobsItem;
+import java.io.IOException;
+import java.util.List;
+import java.util.UUID;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
@@ -14,9 +14,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.UUID;
+import ca.pandaaa.custommobs.CustomMobs;
+import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
+import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.utils.CustomMobsItem;
 
 // Children of CustomMobOption must implement the isApplicable method for the plugin to work properly.
 public abstract class CustomMobOption {

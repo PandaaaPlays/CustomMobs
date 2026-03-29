@@ -1,10 +1,10 @@
 package ca.pandaaa.custommobs.custommobs;
 
-import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
-import org.bukkit.entity.CopperGolem;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
+
+import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 
 public class Equipment {
 

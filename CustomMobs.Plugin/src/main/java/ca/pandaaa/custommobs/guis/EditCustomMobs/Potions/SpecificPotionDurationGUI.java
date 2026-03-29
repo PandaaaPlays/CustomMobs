@@ -1,8 +1,9 @@
 package ca.pandaaa.custommobs.guis.EditCustomMobs.Potions;
 
-import ca.pandaaa.custommobs.CustomMobs;
-import ca.pandaaa.custommobs.guis.CustomMobsGUI;
-import ca.pandaaa.custommobs.utils.Utils;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -13,9 +14,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
+import ca.pandaaa.custommobs.CustomMobs;
+import ca.pandaaa.custommobs.guis.CustomMobsGUI;
+import ca.pandaaa.custommobs.utils.Utils;
 
 public class SpecificPotionDurationGUI extends CustomMobsGUI {
 

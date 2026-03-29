@@ -1,9 +1,9 @@
 package ca.pandaaa.custommobs.custommobs;
 
-import org.bukkit.entity.Player;
-
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.bukkit.entity.Player;
 
 public class BossBar {
     private final ConcurrentHashMap<UUID, org.bukkit.boss.BossBar> bossBars = new ConcurrentHashMap<>();

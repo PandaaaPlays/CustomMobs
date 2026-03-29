@@ -1,16 +1,17 @@
 package ca.pandaaa.custommobs.commands;
 
-import ca.pandaaa.custommobs.CustomMobs;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import ca.pandaaa.custommobs.CustomMobs;
 
 public class TabCompletion implements TabCompleter {
     Set<String> customMobNames = CustomMobs.getPlugin().getCustomMobsManager().getCustomMobNames();
