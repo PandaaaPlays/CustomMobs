@@ -1,26 +1,35 @@
 package ca.pandaaa.custommobs.custommobs.Events;
 
 import ca.pandaaa.custommobs.custommobs.CustomMob;
-import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.entity.EntityDeathEvent;
 
 public class CustomMobDeathEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
-    private final Entity entity;
+    private final EntityDeathEvent entityDeathEvent;
     private final CustomMob customMob;
+    private boolean cancelDrops = false;
 
-    public CustomMobDeathEvent(Entity entity, CustomMob customMob) {
-        this.entity = entity;
+    public CustomMobDeathEvent(CustomMob customMob, EntityDeathEvent entityDeathEvent) {
+        this.entityDeathEvent = entityDeathEvent;
         this.customMob = customMob;
     }
 
-    public Entity getEntity() {
-        return entity;
+    public EntityDeathEvent getOriginalEntityDeathEvent() {
+        return entityDeathEvent;
     }
 
     public CustomMob getCustomMob() {
         return customMob;
+    }
+
+    public boolean isDropsCancelled() {
+        return cancelDrops;
+    }
+
+    public void setCancelDrops(boolean cancelDrops) {
+        this.cancelDrops = cancelDrops;
     }
 
     @Override
@@ -32,4 +41,3 @@ public class CustomMobDeathEvent extends Event {
         return handlers;
     }
 }
-

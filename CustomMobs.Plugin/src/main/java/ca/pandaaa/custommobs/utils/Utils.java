@@ -164,7 +164,7 @@ public class Utils {
             return true;
         if(Integer.parseInt(serverVersionParts[1]) > Integer.parseInt(versionParts[1]))
             return true;
-        if(Integer.parseInt(serverVersionParts[2]) > Integer.parseInt(versionParts[2]))
+        if(serverVersionParts.length > 2 && Integer.parseInt(serverVersionParts[2]) > Integer.parseInt(versionParts[2]))
             return true;
         return version.equals(serverVersion);
     }
@@ -178,7 +178,7 @@ public class Utils {
             return false;
         if(Integer.parseInt(serverVersionParts[1]) > Integer.parseInt(versionParts[1]))
             return false;
-        if(Integer.parseInt(serverVersionParts[2]) > Integer.parseInt(versionParts[2]))
+        if(serverVersionParts.length > 2 && Integer.parseInt(serverVersionParts[2]) > Integer.parseInt(versionParts[2]))
             return false;
 
         return true;

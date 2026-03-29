@@ -6,6 +6,7 @@ import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Keyed;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.entity.Entity;
@@ -31,6 +32,10 @@ public abstract class CustomMobOption {
     public abstract ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType);
 
     protected ItemStack getOptionItemStack(CustomMobsItem item, boolean hasTwoClicks, boolean cycle) {
+        if (item.getItem().getType() == Material.BARRIER) {
+            item.addLore("", "&c&l[!] &cThis option is not supported in this version.");
+            return item.getItem();
+        }
         if (hasTwoClicks && cycle)
             item.addLore("", "&7&o(( Left-Click to cycle this option ))", "&7&o(( Right-Click to reset this option ))");
         else if (hasTwoClicks)

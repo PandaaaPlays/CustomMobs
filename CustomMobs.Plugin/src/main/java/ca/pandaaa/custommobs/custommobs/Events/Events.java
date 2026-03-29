@@ -187,7 +187,7 @@ public class Events implements Listener {
         // Cancel the custom effects of the CustomMob.
         customMob.cancelCustomEffects(event.getEntity().getUniqueId());
 
-        CustomMobDeathEvent customEvent = new CustomMobDeathEvent(event.getEntity(), customMob);
+        CustomMobDeathEvent customEvent = new CustomMobDeathEvent(customMob, event);
         Bukkit.getServer().getPluginManager().callEvent(customEvent);
 
         for (Message message : customMob.getCustomMobMessages()) {
@@ -199,7 +199,7 @@ public class Events implements Listener {
                 && !((Special) customMob.getCustomMobOption("Special")).getNaturalDrops())
             event.getDrops().clear();
 
-        if (!customMob.getDrops().isEmpty())
+        if (!customEvent.isDropsCancelled() && !customMob.getDrops().isEmpty())
             DropManager.sendDrops(customMob.getDrops(), event.getEntity());
     }
 
