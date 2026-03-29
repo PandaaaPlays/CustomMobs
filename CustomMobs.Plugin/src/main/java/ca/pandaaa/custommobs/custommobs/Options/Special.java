@@ -305,7 +305,7 @@ public class Special extends CustomMobOption {
 
             case "aggressive": {
                 if (!Utils.isVersionAtLeast("26.1")) {
-                    clicker.sendMessage(Utils.applyFormat("&c[!] This option is not supported in this version. Please use CustomMobs 1.8.0+ with Minecraft 26.1+ or CustomMobs 1.7.2 with Minecraft 1.21.11-."));
+                    clicker.sendMessage(Utils.applyFormat("&c&l[!] &cThis option is not supported in this version. Please use CustomMobs 1.8.0+ with Minecraft 26.1+ or CustomMobs 1.7.2 with Minecraft 1.21.11-."));
                     return getOptionItemStack(getAggressiveItem(), false, false);
                 }
                 this.aggressive = !aggressive;
@@ -546,7 +546,7 @@ public class Special extends CustomMobOption {
         } else {
            CustomMobsItem item = new CustomMobsItem(Material.BARRIER); 
            item.setName("&c&lAggressive");
-           item.addLore("&eAggressive: &c&lOff", "");
+           item.addLore("&eAggressive: &c&lOff");
            item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "Aggressive");
            return item;
         }
