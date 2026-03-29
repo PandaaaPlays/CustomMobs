@@ -1,5 +1,11 @@
 package ca.pandaaa.custommobs.utils;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -8,12 +14,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.profile.PlayerProfile;
 import org.bukkit.profile.PlayerTextures;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Utils {
     public static String applyFormat(String message) {
@@ -155,32 +155,35 @@ public class Utils {
         return formattedSize;
     }
 
-    public static boolean isVersionAtLeast(String version) {
-        String serverVersion = Bukkit.getBukkitVersion().split("-")[0];
-        String[] versionParts = version.split("\\.");
-        String[] serverVersionParts = serverVersion.split("\\.");
+    public static boolean isVersionAtLeast(String targetVersion) {
+        String currentVersion = Bukkit.getBukkitVersion().split("-")[0];
+        String[] currentParts = currentVersion.split("\\.");
+        String[] targetParts = targetVersion.split("\\.");
 
-        if(Integer.parseInt(serverVersionParts[0]) > Integer.parseInt(versionParts[0]))
-            return true;
-        if(Integer.parseInt(serverVersionParts[1]) > Integer.parseInt(versionParts[1]))
-            return true;
-        if(Integer.parseInt(serverVersionParts[2]) > Integer.parseInt(versionParts[2]))
-            return true;
-        return version.equals(serverVersion);
+        int length = Math.max(currentParts.length, targetParts.length);
+        for (int i = 0; i < length; i++) {
+            int current = i < currentParts.length ? Integer.parseInt(currentParts[i].replaceAll("\\D", "")) : 0;
+            int target = i < targetParts.length ? Integer.parseInt(targetParts[i].replaceAll("\\D", "")) : 0;
+
+            if (current > target) return true;
+            if (current < target) return false;
+        }
+        return true;
     }
 
-    public static boolean isVersionBeforeOrEqual(String version) {
-        String serverVersion = Bukkit.getBukkitVersion().split("-")[0];
-        String[] versionParts = version.split("\\.");
-        String[] serverVersionParts = serverVersion.split("\\.");
+    public static boolean isVersionBeforeOrEqual(String targetVersion) {
+        String currentVersion = Bukkit.getBukkitVersion().split("-")[0];
+        String[] currentParts = currentVersion.split("\\.");
+        String[] targetParts = targetVersion.split("\\.");
 
-        if(Integer.parseInt(serverVersionParts[0]) > Integer.parseInt(versionParts[0]))
-            return false;
-        if(Integer.parseInt(serverVersionParts[1]) > Integer.parseInt(versionParts[1]))
-            return false;
-        if(Integer.parseInt(serverVersionParts[2]) > Integer.parseInt(versionParts[2]))
-            return false;
+        int length = Math.max(currentParts.length, targetParts.length);
+        for (int i = 0; i < length; i++) {
+            int current = i < currentParts.length ? Integer.parseInt(currentParts[i].replaceAll("\\D", "")) : 0;
+            int target = i < targetParts.length ? Integer.parseInt(targetParts[i].replaceAll("\\D", "")) : 0;
 
+            if (current < target) return true;
+            if (current > target) return false;
+        }
         return true;
     }
 

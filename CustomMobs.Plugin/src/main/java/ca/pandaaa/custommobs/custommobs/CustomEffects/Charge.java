@@ -1,14 +1,8 @@
 package ca.pandaaa.custommobs.custommobs.CustomEffects;
 
-import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
-import ca.pandaaa.custommobs.custommobs.CustomMob;
-import ca.pandaaa.custommobs.custommobs.Events.CustomMobCustomEffectEvent;
-import ca.pandaaa.custommobs.custommobs.Events.CustomMobDeathEvent;
-import ca.pandaaa.custommobs.guis.BasicTypes.DoubleGUI;
-import ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects.CustomEffectOptionsGUI;
-import ca.pandaaa.custommobs.utils.CustomMobsItem;
-import ca.pandaaa.custommobs.utils.Utils;
-import org.bukkit.Bukkit;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -16,8 +10,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
+import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
+import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.guis.BasicTypes.DoubleGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects.CustomEffectOptionsGUI;
+import ca.pandaaa.custommobs.utils.CustomMobsItem;
+import ca.pandaaa.custommobs.utils.Utils;
 
 /**
  * Pushes the players back (and in the air) when they enter in collision with the CustomMob.
@@ -42,8 +40,8 @@ public class Charge extends CustomMobCustomEffect {
         List<Entity> playersAround = entity.getNearbyEntities(1D, 1D, 1D).stream().filter(e -> e instanceof Player).toList();
 
         List<Player> affectedPlayers = new ArrayList<>();
-        for(Entity player : playersAround) {
-            if(triggerCustomEffectCancelled(entity, (Player) player, this)) continue;
+        for (Entity player : playersAround) {
+            if (triggerCustomEffectCancelled(entity, (Player) player, this)) continue;
             player.setVelocity(player.getLocation().getDirection().multiply(knockbackStrength * -1).setY(knockbackStrength));
             affectedPlayers.add((Player) player);
         }
@@ -51,9 +49,9 @@ public class Charge extends CustomMobCustomEffect {
     }
 
     public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {
-        switch(option.toLowerCase()) {
+        switch (option.toLowerCase()) {
             case "knockbackstrength": {
-                if(clickType.isRightClick()) {
+                if (clickType.isRightClick()) {
                     this.knockbackStrength = 1;
                     setCustomEffectOption(KNOCKBACK_STRENGTH, this.knockbackStrength);
                 } else {

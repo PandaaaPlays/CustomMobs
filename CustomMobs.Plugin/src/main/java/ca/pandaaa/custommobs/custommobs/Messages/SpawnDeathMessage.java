@@ -1,9 +1,9 @@
 package ca.pandaaa.custommobs.custommobs.Messages;
 
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 public class SpawnDeathMessage extends Message implements ConfigurationSerializable {
 

@@ -1,10 +1,9 @@
 package ca.pandaaa.custommobs.custommobs.Options;
 
-import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
-import ca.pandaaa.custommobs.custommobs.CustomMob;
-import ca.pandaaa.custommobs.guis.BasicTypes.PlayerGUI;
-import ca.pandaaa.custommobs.guis.EditCustomMobs.OptionsGUI;
-import ca.pandaaa.custommobs.utils.CustomMobsItem;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -13,9 +12,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
+import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.guis.BasicTypes.PlayerGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.OptionsGUI;
+import ca.pandaaa.custommobs.utils.CustomMobsItem;
 
 public class Tameable extends CustomMobOption {
     /**

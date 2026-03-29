@@ -1,11 +1,7 @@
 package ca.pandaaa.custommobs.custommobs.Events;
 
-import ca.pandaaa.custommobs.CustomMobs;
-import ca.pandaaa.custommobs.custommobs.*;
-import ca.pandaaa.custommobs.custommobs.CustomEffects.*;
-import ca.pandaaa.custommobs.custommobs.Messages.Message;
-import ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage;
-import ca.pandaaa.custommobs.custommobs.Options.Special;
+import java.util.*;
+
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
@@ -18,8 +14,9 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -28,7 +25,12 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.RayTraceResult;
 
-import java.util.*;
+import ca.pandaaa.custommobs.CustomMobs;
+import ca.pandaaa.custommobs.custommobs.*;
+import ca.pandaaa.custommobs.custommobs.CustomEffects.*;
+import ca.pandaaa.custommobs.custommobs.Messages.Message;
+import ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage;
+import ca.pandaaa.custommobs.custommobs.Options.Special;
 
 public class Events implements Listener {
     private static final Random RANDOM = new Random();
@@ -187,7 +189,7 @@ public class Events implements Listener {
         // Cancel the custom effects of the CustomMob.
         customMob.cancelCustomEffects(event.getEntity().getUniqueId());
 
-        CustomMobDeathEvent customEvent = new CustomMobDeathEvent(event.getEntity(), customMob);
+        CustomMobDeathEvent customEvent = new CustomMobDeathEvent(customMob, event);
         Bukkit.getServer().getPluginManager().callEvent(customEvent);
 
         for (Message message : customMob.getCustomMobMessages()) {
@@ -199,7 +201,7 @@ public class Events implements Listener {
                 && !((Special) customMob.getCustomMobOption("Special")).getNaturalDrops())
             event.getDrops().clear();
 
-        if (!customMob.getDrops().isEmpty())
+        if (!customEvent.isDropsCancelled() && !customMob.getDrops().isEmpty())
             DropManager.sendDrops(customMob.getDrops(), event.getEntity());
     }
 
@@ -415,6 +417,11 @@ public class Events implements Listener {
         if (!isCustomMob(event.getEntity()))
             return;
         event.setCancelled(true);
+    }
+
+    @EventHandler(priority = org.bukkit.event.EventPriority.HIGHEST)
+    public void onRightClickAtEntity(org.bukkit.event.player.PlayerInteractAtEntityEvent event) {
+        onRightClickEntity(event);
     }
 
     @EventHandler

@@ -1,8 +1,8 @@
 package ca.pandaaa.custommobs.custommobs;
 
-import org.bukkit.entity.EntityType;
-
 import java.time.LocalDateTime;
+
+import org.bukkit.entity.EntityType;
 
 public class API {
     private final CustomMob mob;

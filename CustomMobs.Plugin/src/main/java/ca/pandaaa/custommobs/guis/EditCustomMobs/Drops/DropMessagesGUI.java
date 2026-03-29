@@ -1,14 +1,8 @@
 package ca.pandaaa.custommobs.guis.EditCustomMobs.Drops;
 
-import ca.pandaaa.custommobs.CustomMobs;
-import ca.pandaaa.custommobs.custommobs.CustomMob;
-import ca.pandaaa.custommobs.custommobs.Drop;
-import ca.pandaaa.custommobs.custommobs.Messages.DropMessage;
-import ca.pandaaa.custommobs.custommobs.Messages.Message;
-import ca.pandaaa.custommobs.guis.BasicTypes.DoubleGUI;
-import ca.pandaaa.custommobs.guis.CustomMobsGUI;
-import ca.pandaaa.custommobs.utils.DropConditions;
-import ca.pandaaa.custommobs.utils.Utils;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -21,8 +15,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.ArrayList;
-import java.util.List;
+import ca.pandaaa.custommobs.CustomMobs;
+import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.custommobs.Drop;
+import ca.pandaaa.custommobs.custommobs.Messages.DropMessage;
+import ca.pandaaa.custommobs.custommobs.Messages.Message;
+import ca.pandaaa.custommobs.guis.BasicTypes.DoubleGUI;
+import ca.pandaaa.custommobs.guis.CustomMobsGUI;
+import ca.pandaaa.custommobs.utils.DropConditions;
+import ca.pandaaa.custommobs.utils.Utils;
 
 public class DropMessagesGUI extends CustomMobsGUI {
 

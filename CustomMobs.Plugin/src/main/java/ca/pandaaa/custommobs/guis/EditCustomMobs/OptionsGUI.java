@@ -1,13 +1,8 @@
 package ca.pandaaa.custommobs.guis.EditCustomMobs;
 
-import ca.pandaaa.custommobs.CustomMobs;
-import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
-import ca.pandaaa.custommobs.custommobs.CustomMob;
-import ca.pandaaa.custommobs.custommobs.Options.CustomMobOption;
-import ca.pandaaa.custommobs.custommobs.Options.Mannequin;
-import ca.pandaaa.custommobs.guis.CustomMobsGUI;
-import ca.pandaaa.custommobs.utils.Utils;
-import com.google.common.reflect.ClassPath;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -21,10 +16,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
-import java.util.*;
+import ca.pandaaa.custommobs.CustomMobs;
+import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.custommobs.Options.Mannequin;
+import ca.pandaaa.custommobs.guis.CustomMobsGUI;
+import ca.pandaaa.custommobs.utils.Utils;
 
 public class OptionsGUI extends CustomMobsGUI {
 

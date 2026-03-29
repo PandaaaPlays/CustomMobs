@@ -1,8 +1,9 @@
 package ca.pandaaa.custommobs.guis.BasicTypes;
 
-import ca.pandaaa.custommobs.CustomMobs;
-import ca.pandaaa.custommobs.guis.CustomMobsGUI;
-import ca.pandaaa.custommobs.utils.Utils;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -17,9 +18,9 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
+import ca.pandaaa.custommobs.CustomMobs;
+import ca.pandaaa.custommobs.guis.CustomMobsGUI;
+import ca.pandaaa.custommobs.utils.Utils;
 
 public class PlayerGUI extends CustomMobsGUI implements Listener {
 

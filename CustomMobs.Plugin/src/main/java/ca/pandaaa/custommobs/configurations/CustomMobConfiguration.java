@@ -1,21 +1,5 @@
 package ca.pandaaa.custommobs.configurations;
 
-import ca.pandaaa.custommobs.CustomMobs;
-import ca.pandaaa.custommobs.custommobs.*;
-import ca.pandaaa.custommobs.custommobs.CustomEffects.CustomMobCustomEffect;
-import ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage;
-import ca.pandaaa.custommobs.custommobs.Options.CustomMobOption;
-import ca.pandaaa.custommobs.custommobs.Sound;
-import ca.pandaaa.custommobs.guis.EditCustomMobs.TypesGUI;
-import ca.pandaaa.custommobs.utils.Utils;
-import com.google.common.reflect.ClassPath;
-import org.bukkit.*;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.*;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -26,6 +10,23 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
+
+import com.google.common.reflect.ClassPath;
+import org.bukkit.*;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.*;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
+
+import ca.pandaaa.custommobs.CustomMobs;
+import ca.pandaaa.custommobs.custommobs.*;
+import ca.pandaaa.custommobs.custommobs.Sound;
+import ca.pandaaa.custommobs.custommobs.CustomEffects.CustomMobCustomEffect;
+import ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage;
+import ca.pandaaa.custommobs.custommobs.Options.CustomMobOption;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.TypesGUI;
+import ca.pandaaa.custommobs.utils.Utils;
 
 public class CustomMobConfiguration {
     private final String fileName;

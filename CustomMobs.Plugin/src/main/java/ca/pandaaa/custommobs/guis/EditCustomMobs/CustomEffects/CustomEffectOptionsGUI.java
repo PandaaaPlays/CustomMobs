@@ -1,8 +1,8 @@
 package ca.pandaaa.custommobs.guis.EditCustomMobs.CustomEffects;
 
-import ca.pandaaa.custommobs.custommobs.CustomEffects.CustomMobCustomEffect;
-import ca.pandaaa.custommobs.custommobs.CustomMob;
-import ca.pandaaa.custommobs.guis.CustomMobsGUI;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -13,8 +13,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.ArrayList;
-import java.util.List;
+import ca.pandaaa.custommobs.custommobs.CustomEffects.CustomMobCustomEffect;
+import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.guis.CustomMobsGUI;
 
 public class CustomEffectOptionsGUI extends CustomMobsGUI {
 

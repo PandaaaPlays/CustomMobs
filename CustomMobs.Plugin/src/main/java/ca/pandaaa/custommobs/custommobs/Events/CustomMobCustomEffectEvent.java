@@ -1,11 +1,12 @@
 package ca.pandaaa.custommobs.custommobs.Events;
 
-import ca.pandaaa.custommobs.custommobs.CustomEffects.CustomMobCustomEffect;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+
+import ca.pandaaa.custommobs.custommobs.CustomEffects.CustomMobCustomEffect;
 
 public class CustomMobCustomEffectEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();

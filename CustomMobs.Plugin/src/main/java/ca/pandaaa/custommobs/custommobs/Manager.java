@@ -1,18 +1,19 @@
 package ca.pandaaa.custommobs.custommobs;
 
-import ca.pandaaa.custommobs.CustomMobs;
-import ca.pandaaa.custommobs.configurations.ConfigurationManager;
-import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
+
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
+import ca.pandaaa.custommobs.CustomMobs;
+import ca.pandaaa.custommobs.configurations.ConfigurationManager;
+import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 
 public class Manager {
     private final ConfigurationManager configManager;

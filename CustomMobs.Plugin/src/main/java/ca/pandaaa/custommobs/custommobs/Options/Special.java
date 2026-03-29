@@ -1,5 +1,20 @@
 package ca.pandaaa.custommobs.custommobs.Options;
 
+import java.util.*;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
+import org.bukkit.attribute.Attributable;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.*;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
+
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.BossBar;
@@ -12,21 +27,6 @@ import ca.pandaaa.custommobs.guis.EditCustomMobs.OptionsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.DamageRange;
 import ca.pandaaa.custommobs.utils.Utils;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Registry;
-import org.bukkit.attribute.Attributable;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.*;
-import org.bukkit.entity.CopperGolem;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataType;
-
-import java.util.*;
 
 public class Special extends CustomMobOption {
     /**
@@ -304,6 +304,10 @@ public class Special extends CustomMobOption {
             }
 
             case "aggressive": {
+                if (!Utils.isVersionAtLeast("26.1")) {
+                    clicker.sendMessage(Utils.applyFormat("&c&l[!] &cThis option is not supported in this version. Please use CustomMobs 1.8.0+ with Minecraft 26.1+ or CustomMobs 1.7.2 with Minecraft 1.21.11-."));
+                    return getOptionItemStack(getAggressiveItem(), false, false);
+                }
                 this.aggressive = !aggressive;
                 setOption(AGGRESSIVE, aggressive);
                 return getOptionItemStack(getAggressiveItem(), false, false);
@@ -532,12 +536,20 @@ public class Special extends CustomMobOption {
     }
 
     public CustomMobsItem getAggressiveItem() {
-        CustomMobsItem item = new CustomMobsItem(Material.DIAMOND_SWORD);
-        String aggressive = this.aggressive ? "&a&lOn" : "&c&lOff";
-        item.setName("&c&lAggressive");
-        item.addLore("&eAggressive: " + aggressive);
-        item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "Aggressive");
-        return item;
+        if (Utils.isVersionAtLeast("26.1")) {
+            CustomMobsItem item = new CustomMobsItem(Material.DIAMOND_SWORD);
+            String aggressive = this.aggressive ? "&a&lOn" : "&c&lOff";
+            item.setName("&c&lAggressive");
+            item.addLore("&eAggressive: " + aggressive);
+            item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "Aggressive");
+            return item;
+        } else {
+           CustomMobsItem item = new CustomMobsItem(Material.BARRIER); 
+           item.setName("&c&lAggressive");
+           item.addLore("&eAggressive: &c&lOff");
+           item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "Aggressive");
+           return item;
+        }
     }
 
     public CustomMobsItem getGlowingItem() {

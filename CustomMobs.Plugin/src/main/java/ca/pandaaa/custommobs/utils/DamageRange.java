@@ -1,9 +1,9 @@
 package ca.pandaaa.custommobs.utils;
 
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 public class DamageRange implements ConfigurationSerializable {
     private final double minimumDamage;

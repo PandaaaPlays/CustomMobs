@@ -1,11 +1,12 @@
 package ca.pandaaa.custommobs.custommobs.Options;
 
-import ca.pandaaa.custommobs.CustomMobs;
-import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
-import ca.pandaaa.custommobs.custommobs.CustomMob;
-import ca.pandaaa.custommobs.utils.CustomMobsItem;
+import java.io.IOException;
+import java.util.List;
+import java.util.UUID;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Keyed;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.entity.Entity;
@@ -13,9 +14,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.UUID;
+import ca.pandaaa.custommobs.CustomMobs;
+import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
+import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.utils.CustomMobsItem;
 
 // Children of CustomMobOption must implement the isApplicable method for the plugin to work properly.
 public abstract class CustomMobOption {
@@ -31,6 +33,10 @@ public abstract class CustomMobOption {
     public abstract ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType);
 
     protected ItemStack getOptionItemStack(CustomMobsItem item, boolean hasTwoClicks, boolean cycle) {
+        if (item.getItem().getType() == Material.BARRIER) {
+            item.addLore("", "&c&l[!] &cThis option is not supported in this version.");
+            return item.getItem();
+        }
         if (hasTwoClicks && cycle)
             item.addLore("", "&7&o(( Left-Click to cycle this option ))", "&7&o(( Right-Click to reset this option ))");
         else if (hasTwoClicks)

@@ -1,17 +1,18 @@
 package ca.pandaaa.custommobs.guis.EditCustomMobs;
 
-import ca.pandaaa.custommobs.CustomMobs;
-import ca.pandaaa.custommobs.custommobs.CustomMob;
-import ca.pandaaa.custommobs.guis.CustomMobsGUI;
-import ca.pandaaa.custommobs.guis.EditCustomMobs.Potions.PotionsGUI;
-import ca.pandaaa.custommobs.guis.EditCustomMobs.Sounds.SoundsGUI;
-import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
+
+import ca.pandaaa.custommobs.CustomMobs;
+import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.guis.CustomMobsGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.Potions.PotionsGUI;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.Sounds.SoundsGUI;
+import ca.pandaaa.custommobs.utils.CustomMobsItem;
 
 public class OthersGUI extends CustomMobsGUI {
 

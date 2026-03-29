@@ -1,10 +1,9 @@
 package ca.pandaaa.custommobs.guis;
 
-import ca.pandaaa.custommobs.CustomMobs;
-import ca.pandaaa.custommobs.custommobs.CustomMob;
-import ca.pandaaa.custommobs.custommobs.Manager;
-import ca.pandaaa.custommobs.guis.EditCustomMobs.EditGUI;
-import ca.pandaaa.custommobs.utils.Utils;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -19,9 +18,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import ca.pandaaa.custommobs.CustomMobs;
+import ca.pandaaa.custommobs.custommobs.CustomMob;
+import ca.pandaaa.custommobs.custommobs.Manager;
+import ca.pandaaa.custommobs.guis.EditCustomMobs.EditGUI;
+import ca.pandaaa.custommobs.utils.Utils;
 
 public class MainGUI extends CustomMobsGUI {
     private final List<ItemStack> items;

@@ -1,14 +1,13 @@
 package ca.pandaaa.custommobs;
 
-import ca.pandaaa.custommobs.commands.Commands;
-import ca.pandaaa.custommobs.commands.TabCompletion;
-import ca.pandaaa.custommobs.configurations.ConfigurationManager;
-import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
-import ca.pandaaa.custommobs.custommobs.*;
-import ca.pandaaa.custommobs.custommobs.Events.Events;
-import ca.pandaaa.custommobs.custommobs.Messages.DropMessage;
-import ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage;
-import ca.pandaaa.custommobs.utils.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
+import java.util.*;
+
 import com.google.common.reflect.ClassPath;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -26,13 +25,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
-import java.util.*;
+import ca.pandaaa.custommobs.commands.Commands;
+import ca.pandaaa.custommobs.commands.TabCompletion;
+import ca.pandaaa.custommobs.configurations.ConfigurationManager;
+import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
+import ca.pandaaa.custommobs.custommobs.*;
+import ca.pandaaa.custommobs.custommobs.Events.Events;
+import ca.pandaaa.custommobs.custommobs.Messages.DropMessage;
+import ca.pandaaa.custommobs.custommobs.Messages.SpawnDeathMessage;
+import ca.pandaaa.custommobs.utils.*;
 
 public class CustomMobs extends JavaPlugin {
     private Metrics metrics;
@@ -202,7 +203,7 @@ public class CustomMobs extends JavaPlugin {
         List<org.bukkit.Sound> sounds = new ArrayList<>();
         List<String> newSounds = new ArrayList<>();
 
-        if (Utils.isVersionBeforeOrEqual("1.21.11")) {
+        if (Utils.isVersionBeforeOrEqual("26.1")) {
             return;
         } else {
             Registry.SOUNDS.iterator().forEachRemaining(sounds::add);

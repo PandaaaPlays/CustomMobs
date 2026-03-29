@@ -1,8 +1,9 @@
 package ca.pandaaa.custommobs.configurations;
 
+import org.bukkit.configuration.file.FileConfiguration;
+
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.utils.Utils;
-import org.bukkit.configuration.file.FileConfiguration;
 
 public class ConfigurationManager {
     private final FileConfiguration configuration;

@@ -1,14 +1,16 @@
 package ca.pandaaa.custommobs.custommobs.Messages;
 
-import ca.pandaaa.custommobs.utils.Utils;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import ca.pandaaa.custommobs.CustomMobs;
+import ca.pandaaa.custommobs.utils.Utils;
 
 public class DropMessage extends Message implements ConfigurationSerializable {
 
@@ -20,7 +22,7 @@ public class DropMessage extends Message implements ConfigurationSerializable {
     }
 
     public void sendMessage(Player dropper) {
-        if(dropperOnly)
+        if (dropperOnly)
             dropper.sendMessage(Utils.applyFormat(getMessage().replaceAll("%player%", dropper.getName())));
         else {
             if (getRadius() > 0) {
@@ -32,7 +34,9 @@ public class DropMessage extends Message implements ConfigurationSerializable {
                     }
                 }
             } else {
-                Bukkit.broadcastMessage(Utils.applyFormat(getMessage().replaceAll("%player%", dropper.getName())));
+                Bukkit.getScheduler().runTaskLater(CustomMobs.getPlugin(), () -> {
+                    Bukkit.broadcastMessage(Utils.applyFormat(getMessage().replaceAll("%player%", dropper.getName())));
+                }, 1);
             }
         }
     }
@@ -58,7 +62,7 @@ public class DropMessage extends Message implements ConfigurationSerializable {
     public static DropMessage deserialize(Map<String, Object> data) {
         String message = (String) data.get("message");
         boolean dropperOnly = (boolean) data.get("dropper-only");
-        double radius = (double)data.get("radius");
+        double radius = (double) data.get("radius");
         return new DropMessage(message, dropperOnly, radius);
     }
 

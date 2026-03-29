@@ -1,15 +1,16 @@
 package ca.pandaaa.custommobs.commands;
 
+import java.util.Objects;
+
+import org.bukkit.*;
+import org.bukkit.command.*;
+import org.bukkit.entity.Player;
+
 import ca.pandaaa.custommobs.CustomMobs;
 import ca.pandaaa.custommobs.configurations.ConfigurationManager;
 import ca.pandaaa.custommobs.custommobs.Manager;
 import ca.pandaaa.custommobs.guis.MainGUI;
 import ca.pandaaa.custommobs.utils.Utils;
-import org.bukkit.*;
-import org.bukkit.command.*;
-import org.bukkit.entity.Player;
-
-import java.util.Objects;
 
 public class Commands implements CommandExecutor {
 
