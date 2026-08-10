@@ -15,6 +15,7 @@ import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.OptionsGUI;
 import ca.pandaaa.custommobs.utils.CustomMobsItem;
+import ca.pandaaa.custommobs.utils.Utils;
 
 public class Slime extends CustomMobOption {
     /**
@@ -31,10 +32,17 @@ public class Slime extends CustomMobOption {
     }
 
     public void applyOptions(Entity customMob) {
-        if(!(customMob instanceof org.bukkit.entity.Slime))
+        if(size == null)
             return;
 
-        if(size != null)
+        // Since 26.2, Slime, MagmaCube and SulfurCube all extend AbstractCubeMob (MagmaCube is no longer a Slime).
+        if(Utils.isVersionAtLeast("26.2")) {
+            if(customMob instanceof org.bukkit.entity.AbstractCubeMob)
+                ((org.bukkit.entity.AbstractCubeMob) customMob).setSize(size);
+            return;
+        }
+
+        if(customMob instanceof org.bukkit.entity.Slime)
             ((org.bukkit.entity.Slime) customMob).setSize(size);
     }
 
@@ -70,6 +78,9 @@ public class Slime extends CustomMobOption {
     }
 
     public static boolean isApplicable(EntityType entityType) {
+        if(Utils.isVersionAtLeast("26.2"))
+            return org.bukkit.entity.AbstractCubeMob.class.isAssignableFrom(entityType.getEntityClass());
+
         return org.bukkit.entity.Slime.class.isAssignableFrom(entityType.getEntityClass());
     }
 
