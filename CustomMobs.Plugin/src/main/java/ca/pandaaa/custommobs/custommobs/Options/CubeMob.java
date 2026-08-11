@@ -14,73 +14,72 @@ import ca.pandaaa.custommobs.configurations.CustomMobConfiguration;
 import ca.pandaaa.custommobs.custommobs.CustomMob;
 import ca.pandaaa.custommobs.guis.BasicTypes.IntegerGUI;
 import ca.pandaaa.custommobs.guis.EditCustomMobs.OptionsGUI;
-import ca.pandaaa.custommobs.utils.CustomMobsItem;
 import ca.pandaaa.custommobs.utils.Utils;
+import ca.pandaaa.custommobs.utils.CustomMobsItem;
 
-public class Slime extends CustomMobOption {
+public class CubeMob extends CustomMobOption {
     /**
-     * Deprecated since 26.2, see CubeMob instead.
-     * Integer value indicating the size of the slime CustomMob (affects health and split count).
+     * Integer value indicating the size of the cubic CustomMob.
      * @minimum 0
      * @maximum 126
      */
-    private static final String SLIME_SIZE = "mob.slime-size";
+    private static final String CUBE_SIZE = "mob.cube-size";
     private Integer size;
 
-    public Slime(CustomMobConfiguration mobConfiguration) {
+    public CubeMob(CustomMobConfiguration mobConfiguration) {
         super(mobConfiguration);
-        this.size = getOption(SLIME_SIZE, Integer.class);
+        this.size = getOption(CUBE_SIZE, Integer.class);
     }
 
     public void applyOptions(Entity customMob) {
-        if(!(customMob instanceof org.bukkit.entity.Slime))
+        if (!(customMob instanceof org.bukkit.entity.AbstractCubeMob))
             return;
 
-        if(size != null)
-            ((org.bukkit.entity.Slime) customMob).setSize(size);
+        if (size != null)
+            ((org.bukkit.entity.AbstractCubeMob) customMob).setSize(size);
     }
 
     @Override
     public void resetOptions() {
-        setOption(SLIME_SIZE, null);
+        setOption(CUBE_SIZE, null);
     }
 
     public List<ItemStack> getOptionItems() {
         List<ItemStack> items = new ArrayList<>();
-        items.add(getOptionItemStack(getSlimeSizeItem(), true, false));
+        items.add(getOptionItemStack(getCubeSizeItem(), true, false));
         return items;
     }
 
     public ItemStack modifyOption(Player clicker, CustomMob customMob, String option, ClickType clickType) {
         switch(option.toLowerCase()) {
 
-            case "slimesize": {
+            case "cubesize": {
                 if (clickType.isRightClick()) {
                     this.size = null;
-                    setOption(SLIME_SIZE, size);
+                    setOption(CUBE_SIZE, size);
                 } else {
-                    new IntegerGUI("Slime size", false,0, 126, (value) -> {
+                    new IntegerGUI("Cube size", false, 0, 126, (value) -> {
                         this.size = value;
-                        setOption(SLIME_SIZE, size);
+                        setOption(CUBE_SIZE, size);
                         new OptionsGUI(customMob).openInventory(clicker, 1);
                     }).openInventory(clicker, size == null ? 0 : size);
                 }
-                return getOptionItemStack(getSlimeSizeItem(), true, false);
+                return getOptionItemStack(getCubeSizeItem(), true, false);
             }
         }
         return null;
     }
 
     public static boolean isApplicable(EntityType entityType) {
-        return Utils.isVersionBeforeOrEqual("26.1") && org.bukkit.entity.Slime.class.isAssignableFrom(entityType.getEntityClass());
+        return Utils.isVersionAtLeast("26.2") && org.bukkit.entity.AbstractCubeMob.class.isAssignableFrom(entityType.getEntityClass());
     }
 
-    public CustomMobsItem getSlimeSizeItem() {
-        CustomMobsItem item = new CustomMobsItem(Material.SLIME_BALL);
-        item.setName("&a&lSlime size");
-        String size = this.size == null ? "&fNatural random (0-1-3)" : "&f" + this.size;
-        item.addLore("&eSlime size: " + size);
-        item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "SlimeSize");
+    public CustomMobsItem getCubeSizeItem() {
+        CustomMobsItem item = new CustomMobsItem(Material.SLIME_BLOCK);
+        item.setName("&a&lCube size");
+        String size = this.size == null ? "&fNatural" : "&f" + this.size;
+        item.addLore("&eCube size: " + size);
+        item.setOptionPersistentDataContainer(this.getClass().getSimpleName(), "CubeSize");
         return item;
     }
 }
