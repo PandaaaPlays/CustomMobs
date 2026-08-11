@@ -81,6 +81,15 @@
                      "maximum":  null
                  }
              ],
+    "SulfurCube":  [
+                       {
+                           "minimum":  null,
+                           "description":  "Specifies the block material inside the sulfur cube CustomMob.",
+                           "type":  "Item",
+                           "key":  "SULFUR_CUBE_BLOCK",
+                           "maximum":  null
+                       }
+                   ],
     "ZombieNautilus":  [
                            {
                                "minimum":  null,
@@ -231,148 +240,15 @@
                          "maximum":  null
                      }
                  ],
-    "Special":  [
-                    {
-                        "minimum":  null,
-                        "description":  "Toggles the visibility of the entity\u0027s name tag, even when not directly looking at it. If not set, the name of the CustomMob will be shown when looking at the mob (default behavior).",
-                        "type":  "On / Off",
-                        "key":  "VISIBLE_NAME",
-                        "maximum":  null
-                    },
-                    {
-                        "minimum":  "0",
-                        "description":  "Sets the entity\u0027s health (in half heart(s)). A health of 20 means that the CustomMob has 10 hearts of health.",
-                        "type":  "Decimal",
-                        "key":  "HEALTH",
-                        "maximum":  "1024"
-                    },
-                    {
-                        "minimum":  null,
-                        "description":  "Indicates whether the entity is in an aggressive state, which means that they will attack any nearby player (even if the mob is normally passive).",
-                        "type":  "On / Off",
-                        "key":  "AGGRESSIVE",
-                        "maximum":  null
-                    },
-                    {
-                        "minimum":  null,
-                        "description":  "Toggles the glowing effect around the entity.",
-                        "type":  "On / Off",
-                        "key":  "GLOWING",
-                        "maximum":  null
-                    },
-                    {
-                        "minimum":  null,
-                        "description":  "When enabled, allows the entity to pick up dropped items.",
-                        "type":  "On / Off",
-                        "key":  "CAN_PICKUP_LOOT",
-                        "maximum":  null
-                    },
-                    {
-                        "minimum":  "0",
-                        "description":  "Indicates how far the entity is knocked back when hit (a high value indicates that the CustomMob should not go far).",
-                        "type":  "Decimal",
-                        "key":  "KNOCKBACK_RESISTANCE",
-                        "maximum":  "1"
-                    },
-                    {
-                        "minimum":  "0",
-                        "description":  "Controls the movement speed of the entity. The default value is 0,3.",
-                        "type":  "Decimal",
-                        "key":  "SPEED",
-                        "maximum":  "1024"
-                    },
-                    {
-                        "minimum":  "0",
-                        "description":  "Defines the range of damage the entity can inflict. For a mob to inflict exactly \"x\" damage every time, set the lower and higher bounds of the range to the same \"x\" value.",
-                        "type":  "Range of damage",
-                        "key":  "DAMAGE",
-                        "maximum":  "1024"
-                    },
-                    {
-                        "minimum":  null,
-                        "description":  "When enabled, prevents the entity from taking any damage.",
-                        "type":  "On / Off",
-                        "key":  "INVINCIBLE",
-                        "maximum":  null
-                    },
-                    {
-                        "minimum":  null,
-                        "description":  "MWhen enabled, mutes all sounds made by the entity.",
-                        "type":  "On / Off",
-                        "key":  "SILENT",
-                        "maximum":  null
-                    },
-                    {
-                        "minimum":  null,
-                        "description":  "Determines whether the entity is affected by gravity or not.",
-                        "type":  "On / Off",
-                        "key":  "GRAVITY",
-                        "maximum":  null
-                    },
-                    {
-                        "minimum":  null,
-                        "description":  "When enabled, keeps the entity from despawning naturally.",
-                        "type":  "On / Off",
-                        "key":  "PERSISTENT",
-                        "maximum":  null
-                    },
-                    {
-                        "minimum":  null,
-                        "description":  "Specifies whether the entity uses advanced AI behaviors (such as moving around, attacking, etc.).",
-                        "type":  "On / Off",
-                        "key":  "INTELLIGENT",
-                        "maximum":  null
-                    },
-                    {
-                        "minimum":  "0",
-                        "description":  "Sets the range at which the entity can detect and follow targets. The default value is 32.",
-                        "type":  "Decimal",
-                        "key":  "FOLLOW_RANGE",
-                        "maximum":  "2048"
-                    },
-                    {
-                        "minimum":  "0.06",
-                        "description":  "Adjusts the entity’s physical size. The default value is 1.",
-                        "type":  "Decimal",
-                        "key":  "SIZE",
-                        "maximum":  "16"
-                    },
-                    {
-                        "minimum":  null,
-                        "description":  "Toggles whether the entity drops default loot on death.",
-                        "type":  "On / Off",
-                        "key":  "NATURAL_DROPS",
-                        "maximum":  null
-                    },
-                    {
-                        "minimum":  "0",
-                        "description":  "Replaces a percentage of the naturally spawned mobs of the CustomMob\u0027s type. For example, if this value is set to 25% and the CustomMob\u0027s type is a Cow, 1/4 of the naturally spawned cows will be replaced by this CustomMob. \u003cli\u003eMultiple CustomMobs of the same type with this option enabled will increase the percentage accordingly.",
-                        "type":  "Decimal",
-                        "key":  "REPLACE_NATURAL",
-                        "maximum":  "100"
-                    },
-                    {
-                        "minimum":  null,
-                        "description":  "Adds a boss bar, similar to the one shown when fighting the ender dragon or the wither. The style will indicate whether the bar should be split or not (leave at none for no boss bar).",
-                        "type":  "Bar style",
-                        "key":  "BOSS_BAR_STYLE",
-                        "maximum":  null
-                    },
-                    {
-                        "minimum":  null,
-                        "description":  "Sets the boss bar color (must be enabled to show, see boss bar style).",
-                        "type":  "Bar color",
-                        "key":  "BOSS_BAR_COLOR",
-                        "maximum":  null
-                    },
-                    {
-                        "minimum":  null,
-                        "description":  "Allows player to ride the CustomMob, even when not rideable normally. This option will override the default behavior when applicable (for horses, etc.). \u003cli\u003eThis option will only work when ProtocolLib is installed.",
-                        "type":  "On / Off",
-                        "key":  "RIDEABLE",
-                        "maximum":  null
-                    }
-                ],
+    "Rabbit":  [
+                   {
+                       "minimum":  null,
+                       "description":  "Sets the appearance or breed of the rabbit CustomMob (e.g., black, brown, white, Toast). If left unset, the type will be chosen randomly.",
+                       "type":  "Rabbit type",
+                       "key":  "RABBIT_TYPE",
+                       "maximum":  null
+                   }
+               ],
     "Frog":  [
                  {
                      "minimum":  null,
@@ -450,67 +326,6 @@
                            "maximum":  null
                        }
                    ],
-    "Rabbit":  [
-                   {
-                       "minimum":  null,
-                       "description":  "Sets the appearance or breed of the rabbit CustomMob (e.g., black, brown, white, Toast). If left unset, the type will be chosen randomly.",
-                       "type":  "Rabbit type",
-                       "key":  "RABBIT_TYPE",
-                       "maximum":  null
-                   }
-               ],
-    "Shulker":  [
-                    {
-                        "minimum":  null,
-                        "description":  "Determines the dye color of the shulker CustomMob\u0027s shell. If left unset, the color will be the purple-ish (default) one.",
-                        "type":  "Dye color",
-                        "key":  "SHULKER_COLOR",
-                        "maximum":  null
-                    }
-                ],
-    "Chicken":  [
-                    {
-                        "minimum":  null,
-                        "description":  "Specifies the variant of the chicken CustomMob, such as normal or a biome-specific type. When this value is not set, the variant will be based on the biome it is spawned in (like it would by spawning a normal chicken).",
-                        "type":  "Chicken variant",
-                        "key":  "CHICKEN_VARIANT",
-                        "maximum":  null
-                    }
-                ],
-    "Slime":  [
-                  {
-                      "minimum":  "0",
-                      "description":  "Integer value indicating the size of the slime CustomMob (affects health and split count).",
-                      "type":  "Integer",
-                      "key":  "SLIME_SIZE",
-                      "maximum":  "126"
-                  }
-              ],
-    "AbstractHorse":  [
-                          {
-                              "minimum":  "0",
-                              "description":  "Determines how high the horse CustomMob can jump. The default value is 0.7. When left unset, the jump strength will be randomly chosen.",
-                              "type":  "Decimal",
-                              "key":  "JUMP_STRENGTH",
-                              "maximum":  "2"
-                          },
-                          {
-                              "minimum":  null,
-                              "description":  "Indicates whether the horse is equipped with a saddle.",
-                              "type":  "On / Off",
-                              "key":  "SADDLE",
-                              "maximum":  null
-                          }
-                      ],
-    "Sittable":  [
-                     {
-                         "minimum":  null,
-                         "description":  "Determines whether the CustomMob entity is currently in a sitting state.",
-                         "type":  "On / Off",
-                         "key":  "SITTING",
-                         "maximum":  null
-                     }
-                 ],
     "Mannequin":  [
                       {
                           "minimum":  null,
@@ -561,5 +376,208 @@
                           "key":  "DESCRIPTION",
                           "maximum":  null
                       }
-                  ]
+                  ],
+    "Shulker":  [
+                    {
+                        "minimum":  null,
+                        "description":  "Determines the dye color of the shulker CustomMob\u0027s shell. If left unset, the color will be the purple-ish (default) one.",
+                        "type":  "Dye color",
+                        "key":  "SHULKER_COLOR",
+                        "maximum":  null
+                    }
+                ],
+    "CubeMob":  [
+                    {
+                        "minimum":  "0",
+                        "description":  "Integer value indicating the size of the cubic CustomMob.",
+                        "type":  "Integer",
+                        "key":  "CUBE_SIZE",
+                        "maximum":  "126"
+                    }
+                ],
+    "Chicken":  [
+                    {
+                        "minimum":  null,
+                        "description":  "Specifies the variant of the chicken CustomMob, such as normal or a biome-specific type. When this value is not set, the variant will be based on the biome it is spawned in (like it would by spawning a normal chicken).",
+                        "type":  "Chicken variant",
+                        "key":  "CHICKEN_VARIANT",
+                        "maximum":  null
+                    }
+                ],
+    "Special":  [
+                    {
+                        "minimum":  null,
+                        "description":  "Toggles the visibility of the entity\u0027s name tag, even when not directly looking at it. If not set, the name of the CustomMob will be shown when looking at the mob (default behavior).",
+                        "type":  "On / Off",
+                        "key":  "VISIBLE_NAME",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  "0",
+                        "description":  "Sets the entity\u0027s health (in half heart(s)). A health of 20 means that the CustomMob has 10 hearts of health.",
+                        "type":  "Decimal",
+                        "key":  "HEALTH",
+                        "maximum":  "1024"
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "Indicates whether the entity is in an aggressive state, which means that they will attack any nearby player (even if the mob is normally passive).",
+                        "type":  "On / Off",
+                        "key":  "AGGRESSIVE",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "Toggles the glowing effect around the entity.",
+                        "type":  "On / Off",
+                        "key":  "GLOWING",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "When enabled, allows the entity to pick up dropped items.",
+                        "type":  "On / Off",
+                        "key":  "CAN_PICKUP_LOOT",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  "0",
+                        "description":  "Indicates how far the entity is knocked back when hit (a high value indicates that the CustomMob should not go far).",
+                        "type":  "Decimal",
+                        "key":  "KNOCKBACK_RESISTANCE",
+                        "maximum":  "1"
+                    },
+                    {
+                        "minimum":  "0",
+                        "description":  "Controls the movement speed of the entity. The default value is 0,3.",
+                        "type":  "Decimal",
+                        "key":  "SPEED",
+                        "maximum":  "1024"
+                    },
+                    {
+                        "minimum":  "0",
+                        "description":  "Defines the range of damage the entity can inflict. For a mob to inflict exactly \"x\" damage every time, set the lower and higher bounds of the range to the same \"x\" value.",
+                        "type":  "Range of damage",
+                        "key":  "DAMAGE",
+                        "maximum":  "1024"
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "When enabled, prevents the entity from taking any damage.",
+                        "type":  "On / Off",
+                        "key":  "INVINCIBLE",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "When enabled, mutes all sounds made by the entity.",
+                        "type":  "On / Off",
+                        "key":  "SILENT",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "Determines whether the entity is affected by gravity or not.",
+                        "type":  "On / Off",
+                        "key":  "GRAVITY",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "When enabled, keeps the entity from despawning naturally.",
+                        "type":  "On / Off",
+                        "key":  "PERSISTENT",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "Specifies whether the entity uses advanced AI behaviors (such as moving around, attacking, etc.).",
+                        "type":  "On / Off",
+                        "key":  "INTELLIGENT",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  "0",
+                        "description":  "Sets the range at which the entity can detect and follow targets. The default value is 32.",
+                        "type":  "Decimal",
+                        "key":  "FOLLOW_RANGE",
+                        "maximum":  "2048"
+                    },
+                    {
+                        "minimum":  "0.06",
+                        "description":  "Adjusts the entity’s physical size. The default value is 1.",
+                        "type":  "Decimal",
+                        "key":  "SIZE",
+                        "maximum":  "16"
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "Toggles whether the entity drops default loot on death.",
+                        "type":  "On / Off",
+                        "key":  "NATURAL_DROPS",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  "0",
+                        "description":  "Replaces a percentage of the naturally spawned mobs of the CustomMob\u0027s type. For example, if this value is set to 25% and the CustomMob\u0027s type is a Cow, 1/4 of the naturally spawned cows will be replaced by this CustomMob. \u003cli\u003eMultiple CustomMobs of the same type with this option enabled will increase the percentage accordingly.",
+                        "type":  "Decimal",
+                        "key":  "REPLACE_NATURAL",
+                        "maximum":  "100"
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "Adds a boss bar, similar to the one shown when fighting the ender dragon or the wither. The style will indicate whether the bar should be split or not (leave at none for no boss bar).",
+                        "type":  "Bar style",
+                        "key":  "BOSS_BAR_STYLE",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "Sets the boss bar color (must be enabled to show, see boss bar style).",
+                        "type":  "Bar color",
+                        "key":  "BOSS_BAR_COLOR",
+                        "maximum":  null
+                    },
+                    {
+                        "minimum":  null,
+                        "description":  "Allows player to ride the CustomMob, even when not rideable normally. This option will override the default behavior when applicable (for horses, etc.). \u003cli\u003eThis option will only work when ProtocolLib is installed.",
+                        "type":  "On / Off",
+                        "key":  "RIDEABLE",
+                        "maximum":  null
+                    }
+                ],
+    "Slime":  [
+                  {
+                      "minimum":  "0",
+                      "description":  "Deprecated since 26.2, see CubeMob instead. Integer value indicating the size of the slime CustomMob (affects health and split count).",
+                      "type":  "Integer",
+                      "key":  "SLIME_SIZE",
+                      "maximum":  "126"
+                  }
+              ],
+    "AbstractHorse":  [
+                          {
+                              "minimum":  "0",
+                              "description":  "Determines how high the horse CustomMob can jump. The default value is 0.7. When left unset, the jump strength will be randomly chosen.",
+                              "type":  "Decimal",
+                              "key":  "JUMP_STRENGTH",
+                              "maximum":  "2"
+                          },
+                          {
+                              "minimum":  null,
+                              "description":  "Indicates whether the horse is equipped with a saddle.",
+                              "type":  "On / Off",
+                              "key":  "SADDLE",
+                              "maximum":  null
+                          }
+                      ],
+    "Sittable":  [
+                     {
+                         "minimum":  null,
+                         "description":  "Determines whether the CustomMob entity is currently in a sitting state.",
+                         "type":  "On / Off",
+                         "key":  "SITTING",
+                         "maximum":  null
+                     }
+                 ]
 }

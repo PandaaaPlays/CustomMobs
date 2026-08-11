@@ -7,7 +7,8 @@
     "Special"
   ],
   "MAGMA_CUBE": [
-    "Slime",
+    "Ageable",
+    "CubeMob",
     "Special"
   ],
   "MULE": [
@@ -79,11 +80,18 @@
     "ZombieNautilus"
   ],
   "SLIME": [
-    "Slime",
+    "Ageable",
+    "CubeMob",
     "Special"
   ],
   "CAVE_SPIDER": [
     "Special"
+  ],
+  "SULFUR_CUBE": [
+    "Ageable",
+    "CubeMob",
+    "Special",
+    "SulfurCube"
   ],
   "DROWNED": [
     "Ageable",
